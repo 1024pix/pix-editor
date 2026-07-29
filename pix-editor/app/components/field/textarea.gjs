@@ -56,7 +56,7 @@ export default class FieldTextarea extends Component {
         </div>
       {{/unless}}
       <PixTextarea
-        id={{@id}}
+        @id={{@id}}
         @value={{@value}}
         rows="4"
         readonly={{not @edition}}
