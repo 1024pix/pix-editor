@@ -3,13 +3,7 @@ import Hapi from '@hapi/hapi';
 import * as security from '../../../lib/infrastructure/security.js';
 import { handleFailAction } from '../../../lib/infrastructure/validation.js';
 
-const routesConfig = {
-  routes: {
-    validate: {
-      failAction: handleFailAction,
-    },
-  },
-};
+const routesConfig = { routes: { validate: { failAction: handleFailAction } } };
 
 /**
  * ⚠️ You must declare your stubs before calling the HttpTestServer constructor (because of Node.Js memoization).

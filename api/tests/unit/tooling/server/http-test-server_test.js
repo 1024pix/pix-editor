@@ -1,30 +1,26 @@
 import { expect, describe, it, beforeEach } from 'vitest';
 import { HttpTestServer } from '../../../tooling/server/http-test-server.js';
 
-describe('Unit | Tooling | Http-test-server', function () {
-  describe('#constructor', function () {
+describe('Unit | Tooling | Http-test-server', function() {
+  describe('#constructor', function() {
     let server;
 
-    beforeEach(function () {
+    beforeEach(function() {
       server = new HttpTestServer();
     });
 
-    it('should create hapi server', function () {
+    it('should create hapi server', function() {
       // then
       expect(server.hapiServer).to.exist;
     });
   });
 
-  describe('#register', function () {
-    it('should throw error if route is invalid', async function () {
+  describe('#register', function() {
+    it('should throw error if route is invalid', async function() {
       const invalidRoute = {
         name: 'foo-route',
-        register: async function (server) {
-          server.route([
-            {
-              method: 'GET',
-            },
-          ]);
+        register: async function(server) {
+          server.route([{ method: 'GET' }]);
         },
       };
 

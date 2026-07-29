@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, test } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import * as challengeRepository from '../../../../lib/infrastructure/repositories/challenge-repository.js';
