@@ -12,15 +12,11 @@ import * as tubeTranslations from '../../infrastructure/translations/tube.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
 import { areLocalesEqual } from '../../infrastructure/utils/locale-utils.js';
-import { Challenge } from '../models/index.js';
 
 export async function exportTranslationsForWeblate({ stream, frameworkId, areaId, locale, release }) {
   const releaseContent = mapValues(release.content, (entities) => Object.fromEntries(entities.map((entity) => [entity.id, entity])));
 
-  const localizedChallenges = Object.groupBy(
-    await localizedChallengeRepository.list(),
-    ({ challengeId }) => challengeId,
-  );
+  const localizedChallenges = await localizedChallengeRepository.list();
 
   const areas = areaId
     ? [releaseContent.areas[areaId]]
@@ -100,7 +96,15 @@ export async function exportTranslationsForWeblate({ stream, frameworkId, areaId
 
   const csvLinesStream = translationsStreams.map(translationToCSVLine(locale));
 
-  pipeline(csvLinesStream, csv.format({ headers: true }), stream, (error) => {
+  pipeline(csvLinesStream, csv.format({
+    headers: [
+      'context',
+      'source',
+      'target',
+      'developer_comments',
+    ],
+    alwaysWriteHeaders: true,
+  }), stream, (error) => {
     if (!error) return;
     logger.error({ error }, 'Error while exporting translations from release');
   });
@@ -113,14 +117,20 @@ function createTranslationsStream(entities, extractMetadataFn, releaseContent, e
 }
 
 function toDescription(localizedChallenges, challenge, baseUrl) {
-  const primaryLocale = Challenge.getPrimaryLocale(challenge.locales);
-  const primaryLocalePreviewUrl = `Preview ${primaryLocale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview`;
-  const alternativeLocalePreviewUrls = localizedChallenges[challenge.id]
+  const localizedChallenge = localizedChallenges.find(({ id }) => id === challenge.id);
+  const { challengeId } = localizedChallenge;
+  const primaryLocalizedChallenge = localizedChallenge.isPrimary ? localizedChallenge : localizedChallenges.find(({ id }) => id === localizedChallenge.challengeId);
+
+  const primaryLocale = primaryLocalizedChallenge.locale;
+  const primaryLocalePreviewUrl = `Preview ${primaryLocale.toUpperCase()}: ${baseUrl}/api/challenges/${challengeId}/preview`;
+
+  const alternativeLocalePreviewUrls = localizedChallenges
+    .filter((localizedChallenge) => localizedChallenge.challengeId === challengeId)
     .filter(({ locale }) => !areLocalesEqual(locale, primaryLocale))
     .map(({ locale }) => {
-      return `Preview ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview?locale=${locale}`;
+      return `Preview ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challengeId}/preview?locale=${locale}`;
     });
-  const peURL = `Pix Editor: ${baseUrl}/challenge/${challenge.id}`;
+  const peURL = `Pix Editor: ${baseUrl}/challenge/${challengeId}`;
 
   return [
     primaryLocalePreviewUrl,
