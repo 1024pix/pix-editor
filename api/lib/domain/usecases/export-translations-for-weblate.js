@@ -4,11 +4,11 @@ import _ from 'lodash';
 import * as config from '../../config.js';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
 import { localizedChallengeRepository } from '../../infrastructure/repositories/index.js';
-// import * as competenceTranslations from '../../infrastructure/translations/competence.js';
-// import * as thematicTranslations from '../../infrastructure/translations/thematic.js';
-// import * as skillTranslations from '../../infrastructure/translations/skill.js';
-// import * as areaTranslations from '../../infrastructure/translations/area.js';
-// import * as tubeTranslations from '../../infrastructure/translations/tube.js';
+import * as competenceTranslations from '../../infrastructure/translations/competence.js';
+import * as thematicTranslations from '../../infrastructure/translations/thematic.js';
+import * as skillTranslations from '../../infrastructure/translations/skill.js';
+import * as areaTranslations from '../../infrastructure/translations/area.js';
+import * as tubeTranslations from '../../infrastructure/translations/tube.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
 import { areLocalesEqual } from '../../infrastructure/utils/locale-utils.js';
@@ -55,46 +55,41 @@ export async function exportTranslationsForWeblate({ stream, frameworkId, areaId
   });
 
   const translationsStreams = mergeStreams(
-    // createTranslationsStream(
-    //   areas,
-    //   extractMetadataFromArea,
-    //   releaseContent,
-    //   'domaine',
-    //   areaTranslations.extractFromReleaseObject,
-    //   filters.locales,
-    // ),
-    // createTranslationsStream(
-    //   competences,
-    //   extractMetadataFromCompetence,
-    //   releaseContent,
-    //   'competence',
-    //   competenceTranslations.extractFromReleaseObject,
-    //   filters.locales,
-    // ),
-    // createTranslationsStream(
-    //   thematics,
-    //   extractMetadataFromThematic,
-    //   releaseContent,
-    //   'thematique',
-    //   thematicTranslations.extractFromReleaseObject,
-    //   filters.locales,
-    // ),
-    // createTranslationsStream(
-    //   tubes,
-    //   extractMetadataFromTube,
-    //   releaseContent,
-    //   'sujet',
-    //   tubeTranslations.extractFromReleaseObject,
-    //   filters.locales,
-    // ),
-    // createTranslationsStream(
-    //   skills,
-    //   extractMetadataFromSkill,
-    //   releaseContent,
-    //   'acquis',
-    //   skillTranslations.extractFromReleaseObject,
-    //   filters.locales,
-    // ),
+    createTranslationsStream(
+      areas,
+      null,
+      releaseContent,
+      areaTranslations.extractFromReleaseObject,
+      locale,
+    ),
+    createTranslationsStream(
+      competences,
+      null,
+      releaseContent,
+      competenceTranslations.extractFromReleaseObject,
+      locale,
+    ),
+    createTranslationsStream(
+      thematics,
+      null,
+      releaseContent,
+      thematicTranslations.extractFromReleaseObject,
+      locale,
+    ),
+    createTranslationsStream(
+      tubes,
+      null,
+      releaseContent,
+      tubeTranslations.extractFromReleaseObject,
+      locale,
+    ),
+    createTranslationsStream(
+      skills,
+      null,
+      releaseContent,
+      skillTranslations.extractFromReleaseObject,
+      locale,
+    ),
     createTranslationsStream(
       challenges,
       (challenge, releaseContent) => extractMetadataFromChallenge(config.lcms.baseUrl, localizedChallenges, challenge, releaseContent),
@@ -111,10 +106,10 @@ export async function exportTranslationsForWeblate({ stream, frameworkId, areaId
   });
 }
 
-function createTranslationsStream(entities, extractMetadataFn, releaseContent, extractTranslationsFn, locales) {
+function createTranslationsStream(entities, extractMetadataFn, releaseContent, extractTranslationsFn, locale) {
   return Readable.from(entities)
     .map(extractMetadataFromObject(extractMetadataFn, releaseContent))
-    .flatMap(extractTranslationsFromObject(extractTranslationsFn, locales));
+    .flatMap(extractTranslationsFromObject(extractTranslationsFn, [locale]));
 }
 
 function toDescription(localizedChallenges, challenge, baseUrl) {
@@ -136,6 +131,9 @@ function toDescription(localizedChallenges, challenge, baseUrl) {
 
 function extractMetadataFromObject(extractMetadataFn, releaseContent) {
   return (object) => {
+    if (!extractMetadataFn) {
+      return { object };
+    }
     const { description } = extractMetadataFn(object, releaseContent);
 
     return {
@@ -166,42 +164,6 @@ function extractMetadataFromChallenge(baseUrl, localizedChallenges, challenge, _
   return { description: toDescription(localizedChallenges, challenge, baseUrl) };
 }
 
-/*
-function extractMetadataFromSkill(skill, releaseContent) {
-  return {
-    tags: extractTagsFromSkill(skill, releaseContent),
-    description: '',
-  };
-}
-
-function extractMetadataFromTube(tube, releaseContent) {
-  return {
-    tags: extractTagsFromTube(tube, releaseContent),
-    description: '',
-  };
-}
-
-function extractMetadataFromArea(area, releaseContent) {
-  return {
-    tags: extractTagsFromArea(area, releaseContent),
-    description: '',
-  };
-}
-
-function extractMetadataFromCompetence(competence, releaseContent) {
-  return {
-    tags: extractTagsFromCompetence(competence, releaseContent),
-    description: '',
-  };
-}
-
-function extractMetadataFromThematic(thematic, releaseContent) {
-  return {
-    tags: extractTagsFromThematic(thematic, releaseContent),
-    description: '',
-  };
-}
-*/
 function mapValues(object, mapper) {
   return Object.fromEntries(Object.entries(object).map(([key, value]) => [key, mapper(value)]));
 }
