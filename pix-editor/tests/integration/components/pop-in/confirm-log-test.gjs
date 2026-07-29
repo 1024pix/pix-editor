@@ -1,4 +1,5 @@
-import { click, render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
+import { click } from '@ember/test-helpers';
 import ConfirmLog from 'pixeditor/components/pop-in/confirm-log';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -7,7 +8,7 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | popin-confirm-log', function (hooks) {
   setupIntlRenderingTest(hooks);
-  let approveActionStub, denyActionStub;
+  let approveActionStub, denyActionStub, screen;
   hooks.beforeEach(async function () {
     const self = this;
 
@@ -20,13 +21,14 @@ module('Integration | Component | popin-confirm-log', function (hooks) {
     this.defaultSaveChangelog = 'Mise à jour du prototype';
 
     // when
-    await render(
+    screen = await render(
       <template>
         <ConfirmLog
           @title={{self.title}}
           @onApprove={{self.approveAction}}
           @onDeny={{self.denyAction}}
           @defaultValue={{self.defaultSaveChangelog}}
+          @showModal={{true}}
         />
       </template>,
     );
@@ -34,32 +36,28 @@ module('Integration | Component | popin-confirm-log', function (hooks) {
 
   test('it saves without changelog', async function (assert) {
     // when
-
-    await click('[data-test-confirm-log-approve]');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     // then
-    assert.dom('.pix-modal').exists();
     assert.ok(approveActionStub.calledOnce);
     assert.strictEqual(approveActionStub.getCall(0).args[0], null);
   });
 
   test('it saves with changelog', async function (assert) {
     // when
-    await click('[data-test-confirm-log-check]');
-    await click('[data-test-confirm-log-approve]');
+    await click(screen.getByRole('checkbox', { name: 'Je veux ajouter une note de changelog' }));
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     // then
-    assert.dom('.pix-modal').exists();
     assert.ok(approveActionStub.calledOnce);
-    assert.strictEqual(approveActionStub.getCall(0).args[0], 'Mise à jour du prototype');
+    assert.strictEqual(approveActionStub.getCall(0).args[0], self.defaultSaveChangelog);
   });
 
   test('it should cancel', async function (assert) {
     // when
-    await click('[data-test-confirm-log-cancel]');
+    await click(screen.getByRole('button', { name: /Annuler/ }));
 
     // then
-    assert.dom('.pix-modal').exists();
     assert.ok(denyActionStub.calledOnce);
   });
 });

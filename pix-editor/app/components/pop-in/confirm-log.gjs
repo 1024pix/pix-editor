@@ -21,7 +21,6 @@ export default class PopInConfirmLog extends Component {
             @class="checkbox-layout"
             {{on "click" this.toggleDisplayTextarea}}
             @checked={{this.displayTextarea}}
-            data-test-confirm-log-check
           >
             <:label>Je veux ajouter une note de changelog</:label>
           </PixCheckbox>
@@ -34,27 +33,25 @@ export default class PopInConfirmLog extends Component {
                 rows="4"
                 class="changelog-textarea"
                 @edition={{true}}
-                {{on "change" this.change}}
+                @change={{this.change}}
               />
             </div>
           {{/if}}
         </form>
       </:content>
       <:footer>
-        <PixButton data-test-confirm-log-cancel @variant="secondary" @iconBefore="close" @triggerAction={{@onDeny}}>
+        <PixButton @variant="secondary" @iconBefore="close" @triggerAction={{@onDeny}}>
           {{t "common.cancel"}}
         </PixButton>
-        <PixButton
-          data-test-confirm-log-approve
-          @iconBefore="check"
-          @triggerAction={{fn @onApprove this.textareaValue}}
-        >{{t "common.validate"}}</PixButton>
+        <PixButton @iconBefore="check" @triggerAction={{fn @onApprove this.changeLogValue}}>{{t
+            "common.validate"
+          }}</PixButton>
       </:footer>
     </PixModal>
   </template>
 
   @tracked displayTextarea = false;
-  textareaValue = '';
+  textareaValue = null;
   inputId = this.args.inputId;
 
   @action
@@ -63,14 +60,15 @@ export default class PopInConfirmLog extends Component {
   }
 
   @action
-  change(event) {
-    this.textareaValue = event.target.value;
+  change(value) {
+    this.textareaValue = value;
   }
 
   get changeLogValue() {
     if (this.displayTextarea) {
-      return this.defaultValue;
+      return this.textareaValue ?? this.defaultValue;
     }
+
     return null;
   }
 }
