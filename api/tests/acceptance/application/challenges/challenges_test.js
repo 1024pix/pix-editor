@@ -1658,6 +1658,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
         proposals: 'propositions',
         embedTitle: "Titre d'embed",
         geography: 'NL',
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME],
       };
 
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Fmk 1' });
@@ -1729,6 +1731,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
         t2Status: true,
         t3Status: false,
         isQualityOk: true,
+        assessmentMaintenanceTags: [],
+        translationMaintenanceTags: [],
       };
 
       const server = await createServer();
@@ -1788,8 +1792,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'has-embed-internal-validation': true,
               'no-validation-needed': true,
               'is-quality-ok': true,
-              'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS, Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
-              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME, Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
+              'assessment-maintenance-tags': newChallenge.assessmentMaintenanceTags,
+              'translation-maintenance-tags': newChallenge.translationMaintenanceTags,
             },
             relationships: {
               skill: {
@@ -1865,8 +1869,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'has-embed-internal-validation': true,
             'no-validation-needed': true,
             'is-quality-ok': true,
-            'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS, Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
-            'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME, Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
+            'assessment-maintenance-tags': null,
+            'translation-maintenance-tags': null,
           },
           relationships: {
             skill: {
@@ -2026,8 +2030,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
           updatedAt: expect.any(Date),
           validatedAt: new Date(newChallenge.validatedAt),
           version: newChallenge.version,
-          assessmentMaintenanceTags: newChallenge.assessmentMaintenanceTags,
-          translationMaintenanceTags: newChallenge.translationMaintenanceTags,
+          assessmentMaintenanceTags: null,
+          translationMaintenanceTags: null,
         },
       ]);
 
