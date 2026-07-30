@@ -23,6 +23,26 @@ export default class CompetenceManagementNewController extends Controller {
   }
 
   @action
+  setDescription(value) {
+    this.model.competence.description = value;
+  }
+
+  @action
+  setTitle(value) {
+    this.model.competence.title = value;
+  }
+
+  @action
+  setTitleEn(value) {
+    this.model.competence.titleEn = value;
+  }
+
+  @action
+  setDescriptionEn(value) {
+    this.model.competence.descriptionEn = value;
+  }
+
+  @action
   async save() {
     const area = this.model.area;
     try {

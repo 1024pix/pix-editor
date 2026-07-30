@@ -90,7 +90,8 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
 
     await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
@@ -129,7 +130,8 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     await selectFiles('[data-test-file-input-illustration] input', illustrationA);
     await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     // replace illustrationA with illustrationB
     await click(find('[data-test-modify-challenge-button]'));
@@ -137,7 +139,8 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     await selectFiles('[data-test-file-input-illustration] input', illustrationB);
     await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     const store = this.owner.lookup('service:store');
     const attachments = store.peekAll('attachment').slice();
@@ -168,7 +171,8 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
 
     await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
@@ -198,7 +202,8 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
 
     await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
@@ -235,7 +240,8 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
 
     await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');

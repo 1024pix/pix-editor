@@ -53,8 +53,8 @@ export default class SkillForm extends Component {
   }
 
   @action
-  setTextAreaValue(key, event) {
-    this.args.skill[key] = event.target.value;
+  setTextAreaValue(key, value) {
+    this.args.skill[key] = value;
   }
 
   @action

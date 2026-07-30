@@ -23,6 +23,7 @@ export default class ChallengeForm extends Component {
   <template>
     <form action class="form challenge-form">
       <Mde
+        @id="consigne"
         @title="Consigne"
         @value={{@challenge.instruction}}
         @edition={{@edition}}
@@ -40,6 +41,7 @@ export default class ChallengeForm extends Component {
         @setDisplayField={{@setDisplayAlternativeInstructionsField}}
       >
         <Mde
+          @id="alternative_textuelle"
           @title="Alternative textuelle"
           @value={{@challenge.alternativeInstruction}}
           @edition={{@edition}}
@@ -92,6 +94,7 @@ export default class ChallengeForm extends Component {
       {{/if}}
       {{#unless this.isAutoReply}}
         <Mde
+          @id="proposition"
           @title="Propositions"
           @value={{@challenge.proposals}}
           @setValue={{fn (mut @challenge.proposals)}}

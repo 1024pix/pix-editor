@@ -28,7 +28,7 @@ const toolbar = [
 
 export default class MarkdownEditor extends Component {
   <template>
-    <textarea {{this.easyMDESetup}}>{{@value}}</textarea>
+    <textarea {{this.easyMDESetup}} ...attributes>{{@value}}</textarea>
   </template>
 
   @tracked easyMDE;

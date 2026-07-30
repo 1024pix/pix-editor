@@ -25,22 +25,22 @@ export default class CompetenceManagementSingleController extends Controller {
 
   @action
   setDescription(value) {
-    this.competence.description = value;
+    this.model.description = value;
   }
 
   @action
   setTitle(value) {
-    this.competence.title = value;
+    this.model.title = value;
   }
 
   @action
   setTitleEn(value) {
-    this.competence.titleEn = value;
+    this.model.titleEn = value;
   }
 
   @action
   setDescriptionEn(value) {
-    this.competence.descriptionEn = value;
+    this.model.descriptionEn = value;
   }
 
   @action

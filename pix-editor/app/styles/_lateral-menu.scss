@@ -13,7 +13,7 @@
     display: flex;
     justify-content: flex-start;
     padding: 0.85em 1.14em;
-    color: #000;
+    color: var(--pix-neutral-900);
     font-weight: normal;
     font-size: 1em;
     background-color: transparent;
@@ -29,19 +29,6 @@
     svg {
       margin-right: 10px;
       font-size: 1.2em;
-    }
-
-    &--important {
-      color: #d02181;
-
-      &:hover,
-      &:focus {
-        color: #d02181;
-      }
-    }
-
-    &--alternatives {
-      color: #2185d0;
     }
   }
 }

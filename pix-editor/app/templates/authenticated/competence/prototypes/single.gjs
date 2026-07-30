@@ -205,7 +205,6 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         {{#if @controller.mayDuplicate}}
           <PixButton
             class="lateral-menu__item"
-            data-test-modify-challenge-button={{@controller.challenge.id}}
             @variant="secondary"
             @triggerAction={{@controller.duplicate}}
             @iconBefore="copy"

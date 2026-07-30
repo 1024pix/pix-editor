@@ -94,8 +94,7 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
     const previewLink = await screen.findByText('Prévisualiser');
     assert.ok(previewLink.getAttribute('href').endsWith('/preview?locale=en'), 'href ends with /preview?locale=en');
 
-    const header = await screen.getByTestId('challenge-header');
-    assert.dom(header).hasText(/Pas en prod/);
+    assert.dom(screen.getByText('Pas en prod')).exists();
 
     const translationsLink = await screen.findByText('Traductions');
     assert.ok(translationsLink.getAttribute('href').endsWith('/translations/en'), 'href ends with /translations/en');
