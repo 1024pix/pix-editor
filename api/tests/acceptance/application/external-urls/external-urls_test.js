@@ -27,7 +27,7 @@ describe('Acceptance | Controller | external-urls', () => {
       });
     });
 
-    it('should return the active whitelisted urls', async () => {
+    it('should return the external urls', async () => {
       // given
       const editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'editor' });
 
