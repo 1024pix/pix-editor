@@ -2,6 +2,7 @@ import * as google from '@googleapis/sheets';
 import { logger } from '../logger.js';
 import * as config from '../../config.js';
 import { DomainTransaction } from '../../domain/DomainTransaction.js';
+import { fetchPage } from '../utils/knex-utils.js';
 
 const sheets = google.sheets('v4');
 
@@ -105,6 +106,25 @@ export async function get() {
     challengeExternalUrls: challengeExternalUrlsDto,
     tutorialExternalUrls: tutorialExternalUrlsDto,
   };
+}
+
+/**
+ * @param {object} page
+ * @param {number} page.number page number
+ * @param {number} page.size page size
+ */
+export async function getWithPagination(page) {
+  const knex = DomainTransaction.getConnection();
+  const getQuery = knex
+    .select(knex.raw('challenge_id AS id'), 'url', knex.raw('\'challenge\' AS type'))
+    .from('challenge_external_urls')
+    .unionAll(function() {
+      this.select(knex.raw('tutorial_id AS id'), 'url', knex.raw('\'tutorial\' AS type')).from('tutorial_external_urls');
+    })
+    .orderBy('type', 'id');
+
+  const { results: externalUrlDTOs } = await fetchPage(getQuery, page);
+  return externalUrlDTOs;
 }
 
 export async function exportExternalUrls(dataToUpload) {

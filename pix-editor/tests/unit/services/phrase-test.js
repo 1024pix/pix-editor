@@ -30,7 +30,7 @@ module('Unit | Service | storage', function (hooks) {
         '/api/phrase/download',
         {
           method: 'POST',
-          headers: { authorization: 'Bearer someApiKey' },
+          headers: { ['x-api-key']: 'someApiKey' },
         },
       ]);
     });

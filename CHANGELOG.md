@@ -1,5 +1,31 @@
 
 
+## v4.45.0 (30/07/2026)
+
+
+### :rocket: Amélioration
+- [#1540](https://github.com/1024pix/pix-editor/pull/1540) [FEATURE] Permettre d'inverser un proto et une déclinaison (PIX-23329).
+
+### :building_construction: Tech
+- [#1567](https://github.com/1024pix/pix-editor/pull/1567) [TECH] Ajouter la pagination lors de la récupération des urls à vérifier sur le monitoring (Pix-23687).
+
+## v4.44.0 (29/07/2026)
+
+
+### :rocket: Amélioration
+- [#1562](https://github.com/1024pix/pix-editor/pull/1562) [FEATURE] Autoriser l'authentification avec le header `X-API-Key` (PIX-23700).
+
+### :building_construction: Tech
+- [#1558](https://github.com/1024pix/pix-editor/pull/1558) [TECH] Copier les règles de validation des modules de Pix API à Pix Editor (PIX-23158).
+
+### :arrow_up: Montée de version
+- [#1563](https://github.com/1024pix/pix-editor/pull/1563) [BUMP] Update dependency ember-lifeline to v7.1.0 (pix-editor).
+- [#1561](https://github.com/1024pix/pix-editor/pull/1561) [BUMP] Update dependency ember-eslint-parser to ^0.14.0 (pix-editor).
+- [#1560](https://github.com/1024pix/pix-editor/pull/1560) [BUMP] Update dependency @playwright/test to v1.61.1.
+- [#1559](https://github.com/1024pix/pix-editor/pull/1559) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.41 (pix-editor).
+- [#1549](https://github.com/1024pix/pix-editor/pull/1549) [BUMP] Update dependency @1024pix/pix-ui to ^60.15.0 (pix-editor).
+- [#1557](https://github.com/1024pix/pix-editor/pull/1557) [BUMP] Update dependency js-yaml to v4.3.0 [SECURITY].
+
 ## v4.43.0 (24/07/2026)
 
 

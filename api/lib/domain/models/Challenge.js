@@ -288,6 +288,10 @@ export class Challenge {
     return this.genealogy === Challenge.GENEALOGIES.PROTOTYPE;
   }
 
+  get isAlternative() {
+    return this.genealogy === Challenge.GENEALOGIES.DECLINAISON;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }
@@ -328,6 +332,26 @@ export class Challenge {
     return this.#translations;
   }
 
+  get dataOnSwitchGenealogy() {
+    if (this.genealogy === Challenge.GENEALOGIES.PROTOTYPE) {
+      return {
+        id: this.id,
+        genealogy: this.genealogy,
+        alternativeVersion: this.alternativeVersion,
+        accessibility1: this.accessibility1,
+        accessibility2: this.accessibility2,
+        updatedAt: new Date(),
+      };
+    }
+
+    return {
+      id: this.id,
+      genealogy: this.genealogy,
+      alternativeVersion: this.alternativeVersion,
+      updatedAt: new Date(),
+    };
+  }
+
   static getPrimaryLocale(locales) {
     return Challenge.defaultLocales(locales)[0];
   }
@@ -335,6 +359,37 @@ export class Challenge {
   static defaultLocales(locales) {
     if (locales == undefined || locales.length === 0) return ['fr'];
     return [...locales].sort();
+  }
+
+  switchToPrototype({
+    accessibility1,
+    accessibility2,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
+    hasEmbedInternalValidation,
+    noValidationNeeded,
+  }) {
+    this.genealogy = Challenge.GENEALOGIES.PROTOTYPE;
+    this.alternativeVersion = null;
+    this.accessibility1 = accessibility1;
+    this.accessibility2 = accessibility2;
+    this.primaryLocalizedChallenge.switchToPrototype({
+      requireGafamWebsiteAccess,
+      isIncompatibleIpadCertif,
+      deafAndHardOfHearing,
+      isAwarenessChallenge,
+      toRephrase,
+      hasEmbedInternalValidation,
+      noValidationNeeded,
+    });
+  }
+
+  switchToAlternative({ alternativeVersion }) {
+    this.genealogy = Challenge.GENEALOGIES.DECLINAISON;
+    this.alternativeVersion = alternativeVersion;
   }
 
   cloneChallengeAndAttachments({

@@ -66,11 +66,11 @@ export function catchErr(promiseFn, ctx) {
 }
 
 export function generateAuthorizationHeader(user) {
-  return { authorization: `Bearer ${user.apiKey}` };
+  return { 'x-api-key': user.apiKey };
 }
 
 export function generateBrokenLinksMonitorAuthorizationHeader() {
-  return { authorization: `Bearer ${config.urlBrokenLinksMonitor.authSecret}` };
+  return { 'x-api-key': config.urlBrokenLinksMonitor.authSecret };
 }
 
 export { domainBuilder } from './tooling/domain-builder/domain-builder.js';

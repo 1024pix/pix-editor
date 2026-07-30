@@ -6,7 +6,7 @@ export default class PhraseService extends Service {
   async download(fetchFn = fetch) {
     await fetchFn('/api/phrase/download', {
       method: 'POST',
-      headers: { authorization: `Bearer ${this.session.data.authenticated.apiKey}` },
+      headers: { ['x-api-key']: this.session.data.authenticated.apiKey },
     });
   }
 }

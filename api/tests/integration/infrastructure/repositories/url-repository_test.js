@@ -72,4 +72,64 @@ describe('Integration | Repository | url-repository', () => {
       });
     });
   });
+
+  describe('getWithPagination', () => {
+    it('should return a page of external urls', async () => {
+      // given
+      databaseBuilder.factory.buildChallengeExternalUrl({
+        framework_name: 'Pix',
+        competence_name: 'Nom de competence',
+        skill_name: '@patateDouce',
+        challenge_id: 'challenge1',
+        challenge_status: 'validé',
+        locale: 'nl',
+        url: 'https://ui.pix.org',
+      });
+      databaseBuilder.factory.buildChallengeExternalUrl({
+        framework_name: 'Pix',
+        competence_name: 'Nom de competence',
+        skill_name: '@patateDouce',
+        challenge_id: 'challenge2',
+        challenge_status: 'validé',
+        locale: 'fr',
+        url: 'https://ui.pix.fr',
+      });
+      databaseBuilder.factory.buildChallengeExternalUrl({
+        framework_name: 'Pix',
+        competence_name: 'Nom de competence',
+        skill_name: '@patateDouce',
+        challenge_id: 'challenge3',
+        challenge_status: 'validé',
+        locale: 'fr',
+        url: 'https://ui.pix.fr',
+      });
+      databaseBuilder.factory.buildTutorialExternalUrl({
+        competence_name: 'Nom de competence',
+        skill_name: '@patateDouce',
+        tutorial_id: 'tutorial1',
+        url: 'http://commant-pix-ui-fonctionne.org',
+      });
+
+      await databaseBuilder.commit();
+
+      // when
+      const urls = await urlRepository.getWithPagination({ number: 2, size: 2 });
+
+      // then
+      expect(urls).toStrictEqual(
+        [
+          {
+            id: 'challenge3',
+            url: 'https://ui.pix.fr',
+            type: 'challenge',
+          },
+          {
+            id: 'tutorial1',
+            url: 'http://commant-pix-ui-fonctionne.org',
+            type: 'tutorial',
+          },
+        ],
+      );
+    });
+  });
 });

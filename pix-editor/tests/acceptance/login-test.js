@@ -21,8 +21,8 @@ module('Acceptance | Login', function (hooks) {
     hooks.beforeEach(function () {
       // FIXME move this in mirage's configuration and remove direct dependency on miragejs
       this.server.get('/users/me', ({ users }, request) => {
-        const apiKey = request.requestHeaders && request.requestHeaders['Authorization'];
-        return apiKey === `Bearer ${VALID_API_KEY}` ? users.first() : new Response(401);
+        const apiKey = request.requestHeaders && request.requestHeaders['x-api-key'];
+        return apiKey === VALID_API_KEY ? users.first() : new Response(401);
       });
     });
 
