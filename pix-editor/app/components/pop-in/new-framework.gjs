@@ -11,7 +11,7 @@ export default class PopInNewFrameworkComponent extends Component {
       <:content>
         {{#if @framework}}
           <form action class="form" {{on "submit" this.saveOnSubmit}}>
-            <Input @value={{@framework.name}} @edition={{true}} @title="Nom" @change={{this.setFrameWorkName}} />
+            <Input @value={{@framework.name}} @edition={{true}} @label="Nom" @change={{this.setFrameWorkName}} />
           </form>
         {{/if}}
       </:content>

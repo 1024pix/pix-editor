@@ -61,7 +61,7 @@ module('Integration | Component | competence/competence-actions', function (hook
       );
 
       // then
-      assert.dom(screen.getByText('En construction')).hasClass('competence-actions__tab--active');
+      assert.dom(screen.getByText('En construction')).hasClass('active');
     });
   });
 
