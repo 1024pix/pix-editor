@@ -412,7 +412,7 @@ describe('Acceptance | Route | draft-modules', () => {
           ...module.glossary,
           {
             word: 'antennes',
-            description: 'La paire d’antennes de l’escargot lui sert, en gros, à tâter le terrain et à découvrir, par le toucher, son environnement immédiat.',
+            definition: 'La paire d’antennes de l’escargot lui sert, en gros, à tâter le terrain et à découvrir, par le toucher, son environnement immédiat.',
           },
         ],
       }));
@@ -439,7 +439,7 @@ describe('Acceptance | Route | draft-modules', () => {
       expect(response.result.data.attributes['html-diff']).toMatchInlineSnapshot(`
         "<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#6F42C1;font-weight:bold">@@ -9,9 +9,9 @@</span></span>
         <span class="line"><span style="color:#24292E">   "details": {</span></span>
-        <span class="line"><span style="color:#24292E">     "image": "https=//assets.pix.org/draft/escargots.jpg",</span></span>
+        <span class="line"><span style="color:#24292E">     "image": "https://assets.pix.org/draft/escargots.jpg",</span></span>
         <span class="line"><span style="color:#24292E">     "description": "&#x3C;p>Ce module est dédié aux escargots&#x3C;/p>&#x3C;p>Il contient normalement l'intégralité de leurs secrets disponibles à date.&#x3C;/p>",</span></span>
         <span class="line"><span style="color:#24292E">     "duration": 7,</span></span>
         <span class="line"><span style="color:#B31D28">-    "level": "novice",</span></span>
@@ -452,11 +452,11 @@ describe('Acceptance | Route | draft-modules', () => {
         <span class="line"><span style="color:#24292E">   "glossary": [</span></span>
         <span class="line"><span style="color:#24292E">     {</span></span>
         <span class="line"><span style="color:#24292E">       "word": "coquille",</span></span>
-        <span class="line"><span style="color:#24292E">       "description": "Une coquille est un agglomérat de calcaire très résistant. Sa structure cristalline spécifique lui confère une résistance protectrice. Elle prodique à l'escargot toute sa force et sa vitalité."</span></span>
+        <span class="line"><span style="color:#24292E">       "definition": "Une coquille est un agglomérat de calcaire très résistant. Sa structure cristalline spécifique lui confère une résistance protectrice. Elle prodique à l'escargot toute sa force et sa vitalité."</span></span>
         <span class="line"><span style="color:#22863A">+    },</span></span>
         <span class="line"><span style="color:#22863A">+    {</span></span>
         <span class="line"><span style="color:#22863A">+      "word": "antennes",</span></span>
-        <span class="line"><span style="color:#22863A">+      "description": "La paire d’antennes de l’escargot lui sert, en gros, à tâter le terrain et à découvrir, par le toucher, son environnement immédiat."</span></span>
+        <span class="line"><span style="color:#22863A">+      "definition": "La paire d’antennes de l’escargot lui sert, en gros, à tâter le terrain et à découvrir, par le toucher, son environnement immédiat."</span></span>
         <span class="line"><span style="color:#24292E">     }</span></span>
         <span class="line"><span style="color:#24292E">   ]</span></span>
         <span class="line"><span style="color:#24292E"> }</span></span>
