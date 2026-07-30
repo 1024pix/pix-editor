@@ -1,5 +1,14 @@
 
 
+## v4.45.0 (30/07/2026)
+
+
+### :rocket: Amélioration
+- [#1540](https://github.com/1024pix/pix-editor/pull/1540) [FEATURE] Permettre d'inverser un proto et une déclinaison (PIX-23329).
+
+### :building_construction: Tech
+- [#1567](https://github.com/1024pix/pix-editor/pull/1567) [TECH] Ajouter la pagination lors de la récupération des urls à vérifier sur le monitoring (Pix-23687).
+
 ## v4.44.0 (29/07/2026)
 
 
