@@ -11,7 +11,7 @@ describe('Acceptance | Controller | external-urls', () => {
       // when
       const response = await server.inject({
         method: 'GET',
-        url: '/api/external-urls',
+        url: '/api/external-urls?page=1',
       });
 
       // then
@@ -140,7 +140,7 @@ describe('Acceptance | Controller | external-urls', () => {
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/external-urls',
+          url: '/api/external-urls?page=1',
           headers: generateBrokenLinksMonitorAuthorizationHeader(),
         });
 
