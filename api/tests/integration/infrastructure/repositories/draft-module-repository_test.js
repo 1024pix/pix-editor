@@ -202,7 +202,7 @@ describe('Integration | Repository | draft-module-repository', () => {
     });
 
     context('when draft module to update does not exist', function() {
-      it('should thro', async () => {
+      it('should not update existing one', async () => {
         const hasBeenValidated = false;
         const validationErrors = [
           `\nError: "id" must be a valid GUID.
@@ -213,16 +213,17 @@ describe('Integration | Repository | draft-module-repository', () => {
 
         const module = domainBuilder.buildDraftModule({ hasBeenValidated, validationErrors });
         const { id } = databaseBuilder.factory.buildDraftModule(module);
+        const mismatchingId = '235c680e-cbd2-4c56-bef6-80d3ed4d417a';
 
         await databaseBuilder.commit();
 
         // when
-        await draftModuleRepository.updateValidationStatus({ id, hasBeenValidated: true, validationErrors: [] });
+        await draftModuleRepository.updateValidationStatus({ id: mismatchingId, hasBeenValidated: true, validationErrors: [] });
 
         // then
         const draftModule = await draftModuleRepository.getById({ id });
-        expect(draftModule.hasBeenValidated).to.be.true;
-        expect(draftModule.validationErrors).to.deep.equal([]);
+        expect(draftModule.hasBeenValidated).to.be.false;
+        expect(draftModule.validationErrors).to.deep.equal(validationErrors);
       });
     });
   });
