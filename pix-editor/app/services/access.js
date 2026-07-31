@@ -157,6 +157,10 @@ export default class AccessService extends Service {
     return this.isEditor() && challenge.isPrototype && challenge.isDraft;
   }
 
+  maySwitchGenealogy(challenge) {
+    return this.isReplicator() && challenge.isValidated && challenge.isAlternative;
+  }
+
   mayAccessAdministration() {
     return this.isAdmin();
   }

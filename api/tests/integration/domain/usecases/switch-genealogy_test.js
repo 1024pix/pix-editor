@@ -13,6 +13,7 @@ describe('Integration | Usecases | Switch Genealogy', function() {
         alternativeVersion: null,
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.KO,
+        status: Challenge.STATUSES.VALIDE,
         locales: ['fr-FR'],
       },
       localizedChallenge: {
@@ -31,6 +32,7 @@ describe('Integration | Usecases | Switch Genealogy', function() {
       id: 'challengeIdDécli',
       skillId: challengePrototype.skillId,
       genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      status: Challenge.STATUSES.VALIDE,
       alternativeVersion: 56,
       accessibility1: Challenge.ACCESSIBILITY1.OK,
       accessibility2: Challenge.ACCESSIBILITY2.OK,
@@ -98,6 +100,7 @@ describe('Integration | Usecases | Switch Genealogy', function() {
       challenge: {
         id: 'challengeId',
         genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        status: Challenge.STATUSES.VALIDE,
         version: null,
         alternativeVersion: null,
         accessibility1: Challenge.ACCESSIBILITY1.KO,
@@ -120,6 +123,7 @@ describe('Integration | Usecases | Switch Genealogy', function() {
       id: 'challengeIdDécli2',
       skillId: challenge.skillId,
       genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      status: Challenge.STATUSES.VALIDE,
       alternativeVersion: 56,
       accessibility1: Challenge.ACCESSIBILITY1.OK,
       accessibility2: Challenge.ACCESSIBILITY2.OK,

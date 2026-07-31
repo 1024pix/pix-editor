@@ -362,6 +362,82 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
   });
 
+  module('#switchGenealogy', function (hooks) {
+    let challenge, routerTransitionToStub, overviewControllerSendStub, confirmAskStub;
+
+    hooks.beforeEach(function () {
+      routerTransitionToStub = sinon.stub();
+      class RouterService extends Service {
+        transitionTo = routerTransitionToStub;
+      }
+      this.owner.unregister('service:router');
+      this.owner.register('service:router', RouterService);
+
+      class CurrentDataService extends Service {
+        getCompetence = sinon.stub().returns('competence1');
+      }
+      this.owner.unregister('service:current-data');
+      this.owner.register('service:current-data', CurrentDataService);
+
+      confirmAskStub = sinon.stub().resolves();
+      class ConfirmService extends Service {
+        ask = confirmAskStub;
+      }
+      this.owner.unregister('service:confirm');
+      this.owner.register('service:confirm', ConfirmService);
+
+      controller._errorMessage = sinon.stub();
+
+      overviewControllerSendStub = sinon.stub().resolves();
+      controller.overviewController = { send: overviewControllerSendStub };
+
+      challenge = {
+        id: 'rec1',
+        switchGenealogy: sinon.stub().resolves(),
+        relatedPrototype: { id: 'rec2', reload: sinon.stub().resolves() },
+      };
+      controller.model = challenge;
+    });
+
+    test('it should switch the genealogy, reload the prototype and navigate to the prototype page', async function (assert) {
+      // when
+      await controller.switchGenealogy();
+
+      // then
+      assert.ok(confirmAskStub.calledOnce);
+      assert.ok(challenge.switchGenealogy.calledOnce);
+      assert.ok(challenge.relatedPrototype.reload.calledOnce);
+      assert.ok(overviewControllerSendStub.calledWith('refreshModel'));
+      assert.ok(
+        routerTransitionToStub.calledWith('authenticated.competence.prototypes.single', 'competence1', challenge),
+      );
+      assert.ok(messageStub.calledWith('Inversion effectuée'));
+    });
+
+    test('it should not switch the genealogy when the confirmation is cancelled', async function (assert) {
+      // given
+      confirmAskStub.rejects();
+
+      // when
+      await controller.switchGenealogy();
+
+      // then
+      assert.notOk(challenge.switchGenealogy.called);
+      assert.ok(messageStub.calledWith('Inversion abandonnée'));
+    });
+
+    test('it should display an error message if switching the genealogy fails', async function (assert) {
+      // given
+      challenge.switchGenealogy = sinon.stub().rejects(new Error('boom'));
+
+      // when
+      await controller.switchGenealogy();
+
+      // then
+      assert.ok(controller._errorMessage.calledWith("Erreur lors de l'inversion"));
+    });
+  });
+
   module('#UrlsToConsult', function () {
     test('it should reset urlToConsult when urlToConsultField is closed', function (assert) {
       // given

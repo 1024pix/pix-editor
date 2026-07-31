@@ -18,42 +18,22 @@ const routesConfig = { routes: { validate: { failAction: handleFailAction } } };
  * });
  */
 class HttpTestServer {
-  constructor({ mustThrowOn5XXError = true } = {}) {
+  constructor() {
     this.hapiServer = Hapi.server(routesConfig);
-    this._mustThrow5XXOnError = mustThrowOn5XXError;
   }
 
-  async register(moduleUnderTest) {
-    await this.hapiServer.register(moduleUnderTest);
+  register(moduleUnderTest) {
+    return this.hapiServer.register(moduleUnderTest);
   }
 
-  async request(method, url, payload, auth, headers) {
-    const result = await this.hapiServer.inject({ method, url, payload, auth, headers });
-
-    if (this._mustThrowOn5XXError && result.statusCode >= 500) {
-      throw new Error('Request Failed');
-    }
-
-    return result;
-  }
-
-  requestObject({ method, url, payload, auth, headers }) {
-    return this.request(method, url, payload, auth, headers);
+  inject(method, url, payload, auth, headers) {
+    return this.hapiServer.inject({ method, url, payload, auth, headers });
   }
 
   setupAuthentication() {
     this.hapiServer.scheme('api-token', security.scheme);
     this.hapiServer.strategy('default', 'api-token');
     this.hapiServer.default('default');
-  }
-
-  setupDeserialization() {
-    this.hapiServer.ext('onPreHandler', async (request, h) => {
-      if (request.payload?.data) {
-        request.deserializedPayload = await deserializer.deserialize(request.payload);
-      }
-      return h.continue;
-    });
   }
 }
 

@@ -1,3 +1,4 @@
+import { ForbiddenError } from '../errors.js';
 import { LocalizedChallenge } from './LocalizedChallenge.js';
 import _ from 'lodash';
 
@@ -372,6 +373,12 @@ export class Challenge {
     hasEmbedInternalValidation,
     noValidationNeeded,
   }) {
+    if (!this.isAlternative) {
+      throw new ForbiddenError('Challenge to switch to prototype is not an alternative');
+    }
+    if (!this.isValide) {
+      throw new ForbiddenError('Challenge must be validated to be switched');
+    }
     this.genealogy = Challenge.GENEALOGIES.PROTOTYPE;
     this.alternativeVersion = null;
     this.accessibility1 = accessibility1;

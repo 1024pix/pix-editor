@@ -156,6 +156,10 @@ export default class ChallengeModel extends Model {
     return this.genealogy === ChallengeModel.GENEALOGIES.PROTOTYPE;
   }
 
+  get isAlternative() {
+    return this.genealogy === ChallengeModel.GENEALOGIES.DECLINAISON;
+  }
+
   get isWorkbench() {
     const skill = this.skill;
     if (skill) {
@@ -342,6 +346,10 @@ export default class ChallengeModel extends Model {
     this.status = ChallengeModel.STATUSES.VALIDE;
     this.validatedAt = new Date();
     return this.save();
+  }
+
+  async switchGenealogy() {
+    return this.save({ adapterOptions: { switchGenealogy: true } });
   }
 
   async duplicate() {
