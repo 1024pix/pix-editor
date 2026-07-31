@@ -87,6 +87,30 @@ describe('Unit | Domain | DraftModule', () => {
     });
   });
 
+  describe('#toModuleValidation', () => {
+    it('serializes draft module fields to module JSON discarding irrelevant fields', () => {
+      // given
+      const draftModule = domainBuilder.buildDraftModule();
+      const expectedModuleValidation = {
+        id: draftModule.id,
+        details: draftModule.details,
+        glossary: draftModule.glossary,
+        isBeta: draftModule.isBeta,
+        sections: draftModule.sections,
+        shortId: draftModule.shortId,
+        slug: draftModule.slug,
+        title: draftModule.title,
+        visibility: draftModule.visibility,
+      };
+
+      // when
+      const result = draftModule.toModuleValidation();
+
+      // then
+      expect(result).to.deep.equal(expectedModuleValidation);
+    });
+  });
+
   describe('#publish', () => {
     it('creates a published module from draft module', () => {
       // given
