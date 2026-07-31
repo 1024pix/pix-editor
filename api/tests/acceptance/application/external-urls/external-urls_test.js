@@ -20,7 +20,7 @@ describe('Acceptance | Controller | external-urls', () => {
         errors: [
           {
             code: 401,
-            detail: 'Missing or invalid access token in request auhorization headers.',
+            detail: 'Missing or invalid access token in request X-API-Key header.',
             title: 'Unauthorized access',
           },
         ],
