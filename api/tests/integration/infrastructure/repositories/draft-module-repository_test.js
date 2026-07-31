@@ -163,7 +163,7 @@ describe('Draft Module Repository', () => {
       await draftModuleRepository.remove({ id });
 
       // then
-      expect(knex.pluck('shortId').from('draft-modules')).resolves.toStrictEqual(['modtest2']);
+      await expect(knex.pluck('shortId').from('draft-modules')).resolves.toStrictEqual(['modtest2']);
     });
   });
 });

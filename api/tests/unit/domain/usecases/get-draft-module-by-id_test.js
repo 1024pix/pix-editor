@@ -59,7 +59,7 @@ describe('Unit | Domain | Use Cases | getDraftModuleById', () => {
       );
 
       // then
-      expect(result).rejects.toStrictEqual(expectedError);
+      await expect(result).rejects.toStrictEqual(expectedError);
       expect(draftModuleRepository.getById).toHaveBeenCalledExactlyOnceWith({ id: draftModuleId });
     });
   });

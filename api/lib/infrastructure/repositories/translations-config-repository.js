@@ -10,6 +10,15 @@ export async function listWithPhraseProjectId() {
   return dtos.map(toDomain);
 }
 
+export async function listWithWeblateComponent() {
+  const knexConn = DomainTransaction.getConnection();
+  const dtos = await knexConn.select('*')
+    .from('translations_config')
+    .whereNotNull('weblateComponent')
+    .orderBy('id');
+  return dtos.map(toDomain);
+}
+
 /**
  * @param {string} phraseProjectId
  */

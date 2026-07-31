@@ -491,6 +491,7 @@ describe('Acceptance | Controller | admin', () => {
                   phraseProjectId: 'patate123',
                   frameworkId: framework.id,
                   areaId: null,
+                  weblateComponent: null,
                   uploadedLocales: ['fr-fr'],
                 },
               },
@@ -501,6 +502,7 @@ describe('Acceptance | Controller | admin', () => {
             phraseProjectId: 'patate123',
             frameworkId: framework.id,
             areaId: null,
+            weblateComponent: null,
             uploadedLocales: ['fr-fr'],
           });
         });

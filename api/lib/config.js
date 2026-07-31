@@ -144,6 +144,12 @@ export const phrase = {
   webhookSecret: process.env.PHRASE_WEBHOOK_SECRET,
 };
 
+export const weblate = {
+  apiBaseUrl: process.env.WEBLATE_API_BASE_URL,
+  apiToken: process.env.WEBLATE_API_TOKEN,
+  project: process.env.WEBLATE_PROJECT,
+};
+
 export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
 
 export const seedsConfig = {
@@ -202,6 +208,10 @@ if (process.env.NODE_ENV === 'test') {
 
   phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
   phrase.webhookSecret = 'le secret de phrase';
+
+  weblate.apiBaseUrl = 'https://test.weblate.pix.digital';
+  weblate.apiToken = 'TEST_WEBLATE_TOKEN';
+  weblate.project = 'test-pix-editor';
 
   urlBrokenLinksMonitor.authSecret = 'LE_SECRET_DU_MONITEUR_DES_URL_EXTERNES';
   urlBrokenLinksMonitor.pageSize = 2;
