@@ -1,4 +1,4 @@
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
@@ -7,7 +7,7 @@ import or from 'ember-truth-helpers/helpers/or';
 
 export default class Illustration extends Component {
   <template>
-    <div class="field" ...attributes>
+    <div class="field field--files" ...attributes>
       {{#if (or @value @edition)}}
         <h3 class="field-title">{{@title}}</h3>
       {{/if}}
@@ -20,9 +20,7 @@ export default class Illustration extends Component {
           octets)
         {{/if}}
         {{#if @edition}}
-          <button class="file-remove" type="button" title="Supprimer l'image" {{on "click" this.remove}}>
-            <PixIcon @name="close" @ariaHidden={{true}} />
-          </button>
+          <PixIconButton @ariaLabel="Supprimer l'image" @iconName="close" @triggerAction={{this.remove}} />
         {{/if}}
       {{/if}}
       {{#if @edition}}

@@ -9,6 +9,20 @@
   cursor: pointer;
 }
 
+.field--files {
+  & > label {
+    display: flex;
+    flex-direction: column;
+
+    & > input {
+      background: #fff;
+      border: 1px solid rgba(34, 36, 38, .15);
+      color: rgba(0, 0, 0, .87);
+      padding: 0.875rem;
+    }
+  }
+}
+
 .field-textarea__button,
 .field-textarea__help {
   float: right;

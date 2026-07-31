@@ -234,7 +234,7 @@ module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
     // when
     const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1');
     await click(find('[data-test-modify-challenge-button]'));
-    await click(find('[data-test-file-input-illustration] button.file-remove'));
+    await click(screen.getByRole('button', { name: "Supprimer l'image" }));
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
 
