@@ -54,8 +54,7 @@ describe('Integration | Usecases | Validate draft module', () => {
     ];
     const module = domainBuilder.buildModule({ internalTitle: 'different internal title', sections });
 
-    databaseBuilder.factory.buildModule(module);
-    const { id } = databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule());
+    const { id } = databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule(module));
     await databaseBuilder.commit();
 
     const draftModule = await dependencies.draftModuleRepository.getById({ id });
