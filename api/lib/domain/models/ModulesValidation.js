@@ -1,6 +1,6 @@
 import { ModuleDuplicateIdsError } from '../errors.js';
 
-export class Modules {
+export class ModulesValidation {
   constructor({ modules }) {
     this.modules = modules;
   }

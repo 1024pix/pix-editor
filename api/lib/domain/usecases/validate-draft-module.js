@@ -2,7 +2,7 @@ import { draftModuleRepository, moduleRepository } from '../../infrastructure/re
 
 import { moduleSchema } from '../../application/modules/validation/module-schema.js';
 import { joiErrorParser } from '../../application/modules/joi-error-parser.js';
-import { Modules } from '../models/Modules.js';
+import { ModulesValidation } from '../models/ModulesValidation.js';
 
 export async function validateDraftModule(draftModule, dependencies = { moduleRepository, draftModuleRepository }) {
   let hasBeenValidated = true;
@@ -27,7 +27,7 @@ export async function validateDraftModule(draftModule, dependencies = { moduleRe
   }
 
   try {
-    const modulesAgg = new Modules({ modules });
+    const modulesAgg = new ModulesValidation({ modules });
     modulesAgg.validateDraftModuleDoesNotHaveDuplicateIds(draftModule);
   } catch (error) {
     validationErrors.push(error.message);

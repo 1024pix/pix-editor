@@ -1,5 +1,5 @@
 import { describe, describe as context, it, expect } from 'vitest';
-import { Modules } from '../../../../lib/domain/models/Modules.js';
+import { ModulesValidation } from '../../../../lib/domain/models/ModulesValidation.js';
 
 describe('Unit | Domain | Modules', () => {
   context('#constructor', () => {
@@ -8,10 +8,10 @@ describe('Unit | Domain | Modules', () => {
       const modules = _buildModules();
 
       // when
-      const result = new Modules({ modules });
+      const result = new ModulesValidation({ modules });
 
       // then
-      expect(result).to.be.an.instanceOf(Modules);
+      expect(result).to.be.an.instanceOf(ModulesValidation);
       expect(result.modules).to.deep.equal(modules);
     });
   });
@@ -23,7 +23,7 @@ describe('Unit | Domain | Modules', () => {
 
       // when / then
       try {
-        const result = new Modules({ modules });
+        const result = new ModulesValidation({ modules });
         result.validateDraftModuleDoesNotHaveDuplicateIds(draftModule);
       } catch (error) {
         expect.fail(`ModuleDuplicateIdsError should not be thrown ${error}`);
@@ -37,7 +37,7 @@ describe('Unit | Domain | Modules', () => {
 
         // when / then
         try {
-          const result = new Modules({ modules });
+          const result = new ModulesValidation({ modules });
           result.validateDraftModuleDoesNotHaveDuplicateIds(draftModule);
         } catch (error) {
           expect.fail(`ModuleDuplicateIdsError should not be thrown ${error}`);
@@ -54,7 +54,7 @@ describe('Unit | Domain | Modules', () => {
 
           try {
             // when
-            const result = new Modules({ modules });
+            const result = new ModulesValidation({ modules });
             result.validateDraftModuleDoesNotHaveDuplicateIds(draftModule);
             expect.fail('should have thrown a ModuleDuplicateIdsError');
           } catch (error) {
@@ -76,7 +76,7 @@ describe('Unit | Domain | Modules', () => {
 
           try {
             // when
-            const result = new Modules({ modules });
+            const result = new ModulesValidation({ modules });
             result.validateDraftModuleDoesNotHaveDuplicateIds(draftModule);
             expect.fail('should have thrown a ModuleDuplicateIdsError');
           } catch (error) {
@@ -97,7 +97,7 @@ describe('Unit | Domain | Modules', () => {
 
           try {
             // when
-            const result = new Modules({ modules });
+            const result = new ModulesValidation({ modules });
             result.validateDraftModuleDoesNotHaveDuplicateIds(draftModule);
             expect.fail('should have thrown a ModuleDuplicateIdsError');
           } catch (error) {
