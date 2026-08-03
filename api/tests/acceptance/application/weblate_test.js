@@ -138,7 +138,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           component: 'weblate-component',
           context: 'area.area1.title',
           translation: 'fr',
-          target: 'ne doit pas être pris en compte',
+          target: ['ne doit pas être pris en compte'],
         };
 
         const serializedPayload = JSON.stringify(payload);
@@ -177,7 +177,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           component: 'weblate-component',
           context: 'area.area1.title',
           translation: 'en',
-          target: 'area1’s english title',
+          target: ['area1’s english title'],
         };
 
         const serializedPayload = JSON.stringify(payload);
@@ -206,7 +206,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       });
     });
 
-    describe('when change is 2 (translation_updated)', () => {
+    describe('when change is `Translation Changed`', () => {
       it('saves the translation in database', async () => {
         const payload = {
           action: 'Translation changed',
@@ -214,7 +214,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           component: 'weblate-component',
           context: 'area.area1.title',
           translation: 'en',
-          target: 'area1’s english title',
+          target: ['area1’s english title'],
         };
 
         const serializedPayload = JSON.stringify(payload);
