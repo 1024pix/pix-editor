@@ -966,6 +966,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
         databaseBuilder.factory.buildTranslationsConfig({ phraseProjectId: 'phraseProject666', frameworkId: 'framework1', areaId: 'area1', uploadedLocales: ['fr'] });
         databaseBuilder.factory.buildTranslationsConfig({ phraseProjectId: 'phraseProject333', frameworkId: 'framework2', uploadedLocales: ['fr', 'fr-FR'] });
 
+        await databaseBuilder.commit();
+
         const server = await createServer();
 
         // when

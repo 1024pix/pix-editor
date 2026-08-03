@@ -31,6 +31,7 @@ import * as translationsRoute from './application/translations.js';
 import * as tutorialsRoute from './application/tutorials.js';
 import * as tubesRoutes from './application/tubes.js';
 import * as usersRoute from './application/users.js';
+import * as weblateRoute from './application/weblate.js';
 import * as whitelistedUrlsRoute from './application/whitelisted-urls/index.js';
 
 export const routes = [
@@ -66,6 +67,7 @@ export const routes = [
   tutorialsRoute,
   tubesRoutes,
   usersRoute,
+  weblateRoute,
   whitelistedUrlsRoute,
   ...competenceRoutes,
 ];
