@@ -1,5 +1,21 @@
 
 
+## v4.46.0 (04/08/2026)
+
+
+### :boom: BREAKING CHANGE
+- [#896](https://github.com/1024pix/pix-editor/pull/896) [BREAKING] Protéger l'accès à pix editor avec oauth2 proxy (PIX-12286).
+
+### :rocket: Amélioration
+- [#1566](https://github.com/1024pix/pix-editor/pull/1566) [FEATURE] Ajouter une nouvelle route afin de récuperer les events weblate.
+- [#1565](https://github.com/1024pix/pix-editor/pull/1565) [FEATURE] Envoie les traductions vers Weblate.
+
+### :building_construction: Tech
+- [#1571](https://github.com/1024pix/pix-editor/pull/1571) [TECH] Ne pas enregister les tags de maintenance sous forme de tableau vide mais avec la valeur `null` lorseque challenge ne comporte pas de tag de maintenance (PIX-23767) .
+
+### :bug: Correction
+- [#1568](https://github.com/1024pix/pix-editor/pull/1568) [BUGFIX] Ajout du code manquant d'inversion de décli et prototype (PIX-23329).
+
 ## v4.45.0 (30/07/2026)
 
 
