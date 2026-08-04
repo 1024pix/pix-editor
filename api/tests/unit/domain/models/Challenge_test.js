@@ -1293,6 +1293,32 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('static #defaultLocales', () => {
+    it('should set the default locale to "fr" if the given value is undefined', () => {
+      // when
+      const locales = Challenge.defaultLocales(undefined);
+
+      // then
+      expect(locales).toStrictEqual(['fr']);
+    });
+
+    it('should set the default locale to "fr" if the given value is an empty array', () => {
+      // when
+      const locales = Challenge.defaultLocales([]);
+
+      // then
+      expect(locales).toStrictEqual(['fr']);
+    });
+
+    it('should not change the default locale if the given value is not an empty array', () => {
+      // when
+      const locales = Challenge.defaultLocales(['blabla']);
+
+      // then
+      expect(locales).toStrictEqual(['blabla']);
+    });
+  });
+
   describe('obsolete', () => {
     it('obsoletes a challenge', () => {
       // given
@@ -1304,6 +1330,334 @@ describe('Unit | Domain | Challenge', () => {
       // then
       expect(challenge.status).toStrictEqual(Challenge.STATUSES.PERIME);
       expect(challenge.madeObsoleteAt).toBeInstanceOf(Date);
+    });
+  });
+
+  describe('constructor', () => {
+    it('should create a challenge domain object', () => {
+      // given
+      const challengeDTO = domainBuilder.buildChallengeDatasourceObject({
+        id: 'challengeId',
+        type: Challenge.TYPES.QCM,
+        t1Status: true,
+        t2Status: false,
+        t3Status: true,
+        status: Challenge.STATUSES.VALIDE,
+        skillId: 'recUDrCWD76fp5MsE',
+        timer: 1234,
+        competenceId: 'recsvLz0W2ShyfD63',
+        embedUrl: 'https://github.io/page/epreuve.html',
+        embedHeight: 500,
+        format: Challenge.FORMATS.PETIT,
+        autoReply: false,
+        locales: ['fr'],
+        focusable: false,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
+        author: ['SPS'],
+        declinable: Challenge.DECLINABLES.FACILEMENT,
+        version: 1,
+        alternativeVersion: 2,
+        accessibility1: Challenge.ACCESSIBILITY1.OK,
+        accessibility2: Challenge.ACCESSIBILITY2.RAS,
+        spoil: 'Non Sp',
+        responsive: Challenge.RESPONSIVES.NON,
+        geography: 'FR',
+        files: [{ fileId: 'primaryLocalizedAttachmentId', localizedChallengeId: 'challengeId' }],
+        updatedAt: '2021-10-04',
+        createdAt: '1986-07-14',
+        validatedAt: '2023-02-02T14:17:30Z',
+        archivedAt: '2023-03-03T10:47:05Z',
+        madeObsoleteAt: '2023-04-04T10:47:05Z',
+        shuffled: false,
+        isQualityOk: false,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS, Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME, Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
+      });
+
+      // when
+      const challenge = new Challenge({
+        translations: {
+          fr: {
+            instruction: challengeDTO.instruction,
+            alternativeInstruction: challengeDTO.alternativeInstruction,
+            proposals: challengeDTO.proposals,
+            solution: challengeDTO.solution,
+            solutionToDisplay: challengeDTO.solutionToDisplay,
+            embedTitle: challengeDTO.embedTitle,
+            illustrationAlt: challengeDTO.illustrationAlt,
+          },
+        },
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeDTO.id,
+            challengeId: challengeDTO.id,
+            locale: 'fr',
+            embedUrl: challengeDTO.embedUrl,
+            status: LocalizedChallenge.STATUSES.PRIMARY,
+            geography: 'FR',
+            primaryEmbedUrl: 'https://example.com/embed.html',
+            fileIds: ['primaryLocalizedAttachmentId'],
+            urlsToConsult: ['http://url.com'],
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+            isAwarenessChallenge: false,
+            toRephrase: false,
+            hasEmbedInternalValidation: false,
+            noValidationNeeded: false,
+            validatedAt: null,
+          }),
+        ],
+        ...challengeDTO,
+      });
+
+      // then
+      expect(challenge.id).toStrictEqual('challengeId');
+      expect(challenge.type).toStrictEqual(Challenge.TYPES.QCM);
+      expect(challenge.t1Status).toStrictEqual(true);
+      expect(challenge.t2Status).toStrictEqual(false);
+      expect(challenge.t3Status).toStrictEqual(true);
+      expect(challenge.status).toStrictEqual(Challenge.STATUSES.VALIDE);
+      expect(challenge.skillId).toStrictEqual('recUDrCWD76fp5MsE');
+      expect(challenge.timer).toStrictEqual(1234);
+      expect(challenge.competenceId).toStrictEqual('recsvLz0W2ShyfD63');
+      expect(challenge.embedUrl).toStrictEqual('https://github.io/page/epreuve.html');
+      expect(challenge.embedHeight).toStrictEqual(500);
+      expect(challenge.format).toStrictEqual(Challenge.FORMATS.PETIT);
+      expect(challenge.autoReply).toStrictEqual(false);
+      expect(challenge.locales).toStrictEqual(['fr']);
+      expect(challenge.focusable).toStrictEqual(false);
+      expect(challenge.genealogy).toStrictEqual(Challenge.GENEALOGIES.PROTOTYPE);
+      expect(challenge.pedagogy).toStrictEqual(Challenge.PEDAGOGIES.Q_SITUATION);
+      expect(challenge.author).toStrictEqual(['SPS']);
+      expect(challenge.declinable).toStrictEqual(Challenge.DECLINABLES.FACILEMENT);
+      expect(challenge.version).toStrictEqual(1);
+      expect(challenge.alternativeVersion).toStrictEqual(2);
+      expect(challenge.accessibility1).toStrictEqual(Challenge.ACCESSIBILITY1.OK);
+      expect(challenge.accessibility2).toStrictEqual(Challenge.ACCESSIBILITY2.RAS);
+      expect(challenge.spoil).toStrictEqual('Non Sp');
+      expect(challenge.responsive).toStrictEqual(Challenge.RESPONSIVES.NON);
+      expect(challenge.geography).toStrictEqual('FR');
+      expect(challenge.files).toStrictEqual(['primaryLocalizedAttachmentId']);
+      expect(challenge.updatedAt).toStrictEqual(challengeDTO.updatedAt);
+      expect(challenge.createdAt).toStrictEqual(challengeDTO.createdAt);
+      expect(challenge.validatedAt).toStrictEqual(challengeDTO.validatedAt);
+      expect(challenge.archivedAt).toStrictEqual(challengeDTO.archivedAt);
+      expect(challenge.madeObsoleteAt).toStrictEqual(challengeDTO.madeObsoleteAt);
+      expect(challenge.shuffled).toStrictEqual(false);
+      expect(challenge.isQualityOk).toStrictEqual(false);
+      expect(challenge.assessmentMaintenanceTags).toStrictEqual([Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS, Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS]);
+      expect(challenge.translationMaintenanceTags).toStrictEqual([Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME, Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD]);
+    });
+
+    it('should set the timer to undefined if it is set to 0', () => {
+      // given
+      const challengeDTO = domainBuilder.buildChallengeDatasourceObject({ timer: 0 });
+
+      // when
+      const challenge = new Challenge({
+        translations: {
+          fr: {
+            instruction: challengeDTO.instruction,
+            alternativeInstruction: challengeDTO.alternativeInstruction,
+            proposals: challengeDTO.proposals,
+            solution: challengeDTO.solution,
+            solutionToDisplay: challengeDTO.solutionToDisplay,
+            embedTitle: challengeDTO.embedTitle,
+            illustrationAlt: challengeDTO.illustrationAlt,
+          },
+        },
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeDTO.id,
+            challengeId: challengeDTO.id,
+          }),
+        ],
+        ...challengeDTO,
+      });
+
+      // then
+      expect(challenge.timer).toStrictEqual(undefined);
+    });
+
+    it('should set the accessibility tags to the prototypes tags', () => {
+      // given
+      const challengeDTO = domainBuilder.buildChallengeDatasourceObject({
+        id: 'challengeId',
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      });
+
+      const protoChallengeDTO = domainBuilder.buildChallengeDatasourceObject({
+        accessibility1: Challenge.ACCESSIBILITY1.NONE,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+      });
+
+      // when
+      const challenge = new Challenge({
+        translations: {
+          fr: {
+            instruction: challengeDTO.instruction,
+            alternativeInstruction: challengeDTO.alternativeInstruction,
+            proposals: challengeDTO.proposals,
+            solution: challengeDTO.solution,
+            solutionToDisplay: challengeDTO.solutionToDisplay,
+            embedTitle: challengeDTO.embedTitle,
+            illustrationAlt: challengeDTO.illustrationAlt,
+          },
+        },
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeDTO.id,
+            challengeId: challengeDTO.id,
+          }),
+        ],
+        prototypeChallenge: protoChallengeDTO,
+        ...challengeDTO,
+      });
+
+      // then
+      expect(challenge.accessibility1).toStrictEqual(Challenge.ACCESSIBILITY1.NONE);
+      expect(challenge.accessibility2).toStrictEqual(Challenge.ACCESSIBILITY2.KO);
+    });
+
+    it('should set the maintenance tags to the prototypes tags', () => {
+      // given
+      const challengeDTO = domainBuilder.buildChallengeDatasourceObject({
+        id: 'challengeId',
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      });
+
+      const protoChallengeDTO = domainBuilder.buildChallengeDatasourceObject({
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.INTERFACE, Challenge.ASSESSMENT_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE],
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO, Challenge.TRANSLATION_MAINTENANCE_TAGS.ILLUSTRATION_SCREENSHOT],
+      });
+
+      // when
+      const challenge = new Challenge({
+        translations: {
+          fr: {
+            instruction: challengeDTO.instruction,
+            alternativeInstruction: challengeDTO.alternativeInstruction,
+            proposals: challengeDTO.proposals,
+            solution: challengeDTO.solution,
+            solutionToDisplay: challengeDTO.solutionToDisplay,
+            embedTitle: challengeDTO.embedTitle,
+            illustrationAlt: challengeDTO.illustrationAlt,
+          },
+        },
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeDTO.id,
+            challengeId: challengeDTO.id,
+          }),
+        ],
+        prototypeChallenge: protoChallengeDTO,
+        ...challengeDTO,
+      });
+
+      // then
+      expect(challenge.assessmentMaintenanceTags).toStrictEqual([Challenge.ASSESSMENT_MAINTENANCE_TAGS.INTERFACE, Challenge.ASSESSMENT_MAINTENANCE_TAGS.KNOWN_EXPIRY_DATE]);
+      expect(challenge.translationMaintenanceTags).toStrictEqual([Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO, Challenge.TRANSLATION_MAINTENANCE_TAGS.ILLUSTRATION_SCREENSHOT]);
+    });
+
+    it('should set the format to MOTS if it is not set', () => {
+      // given
+      const challengeDTO = domainBuilder.buildChallengeDatasourceObject({
+        id: 'challengeId',
+        format: null,
+      });
+
+      // when
+      const challenge = new Challenge({
+        translations: {
+          fr: {
+            instruction: challengeDTO.instruction,
+            alternativeInstruction: challengeDTO.alternativeInstruction,
+            proposals: challengeDTO.proposals,
+            solution: challengeDTO.solution,
+            solutionToDisplay: challengeDTO.solutionToDisplay,
+            embedTitle: challengeDTO.embedTitle,
+            illustrationAlt: challengeDTO.illustrationAlt,
+          },
+        },
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeDTO.id,
+            challengeId: challengeDTO.id,
+          }),
+        ],
+        ...challengeDTO,
+      });
+
+      // then
+      expect(challenge.format).toStrictEqual(Challenge.FORMATS.MOTS);
+    });
+
+    it('should set the primary locales to [\'fr\'] if it is not set', () => {
+      // given
+      const challengeDTO = domainBuilder.buildChallengeDatasourceObject({
+        id: 'challengeId',
+        locales: null,
+      });
+
+      // when
+      const challenge = new Challenge({
+        translations: {
+          fr: {
+            instruction: challengeDTO.instruction,
+            alternativeInstruction: challengeDTO.alternativeInstruction,
+            proposals: challengeDTO.proposals,
+            solution: challengeDTO.solution,
+            solutionToDisplay: challengeDTO.solutionToDisplay,
+            embedTitle: challengeDTO.embedTitle,
+            illustrationAlt: challengeDTO.illustrationAlt,
+          },
+        },
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeDTO.id,
+            challengeId: challengeDTO.id,
+          }),
+        ],
+        ...challengeDTO,
+      });
+
+      // then
+      expect(challenge.primaryLocale).toStrictEqual('fr');
+    });
+
+    it('should set `assessmentMaintenanceTags` and `translationMaintenanceTags` to null if value is empty array', () => {
+      // Given
+      const challengeDTO = domainBuilder.buildChallengeDatasourceObject({
+        id: 'challengeId',
+        assessmentMaintenanceTags: [],
+        translationMaintenanceTags: [],
+      });
+      // When
+      const challenge = new Challenge({
+        translations: {
+          fr: {
+            instruction: challengeDTO.instruction,
+            alternativeInstruction: challengeDTO.alternativeInstruction,
+            proposals: challengeDTO.proposals,
+            solution: challengeDTO.solution,
+            solutionToDisplay: challengeDTO.solutionToDisplay,
+            embedTitle: challengeDTO.embedTitle,
+            illustrationAlt: challengeDTO.illustrationAlt,
+          },
+        },
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeDTO.id,
+            challengeId: challengeDTO.id,
+          }),
+        ],
+        ...challengeDTO,
+      });
+      // Then
+      expect(challenge.assessmentMaintenanceTags).toBeNull();
+      expect(challenge.translationMaintenanceTags).toBeNull();
     });
   });
 });

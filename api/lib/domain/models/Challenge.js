@@ -85,8 +85,8 @@ export class Challenge {
     this.updatedAt = updatedAt;
     this.validatedAt = validatedAt;
     this.version = version;
-    this.assessmentMaintenanceTags = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? assessmentMaintenanceTags : prototypeChallenge.assessmentMaintenanceTags;
-    this.translationMaintenanceTags = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? translationMaintenanceTags : prototypeChallenge.translationMaintenanceTags;
+    this.assessmentMaintenanceTags = this.#setMaintenanceTags({ maintenanceTag: assessmentMaintenanceTags, key: 'assessmentMaintenanceTags', genealogy, prototypeChallenge });
+    this.translationMaintenanceTags = this.#setMaintenanceTags({ maintenanceTag: translationMaintenanceTags, key: 'translationMaintenanceTags', genealogy, prototypeChallenge });
 
     this.localizedChallenges = localizedChallenges;
 
@@ -539,6 +539,11 @@ export class Challenge {
   #translateValidatedAt(localizedChallenge) {
     if (this.isPrimary) return this.validatedAt;
     return localizedChallenge.validatedAt;
+  }
+
+  #setMaintenanceTags({ maintenanceTag, genealogy, prototypeChallenge, key }) {
+    const result = genealogy === Challenge.GENEALOGIES.PROTOTYPE || prototypeChallenge == null ? maintenanceTag : prototypeChallenge[key];
+    return (result && result.length) ? result : null;
   }
 
   obsolete() {
