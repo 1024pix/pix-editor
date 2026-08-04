@@ -113,6 +113,14 @@ function _mapToInfrastructureError(error) {
     };
   }
 
+  if (error instanceof DomainErrors.ModuleDuplicateIdsError) {
+    const infraError = new InfraErrors.BadRequestError(error.message);
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
+  }
+
   const infraError = new InfraErrors.InfrastructureError(error.message);
   return {
     infraErrors: [infraError],

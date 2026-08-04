@@ -1,7 +1,7 @@
 export const joiErrorParser = {
-  format(error) {
-    const visualSeparator = `\n${'='.repeat(60)}\n`;
-    const objectErrorSeparator = `\n${'─'.repeat(60)}\n`;
+  format({ error, objectErrorSeparator, visualSeparator }) {
+    visualSeparator = visualSeparator ?? `\n${'='.repeat(60)}\n`;
+    objectErrorSeparator = objectErrorSeparator ?? `\n${'─'.repeat(60)}\n`;
 
     return `${visualSeparator}${error.details
       .map((errorDetail) => {

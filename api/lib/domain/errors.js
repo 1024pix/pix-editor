@@ -103,3 +103,10 @@ export class DraftModuleDiffError extends DomainError {
     super(message);
   }
 }
+
+export class ModuleDuplicateIdsError extends DomainError {
+  constructor(message, duplicateIds) {
+    super(message);
+    this.duplicateIds = duplicateIds;
+  }
+}

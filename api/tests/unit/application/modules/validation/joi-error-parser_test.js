@@ -1,4 +1,4 @@
-import { expect, describe, it } from 'vitest';
+import { expect, describe, describe as context, it } from 'vitest';
 import { joiErrorParser } from '../../../../../lib/application/modules/joi-error-parser.js';
 
 describe('Unit | Infrastructure | Datasources | Learning Content | Module Datasource | joi error parser', function() {
@@ -66,7 +66,26 @@ Valeur concernée à rechercher : "b7ea7630-824"
 ============================================================
 `;
 
-    expect(joiErrorParser.format(error)).to.equal(expectedLog);
+    expect(joiErrorParser.format({ error })).to.equal(expectedLog);
+  });
+
+  context('when separators in parameters are empty string', function() {
+    it('should parse schema errors without adding separators', async function() {
+      const error = {
+        details: [
+          {
+            message: '"id" must be a valid GUID',
+            path: ['id'],
+            type: 'string.guid',
+            context: { label: 'id', value: 'f7b3a2-1a3d8f7e9f5d', key: 'id' },
+          },
+        ],
+      };
+
+      const expectedLog = `\nError: "id" must be a valid GUID.
+Valeur concernée à rechercher : "f7b3a2-1a3d8f7e9f5d"\n`;
+      expect(joiErrorParser.format({ error, objectErrorSeparator: '', visualSeparator: '' })).to.equal(expectedLog);
+    });
   });
 
   it('should parse html errors', async function() {
@@ -139,6 +158,6 @@ Valeur concernée à rechercher :
 ============================================================
 `;
 
-    expect(joiErrorParser.format(error)).to.equal(expectedLog);
+    expect(joiErrorParser.format({ error })).to.equal(expectedLog);
   });
 });

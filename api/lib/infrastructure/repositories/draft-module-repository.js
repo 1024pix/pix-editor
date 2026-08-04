@@ -16,6 +16,11 @@ export async function save({ details, sections, glossary, ...module }) {
   return toDomain(savedDraftModule);
 }
 
+export async function updateValidationStatus({ id, hasBeenValidated, validationErrors }) {
+  const knexConn = DomainTransaction.getConnection();
+  await knexConn('draft-modules').update({ hasBeenValidated, validationErrors, updatedAt: new Date() }).where({ id });
+}
+
 export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
   const knexConn = DomainTransaction.getConnection();
   const query = knexConn.select().from('draft-modules');

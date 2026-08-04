@@ -51,5 +51,6 @@ export * from './update-thematic.js';
 export * from './update-tutorial.js';
 export * from './update-tube.js';
 export * from './upload-translation-to-phrase.js';
+export * from './validate-draft-module.js';
 export * from './upload-translations-to-weblate.js';
 export * from './save-urls-from-release.js';

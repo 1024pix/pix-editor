@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
+import { createDraftModule, updateDraftModule, getDraftModuleById, getDraftModuleDiff, listPaginatedDraftModules, publishDraftModule, validateDraftModule } from '../../domain/usecases/index.js';
 import { draftModuleDiffSerializer, draftModuleSerializer, moduleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
-import { createDraftModule, updateDraftModule, getDraftModuleById, getDraftModuleDiff, listPaginatedDraftModules, publishDraftModule } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 import * as Types from '../types.js';
 
@@ -96,6 +96,12 @@ export function register(server) {
       method: 'PATCH',
       path: '/api/draft-modules/{id}',
       config: {
+        handler: async (request, h) => {
+          const draftModule = await draftModuleSerializer.deserialize(request.payload);
+          const updatedModule = await updateDraftModule(draftModule);
+          const validatedModule = await validateDraftModule(updatedModule);
+          return h.response(draftModuleSerializer.serialize(validatedModule)).code(200);
+        },
         validate: {
           params: Joi.object({ id: Types.moduleId().required() }).required(),
           payload: Joi.object({
@@ -122,11 +128,6 @@ export function register(server) {
               }).optional(),
             }).required(),
           }).required(),
-        },
-        handler: async (request, h) => {
-          const draftModule = await draftModuleSerializer.deserialize(request.payload);
-          const updatedModule = await updateDraftModule(draftModule);
-          return h.response(draftModuleSerializer.serialize(updatedModule)).code(200);
         },
       },
     },

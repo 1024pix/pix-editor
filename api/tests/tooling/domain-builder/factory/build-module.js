@@ -38,7 +38,7 @@ export function buildModule({
   glossary = [
     {
       word: 'coquille',
-      description: 'Une coquille est un agglomérat de calcaire très résistant. Sa structure cristalline spécifique lui confère une résistance protectrice. Elle prodique à l\'escargot toute sa force et sa vitalité.',
+      definition: 'Une coquille est un agglomérat de calcaire très résistant. Sa structure cristalline spécifique lui confère une résistance protectrice. Elle prodique à l\'escargot toute sa force et sa vitalité.',
     },
   ],
   version = '1.0',
@@ -46,7 +46,7 @@ export function buildModule({
   updatedAt = new Date(),
 } = {}) {
   const {
-    image = 'https=//assets.pix.org/draft/escargots.jpg',
+    image = 'https://assets.pix.org/draft/escargots.jpg',
     description = "<p>Ce module est dédié aux escargots</p><p>Il contient normalement l'intégralité de leurs secrets disponibles à date.</p>",
     duration = 7,
     level = Module.LEVELS.NOVICE,
