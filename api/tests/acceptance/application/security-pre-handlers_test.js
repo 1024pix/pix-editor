@@ -29,7 +29,7 @@ describe('Acceptance | Application | SecurityPreHandlers', () => {
           {
             code: 401,
             title: 'Unauthorized access',
-            detail: 'Missing or invalid access token in request auhorization headers.',
+            detail: 'Missing or invalid access token in request X-API-Key header.',
           },
         ],
       };

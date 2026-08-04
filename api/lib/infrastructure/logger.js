@@ -40,7 +40,7 @@ export function child(section, bindings, options) {
 export const logger = pino(
   {
     level: config.logging.logLevel,
-    redact: ['req.headers.authorization'],
+    redact: ['req.headers.authorization', 'req.headers.x-api-key'],
   },
   config.logging.enabled ? destination : nullDestination,
 );
