@@ -100,19 +100,19 @@ describe('Acceptance | Route | draft-modules', () => {
           id: module.id,
           shortId: module.shortId,
           moduleId: module.id,
-          slug: module.slug + '_update',
+          slug: module.slug + '-update',
           title: module.title + ' update',
-          internalTitle: module.internalTitle + '_update',
+          internalTitle: module.internalTitle + '-update',
           isBeta: true,
           visibility: Module.VISIBILITIES.PRIVATE,
           version: '4.1',
           details: {
-            image: module.details.image + '_update',
+            image: module.details.image + '-update',
             description: module.details.description + ' update',
             duration: module.details.duration + 1,
             level: Module.LEVELS.ADVANDCED,
             objectives: [...module.details.objectives, 'update'],
-            tabletSupport: module.details.tabletSupport + '_update',
+            tabletSupport: module.details.tabletSupport + '-update',
           },
         });
         const draftModulePayload = {
