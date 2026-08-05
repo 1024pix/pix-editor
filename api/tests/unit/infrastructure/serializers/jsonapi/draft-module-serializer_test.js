@@ -27,6 +27,8 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
             glossary: draftModule.glossary,
             url: `${config.pixApp.recette.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
             'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
+            'has-been-validated': draftModule.hasBeenValidated,
+            'validation-errors': draftModule.validationErrors,
           },
           relationships: {
             module: {
