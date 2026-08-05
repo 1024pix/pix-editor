@@ -88,7 +88,8 @@ export function register(server) {
         handler: async (request, h) => {
           const module = await draftModuleSerializer.deserialize(request.payload);
           const savedModule = await createDraftModule(module);
-          return h.response(draftModuleSerializer.serialize(savedModule)).code(201);
+          const validatedModule = await validateDraftModule(savedModule);
+          return h.response(draftModuleSerializer.serialize(validatedModule)).code(201);
         },
       },
     },
