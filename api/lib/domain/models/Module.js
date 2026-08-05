@@ -70,7 +70,7 @@ export class Module {
     return {
       NOVICE: 'novice',
       INDEPENDENT: 'independent',
-      ADVANDCED: 'advandced',
+      ADVANDCED: 'advanced',
       EXPERT: 'expert',
     };
   }
