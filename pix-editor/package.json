@@ -112,7 +112,7 @@
     "vite": "^7.3.0"
   },
   "engines": {
-    "node": "^24.15.0"
+    "node": "^24.18.1"
   },
   "ember": {
     "edition": "octane"
