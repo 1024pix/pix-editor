@@ -294,7 +294,7 @@ module('Unit | Service | access', function (hooks) {
   module('maySwitchGenealogy', function () {
     test('it should return `false` when challenge is not an alternative', function (assert) {
       // given
-      _stubAccessLevel(REPLICATOR, this.owner);
+      _stubAccessLevel(ADMIN, this.owner);
       const prototypeChallenge = EmberObject.create({
         id: 'rec123656',
         isAlternative: false,
@@ -310,7 +310,7 @@ module('Unit | Service | access', function (hooks) {
 
     test('it should return `false` when challenge is not validated', function (assert) {
       // given
-      _stubAccessLevel(REPLICATOR, this.owner);
+      _stubAccessLevel(ADMIN, this.owner);
       const prototypeChallenge = EmberObject.create({
         id: 'rec123656',
         isAlternative: true,
@@ -324,10 +324,9 @@ module('Unit | Service | access', function (hooks) {
       assert.notOk(accessResult);
     });
 
-    test('it should return `false` when user level is lower than `REPLICATOR` level', function (assert) {
+    test('it should return `false` when user level is lower than `ADMIN` level', function (assert) {
       // given
-      const READ_ONLY = 1;
-      _stubAccessLevel(READ_ONLY, this.owner);
+      _stubAccessLevel(REPLICATOR, this.owner);
       const alternativeChallenge = EmberObject.create({
         id: 'rec123656',
         isAlternative: true,
@@ -341,7 +340,7 @@ module('Unit | Service | access', function (hooks) {
       assert.notOk(accessResult);
     });
 
-    test('it should return `true` when challenge is an alternative and user level is `REPLICATOR` or above', function (assert) {
+    test('it should return `true` when challenge is an alternative and user level is `ADMIN`', function (assert) {
       // given
       const alternativeChallenge = EmberObject.create({
         id: 'rec123656',
@@ -350,13 +349,10 @@ module('Unit | Service | access', function (hooks) {
       });
 
       // when
-      _stubAccessLevel(REPLICATOR, this.owner);
-      const accessResultAsReplicator = accessService.maySwitchGenealogy(alternativeChallenge);
       _stubAccessLevel(ADMIN, this.owner);
       const accessResultAsAdmin = accessService.maySwitchGenealogy(alternativeChallenge);
 
       // then
-      assert.ok(accessResultAsReplicator);
       assert.ok(accessResultAsAdmin);
     });
   });
