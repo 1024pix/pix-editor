@@ -2,7 +2,7 @@ import { Module } from '../../../../lib/domain/models/index.js';
 
 const defaultSections = [
   {
-    id: 'cfaefec9-e185-43b8-8258-e8beff6dd56b',
+    id: 'cfaefec9-e185-43b8-8258-e8beff6dd77b',
     type: 'question-yourself',
     grains: [
       {
@@ -13,7 +13,7 @@ const defaultSections = [
           {
             type: 'element',
             element: {
-              id: 'd5e369ec-2a5e-4692-ac46-5be5a49f2acd',
+              id: 'd5e779ec-2a5e-4692-ac46-5be5a49f2acd',
               type: 'text',
               tag: 'context',
               content: "<p>Ceci&nbsp;est un contenu pour les amateurs de coquille d'escargots.</p>",
@@ -29,8 +29,8 @@ export function buildModule({
   id = crypto.randomUUID(),
   shortId = 'escargou',
   slug = 'petit-escargot-pignouf',
-  internalTitle = 'NAT_escagot',
-  title = 'apprendre à être mou',
+  internalTitle = 'NAT_escargot',
+  title = 'Apprendre à être mou',
   isBeta = false,
   visibility = Module.VISIBILITIES.PUBLIC,
   details = {},

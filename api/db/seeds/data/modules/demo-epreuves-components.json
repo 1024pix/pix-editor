@@ -161,6 +161,36 @@
           ]
         },
         {
+          "id": "a33af0d8-649b-4138-9958-e51d43010303",
+          "type": "discovery",
+          "title": "autocompletion-mdp",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "54d93d01-03f5-4297-b89c-6ea57b444f55",
+                "type": "text",
+                "content": "<p>autocompletion-mdp</p>",
+                "tag": " "
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "4934fe15-f787-49fc-8ebc-12b998e4298a",
+                "type": "custom",
+                "instruction": "",
+                "tagName": "autocompletion-mdp",
+                "props": {
+                  "titleLevel": 2
+                },
+                "title": "",
+                "functionalInstruction": ""
+              }
+            }
+          ]
+        },
+        {
           "id": "5161dd9c-0ed3-43a8-b550-ced9e2c539ba",
           "type": "discovery",
           "title": "calcul-impact",
@@ -498,6 +528,36 @@
                       "image": "https://assets.pix.org/modules/flip-cards/transport.png"
                     }
                   ]
+                },
+                "title": "",
+                "functionalInstruction": ""
+              }
+            }
+          ]
+        },
+        {
+          "id": "5d0ae4f9-5e8c-4d97-82d8-b0c23b2ee257",
+          "type": "discovery",
+          "title": "generate-mdp",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "fa07b3c0-bea0-467c-8a25-088b0f5e2e2a",
+                "type": "text",
+                "content": "<p>generate-mdp</p>",
+                "tag": " "
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "583a5b12-3cfd-4d91-8f58-c31ba65a311c",
+                "type": "custom",
+                "instruction": "",
+                "tagName": "generate-mdp",
+                "props": {
+                  "titleLevel": 2
                 },
                 "title": "",
                 "functionalInstruction": ""
@@ -875,7 +935,12 @@
                 "instruction": "",
                 "tagName": "mdp-classement",
                 "props": {
-                  "passwords": ["r7&Kp9!qZ4#tV2", "MonCh@t!23", "Bonjour1", "1234567"]
+                  "passwords": [
+                    "r7&Kp9!qZ4#tV2",
+                    "MonCh@t!23",
+                    "Bonjour1",
+                    "1234567"
+                  ]
                 },
                 "title": "",
                 "functionalInstruction": ""
@@ -951,6 +1016,36 @@
           ]
         },
         {
+          "id": "b4c515e5-ca84-47f7-827e-428f1ce6c2e1",
+          "type": "discovery",
+          "title": "notification-antivirus",
+          "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "a10e59dd-de5f-4bf2-81cf-41c62c181ecf",
+                "type": "text",
+                "content": "<p>notification-antivirus</p>",
+                "tag": " "
+              }
+            },
+            {
+              "type": "element",
+              "element": {
+                "id": "c894017d-df9e-4d6c-a95e-8ed81d3e0bf8",
+                "type": "custom",
+                "instruction": "",
+                "tagName": "notification-antivirus",
+                "props": {
+                  "titleLevel": 2
+                },
+                "title": "",
+                "functionalInstruction": ""
+              }
+            }
+          ]
+        },
+        {
           "id": "1613420c-534d-4571-b0d1-88476b7f0dfd",
           "type": "discovery",
           "title": "phishing-message",
@@ -972,7 +1067,8 @@
                 "instruction": "",
                 "tagName": "phishing-message",
                 "props": {
-                  "titleLevel": 2
+                  "titleLevel": 2,
+                  "forcedLocale": "fr-BE"
                 },
                 "title": "",
                 "functionalInstruction": ""
