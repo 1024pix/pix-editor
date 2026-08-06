@@ -2,7 +2,7 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import Challenge from 'pixeditor/models/challenge';
 
 export default class SingleController extends Controller {
