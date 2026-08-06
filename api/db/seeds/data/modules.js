@@ -8,6 +8,8 @@ export function buildModules(databaseBuilder) {
   databaseBuilder.factory.buildModule({ ...demoCombinix1, version: '2.0' });
   databaseBuilder.factory.buildModule({ ...demoEpreuvesComponents, version: '3.0' });
 
-  databaseBuilder.factory.buildDraftModule({ ...domainBuilder.buildDraftModule({ title: 'Draft module', version: '0.1' }) });
-  databaseBuilder.factory.buildDraftModule({ ...domainBuilder.buildDraftModule({ ...moduleBacASable, moduleId: moduleBacASable.id, title: '[DRAFT] Bac a sable', version: '1.1' }) });
+  const draftModule = databaseBuilder.factory.buildDraftModule({ ...domainBuilder.buildDraftModule({ title: 'Draft module', version: '0.1' }) });
+  const draftModuleBacASable = databaseBuilder.factory.buildDraftModule({ ...domainBuilder.buildDraftModule({ ...moduleBacASable, moduleId: moduleBacASable.id, title: '[DRAFT] Bac a sable', version: '1.1' }) });
+
+  return [draftModule.id, draftModuleBacASable.id];
 }

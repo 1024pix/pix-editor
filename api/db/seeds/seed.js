@@ -14,6 +14,8 @@ import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
 import { buildTags } from './data/tags.js';
 import { buildTutorials } from './data/tutorials.js';
 import { buildModules } from './data/modules.js';
+import { draftModuleRepository } from '../../lib/infrastructure/repositories/index.js';
+import { validateDraftModule } from '../../lib/domain/usecases/index.js';
 
 export async function seed(knex) {
   const databaseBuilder = new DatabaseBuilder({ knex });
@@ -65,9 +67,14 @@ export async function seed(knex) {
   staticCoursesBuilder(databaseBuilder);
   whitelistedUrlsBuilder(databaseBuilder, adminId);
 
-  buildModules(databaseBuilder);
+  const draftModuleIds = buildModules(databaseBuilder);
 
-  return databaseBuilder.commit();
+  await databaseBuilder.commit();
+
+  for (const id of draftModuleIds) {
+    const draftModule = await draftModuleRepository.getById({ id });
+    await validateDraftModule(draftModule);
+  }
 }
 
 const adminUserApiKey = !process.env.REVIEW_APP && '8d03a893-3967-4501-9dc4-e0aa6c6dc442';
