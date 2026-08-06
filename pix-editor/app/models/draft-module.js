@@ -1,10 +1,13 @@
-import { belongsTo } from '@ember-data/model';
+import { attr, belongsTo } from '@ember-data/model';
 
 import BaseModule from './base-module';
 
 export default class DraftModule extends BaseModule {
   @belongsTo('module', { inverse: 'draftModule', async: true }) module;
   @belongsTo('draft-module-diff', { inverse: null, async: true }) diff;
+
+  @attr hasBeenValidated;
+  @attr validationErrors;
 
   get isDraft() {
     return true;

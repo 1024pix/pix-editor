@@ -12,7 +12,6 @@ export default class NewModule extends Component {
   @action
   async saveModule({ internalTitle, title, isBeta, slug, visibility, details, sections, glossary }) {
     const { draftModule } = this.args.model;
-
     Object.assign(draftModule, {
       internalTitle,
       title,

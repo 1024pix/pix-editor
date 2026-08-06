@@ -20,7 +20,11 @@
     justify-items: start;
   }
 }
-
+.module-form-errors{
+  &__banner{
+    margin-bottom: var(--pix-spacing-4x);
+  }
+}
 .module-form-notification {
   &--info {
     --color: var(--pix-info-700);

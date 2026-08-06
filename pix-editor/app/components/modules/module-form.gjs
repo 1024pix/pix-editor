@@ -1,3 +1,4 @@
+import PixAccordions from '@1024pix/pix-ui/components/pix-accordions';
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixLabel from '@1024pix/pix-ui/components/pix-label';
@@ -11,6 +12,8 @@ import MonacoEditor from 'pixeditor/components/monaco-editor/monaco-editor';
 export default class ModuleForm extends Component {
   @tracked internalTitle;
   @tracked moduleData;
+  @tracked hasBeenValidated;
+  @tracked validationErrors = [];
 
   constructor(...args) {
     super(...args);
@@ -27,10 +30,25 @@ export default class ModuleForm extends Component {
 
     if (!this.args.module) return;
 
-    const { id, internalTitle, shortId, slug, title, isBeta, visibility, details, sections, glossary } =
-      this.args.module;
+    const {
+      id,
+      internalTitle,
+      shortId,
+      slug,
+      title,
+      isBeta,
+      visibility,
+      details,
+      sections,
+      glossary,
+      hasBeenValidated,
+      validationErrors,
+    } = this.args.module;
 
     this.internalTitle = internalTitle;
+    this.hasBeenValidated = hasBeenValidated;
+    this.validationErrors = validationErrors ?? [];
+
     this.moduleData = { id, shortId, slug, title, isBeta, visibility, details, sections, glossary };
     this.monacoOptions.value = JSON.stringify(this.moduleData, null, 2);
   }
@@ -58,6 +76,15 @@ export default class ModuleForm extends Component {
 
   back() {
     window.history.back();
+  }
+
+  get hasValidationErrors() {
+    return !this.hasBeenValidated && this.validationErrors.length > 0;
+  }
+
+  get formattedTag() {
+    const numberOfErrors = this.validationErrors.length;
+    return `${numberOfErrors} erreur${numberOfErrors > 1 ? 's' : ''}`;
   }
 
   get isIdsChangedWarningDisplayed() {
@@ -88,6 +115,23 @@ export default class ModuleForm extends Component {
         >
           <:label>Titre interne</:label>
         </PixInput>
+      {{/if}}
+
+      {{#if this.hasValidationErrors}}
+        <PixAccordions @iconName="error" @isV2Version={{false}} @tagContent={{this.formattedTag}} @tagColor="error">
+          <:title>Erreurs de validation</:title>
+          <:content>
+            <ul>
+              {{#each this.validationErrors as |validationError|}}
+                <li class="module-form-errors__banner">
+                  <PixNotificationAlert @withIcon={{true}} @type="error">
+                    {{validationError}}
+                  </PixNotificationAlert>
+                </li>
+              {{/each}}
+            </ul>
+          </:content>
+        </PixAccordions>
       {{/if}}
 
       <div class="module-form__data-field">

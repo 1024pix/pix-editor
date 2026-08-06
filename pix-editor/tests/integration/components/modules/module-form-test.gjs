@@ -98,4 +98,105 @@ module('Integration | Component | modules/module-form', function (hooks) {
       assert.dom(await screen.queryByRole('button', { name: 'Annuler' })).doesNotExist();
     });
   });
+
+  module('validation-errors', function () {
+    module('when a module has errors', function () {
+      module('when module form is edited', function () {
+        test('it should display errors', async function (assert) {
+          const moduleWoInternalTitle = {
+            id: 'dadfd2d4-0430-47ce-ae0f-455459f12d3b',
+            shortId: 'dadfd2d4',
+            slug: 'escargot-du loiret',
+            details: { level: 1001 },
+            sections: [],
+          };
+          const module = {
+            ...moduleWoInternalTitle,
+            internalTitle: 'MOL_escargot-loiret',
+            validationErrors: ['Le slug est mal formatté'],
+            hasBeenValidated: false,
+          };
+
+          // when
+          const screen = await render(<template><ModuleForm @module={{module}} @readonly={{false}} /></template>);
+
+          // then
+          assert.dom(await screen.findByText('Erreurs de validation')).exists();
+          assert.dom(await screen.getByText('1 erreur')).exists();
+        });
+      });
+      module('when module form is readonly', function () {
+        test('it should display errors', async function (assert) {
+          const moduleWoInternalTitle = {
+            id: 'dadfd2d4-0430-47ce-ae0f-455459f12d3b',
+            shortId: 'dadfd2d4',
+            slug: 'escargot-du loiret',
+            details: { level: 1001 },
+            sections: [],
+          };
+          const module = {
+            ...moduleWoInternalTitle,
+            internalTitle: 'MOL_escargot-loiret',
+            validationErrors: ['Le slug est mal formatté', "Problème de duplications d'Ids"],
+            hasBeenValidated: false,
+          };
+
+          // when
+          const screen = await render(<template><ModuleForm @module={{module}} @readonly={{true}} /></template>);
+
+          // then
+          assert.dom(await screen.getByText('2 erreurs')).exists();
+          assert.dom(await screen.findByText('Erreurs de validation')).exists();
+        });
+      });
+    });
+    module('when a module does not have errors', function () {
+      module('when module form is edited', function () {
+        test('it should not display errors', async function (assert) {
+          const moduleWoInternalTitle = {
+            id: 'dadfd2d4-0430-47ce-ae0f-455459f12d3b',
+            shortId: 'dadfd2d4',
+            slug: 'escargot-du loiret',
+            details: { level: 1001 },
+            sections: [],
+          };
+          const module = {
+            ...moduleWoInternalTitle,
+            internalTitle: 'MOL_escargot-loiret',
+            validationErrors: [],
+            hasBeenValidated: true,
+          };
+
+          // when
+          const screen = await render(<template><ModuleForm @module={{module}} @readonly={{true}} /></template>);
+
+          // then
+          assert.dom(await screen.queryByText('Erreurs de validation')).doesNotExist();
+        });
+      });
+      module('when module form is readonly', function () {
+        test('it should display errors', async function (assert) {
+          const moduleWoInternalTitle = {
+            id: 'dadfd2d4-0430-47ce-ae0f-455459f12d3b',
+            shortId: 'dadfd2d4',
+            slug: 'escargot-du loiret',
+            details: { level: 1001 },
+            sections: [],
+          };
+          const module = {
+            ...moduleWoInternalTitle,
+            internalTitle: 'MOL_escargot-loiret',
+            validationErrors: null,
+            hasBeenValidated: true,
+          };
+
+          // when
+          const screen = await render(<template><ModuleForm @module={{module}} @readonly={{true}} /></template>);
+
+          // then
+          assert.dom(await screen.queryByText('Erreurs de validation')).doesNotExist();
+        });
+      });
+    });
+  });
 });
