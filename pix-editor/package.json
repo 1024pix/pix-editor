@@ -96,7 +96,7 @@
     "miragejs": "^0.1.48",
     "monaco-editor": "^0.55.1",
     "morgan": "^1.10.1",
-    "npm-run-all2": "^8.0.4",
+    "npm-run-all2": "^9.0.0",
     "p-queue": "^9.1.0",
     "postcss": "^8.5.6",
     "postcss-url": "^10.1.3",
