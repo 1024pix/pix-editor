@@ -2,6 +2,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import ModuleForm from 'pixeditor/components/modules/module-form';
+import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
 
 export default class NewModule extends Component {
   @service loader;
@@ -36,6 +37,14 @@ export default class NewModule extends Component {
     }
   }
 
+  get hasValidationErrors() {
+    return !this.args.model.draftModule.hasBeenValidated && this.validationErrors?.length > 0;
+  }
+
+  get validationErrors() {
+    return this.args.model.draftModule.validationErrors;
+  }
+
   <template>
     <header class="page-header">
       <h1 class="page-title">
@@ -44,6 +53,10 @@ export default class NewModule extends Component {
     </header>
     <main class="page-body">
       <section class="page-section module-form">
+        {{#if this.hasValidationErrors}}
+          <ModuleValidationErrors @validationErrors={{this.validationErrors}} />
+        {{/if}}
+
         <ModuleForm @module={{@model.draftModule}} @saveModule={{this.saveModule}} />
       </section>
     </main>

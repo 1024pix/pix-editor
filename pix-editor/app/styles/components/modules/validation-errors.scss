@@ -1,0 +1,10 @@
+.module-validation-errors {
+
+  .pix-accordions-v2-title__container {
+    font-family: inherit;
+  }
+
+  &__notification {
+    margin-bottom: var(--pix-spacing-4x);
+  }
+}
