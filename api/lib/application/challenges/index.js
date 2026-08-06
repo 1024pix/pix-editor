@@ -139,7 +139,7 @@ export async function register(server) {
       path: '/api/challenges/{challengeId}/switch-genealogy',
       config: {
         validate: { params: Joi.object({ challengeId: challengeIdType }) },
-        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        pre: [{ method: securityPreHandlers.checkUserHasAdminAccess }],
         handler: async function(request, h) {
           const { challengeId } = request.params;
           await switchGenealogy({ alternativeChallengeId: challengeId });

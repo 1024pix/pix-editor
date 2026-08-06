@@ -2871,5 +2871,24 @@ describe('Acceptance | Controller | challenges-controller', () => {
         { key: `challenge.${challengeDecliId}.solutionToDisplay`, locale: 'fr', value: 'challengeDecli.solutionToDisplay' },
       ]);
     });
+
+    it('should not switch genealogy when user is not admin', async () => {
+      // Given
+      const server = await createServer();
+      const editorUser = databaseBuilder.factory.buildEditorUser();
+
+      await databaseBuilder.commit();
+
+      // When
+      const response = await server.inject({
+        method: 'PATCH',
+        url: `/api/challenges/${challengeDecliId}/switch-genealogy`,
+        headers: generateAuthorizationHeader(editorUser),
+        payload: { data: {} },
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(403);
+    });
   });
 });
