@@ -148,4 +148,17 @@ module('Acceptance | Controller | Get Alternative challenge', function (hooks) {
     assert.ok(currentURL().startsWith(`/competence/${competence.id}/prototypes/${alternative.id}`));
     assert.dom(await screen.findByText('Ma consigne déclinée')).exists();
   });
+
+  test('it should not show the switch button when user is not admin', async function (assert) {
+    // given
+    this.server.db.users.remove();
+    this.server.create('user', { trigram: 'DEF', access: 'editor' });
+
+    const screen = await visit(
+      `/competence/${competence.id}/prototypes/${prototype.id}/alternatives/${alternative.id}`,
+    );
+
+    // when then
+    assert.dom(screen.queryByRole('button', { name: 'Inverser avec le prototype' })).doesNotExist();
+  });
 });
