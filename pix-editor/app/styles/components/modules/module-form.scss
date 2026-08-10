@@ -14,7 +14,14 @@
   }
 
   &__actions {
+    position: sticky;
     display: flex;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--pix-neutral-20);
+    padding: var(--pix-spacing-4x);
+    z-index: 1000;
     flex-direction: row-reverse;
     gap: var(--pix-spacing-4x);
     justify-items: start;
