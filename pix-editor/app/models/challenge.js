@@ -1,6 +1,6 @@
 import { service } from '@ember/service';
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
+import Model, { attr, belongsTo, hasMany } from '@warp-drive/legacy/model';
 import _ from 'lodash';
 
 export default class ChallengeModel extends Model {

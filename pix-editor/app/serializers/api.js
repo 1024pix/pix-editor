@@ -1,4 +1,4 @@
-import RESTSerializer from '@ember-data/serializer/rest';
+import RESTSerializer from '@warp-drive/legacy/serializer/rest';
 
 export default class ApiSerializer extends RESTSerializer {
   normalizeResponse(store, primaryModelClass, payload, id, requestType) {

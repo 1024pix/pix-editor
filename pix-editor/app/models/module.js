@@ -1,4 +1,4 @@
-import { belongsTo } from '@ember-data/model';
+import { belongsTo } from '@warp-drive/legacy/model';
 
 import BaseModule from './base-module';
 
