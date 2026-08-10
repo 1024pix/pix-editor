@@ -22,8 +22,38 @@
         {
           "id": "9de10c46-df0e-41f5-a709-81637f0d5cc3",
           "type": "challenge",
-          "title": "Element text avec tags",
+          "title": "Premier grain du bac-a-sable",
           "components": [
+            {
+              "type": "element",
+              "element": {
+                "id": "d95aff0f-e120-4bd6-9566-7d72a11f4f40",
+                "type": "qcm-declarative",
+                "instruction": "<p>Quelles sont tes séries favorites ?</p>",
+                "hasShortProposals": false,
+                "proposals": [
+                  {
+                    "id": "1",
+                    "content": "The X-Files"
+                  },
+                  {
+                    "id": "2",
+                    "content": "Friends"
+                  },
+                  {
+                    "id": "3",
+                    "content": "The Wire"
+                  },
+                  {
+                    "id": "4",
+                    "content": "Downton Abbey"
+                  }
+                ],
+                "feedback": {
+                  "diagnosis": "<p>Ça va, tu as bon goût.</p>"
+                }
+              }
+            },
             {
               "type": "element",
               "element": {
@@ -91,6 +121,44 @@
               "type": "stepper",
               "instruction": "<p>Ce texte s'affiche uniquement pour ce stepper car il est horizontal.</p>",
               "steps": [
+                {
+                  "elements": [
+                    {
+                      "id": "0401cef4-871e-40a3-876b-5d7571f8b556",
+                      "type": "qcm-declarative",
+                      "instruction": "<p>Quels sont tes petits plaisirs de la vie ?</p>",
+                      "hasShortProposals": false,
+                      "proposals": [
+                        {
+                          "id": "1",
+                          "content": "Manger les cookies glacés de Clément"
+                        },
+                        {
+                          "id": "2",
+                          "content": "Regarder un match de foot avec Eric"
+                        },
+                        {
+                          "id": "3",
+                          "content": "Se faire coacher au marathon par Matthias"
+                        },
+                        {
+                          "id": "4",
+                          "content": "Observer Andreia dessiner dans Slack"
+                        },
+                        {
+                          "id": "5",
+                          "content": "Ecouter du reggae avec Nico"
+                        },
+                        {
+                          "id": "6",
+                          "content": "Descendre une pente en ski de fond avec Julie"
+                        }
+                      ],
+                      "feedback": {
+                        "diagnosis": "<p>C'est sûr, c'est un vrai kiff !</p>"
+                      }
+                    }]
+                },
                 {
                   "elements": [
                     {

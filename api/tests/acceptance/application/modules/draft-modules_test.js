@@ -58,6 +58,8 @@ describe('Acceptance | Route | draft-modules', () => {
             ...draftModulePayload,
             url: expect.stringMatching(new RegExp(`^${config.pixApp.recette.baseUrlFr.replace(/([.])/g, '\\$1')}/modules/.{8}/${draftModule.slug}$`)),
             'preview-url': expect.stringMatching(new RegExp(`^${config.pixApp.recette.baseUrlFr.replace(/([.])/g, '\\$1')}/modules/preview/.{8}/${draftModule.slug}$`)),
+            'has-been-validated': true,
+            'validation-errors': [],
           },
           relationships: { module: { data: null } },
         },
@@ -160,6 +162,8 @@ describe('Acceptance | Route | draft-modules', () => {
               ...draftModulePayload,
               url: `${config.pixApp.recette.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
               'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
+              'has-been-validated': true,
+              'validation-errors': [],
             },
             relationships: {
               module: {
@@ -366,6 +370,8 @@ describe('Acceptance | Route | draft-modules', () => {
             glossary: draftModule.glossary,
             url: `${config.pixApp.recette.baseUrlFr}/modules/${draftModule.shortId}/${draftModule.slug}`,
             'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
+            'has-been-validated': draftModule.hasBeenValidated,
+            'validation-errors': draftModule.validationErrors,
           },
           relationships: {
             module: {
@@ -532,6 +538,8 @@ describe('Acceptance | Route | draft-modules', () => {
             ...draftModulePayload,
             url: `${config.pixApp.recette.baseUrlFr}/modules/${draftModule.shortId}/kebab-royal`,
             'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/kebab-royal`,
+            'has-been-validated': true,
+            'validation-errors': [],
           },
           relationships: { module: { data: null } },
         },

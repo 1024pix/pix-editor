@@ -34,6 +34,8 @@ const defaultAttributes = [
   'diff',
   'url',
   'previewUrl',
+  'hasBeenValidated',
+  'validationErrors',
 ];
 
 export function serialize(draftModules, { meta, attributes = defaultAttributes } = {}) {
