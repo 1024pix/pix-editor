@@ -1,10 +1,12 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import t from 'ember-intl/helpers/t';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
 
 export default class NewModule extends Component {
+  @service intl;
   @service loader;
   @service notifications;
   @service router;
@@ -29,9 +31,9 @@ export default class NewModule extends Component {
       this.loader.start();
       await draftModule.save();
       this.router.replaceWith('authenticated.modules.draft-module', draftModule.id);
-      this.notifications.sendSuccess(`Le draft "${draftModule.internalTitle}" a été enregistré.`);
+      this.notifications.sendSuccess(this.intl.t('modules.new.draft-success', { title: draftModule.internalTitle }));
     } catch {
-      this.notifications.sendError('Erreur lors de l’enregistrement du draft.');
+      this.notifications.sendError(this.intl.t('modules.new.draft-error'));
     } finally {
       this.loader.stop();
     }
@@ -48,7 +50,7 @@ export default class NewModule extends Component {
   <template>
     <header class="page-header">
       <h1 class="page-title">
-        Édition du draft de module
+        {{t "modules.edit-draft-module.title"}}
       </h1>
     </header>
     <main class="page-body">

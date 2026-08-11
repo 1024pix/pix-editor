@@ -69,6 +69,28 @@ prototype:
     update-message: Mise à jour du prototype
     update-status: Épreuve mise à jour
     update-error: Erreur lors de la mise à jour
+modules:
+  new:
+    draft-title: Création d’un draft
+    module-title: Création d’un module
+    draft-success: Le draft "{title}" a été enregistré.
+    module-success: Le module "{title}" a été enregistré.
+    draft-error: Erreur lors de l’enregistrement du draft.
+    module-error: Erreur lors de l’enregistrement du module.
+  workbench:
+    title: Modules
+  production:
+    title: Modules
+  production-module:
+    title: Détail du module
+  draft-module:
+    title: Détail du draft de module
+    edit: Modifier
+    validation-status-label: 'Statut de validation :'
+    validation-success: Succès
+    validation-failure: Échec
+  edit-draft-module:
+    title: Édition du draft de module
 common:
   validate: Valider
   validate-quality: Valider qualité

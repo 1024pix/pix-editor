@@ -1,6 +1,8 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
+import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import t from 'ember-intl/helpers/t';
 import DraftModuleDiff from 'pixeditor/components/modules/draft-module-diff';
 import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
@@ -10,6 +12,8 @@ import PublishModuleButton from 'pixeditor/components/modules/publish-module-but
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
 
 export default class DraftModule extends Component {
+  @service intl;
+
   get hasValidationErrors() {
     return !this.args.model.draftModule.hasBeenValidated && this.validationErrors?.length > 0;
   }
@@ -23,7 +27,9 @@ export default class DraftModule extends Component {
   }
 
   get validationStatusLabel() {
-    return this.validationStatus ? 'Succès' : 'Échec';
+    return this.validationStatus
+      ? this.intl.t('modules.draft-module.validation-success')
+      : this.intl.t('modules.draft-module.validation-failure');
   }
 
   get validationStatusColor() {
@@ -32,7 +38,7 @@ export default class DraftModule extends Component {
 
   <template>
     <header class="page-header">
-      <h1 class="page-title">Détail du draft de module</h1>
+      <h1 class="page-title">{{t "modules.draft-module.title"}}</h1>
       <div class="page-actions">
         <PlayModuleButtons @module={{@model.draftModule}} />
         <PixButtonLink
@@ -41,7 +47,7 @@ export default class DraftModule extends Component {
           class="pix-button-link-with-icon white-font"
           @iconBefore="edit"
         >
-          Modifier
+          {{t "modules.draft-module.edit"}}
         </PixButtonLink>
         <PublishModuleButton @draftModule={{@model.draftModule}} />
       </div>
@@ -51,7 +57,7 @@ export default class DraftModule extends Component {
         <ModuleNotification @module={{@model.draftModule}} />
         <dl class="draft-module__description">
           <dt>
-            Statut de validation :
+            {{t "modules.draft-module.validation-status-label"}}
           </dt>
           <dd><PixTag @color={{this.validationStatusColor}}>
               {{this.validationStatusLabel}}
