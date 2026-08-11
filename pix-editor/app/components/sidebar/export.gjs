@@ -6,7 +6,10 @@ import Component from '@glimmer/component';
 
 export default class SidebarExportComponent extends Component {
   <template>
-    <p {{on "click" this.shareAreas}}><PixIcon @name="share" @ariaHidden={{true}} /> Exporter les sujets</p>
+    <p class="main-sidebar-secondary-links--action" {{on "click" this.shareAreas}}>
+      <PixIcon @name="download" @ariaHidden={{true}} />
+      Exporter les sujets
+    </p>
   </template>
 
   @service('file-saver') fileSaver;

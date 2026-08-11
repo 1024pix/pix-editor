@@ -39,7 +39,7 @@ module('Acceptance | Missions | List', function (hooks) {
   test('it displays all Pix 1D missions', async function (assert) {
     // when
     const screen = await visit('/');
-    await clickByName('Sélectionner un référentiel');
+    await clickByName('Choisir un référentiel');
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'Pix 1D' }));
     await clickByName('Missions Pix 1D');
@@ -53,7 +53,7 @@ module('Acceptance | Missions | List', function (hooks) {
   test('should display only validated missions', async function (assert) {
     // when
     const screen = await visit('/');
-    await clickByName('Sélectionner un référentiel');
+    await clickByName('Choisir un référentiel');
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'Pix 1D' }));
     await clickByName('Missions Pix 1D');
@@ -68,7 +68,7 @@ module('Acceptance | Missions | List', function (hooks) {
   test('should display only mission validée et expérimental', async function (assert) {
     // when
     const screen = await visit('/');
-    await clickByName('Sélectionner un référentiel');
+    await clickByName('Choisir un référentiel');
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'Pix 1D' }));
     await clickByName('Missions Pix 1D');

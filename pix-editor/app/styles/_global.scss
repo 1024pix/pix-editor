@@ -26,7 +26,7 @@ $production-alternative-color: #085508;/* #0000ff; */
 $draft-alternative-color: #1083ce;
 $alternative-count-color: #c48807;
 
-body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pusher > .column {
+body, html, body > div.ember-view, .application, .content-wrapper, .main, .main-menu {
   min-height: 100vh;
 }
 
@@ -51,10 +51,9 @@ a, p, span, li {
 .application {
   background-color: #fff;
 
-  .pusher {
+  .content-wrapper {
     display: flex;
     flex-direction: row;
-    transition: transform 0.5s;
   }
 
 }

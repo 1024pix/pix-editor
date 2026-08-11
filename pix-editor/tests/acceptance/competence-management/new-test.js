@@ -46,7 +46,7 @@ module('Acceptance | competence-management/new', function (hooks) {
 
     // when
     const screen = await visit('/');
-    await clickByName('Sélectionner un référentiel');
+    await clickByName('Choisir un référentiel');
     await clickByText('Pix+');
     await click(screen.getByRole('button', { name: '1. Information et données' }));
     await click(screen.getByRole('link', { name: 'Ajouter une compétence' }));

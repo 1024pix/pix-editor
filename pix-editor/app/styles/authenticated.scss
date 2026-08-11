@@ -1,6 +1,6 @@
 // stylelint-disable color-no-hex, color-named
 .application {
-  background-color: #fff;
+  background-color: var(--pix-neutral-0);
 
   &__loader {
     position: fixed;
@@ -50,14 +50,14 @@
 .main-menu {
   display: flex;
   flex-direction: column;
-  background-color: var(--pix-orga-500);
+  background-color: var(--pix-environment-dark);
   border-right: 1px solid rgba(34, 36, 38, 0.15);
 
   &__toggle {
     position: sticky;
     top: 0;
     padding: 11px 14px;
-    color: #fff;
+    color: var(--pix-neutral-0);
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -70,11 +70,10 @@
 }
 
 .confidential-footer {
-  margin-left: 288px;
   padding: 0.78em 1em;
-  color: #fff;
+  color: var(--pix-neutral-0);
   text-align: center;
-  background-color: rgba(52, 152, 219);
+  background-color: var(--pix-environment-dark);
 
   p {
     position: relative;

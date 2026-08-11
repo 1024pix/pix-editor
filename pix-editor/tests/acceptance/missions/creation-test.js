@@ -48,7 +48,7 @@ module('Acceptance | Missions | Creation', function (hooks) {
     test('should prevent user from being able to access creation form', async function (assert) {
       // when
       const screen = await visit('/');
-      await clickByName('Sélectionner un référentiel');
+      await clickByName('Choisir un référentiel');
       await screen.findByRole('listbox');
       await click(screen.getByRole('option', { name: 'Pix 1D' }));
       await clickByName('Missions Pix 1D');
@@ -68,7 +68,7 @@ module('Acceptance | Missions | Creation', function (hooks) {
     test('should be able to access mission creation', async function (assert) {
       // given
       const screen = await visit('/');
-      await clickByName('Sélectionner un référentiel');
+      await clickByName('Choisir un référentiel');
       await screen.findByRole('listbox');
       await click(screen.getByRole('option', { name: 'Pix 1D' }));
       await clickByName('Missions Pix 1D');

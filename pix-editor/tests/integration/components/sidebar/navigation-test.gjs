@@ -98,7 +98,7 @@ module('Integration | Component | sidebar/navigation', function (hooks) {
         </template>,
       );
 
-      await clickByName('Sélectionner un référentiel');
+      await clickByName('Choisir un référentiel');
 
       // then
       const frameworksList = await screen.findAllByRole('option');
@@ -115,7 +115,7 @@ module('Integration | Component | sidebar/navigation', function (hooks) {
         </template>,
       );
 
-      await screen.getByRole('button', { name: 'Sélectionner un référentiel' }).click();
+      await screen.getByRole('button', { name: 'Choisir un référentiel' }).click();
 
       await fillByLabel('Rechercher', '+');
       const listOptions = await screen.findByRole('listbox');

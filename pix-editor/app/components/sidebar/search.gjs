@@ -43,7 +43,6 @@ export default class SidebarSearch extends Component {
     <PixSelect
       @isSearchable={{true}}
       @searchPlaceholder="@patate1, recABCD1234"
-      @placeholder="Acquix ou recordId"
       @options={{this.searchResultOptions}}
       @onSearch={{this.getSearchResults}}
       @onChange={{this.transitionTo}}
@@ -54,7 +53,7 @@ export default class SidebarSearch extends Component {
       @emptySearchMessage="Pas de résultat"
     >
       <:label>
-        <span class="sr-only">Rechercher un acquis ou une épreuve...</span>
+        <span>Rechercher un Acquix ou recordID</span>
       </:label>
     </PixSelect>
   </template>
