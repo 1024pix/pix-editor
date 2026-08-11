@@ -40,7 +40,7 @@ function logHtmlErrors(errorDetail, objectErrorSeparator) {
 
 function logSchemaErrors(errorDetail) {
   const errorLog = [];
-  errorLog.push(`\nError: ${errorDetail.message}.`);
+  errorLog.push(`\n${errorDetail.message}.`);
   errorLog.push(`Valeur concernée à rechercher : ${JSON.stringify(errorDetail.context.value)}\n`);
   return errorLog.join('\n');
 }
