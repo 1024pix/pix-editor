@@ -25,6 +25,7 @@
 @use 'mde';
 @use 'popin';
 @use 'pages/login';
+@use 'pages/draft-module';
 @use 'authenticated';
 @use 'authenticated/missions/new' as missions-new;
 @use 'authenticated/missions/details' as missions-details;

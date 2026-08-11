@@ -94,6 +94,25 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       // then
       assert.dom(screen.getByRole('button', { name: 'Erreurs de validation 1 erreur' })).exists();
     });
+
+    test('it should display validation status', async function (assert) {
+      // given
+      const moduleWithErrors = this.server.create('draft-module', {
+        id: crypto.randomUUID(),
+        internalTitle: 'MODULE_DRAFT',
+        validationErrors: ['oups !'],
+        hasBeenValidated: false,
+      });
+
+      // when
+      const screen = await visit(`/modules/workbench/${moduleWithErrors.id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // then
+      assert.dom(screen.getByRole('term')).hasText('Statut de validation :');
+      assert.dom(screen.getByRole('definition')).hasText('Échec');
+    });
   });
 
   module('when a module has no errors', function () {
@@ -105,6 +124,25 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
 
       // then
       assert.dom(screen.queryByRole('button', { name: 'Erreurs de validation 1 erreur' })).doesNotExist();
+    });
+
+    test('it should display validation status', async function (assert) {
+      // given
+      const module = this.server.create('draft-module', {
+        id: crypto.randomUUID(),
+        internalTitle: 'MODULE_DRAFT',
+        validationErrors: [],
+        hasBeenValidated: true,
+      });
+
+      // when
+      const screen = await visit(`/modules/workbench/${module.id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // then
+      assert.dom(screen.getByRole('term')).hasText('Statut de validation :');
+      assert.dom(screen.getByRole('definition')).hasText('Succès');
     });
   });
 });
