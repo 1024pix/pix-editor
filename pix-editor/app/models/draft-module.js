@@ -1,4 +1,4 @@
-import { belongsTo } from '@warp-drive/legacy/model';
+import { belongsTo, attr } from '@warp-drive/legacy/model';
 
 import BaseModule from './base-module';
 
