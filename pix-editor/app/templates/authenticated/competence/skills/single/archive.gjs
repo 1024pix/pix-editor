@@ -4,7 +4,7 @@ import Archive from 'pixeditor/components/list/archive';
 <template>
   {{#if @controller.competenceController.mainRightSlot}}
     {{#in-element @controller.competenceController.mainRightSlot}}
-      <div class="archive__title {{if @controller.config.lite 'archive__title--lite'}}">
+      <div class="archive__title">
         <h1 class="archive__heading">
           Anciennes épreuves de
           {{@controller.skill.name}}

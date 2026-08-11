@@ -119,11 +119,6 @@ a, p, span, li {
   background-color: var(--pix-orga-500);
   border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 
-  &.lite,
-  &--lite {
-    background-color: #7C0E6A;
-  }
-
   &__heading {
     margin: 0;
     padding: 6px 0;

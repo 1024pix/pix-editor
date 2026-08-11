@@ -11,7 +11,7 @@ import Main from 'pixeditor/components/sidebar/main';
     </div>
     <Main @openLogout={{@controller.openLogout}} @open={{@controller.menuOpen}} @close={{@controller.closeMenu}} />
     <div class="pusher">
-      <div class="main-menu {{if @controller.config.lite 'main-menu--lite' ''}}">
+      <div class="main-menu">
         <button
           class="main-menu__toggle"
           type="button"

@@ -1,13 +1,10 @@
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class CompetenceHeader extends Component {
-  @service config;
-
   sections = [
     {
       label: 'Epreuves',
@@ -80,10 +77,6 @@ export default class CompetenceHeader extends Component {
 
   @tracked languageOptionsResult = this.languageOptions;
 
-  get liteClass() {
-    return this.config.lite ? ' main-title--lite' : '';
-  }
-
   get selectedSection() {
     const section = this.args.section;
     return this.sections.find((el) => el.value === section);
@@ -113,7 +106,7 @@ export default class CompetenceHeader extends Component {
   }
 
   <template>
-    <section class="main-title{{this.liteClass}}">
+    <section class="main-title">
       <h1 class="main-title__heading">
         <LinkTo
           @route="authenticated.competence-management.single"

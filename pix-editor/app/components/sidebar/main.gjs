@@ -14,7 +14,7 @@ import FrameworkModel from '../../models/framework';
 
 export default class SidebarMain extends Component {
   <template>
-    <div class="main-sidebar {{if @open 'main-sidebar--visible' ''}} {{if this.config.lite 'main-sidebar--lite' ''}}">
+    <div class="main-sidebar {{if @open 'main-sidebar--visible' ''}}">
       <div class="main-sidebar__header">
         <h1>Pix Editor</h1>
         <PixSegmentedControl @screenReaderOnly={{true}} @onChange={{this.switchVersion}} @toggled={{this.isV2}}>

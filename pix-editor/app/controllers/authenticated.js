@@ -17,7 +17,6 @@ export default class AuthenticatedController extends Controller {
   @tracked displayLoginForm = false;
   @tracked displayLogout = false;
 
-  @service config;
   @service router;
   @service loader;
   @service confirm;

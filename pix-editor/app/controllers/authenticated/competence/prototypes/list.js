@@ -8,7 +8,6 @@ export default class ListController extends Controller {
   parentController;
 
   @service access;
-  @service config;
   @service currentData;
   @service router;
 
