@@ -1,4 +1,5 @@
 import { visit } from '@1024pix/ember-testing-library';
+import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -30,7 +31,13 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.getByRole('button', { name: 'Erreurs de validation 1 erreur' })).exists();
+      assert
+        .dom(
+          screen.getByRole('button', {
+            name: `${t('modules.components.validation-errors.title')} ${t('modules.components.validation-errors.error-count', { count: 1 })}`,
+          }),
+        )
+        .exists();
     });
   });
 
@@ -48,7 +55,13 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.queryByRole('button', { name: 'Erreurs de validation 1 erreur' })).doesNotExist();
+      assert
+        .dom(
+          screen.queryByRole('button', {
+            name: `${t('modules.components.validation-errors.title')} ${t('modules.components.validation-errors.error-count', { count: 1 })}`,
+          }),
+        )
+        .doesNotExist();
     });
   });
 });

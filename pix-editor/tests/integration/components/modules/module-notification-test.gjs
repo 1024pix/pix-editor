@@ -1,4 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
+import { t } from 'ember-intl/test-support';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
 import { module, test } from 'qunit';
 
@@ -23,10 +24,12 @@ module('Integration | Component | modules/draft-module-diff', function (hooks) {
         const screen = await render(<template><ModuleNotification @module={{module}} /></template>);
 
         // then
-        assert.dom(screen.getByText('Ce module possède une version en cours de modification.')).exists();
-        assert.dom(screen.getByRole('link', { name: 'Voir le détail des modifications' })).exists();
+        assert.dom(screen.getByText(t('modules.components.module-notification.production-information'))).exists();
         assert
-          .dom(screen.getByRole('link', { name: 'Voir le détail des modifications' }))
+          .dom(screen.getByRole('link', { name: t('modules.components.module-notification.production-redirection') }))
+          .exists();
+        assert
+          .dom(screen.getByRole('link', { name: t('modules.components.module-notification.production-redirection') }))
           .hasAttribute('href', /\/modules\/workbench\/draftModuleId$/);
       });
     });
@@ -64,10 +67,12 @@ module('Integration | Component | modules/draft-module-diff', function (hooks) {
         const screen = await render(<template><ModuleNotification @module={{draftModule}} /></template>);
 
         // then
-        assert.dom(screen.getByText('Ce module possède une version disponible en production.')).exists();
-        assert.dom(screen.getByRole('link', { name: 'Voir le détail du module en prod' })).exists();
+        assert.dom(screen.getByText(t('modules.components.module-notification.draft-information'))).exists();
         assert
-          .dom(screen.getByRole('link', { name: 'Voir le détail du module en prod' }))
+          .dom(screen.getByRole('link', { name: t('modules.components.module-notification.draft-redirection') }))
+          .exists();
+        assert
+          .dom(screen.getByRole('link', { name: t('modules.components.module-notification.draft-redirection') }))
           .hasAttribute('href', /\/modules\/production\/moduleId$/);
       });
     });
