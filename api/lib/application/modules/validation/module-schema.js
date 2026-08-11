@@ -1,5 +1,6 @@
 import Joi from 'joi';
 
+import { joiFrErrorMessages } from '../../../infrastructure/schemas/joi-fr-error-messages.js';
 import { audioElementSchema } from './element/audio-schema.js';
 import { customDraftElementSchema } from './element/custom-draft-element-schema.js';
 import { customElementSchema } from './element/custom-element-schema.js';
@@ -171,6 +172,8 @@ const moduleSchema = Joi.object({
     .items(moduleGlossaryEntrySchema)
     .required()
     .description("Glossaire des mots nécessitant l'affichage de leurs définitions dans le module."),
-}).required();
+})
+  .required()
+  .messages(joiFrErrorMessages);
 
 export { componentStepperSchema, grainSchema, moduleSchema };

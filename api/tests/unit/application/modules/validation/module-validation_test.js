@@ -848,7 +848,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
           throw new Error('Joi validation should have thrown');
         } catch (joiError) {
           expect(joiError.message).to.deep.equal(
-            '"sections[0].grains[0].components[0].element.proposals[1].content" length must be less than or equal to 20 characters long. "sections[0].grains" does not contain 1 required value(s)',
+            '"sections[0].grains[0].components[0].element.proposals[1].content" doit avoir une longueur inférieure ou égale à 20 caractères. "sections[0].grains" ne contient pas 1 valeur(s) requise(s)',
           );
         }
       });
@@ -886,7 +886,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
           throw new Error('Joi validation should have thrown');
         } catch (joiError) {
           expect(joiError.message).to.deep.equal(
-            '"sections[0].grains[0].components[0].element.proposals[1].content" failed custom validation because HTML is not allowed in this field. "sections[0].grains" does not contain 1 required value(s)',
+            '"sections[0].grains[0].components[0].element.proposals[1].content" failed custom validation because HTML is not allowed in this field. "sections[0].grains" ne contient pas 1 valeur(s) requise(s)',
           );
         }
       });
