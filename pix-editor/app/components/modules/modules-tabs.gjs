@@ -1,13 +1,14 @@
 import PixTabs from '@1024pix/pix-ui/components/pix-tabs';
 import { LinkTo } from '@ember/routing';
+import t from 'ember-intl/helpers/t';
 
 <template>
-  <PixTabs @ariaLabel="Navigation">
+  <PixTabs @ariaLabel={{t "modules.components.modules-tabs.navigation"}}>
     <LinkTo @route="authenticated.modules.workbench">
-      Atelier
+      {{t "modules.components.modules-tabs.workbench"}}
     </LinkTo>
     <LinkTo @route="authenticated.modules.production">
-      En production
+      {{t "modules.components.modules-tabs.production"}}
     </LinkTo>
   </PixTabs>
 </template>

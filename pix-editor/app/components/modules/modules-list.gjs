@@ -5,6 +5,7 @@ import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import t from 'ember-intl/helpers/t';
 
 import PlayModuleButton from './play-module-button';
 
@@ -21,12 +22,12 @@ export default class Product extends Component {
   }
 
   <template>
-    <PixTable @variant="modulix" @data={{@modules}} @caption="Liste des modules">
+    <PixTable @variant="modulix" @data={{@modules}} @caption={{t "modules.components.modules-list.caption"}}>
       <:columns as |module context|>
         {{#if @showStatus}}
           <PixTableColumn @context={{context}}>
             <:header>
-              Statut
+              {{t "modules.components.modules-list.status"}}
             </:header>
             <:cell>
               <div class="modules-list__status">
@@ -42,7 +43,7 @@ export default class Product extends Component {
         {{/if}}
         <PixTableColumn @context={{context}}>
           <:header>
-            Titre interne
+            {{t "modules.components.modules-list.internal-title"}}
           </:header>
           <:cell>
             {{module.internalTitle}}
@@ -50,7 +51,7 @@ export default class Product extends Component {
         </PixTableColumn>
         <PixTableColumn @context={{context}}>
           <:header>
-            Niveau
+            {{t "modules.components.modules-list.level"}}
           </:header>
           <:cell>
             {{module.levelForDisplay}}
@@ -58,7 +59,7 @@ export default class Product extends Component {
         </PixTableColumn>
         <PixTableColumn @context={{context}} class="modules-list__actions">
           <:header>
-            <span class="sr-only">Actions</span>
+            <span class="sr-only">{{t "modules.components.modules-list.actions"}}</span>
           </:header>
           <:cell>
             <PixButtonLink
@@ -69,7 +70,7 @@ export default class Product extends Component {
               }}
               @model={{module.id}}
             >
-              Voir le détail
+              {{t "modules.components.modules-list.detail"}}
             </PixButtonLink>
             <PlayModuleButton @module={{module}} @isPreview={{module.isDraft}} />
             {{#if module.isEditionDraft}}
@@ -78,7 +79,7 @@ export default class Product extends Component {
                 @model={{module.moduleId}}
                 @variant="secondary"
               >
-                Voir le détail du module en prod
+                {{t "modules.components.modules-list.production-detail"}}
               </PixButtonLink>
             {{/if}}
           </:cell>

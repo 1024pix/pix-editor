@@ -4,11 +4,15 @@ import PixLabel from '@1024pix/pix-ui/components/pix-label';
 import PixNotificationAlert from '@1024pix/pix-ui/components/pix-notification-alert';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import t from 'ember-intl/helpers/t';
 import MonacoEditor from 'pixeditor/components/monaco-editor/monaco-editor';
 
 export default class ModuleForm extends Component {
+  @service intl;
+
   @tracked internalTitle;
   @tracked moduleData;
 
@@ -16,7 +20,7 @@ export default class ModuleForm extends Component {
     super(...args);
 
     this.monacoOptions = {
-      ariaLabel: 'Contenu (JSON)',
+      ariaLabel: this.intl.t('modules.components.module-form.content-label'),
       ariaRequired: true,
       automaticLayout: true,
       domReadOnly: this.args.readonly,
@@ -69,11 +73,11 @@ export default class ModuleForm extends Component {
     <div class="module-form">
       {{#if this.isIdsChangedWarningDisplayed}}
         <PixNotificationAlert @type="warning">
-          Les champs
+          {{t "modules.components.module-form.ids-warning-prefix"}}
           <code>id</code>
-          et
+          {{t "modules.components.module-form.ids-warning-middle"}}
           <code>shortId</code>
-          ne peuvent pas être modifiés.
+          {{t "modules.components.module-form.ids-warning-suffix"}}
         </PixNotificationAlert>
       {{/if}}
 
@@ -83,16 +87,16 @@ export default class ModuleForm extends Component {
         <PixInput
           @id="internalTitle"
           @value={{this.internalTitle}}
-          @requiredLabel="Champ obligatoire"
+          @requiredLabel={{t "modules.components.module-form.required-field"}}
           {{on "change" this.onInternalTitleChange}}
         >
-          <:label>Titre interne</:label>
+          <:label>{{t "modules.components.module-form.internal-title-label"}}</:label>
         </PixInput>
       {{/if}}
 
       <div class="module-form__data-field">
-        <PixLabel @requiredLabel="Champ obligatoire">
-          Contenu (JSON)
+        <PixLabel @requiredLabel={{t "modules.components.module-form.required-field"}}>
+          {{t "modules.components.module-form.content-label"}}
         </PixLabel>
         <MonacoEditor @options={{this.monacoOptions}} class="module-form__monaco-editor" @onChange={{this.onChange}} />
       </div>
@@ -100,10 +104,10 @@ export default class ModuleForm extends Component {
       {{#unless @readonly}}
         <div class="module-form__actions">
           <PixButton @triggerAction={{this.saveModule}} @isDisabled={{this.isSaveDisabled}}>
-            Enregistrer
+            {{t "modules.components.module-form.save"}}
           </PixButton>
           <PixButton @triggerAction={{this.back}} @variant="secondary">
-            Annuler
+            {{t "modules.components.module-form.cancel"}}
           </PixButton>
         </div>
       {{/unless}}

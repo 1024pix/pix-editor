@@ -1,4 +1,5 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import t from 'ember-intl/helpers/t';
 
 <template>
   <PixButtonLink
@@ -8,9 +9,13 @@ import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
     @iconAfter="openNew"
   >
     {{#if @isPreview}}
-      Prévisualiser
+      {{t "modules.components.play-module-button.preview"}}
     {{else}}
-      {{if @module.isDraft "Jouer le draft" "Jouer le module"}}
+      {{if
+        @module.isDraft
+        (t "modules.components.play-module-button.play-draft")
+        (t "modules.components.play-module-button.play-module")
+      }}
     {{/if}}
   </PixButtonLink>
 </template>
