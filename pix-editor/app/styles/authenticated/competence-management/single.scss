@@ -11,7 +11,6 @@
   box-sizing: border-box;
   min-width: 0;
   overflow: hidden;
-  border-left: 10px solid #dfe1e4;
 
   // Reproduces `.main-title` (blue header bar)
   &__title {
@@ -19,16 +18,13 @@
     justify-content: space-between;
     box-sizing: border-box;
     padding: 10px;
-    background-color: var(--pix-orga-500);
+    background-color: var(--pix-neutral-0);
     border-bottom: 1px solid rgba(34, 36, 38, 0.15);
   }
 
   &__heading {
     margin: 0;
     padding: 6px 0;
-    color: #fff;
-    font-weight: normal;
-    font-size: 20px;
   }
 
   // Reproduces `.challenge` (details row)

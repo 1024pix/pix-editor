@@ -47,7 +47,7 @@ export default class NewModule extends Component {
 
   <template>
     <header class="page-header">
-      <h1 class="page-title">
+      <h1>
         Édition du draft de module
       </h1>
     </header>

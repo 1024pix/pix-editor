@@ -10,10 +10,8 @@
 }
 
 .competence-management-link {
-  color: var(--pix-neutral-0);
-
   &:hover {
-    color: var(--pix-neutral-0);
+    color: var(--pix-neutral-500);
     text-decoration: underline;
   }
 }
@@ -337,11 +335,6 @@
       }
     }
   }
-}
-
-.prototype-list,
-.alternative-list {
-  height: 100%;
 }
 
 .quality-indication-details {

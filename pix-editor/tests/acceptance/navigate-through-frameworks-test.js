@@ -27,7 +27,7 @@ module('Acceptance | Navigate through frameworks', function (hooks) {
 
       test('it should display select framework', async function (assert) {
         // then
-        assert.dom(await screen.findByLabelText('Sélectionner un référentiel')).exists();
+        assert.dom(await screen.findByLabelText('Choisir un référentiel')).exists();
       });
 
       test('it should display generator target profile link', async function (assert) {
@@ -53,7 +53,7 @@ module('Acceptance | Navigate through frameworks', function (hooks) {
 
     test('it should not have access to framework list', async function (assert) {
       // then
-      assert.strictEqual(await screen.queryByLabelText('Sélectionner un référentiel'), null);
+      assert.strictEqual(await screen.queryByLabelText('Choisir un référentiel'), null);
     });
 
     test('it should not display generator target profile link', async function (assert) {

@@ -13,7 +13,7 @@ import not from 'ember-truth-helpers/helpers/not';
 import Card from 'pixeditor/components/card';
 <template>
   <header class="page-header">
-    <h1 class="page-title">{{@controller.model.staticCourse.name}}</h1>
+    <h1>{{@controller.model.staticCourse.name}}</h1>
     <div class="page-actions">
       <PixButtonLink
         @backgroundColor="blue"

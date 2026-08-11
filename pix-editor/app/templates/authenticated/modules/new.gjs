@@ -48,7 +48,7 @@ export default class NewModule extends Component {
 
   <template>
     <header class="page-header">
-      <h1 class="page-title">
+      <h1>
         {{#if @model.module}}
           Création d’un draft
         {{else}}

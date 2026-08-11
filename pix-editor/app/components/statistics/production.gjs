@@ -5,7 +5,7 @@ export default class StatisticsProductionComponent extends Component {
   <template>
     <h2 class="statistics-production__heading">
       <PixIcon @name="bolt" @ariaHidden={{true}} />
-      <span>En production</span>
+      En production
     </h2>
     <div class="statistics-production__tiles">
       <div class="statistics-production__tile">

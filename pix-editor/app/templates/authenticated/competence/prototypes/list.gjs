@@ -5,7 +5,7 @@ import { on } from '@ember/modifier';
 import eq from 'ember-truth-helpers/helpers/eq';
 import Prototypes from 'pixeditor/components/list/prototypes';
 <template>
-  <div class="prototypes-list__title {{if @controller.config.lite 'prototypes-list__title--lite'}}">
+  <div class="prototypes-list__title">
     <h1 class="prototypes-list__heading">
       Prototypes de
       {{@controller.model.skill.name}}

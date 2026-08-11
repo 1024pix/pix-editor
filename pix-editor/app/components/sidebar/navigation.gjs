@@ -130,7 +130,6 @@ export default class SidebarNavigationComponent extends Component {
         @value={{this.selectedFrameworkId}}
         @options={{this.frameworkOptionsResult}}
         @onChange={{this.setFramework}}
-        @placeholder="Sélectionner un référentiel"
         @placement="bottom"
         class="select-framework"
         @hideDefaultOption={{true}}
@@ -140,7 +139,7 @@ export default class SidebarNavigationComponent extends Component {
         @emptySearchMessage="Aucun référentiel correspondant"
       >
         <:label>
-          <span class="sr-only">Sélectionner un référentiel</span>
+          Choisir un référentiel
         </:label>
       </PixSelect>
     {{/if}}
@@ -179,10 +178,11 @@ export default class SidebarNavigationComponent extends Component {
         <LinkTo
           @route="authenticated.area-management.new"
           @model={{this.framework.id}}
-          class="area-link"
+          class="main-sidebar-secondary-links--action"
           {{on "click" @close}}
         >
-          <PixIcon @name="add" @ariaHidden={{true}} />Ajouter un domaine
+          <PixIcon @name="add" @ariaHidden={{true}} />
+          Ajouter un domaine
         </LinkTo>
       {{/if}}
     </div>

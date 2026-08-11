@@ -56,19 +56,6 @@
       }
     }
 
-    .row--not-clickable {
-      cursor: auto;
-      background-color: white;
-    }
-
-    th.th--clickable {
-      background-color: white;
-
-      &:hover {
-        background-color: colors.$pix-neutral-15;
-      }
-    }
-
     td {
       font-family: fonts.$font-roboto;
       font-size: 0.875rem;
@@ -89,10 +76,6 @@
          height: 100%;
          margin: auto;
 
-         &__edit-mission {
-           height: inherit;
-         }
-
          a {
            padding: 8px 10px;
            border-radius: 50%;
@@ -101,14 +84,6 @@
              background-color: colors.$pix-neutral-20;
            }
          }
-        &__edit-mission{
-          a {
-            border-radius: 0;
-            &:hover {
-              background-color: var(--pix-primary-700);
-            }
-          }
-        }
       }
 
       > a {
@@ -160,10 +135,6 @@
 
     &--wide {
       width: 25%;
-    }
-
-    &--highlight {
-      color: colors.$pix-neutral-80;
     }
   }
 }

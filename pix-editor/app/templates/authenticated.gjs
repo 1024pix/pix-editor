@@ -10,8 +10,8 @@ import Main from 'pixeditor/components/sidebar/main';
       <div class="application__loader-text">{{@controller.loadingMessage}}</div>
     </div>
     <Main @openLogout={{@controller.openLogout}} @open={{@controller.menuOpen}} @close={{@controller.closeMenu}} />
-    <div class="pusher">
-      <div class="main-menu {{if @controller.config.lite 'main-menu--lite' ''}}">
+    <div class="content-wrapper">
+      <div class="main-menu">
         <button
           class="main-menu__toggle"
           type="button"

@@ -5,7 +5,7 @@ import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
 
 <template>
   <header class="page-header">
-    <h1 class="page-title">Modules</h1>
+    <h1>Modules</h1>
     <div class="page-actions">
       <CreateModuleButton />
     </div>

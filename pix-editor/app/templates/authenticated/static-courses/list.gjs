@@ -14,7 +14,7 @@ import formatDate from 'ember-intl/helpers/format-date';
 import not from 'ember-truth-helpers/helpers/not';
 <template>
   <header class="page-header">
-    <h1 class="page-title">Tests Statiques</h1>
+    <h1>Tests Statiques</h1>
     <div class="page-actions">
       <PixTooltip
         @id="create-static-course-tooltip"

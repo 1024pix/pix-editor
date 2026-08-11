@@ -8,12 +8,8 @@
     justify-content: space-between;
     box-sizing: border-box;
     padding: 10px;
-    background-color: var(--pix-orga-500);
+    background-color: var(--pix-neutral-0);
     border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-
-    &--lite {
-      background-color: #7c0e6a;
-    }
   }
 
   &__heading {
@@ -23,9 +19,6 @@
     justify-content: space-between;
     margin: 0;
     padding: 6px 0;
-    color: #fff;
-    font-weight: normal;
-    font-size: 20px;
   }
 
   &__actions {
