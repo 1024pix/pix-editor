@@ -5,7 +5,7 @@ import not from 'ember-truth-helpers/helpers/not';
 import List from 'pixeditor/components/whitelisted-urls/list';
 <template>
   <header class="page-header">
-    <h1 class="page-title">URLs à ne pas analyser dans les moulinettes</h1>
+    <h1>URLs à ne pas analyser dans les moulinettes</h1>
     <div class="page-actions">
       <PixTooltip
         @id="create-whitelisted-url-tooltip"

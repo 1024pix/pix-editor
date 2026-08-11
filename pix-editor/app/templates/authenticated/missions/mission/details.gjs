@@ -7,7 +7,7 @@ import not from 'ember-truth-helpers/helpers/not';
 import Card from 'pixeditor/components/card';
 <template>
   <header class="page-header">
-    <h1 class="page-title">Détails d'une mission</h1>
+    <h1>Détails d'une mission</h1>
     <div class="page-actions">
       <PixButtonLink
         @route="authenticated.missions.mission.edit"

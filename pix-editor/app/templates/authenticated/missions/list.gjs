@@ -9,7 +9,7 @@ import { on } from '@ember/modifier';
 import formatDate from 'ember-intl/helpers/format-date';
 <template>
   <header class="page-header">
-    <h1 class="page-title">Missions</h1>
+    <h1>Missions</h1>
     {{#if @controller.model.mayCreateOrEditMissions}}
       <div class="page-actions">
         <PixButtonLink

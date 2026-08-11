@@ -1,7 +1,7 @@
 import Mission from 'pixeditor/components/form/mission';
 <template>
   <header class="page-header">
-    <h1 class="page-title">Création d'une mission</h1>
+    <h1>Création d'une mission</h1>
   </header>
   <main class="page-body">
     <section class="page-section">

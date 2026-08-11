@@ -1,7 +1,7 @@
 import StaticCourse from 'pixeditor/components/form/static-course';
 <template>
   <header class="page-header">
-    <h1 class="page-title">Création d'un test</h1>
+    <h1>Création d'un test</h1>
   </header>
   <main class="page-body">
     <section class="page-section">

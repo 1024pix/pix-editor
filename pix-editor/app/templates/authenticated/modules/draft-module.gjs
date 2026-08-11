@@ -32,7 +32,7 @@ export default class DraftModule extends Component {
 
   <template>
     <header class="page-header">
-      <h1 class="page-title">Détail du draft de module</h1>
+      <h1>Détail du draft de module</h1>
       <div class="page-actions">
         <PlayModuleButtons @module={{@model.draftModule}} />
         <PixButtonLink
