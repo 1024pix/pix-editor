@@ -1,3 +1,5 @@
+@use 'pix-design-tokens/typography';
+
 // stylelint-disable color-no-hex, color-named
 $challenge-background-color: #fcfd9f;
 $skill-background-color: #d5e8fd;
@@ -30,16 +32,14 @@ body, html, body > div.ember-view, .application, .content-wrapper, .main, .main-
   min-height: 100vh;
 }
 
-h1, h2, h3, h4 {
-  // TODO: remplacer par `@extend %pix-title-${size}` (un jour, potentiellement quand la V2 sera partout)
-  // stylelint-disable-next-line custom-property-pattern
-  font-family: var(--_pix-font-family-title), Arial, sans-serif;
+.application {
+  h1, h2, h3, h4 {
+  @extend %pix-title-xs;
+  }
 }
 
 a, p, span, li {
-  // TODO: remplacer par `@extend %pix-body-${size}` (un jour, potentiellement quand la V2 sera partout)
-  // stylelint-disable-next-line custom-property-pattern
-  font-family: var(--_pix-font-family-body), Arial, sans-serif;
+  @extend %pix-body-s;
 }
 
 .monaco-editor {
@@ -117,9 +117,6 @@ a, p, span, li {
   &__heading {
     margin: 0;
     padding: 6px 0;
-    color: #fff;
-    font-weight: normal;
-    font-size: 20px;
   }
 }
 

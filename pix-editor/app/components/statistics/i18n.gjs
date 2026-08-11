@@ -9,9 +9,7 @@ export default class StatisticsI18nComponent extends Component {
   <template>
     <h2 class="statistics-i18n__heading">
       <PixIcon @name="language" @ariaHidden={{true}} />
-      <div class="statistics-i18n__heading-content">
-        Internationalisation
-      </div>
+      Internationalisation
     </h2>
     <div class="statistics-i18n__grid statistics-i18n__grid--four">
       <div class="statistics-i18n__column">

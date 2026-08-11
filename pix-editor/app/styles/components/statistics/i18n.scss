@@ -5,16 +5,9 @@
 .statistics-i18n {
   &__heading {
     display: flex;
+    gap: 0.5rem;
     align-items: center;
-    margin: calc(2rem - 0.14285714em) 0 1rem;
-    color: rgba(0, 0, 0, 0.87);
-    font-weight: bold;
-    font-size: 1.28571429em;
-    line-height: 1.28571429em;
-  }
-
-  &__heading-content {
-    margin-left: 0.5rem;
+    padding: 1rem;
   }
 
   &__grid {
