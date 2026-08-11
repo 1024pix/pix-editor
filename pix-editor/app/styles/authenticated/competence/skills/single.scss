@@ -3,16 +3,6 @@
 // stylelint-disable color-no-hex, color-named
 
 .skill-view {
-  &__menu-bar {
-    display: flex;
-    align-items: stretch;
-    color: inherit;
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
   &__action-button {
     color: #000;
   }
@@ -32,9 +22,7 @@
     background-color: #1b1c1d;
     border-radius: 500rem;
 
-    &--validated,
-    &--prevalidated,
-    &--validated_no_test {
+    &--validated {
       color: #2f2f2f;
       background: global.$validated-background-color;
     }

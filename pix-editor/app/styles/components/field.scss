@@ -2,13 +2,6 @@
 // `.field-title` / `.field` spacing now live in `components/form.scss`.
 // stylelint-disable color-no-hex, color-named
 
-.file-remove {
-  color: rgba(0, 0, 0, 0.6);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
 .field--files {
   & > label {
     display: flex;

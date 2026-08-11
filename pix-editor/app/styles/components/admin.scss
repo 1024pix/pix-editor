@@ -25,14 +25,6 @@
     @extend %pix-title-l;
   }
 
-  .table-actions {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 100%;
-    margin: auto;
-  }
-
   .pagination {
     margin-top: 1rem;
   }

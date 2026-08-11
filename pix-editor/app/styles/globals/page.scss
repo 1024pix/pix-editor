@@ -45,25 +45,6 @@
       border-radius: 5px;
       padding: 32px;
       margin-bottom: 10px;
-
-      &__header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-
-      &__title {
-        font-size: 1.2rem;
-        font-weight: 600;
-
-        &--sub {
-          margin-bottom: var(--pix-spacing-4x);
-        }
-      }
-
-      &__content {
-        margin-bottom: 10px;
-      }
     }
   }
 

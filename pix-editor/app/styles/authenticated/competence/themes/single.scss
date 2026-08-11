@@ -64,29 +64,4 @@
     padding: 10px 20px;
     overflow: scroll;
   }
-
-  &__actions-menu {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    margin-top: 0;
-    overflow-y: auto;
-    border: none;
-    border-left: 1px solid rgba(34, 36, 38, 0.15);
-    box-shadow: none;
-  }
-
-  &__action {
-    justify-content: flex-start;
-    text-align: left;
-
-    &--important {
-      color: #d02181;
-
-      &:hover,
-      &:focus {
-        color: #d02181;
-      }
-    }
-  }
 }

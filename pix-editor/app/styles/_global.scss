@@ -48,10 +48,6 @@ a, p, span, li {
   }
 }
 
-.waiting {
-  height: 100%;
-}
-
 .application {
   background-color: #fff;
 
@@ -135,10 +131,6 @@ a, p, span, li {
   margin-left: 150px;
   background: url("/assets/images/elephant_main.png") center center no-repeat;
   background-size: contain;
-}
-
-.rotate-90 {
-  transform: rotate(90deg);
 }
 
 .sr-only {

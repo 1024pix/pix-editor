@@ -16,10 +16,6 @@
   .not-declinable {
     font-weight: bold;
   }
-
-  .alternative-count {
-    color: global.$alternative-count-color;
-  }
 }
 
 .challenge {
@@ -50,25 +46,6 @@ img.clickable {
 .modal img {
   max-height: 500px;
   margin: auto;
-}
-
-.dropdown-content-challenge {
-  & > .item {
-    margin: 0;
-    padding: 0.7em 1.4em;
-    font-size: 16px !important;
-    border-radius: 0;
-
-    &.validate {
-      color: global.$production-color !important;
-      background-color: global.$production-background-color !important;
-    }
-
-    &.archive {
-      color: global.$archived-color !important;
-      background-color: global.$archived-background-color !important;
-    }
-  }
 }
 
 .challenge-header {
@@ -106,33 +83,6 @@ img.clickable {
     font-weight: normal;
     font-size: 20px;
     text-align: center;
-  }
-
-  &__action {
-    color: inherit;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      background-color: rgba(0, 0, 0, 0.03);
-    }
-  }
-}
-
-.bullet_status {
-  display: block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-
-  &.skill {
-    background-color: global.$skill-background-color !important;
-  }
-
-  &.challenge {
-    background-color: global.$challenge-background-color !important;
   }
 }
 
@@ -192,47 +142,18 @@ img.clickable {
   }
 }
 
-.challenge-status-actions {
-  position: relative;
-  display: flex;
-  align-items: center;
+.bullet_status {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 
-  &__menu {
-    position: absolute;
-    top: 45px;
-    z-index: 1000000;
-    background: white;
-    border: solid lightgray 1px;
-    border-radius: 5px;
-  }
-}
-
-%challenge-menu {
-  margin-top: 0;
-  border: none;
-  border-left: 1px solid rgba(34, 36, 38, 0.15);
-  box-shadow: none;
-
-  div.item::before {
-    display: none;
+  &.skill {
+    background-color: global.$skill-background-color !important;
   }
 
-  .item {
-    &.alternatives {
-      color: #2185d0;
-    }
-  }
-
-  .switch-genealogy {
-    display: flex;
-    flex-direction: row !important;
-    gap: 0.25rem;
-    align-items: center;
-
-    i {
-      width: 16px !important;
-      margin-bottom: 0;
-    }
+  &.challenge {
+    background-color: global.$challenge-background-color !important;
   }
 }
 
@@ -244,10 +165,6 @@ img.clickable {
   background: transparent;
   border: none;
   outline: none;
-}
-
-.file-remove .pix-icon {
-  vertical-align: top;
 }
 
 .translation-link {
