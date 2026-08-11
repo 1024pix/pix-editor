@@ -1,4 +1,5 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import Component from '@glimmer/component';
 import DraftModuleDiff from 'pixeditor/components/modules/draft-module-diff';
 import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
@@ -15,6 +16,18 @@ export default class DraftModule extends Component {
 
   get validationErrors() {
     return this.args.model.draftModule.validationErrors;
+  }
+
+  get validationStatus() {
+    return this.args.model.draftModule.hasBeenValidated;
+  }
+
+  get validationStatusLabel() {
+    return this.validationStatus ? 'Succès' : 'Échec';
+  }
+
+  get validationStatusColor() {
+    return this.validationStatus ? 'green' : 'error';
   }
 
   <template>
@@ -36,6 +49,14 @@ export default class DraftModule extends Component {
     <main class="page-body">
       <section class="page-section module-form">
         <ModuleNotification @module={{@model.draftModule}} />
+        <dl class="draft-module__description">
+          <dt>
+            Statut de validation :
+          </dt>
+          <dd><PixTag @color={{this.validationStatusColor}}>
+              {{this.validationStatusLabel}}
+            </PixTag></dd>
+        </dl>
         {{#if this.hasValidationErrors}}
           <ModuleValidationErrors @validationErrors={{this.validationErrors}} />
         {{/if}}
