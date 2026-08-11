@@ -298,6 +298,6 @@ Valeur concernée à rechercher : "pamplemousse"
 
     // then
     expect(result.hasBeenValidated).to.equal(false);
-    expect(result.validationErrors).to.deep.equal([`Modules have duplicate ids: ${duplicateIds.join(', ')}`]);
+    expect(result.validationErrors).to.deep.equal([`Le brouillon a des ids dupliqués : ${duplicateIds.join(', ')}`]);
   });
 });

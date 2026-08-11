@@ -71,7 +71,7 @@ export class ModulesValidation {
     }
 
     if (duplicateIds.size > 0) {
-      throw new ModuleDuplicateIdsError(`Modules have duplicate ids: ${Array.from(duplicateIds).join(', ')}`, Array.from(duplicateIds));
+      throw new ModuleDuplicateIdsError(`Le brouillon a des ids dupliqués : ${Array.from(duplicateIds).join(', ')}`, Array.from(duplicateIds));
     }
   }
 }
