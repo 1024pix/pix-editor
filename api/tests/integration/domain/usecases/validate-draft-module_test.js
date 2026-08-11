@@ -224,11 +224,11 @@ describe('Integration | Usecases | Validate draft module', () => {
     expect(result.hasBeenValidated).to.equal(false);
     expect(result.validationErrors).to.deep.equal([
       `
-Error: "slug" with value "not valid slug" fails to match the required pattern: /^[a-z0-9-]+$/.
+Erreur: Chaîne invalide : doit correspondre au modèle /^[a-z0-9-]+$/.
 Valeur concernée à rechercher : "not valid slug"
 `,
       `
-Error: "sections[0].type" must be one of [question-yourself, explore-to-understand, retain-the-essentials, practise, go-further, blank].
+Erreur: Option invalide : une valeur parmi "question-yourself"|"explore-to-understand"|"retain-the-essentials"|"practise"|"go-further"|"blank" attendue.
 Valeur concernée à rechercher : "pamplemousse"
 `,
     ]);

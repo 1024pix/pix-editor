@@ -1,7 +1,7 @@
 import { draftModuleRepository, moduleRepository } from '../../infrastructure/repositories/index.js';
 
-import { moduleSchema } from '../../application/modules/validation/module-schema.js';
-import { joiErrorParser } from '../../application/modules/joi-error-parser.js';
+import { moduleSchema } from '../../application/modules/zod-validation/module-schema.js';
+import { zodErrorParser } from '../../application/modules/zod-error-parser.js';
 import { ModulesValidation } from '../models/ModulesValidation.js';
 
 export async function validateDraftModule(draftModule, dependencies = { moduleRepository, draftModuleRepository }) {
@@ -11,13 +11,13 @@ export async function validateDraftModule(draftModule, dependencies = { moduleRe
   const draftModuleJSON = draftModule.toModuleValidation();
   const modules = await dependencies.moduleRepository.list();
 
-  try {
-    await moduleSchema.validateAsync(draftModuleJSON, { abortEarly: false });
-  } catch (joiError) {
+  const result = await moduleSchema.safeParseAsync(draftModuleJSON);
+  if (!result.success) {
     validationErrors.push(
-      ...joiError.details.map((errorDetail) =>
-        joiErrorParser.format({
-          error: { details: [errorDetail] },
+      ...result.error.issues.map((issue) =>
+        zodErrorParser.format({
+          error: { issues: [issue] },
+          data: draftModuleJSON,
           objectErrorSeparator: '',
           visualSeparator: '',
         }),
