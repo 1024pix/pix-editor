@@ -23,7 +23,6 @@ export default class SidebarMain extends Component {
           <:viewB>V2</:viewB>
         </PixSegmentedControl>
       </div>
-      <p class="legal-mention">Confidentiel - secret - ne pas divulguer</p>
       {{#if this.maySearch}}
         <Search @close={{@close}} />
       {{/if}}
