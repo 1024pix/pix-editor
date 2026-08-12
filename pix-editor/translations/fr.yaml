@@ -139,8 +139,6 @@ modules:
     create-module-button:
       create-draft: Créer un draft
       create-module: Créer un module
-    module-back-button:
-      back: Retour
     module-form:
       required-field: Champ obligatoire
       internal-title-label: Titre interne

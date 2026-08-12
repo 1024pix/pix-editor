@@ -5,7 +5,6 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
 import DraftModuleDiff from 'pixeditor/components/modules/draft-module-diff';
-import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
 import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
@@ -87,9 +86,6 @@ export default class DraftModule extends Component {
         {{else}}
           <ModuleForm @module={{@model.draftModule}} @readonly={{true}} />
         {{/if}}
-        <div class="page-actions">
-          <ModuleBackButton />
-        </div>
       </section>
     </main>
   </template>

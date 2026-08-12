@@ -1,12 +1,11 @@
 import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
+import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
 import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
-import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
 import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
-import {inject as service} from "@ember/service";
 
 export default class ProductionModule extends Component {
   @service intl;
@@ -36,9 +35,6 @@ export default class ProductionModule extends Component {
       <section class="page-section module-form">
         <ModuleNotification @module={{@model.module}} />
         <ModuleForm @module={{@model.module}} @readonly={{true}} />
-        <div class="page-actions">
-          <ModuleBackButton />
-        </div>
       </section>
     </main>
   </template>
