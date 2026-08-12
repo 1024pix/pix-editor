@@ -43,6 +43,7 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
         id: crypto.randomUUID(),
         internalTitle: 'MODULE_DRAFT',
         validationErrors: ['oups !'],
+        hasBeenValidated: false,
       });
 
       // when
@@ -54,7 +55,7 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
       assert
         .dom(
           screen.getByRole('button', {
-            name: `${t('modules.components.validation-errors.title')} ${t('modules.components.validation-errors.error-count', { count: 1 })}`,
+            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')}`,
           }),
         )
         .exists();
@@ -78,7 +79,7 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
       assert
         .dom(
           screen.queryByRole('button', {
-            name: `${t('modules.components.validation-errors.title')} ${t('modules.components.validation-errors.error-count', { count: 1 })}`,
+            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')}`,
           }),
         )
         .doesNotExist();

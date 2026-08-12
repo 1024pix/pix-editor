@@ -131,8 +131,8 @@ modules:
       detail: Voir le détail
       production-detail: Voir le détail du module en prod
     validation-errors:
-      title: Erreurs de validation
-      error-count: '{count, plural, one {1 erreur} other {# erreurs}}'
+      title: '{count, plural, one {1 erreur} other {# erreurs}} de validation'
+      information: La publication est impossible tant que des erreurs subsistent.
     validation-success:
       content: Aucune erreur de validation
     create-module-button:
