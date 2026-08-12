@@ -8,8 +8,8 @@ import DraftModuleDiff from 'pixeditor/components/modules/draft-module-diff';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
 import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
-import PublishModuleButton from 'pixeditor/components/modules/publish-module-button';
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
+import ModuleValidationSuccess from 'pixeditor/components/modules/validation-success';
 
 export default class DraftModule extends Component {
   @service intl;
@@ -71,7 +71,6 @@ export default class DraftModule extends Component {
         >
           {{t "modules.draft-module.edit"}}
         </PixButtonLink>
-        <PublishModuleButton @draftModule={{@model.draftModule}} />
       </div>
     </header>
     <main class="page-body">
@@ -79,6 +78,8 @@ export default class DraftModule extends Component {
         <ModuleNotification @module={{@model.draftModule}} />
         {{#if this.hasValidationErrors}}
           <ModuleValidationErrors @validationErrors={{this.validationErrors}} />
+        {{else}}
+          <ModuleValidationSuccess @draftModule={{@model.draftModule}} />
         {{/if}}
 
         {{#if @model.draftModule.isEditionDraft}}

@@ -105,8 +105,8 @@ modules:
     publish-module-button:
       success: Le module "{title}" a été publié.
       error: Erreur lors de la publication du module.
-      aria-label: Publier le module "{title}"
-      publish: Publier
+      aria-label: Publier le brouillon "{title}"
+      publish: Publier ce brouillon
     modules-tabs:
       navigation: Navigation
       workbench: Atelier
@@ -131,6 +131,8 @@ modules:
     validation-errors:
       title: Erreurs de validation
       error-count: '{count, plural, one {1 erreur} other {# erreurs}}'
+    validation-success:
+      content: Aucune erreur de validation
     create-module-button:
       create-draft: Créer un draft
       create-module: Créer un module

@@ -142,6 +142,26 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       // then
       assert.dom(screen.getByText(t('modules.draft-module.validation-failure'))).exists();
     });
+
+    test('it should not display publish button', async function (assert) {
+      // given
+      const moduleWithErrors = this.server.create('draft-module', {
+        id: crypto.randomUUID(),
+        internalTitle: 'MODULE_DRAFT',
+        validationErrors: ['oups !'],
+        hasBeenValidated: false,
+      });
+
+      // when
+      const screen = await visit(`/modules/workbench/${moduleWithErrors.id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // then
+      assert
+        .dom(screen.queryByRole('button', { name: t('modules.components.publish-module-button.publish') }))
+        .doesNotExist();
+    });
   });
 
   module('when a module has no errors', function () {
