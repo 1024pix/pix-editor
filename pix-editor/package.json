@@ -21,7 +21,7 @@
     "lint:scss:fix": "npm run lint:scss -- --fix",
     "lint:js": "eslint . --cache",
     "preinstall": "git config core.hooksPath .githooks || true",
-    "lint:js:fix": "eslint . --fix",
+    "lint:js:fix": "npm run lint:js -- --fix",
     "start": "vite",
     "test": "npm-run-all lint test:*",
     "test:ember": "vite build --mode development && ember test --path dist"
