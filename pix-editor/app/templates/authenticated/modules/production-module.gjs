@@ -1,7 +1,6 @@
 import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import t from 'ember-intl/helpers/t';
 import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
@@ -23,11 +22,14 @@ export default class ProductionModule extends Component {
   }
 
   <template>
-    <header class="page-header">
-      <PixBreadcrumb @links={{this.links}} />
-      <h1 class="page-title">{{t "modules.production-module.title"}}</h1>
+    <header class="module__header">
+      <div>
+        <PixBreadcrumb class="module-header__breadcrumb" @links={{this.links}} />
+        <h1 class="module-header__title">{{@model.module.internalTitle}}</h1>
+      </div>
       <div class="page-actions">
         <PlayModuleButtons @module={{@model.module}} />
+        <div class="module__separator"></div>
         <CreateModuleButton @module={{@model.module}} />
       </div>
     </header>

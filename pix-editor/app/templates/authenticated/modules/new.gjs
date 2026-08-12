@@ -79,16 +79,17 @@ export default class NewModule extends Component {
   }
 
   <template>
-    <header class="page-header">
-      <PixBreadcrumb @links={{this.links}} />
-
-      <h1 class="page-title">
-        {{#if @model.module}}
-          {{t "modules.new.draft-title"}}
-        {{else}}
-          {{t "modules.new.module-title"}}
-        {{/if}}
-      </h1>
+    <header class="module__header">
+      <div>
+        <PixBreadcrumb class="module-header__breadcrumb" @links={{this.links}} />
+        <h1 class="module-header__title">
+          {{#if @model.module}}
+            {{@model.module.internalTitle}}
+          {{else}}
+            {{t "modules.new.module-title"}}
+          {{/if}}
+        </h1>
+      </div>
     </header>
     <main class="page-body">
       <section class="page-section module-form">

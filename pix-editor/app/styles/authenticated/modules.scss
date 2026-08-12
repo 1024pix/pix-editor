@@ -38,3 +38,29 @@ td.modules-list__actions {
     }
   }
 }
+
+
+.module {
+  &__header {
+    background: var(--pix-neutral-0);
+    padding: var(--pix-spacing-4x) var(--pix-spacing-5x);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__separator {
+    height: 40px;
+    border-left: 1.5px solid var(--pix-neutral-100);
+  }
+}
+
+.module-header {
+  &__breadcrumb {
+    padding-bottom : var(--pix-spacing-2x);
+  }
+
+  &__title {
+    @extend %pix-title-s;
+  }
+}

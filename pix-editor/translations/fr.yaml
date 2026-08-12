@@ -86,7 +86,6 @@ modules:
     new-module:
       label: Création du brouillon
   new:
-    draft-title: Création d’un draft
     module-title: Création d’un module
     draft-success: Le draft "{title}" a été enregistré.
     module-success: Le module "{title}" a été enregistré.
@@ -96,10 +95,7 @@ modules:
     title: Modules
   production:
     title: Modules
-  production-module:
-    title: Détail du module
   draft-module:
-    title: Détail du draft de module
     edit: Modifier
     validation-status-label: 'Statut de validation :'
     validation-success: Succès
@@ -118,7 +114,7 @@ modules:
       production: En production
     play-module-button:
       preview: Prévisualiser
-      play-draft: Jouer le draft
+      play-draft: Jouer le brouillon
       play-module: Jouer le module
     module-notification:
       draft-information: Ce module possède une version disponible en production.

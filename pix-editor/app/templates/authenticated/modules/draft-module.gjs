@@ -49,12 +49,18 @@ export default class DraftModule extends Component {
   }
 
   <template>
-    <header class="page-header">
-      <PixBreadcrumb @links={{this.links}} />
+    <header class="module__header">
+      <div>
+        <PixBreadcrumb class="module-header__breadcrumb" @links={{this.links}} />
 
-      <h1 class="page-title">{{t "modules.draft-module.title"}}</h1>
+        <h1 class="module-header__title">{{@model.draftModule.internalTitle}}</h1>
+      </div>
+
       <div class="page-actions">
         <PlayModuleButtons @module={{@model.draftModule}} />
+
+        <div class="module__separator"></div>
+
         <PixButtonLink
           @route="authenticated.modules.edit-draft-module"
           @model={{@model.draftModule.id}}

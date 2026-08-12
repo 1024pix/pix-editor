@@ -44,7 +44,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
 
     // then
     assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
-    assert.dom(screen.getByRole('heading', { name: t('modules.draft-module.title') })).exists();
+    assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
 
     // WORKAROUND: let some time for monaco-editor to settle
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -60,7 +60,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
 
       // then
       assert.strictEqual(currentURL(), `/modules/workbench/${id}/edit`);
-      assert.dom(screen.getByRole('heading', { name: t('modules.edit-draft-module.title') })).exists();
+      assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
 

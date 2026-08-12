@@ -20,7 +20,6 @@ module('Acceptance | Modules | New', function (hooks) {
   });
 
   module.if('when creating a new module', !isChrome, function () {
-
     test('displays a breadcrumb', async function (assert) {
       // when
       const screen = await visit('/');
@@ -129,7 +128,7 @@ module('Acceptance | Modules | New', function (hooks) {
       const screen = await visit(`/modules/workbench/new?moduleId=${id}`);
 
       // then
-      assert.dom(await screen.findByRole('heading', { name: t('modules.new.draft-title') })).exists();
+      assert.dom(await screen.findByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
       assert.strictEqual(currentURL(), `/modules/workbench/new?moduleId=${id}`);
 
       await fillIn(
@@ -143,8 +142,7 @@ module('Acceptance | Modules | New', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       await screen.getByRole('button', { name: t('modules.components.module-form.save') }).click();
-
-      assert.dom(await screen.findByRole('heading', { name: t('modules.draft-module.title') })).exists();
+      assert.dom(await screen.findByRole('heading', { name: 'MOD_666' })).exists();
       assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
       assert.dom(await screen.findByRole('heading', { name: 'MOD_666' })).exists();
       assert.dom(await screen.findByText(t('modules.new.draft-success', { title: 'MOD_666' }))).exists();

@@ -2,7 +2,6 @@ import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import t from 'ember-intl/helpers/t';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
 
@@ -66,12 +65,14 @@ export default class NewModule extends Component {
   }
 
   <template>
-    <header class="page-header">
-      <PixBreadcrumb @links={{this.links}} />
+    <header class="module__header">
+      <div>
+        <PixBreadcrumb class="module-header__breadcrumb" @links={{this.links}} />
 
-      <h1 class="page-title">
-        {{t "modules.edit-draft-module.title"}}
-      </h1>
+        <h1 class="module-header__title">
+          {{@model.draftModule.internalTitle}}
+        </h1>
+      </div>
     </header>
     <main class="page-body">
       <section class="page-section module-form">
