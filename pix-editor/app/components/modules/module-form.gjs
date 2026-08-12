@@ -92,7 +92,7 @@ export default class ModuleForm extends Component {
         </PixInput>
       {{/unless}}
 
-      <div class="module-form__data-field">
+      <div class="module__data-field">
         <PixLabel @requiredLabel={{t "modules.components.module-form.required-field"}}>
           {{t "modules.components.module-form.content-label"}}
         </PixLabel>

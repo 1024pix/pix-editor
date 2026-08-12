@@ -99,6 +99,8 @@ modules:
     edit: Modifier
     validation-success: Validation en succès
     validation-failure: Validation en échec
+    diff:
+      label: Modifications
   edit-draft-module:
     title: Édition du draft de module
   components:
