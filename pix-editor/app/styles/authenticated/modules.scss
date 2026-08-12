@@ -23,10 +23,6 @@ td.modules-list__actions {
   gap: var(--pix-spacing-2x);
 }
 
-.module-internal-title {
-  @extend %pix-title-xs;
-}
-
 .draft-module-diff {
   pre.shiki {
     max-height: 70vh;

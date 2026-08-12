@@ -107,8 +107,6 @@ module('Integration | Component | modules/module-form', function (hooks) {
           }),
         )
         .doesNotExist();
-      assert.dom(screen.getByRole('heading', { name: 'MOL_escargot-loiret' })).exists();
-
       assert.dom(await screen.queryByRole('button', { name: t('modules.components.module-form.save') })).doesNotExist();
       assert
         .dom(await screen.queryByRole('button', { name: t('modules.components.module-form.cancel') }))

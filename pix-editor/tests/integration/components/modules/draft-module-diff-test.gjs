@@ -28,7 +28,6 @@ module('Integration | Component | modules/draft-module-diff', function (hooks) {
     );
 
     // then
-    assert.dom(screen.getByRole('heading', { name: internalTitle })).exists();
     assert.dom(screen.getByText('première ligne de diff')).exists();
     assert.dom(screen.getByText('deuxième ligne de diff')).exists();
   });
