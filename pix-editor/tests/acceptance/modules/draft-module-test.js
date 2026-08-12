@@ -1,5 +1,6 @@
 import { clickByName, visit } from '@1024pix/ember-testing-library';
 import { click, currentURL } from '@ember/test-helpers';
+import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -24,11 +25,11 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByName('Modules');
-    await clickByName('Voir le détail');
+    await clickByName(t('modules.components.modules-list.detail'));
 
     // then
     assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
-    assert.dom(screen.getByRole('heading', { name: 'Détail du draft de module' })).exists();
+    assert.dom(screen.getByRole('heading', { name: t('modules.draft-module.title') })).exists();
 
     // WORKAROUND: let some time for monaco-editor to settle
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -40,16 +41,16 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       const screen = await visit(`/modules/workbench/${id}`);
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
-      await clickByName('Modifier');
+      await clickByName(t('modules.draft-module.edit'));
 
       // then
       assert.strictEqual(currentURL(), `/modules/workbench/${id}/edit`);
-      assert.dom(screen.getByRole('heading', { name: 'Édition du draft de module' })).exists();
+      assert.dom(screen.getByRole('heading', { name: t('modules.edit-draft-module.title') })).exists();
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // when
-      await clickByName('Enregistrer');
+      await clickByName(t('modules.components.module-form.save'));
 
       // then
       assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
@@ -66,10 +67,18 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // when
-      await click(screen.getByRole('button', { name: 'Publier le module "MON_BEAU_MODULE"' }));
+      await click(
+        screen.getByRole('button', {
+          name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
+        }),
+      );
 
       // then
-      assert.dom(await screen.findByText('Le module "MON_BEAU_MODULE" a été publié.')).exists();
+      assert
+        .dom(
+          await screen.findByText(t('modules.components.publish-module-button.success', { title: 'MON_BEAU_MODULE' })),
+        )
+        .exists();
       assert.strictEqual(currentURL(), `/modules/production/${id}`);
 
       // WORKAROUND: let some time for monaco-editor to settle
@@ -92,7 +101,13 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.getByRole('button', { name: 'Erreurs de validation 1 erreur' })).exists();
+      assert
+        .dom(
+          screen.getByRole('button', {
+            name: `${t('modules.components.validation-errors.title')} ${t('modules.components.validation-errors.error-count', { count: 1 })}`,
+          }),
+        )
+        .exists();
     });
 
     test('it should display validation status', async function (assert) {
@@ -110,8 +125,8 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.getByRole('term')).hasText('Statut de validation :');
-      assert.dom(screen.getByRole('definition')).hasText('Échec');
+      assert.dom(screen.getByRole('term')).hasText(t('modules.draft-module.validation-status-label'));
+      assert.dom(screen.getByRole('definition')).hasText(t('modules.draft-module.validation-failure'));
     });
   });
 
@@ -123,7 +138,13 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.queryByRole('button', { name: 'Erreurs de validation 1 erreur' })).doesNotExist();
+      assert
+        .dom(
+          screen.queryByRole('button', {
+            name: `${t('modules.components.validation-errors.title')} ${t('modules.components.validation-errors.error-count', { count: 1 })}`,
+          }),
+        )
+        .doesNotExist();
     });
 
     test('it should display validation status', async function (assert) {
@@ -141,8 +162,8 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.getByRole('term')).hasText('Statut de validation :');
-      assert.dom(screen.getByRole('definition')).hasText('Succès');
+      assert.dom(screen.getByRole('term')).hasText(t('modules.draft-module.validation-status-label'));
+      assert.dom(screen.getByRole('definition')).hasText(t('modules.draft-module.validation-success'));
     });
   });
 });

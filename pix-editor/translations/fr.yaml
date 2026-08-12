@@ -69,6 +69,72 @@ prototype:
     update-message: Mise à jour du prototype
     update-status: Épreuve mise à jour
     update-error: Erreur lors de la mise à jour
+modules:
+  new:
+    draft-title: Création d’un draft
+    module-title: Création d’un module
+    draft-success: Le draft "{title}" a été enregistré.
+    module-success: Le module "{title}" a été enregistré.
+    draft-error: Erreur lors de l’enregistrement du draft.
+    module-error: Erreur lors de l’enregistrement du module.
+  workbench:
+    title: Modules
+  production:
+    title: Modules
+  production-module:
+    title: Détail du module
+  draft-module:
+    title: Détail du draft de module
+    edit: Modifier
+    validation-status-label: 'Statut de validation :'
+    validation-success: Succès
+    validation-failure: Échec
+  edit-draft-module:
+    title: Édition du draft de module
+  components:
+    publish-module-button:
+      success: Le module "{title}" a été publié.
+      error: Erreur lors de la publication du module.
+      aria-label: Publier le module "{title}"
+      publish: Publier
+    modules-tabs:
+      navigation: Navigation
+      workbench: Atelier
+      production: En production
+    play-module-button:
+      preview: Prévisualiser
+      play-draft: Jouer le draft
+      play-module: Jouer le module
+    module-notification:
+      draft-information: Ce module possède une version disponible en production.
+      draft-redirection: Voir le détail du module en prod
+      production-information: Ce module possède une version en cours de modification.
+      production-redirection: Voir le détail des modifications
+    modules-list:
+      caption: Liste des modules
+      status: Statut
+      internal-title: Titre interne
+      level: Niveau
+      actions: Actions
+      detail: Voir le détail
+      production-detail: Voir le détail du module en prod
+    validation-errors:
+      title: Erreurs de validation
+      error-count: '{count, plural, one {1 erreur} other {# erreurs}}'
+    create-module-button:
+      create-draft: Créer un draft
+      create-module: Créer un module
+    module-back-button:
+      back: Retour
+    module-form:
+      required-field: Champ obligatoire
+      internal-title-label: Titre interne
+      content-label: Contenu (JSON)
+      ids-warning-prefix: Les champs
+      ids-warning-middle: et
+      ids-warning-suffix: ne peuvent pas être modifiés.
+      save: Enregistrer
+      cancel: Annuler
 common:
   validate: Valider
   validate-quality: Valider qualité

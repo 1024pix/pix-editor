@@ -1,5 +1,6 @@
 import { clickByName, visit } from '@1024pix/ember-testing-library';
 import { currentURL } from '@ember/test-helpers';
+import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -22,21 +23,21 @@ module('Acceptance | Modules | Production', function (hooks) {
     // when
     const screen = await visit('/');
     await clickByName('Modules');
-    await clickByName('En production');
+    await clickByName(t('modules.components.modules-tabs.production'));
 
     // then
-    assert.dom(screen.getByRole('link', { name: 'Créer un module' })).exists();
+    assert.dom(screen.getByRole('link', { name: t('modules.components.create-module-button.create-module') })).exists();
   });
 
   test('displays modules with pagination', async function (assert) {
     // when
     const screen = await visit('/');
     await clickByName('Modules');
-    await clickByName('En production');
+    await clickByName(t('modules.components.modules-tabs.production'));
 
     // then
     assert.strictEqual(currentURL(), '/modules/production');
-    assert.dom(await screen.findByRole('heading', { name: 'Modules' })).exists();
+    assert.dom(await screen.findByRole('heading', { name: t('modules.production.title') })).exists();
 
     assert.dom(await screen.findByText('1-10 sur 36 éléments')).exists();
     assert.dom(await screen.findByText('Page 1 / 4')).exists();

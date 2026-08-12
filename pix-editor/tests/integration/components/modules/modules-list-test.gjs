@@ -1,5 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
 import { getByRole, getByText, queryByRole, queryByText } from '@testing-library/dom';
+import { t } from 'ember-intl/test-support';
 import ModulesList from 'pixeditor/components/modules/modules-list';
 import { module, test } from 'qunit';
 
@@ -41,9 +42,11 @@ module('Integration | Component | modules-list', function (hooks) {
       test('it renders with status column', async function (assert) {
         const screen = await render(<template><ModulesList @modules={{modules}} @showStatus={{true}} /></template>);
 
-        assert.dom(screen.getByRole('columnheader', { name: 'Statut' })).exists();
-        assert.dom(screen.getByRole('columnheader', { name: 'Titre interne' })).exists();
-        assert.dom(screen.getByRole('columnheader', { name: 'Niveau' })).exists();
+        assert.dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.status') })).exists();
+        assert
+          .dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.internal-title') }))
+          .exists();
+        assert.dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.level') })).exists();
 
         assert.dom(screen.getByText('MOD_super_1')).exists();
         assert.dom(screen.getByText('MOD_super_2')).exists();
@@ -53,26 +56,30 @@ module('Integration | Component | modules-list', function (hooks) {
         assert.dom(queryByText(firstRow, 'Beta')).doesNotExist();
         assert.dom(getByText(firstRow, 'Novice')).exists();
 
-        assert.dom(getByRole(firstRow, 'link', { name: 'Voir le détail' })).exists();
+        assert.dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.detail') })).exists();
         assert
-          .dom(getByRole(firstRow, 'link', { name: 'Voir le détail' }))
+          .dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.detail') }))
           .hasAttribute('href', `/modules/production/super-1`);
-        assert.dom(getByRole(firstRow, 'link', { name: 'Jouer le module' })).exists();
         assert
-          .dom(getByRole(firstRow, 'link', { name: 'Jouer le module' }))
+          .dom(getByRole(firstRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
+          .exists();
+        assert
+          .dom(getByRole(firstRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
           .hasAttribute('href', 'https://graou.prod.asso/modules/super-1');
 
         const secondRow = screen.getByText('MOD_super_2').closest('tr');
         assert.dom(getByText(secondRow, 'Privé')).exists();
         assert.dom(getByText(secondRow, 'Beta')).exists();
         assert.dom(getByText(secondRow, 'Avancé')).exists();
-        assert.dom(getByRole(secondRow, 'link', { name: 'Voir le détail' })).exists();
+        assert.dom(getByRole(secondRow, 'link', { name: t('modules.components.modules-list.detail') })).exists();
         assert
-          .dom(getByRole(secondRow, 'link', { name: 'Voir le détail' }))
+          .dom(getByRole(secondRow, 'link', { name: t('modules.components.modules-list.detail') }))
           .hasAttribute('href', `/modules/production/super-2`);
-        assert.dom(getByRole(secondRow, 'link', { name: 'Jouer le module' })).exists();
         assert
-          .dom(getByRole(secondRow, 'link', { name: 'Jouer le module' }))
+          .dom(getByRole(secondRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
+          .exists();
+        assert
+          .dom(getByRole(secondRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
           .hasAttribute('href', 'https://graou.prod.asso/modules/super-2');
       });
     });
@@ -81,9 +88,13 @@ module('Integration | Component | modules-list', function (hooks) {
       test('it renders without status column', async function (assert) {
         const screen = await render(<template><ModulesList @modules={{modules}} @showStatus={{false}} /></template>);
 
-        assert.dom(screen.queryByRole('columnheader', { name: 'Statut' })).doesNotExist();
-        assert.dom(screen.getByRole('columnheader', { name: 'Titre interne' })).exists();
-        assert.dom(screen.getByRole('columnheader', { name: 'Niveau' })).exists();
+        assert
+          .dom(screen.queryByRole('columnheader', { name: t('modules.components.modules-list.status') }))
+          .doesNotExist();
+        assert
+          .dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.internal-title') }))
+          .exists();
+        assert.dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.level') })).exists();
 
         assert.dom(screen.getByText('MOD_super_1')).exists();
         assert.dom(screen.getByText('MOD_super_2')).exists();
@@ -142,27 +153,31 @@ module('Integration | Component | modules-list', function (hooks) {
       assert.dom(screen.getByText('MOD_super_2')).exists();
 
       const firstRow = screen.getByText('MOD_super_1').closest('tr');
-      assert.dom(getByRole(firstRow, 'link', { name: 'Voir le détail' })).exists();
+      assert.dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.detail') })).exists();
       assert
-        .dom(getByRole(firstRow, 'link', { name: 'Voir le détail' }))
+        .dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.detail') }))
         .hasAttribute('href', `/modules/workbench/super-1`);
-      assert.dom(getByRole(firstRow, 'link', { name: 'Voir le détail du module en prod' })).exists();
       assert
-        .dom(getByRole(firstRow, 'link', { name: 'Voir le détail du module en prod' }))
+        .dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.production-detail') }))
+        .exists();
+      assert
+        .dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.production-detail') }))
         .hasAttribute('href', '/modules/production/moduleId');
-      assert.dom(getByRole(firstRow, 'link', { name: 'Prévisualiser' })).exists();
+      assert.dom(getByRole(firstRow, 'link', { name: t('modules.components.play-module-button.preview') })).exists();
       assert
-        .dom(getByRole(firstRow, 'link', { name: 'Prévisualiser' }))
+        .dom(getByRole(firstRow, 'link', { name: t('modules.components.play-module-button.preview') }))
         .hasAttribute('href', 'https://graou.asso/modules/preview/super-1');
 
       const secondRow = screen.getByText('MOD_super_2').closest('tr');
-      assert.dom(getByRole(secondRow, 'link', { name: 'Voir le détail' })).exists();
+      assert.dom(getByRole(secondRow, 'link', { name: t('modules.components.modules-list.detail') })).exists();
       assert
-        .dom(getByRole(secondRow, 'link', { name: 'Voir le détail' }))
+        .dom(getByRole(secondRow, 'link', { name: t('modules.components.modules-list.detail') }))
         .hasAttribute('href', `/modules/workbench/super-2`);
-      assert.dom(queryByRole(secondRow, 'link', { name: 'Voir le détail du module en prod' })).doesNotExist();
       assert
-        .dom(getByRole(secondRow, 'link', { name: 'Prévisualiser' }))
+        .dom(queryByRole(secondRow, 'link', { name: t('modules.components.modules-list.production-detail') }))
+        .doesNotExist();
+      assert
+        .dom(getByRole(secondRow, 'link', { name: t('modules.components.play-module-button.preview') }))
         .hasAttribute('href', 'https://graou.asso/modules/preview/super-2');
     });
   });

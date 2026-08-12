@@ -1,11 +1,16 @@
 import PixAccordions from '@1024pix/pix-ui/components/pix-accordions';
 import PixNotificationAlert from '@1024pix/pix-ui/components/pix-notification-alert';
+import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import t from 'ember-intl/helpers/t';
 
 export default class ModuleValidationErrors extends Component {
+  @service intl;
+
   get formattedTag() {
-    const numberOfErrors = this.args.validationErrors.length;
-    return `${numberOfErrors} erreur${numberOfErrors > 1 ? 's' : ''}`;
+    return this.intl.t('modules.components.validation-errors.error-count', {
+      count: this.args.validationErrors.length,
+    });
   }
 
   <template>
@@ -16,7 +21,7 @@ export default class ModuleValidationErrors extends Component {
       @tagColor="error"
       class="module-validation-errors"
     >
-      <:title>Erreurs de validation</:title>
+      <:title>{{t "modules.components.validation-errors.title"}}</:title>
       <:content>
         <ul>
           {{#each @validationErrors as |validationError|}}

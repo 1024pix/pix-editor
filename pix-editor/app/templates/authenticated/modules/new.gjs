@@ -1,9 +1,11 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import t from 'ember-intl/helpers/t';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 
 export default class NewModule extends Component {
+  @service intl;
   @service loader;
   @service notifications;
   @service router;
@@ -30,16 +32,16 @@ export default class NewModule extends Component {
       await newModule.save();
       if (module) {
         this.router.replaceWith('authenticated.modules.draft-module', newModule.id);
-        this.notifications.sendSuccess(`Le draft "${newModule.internalTitle}" a été enregistré.`);
+        this.notifications.sendSuccess(this.intl.t('modules.new.draft-success', { title: newModule.internalTitle }));
       } else {
         this.router.replaceWith('authenticated.modules.workbench');
-        this.notifications.sendSuccess(`Le module "${newModule.internalTitle}" a été enregistré.`);
+        this.notifications.sendSuccess(this.intl.t('modules.new.module-success', { title: newModule.internalTitle }));
       }
     } catch {
       if (module) {
-        this.notifications.sendError('Erreur lors de l’enregistrement du draft.');
+        this.notifications.sendError(this.intl.t('modules.new.draft-error'));
       } else {
-        this.notifications.sendError('Erreur lors de l’enregistrement du module.');
+        this.notifications.sendError(this.intl.t('modules.new.module-error'));
       }
     } finally {
       this.loader.stop();
@@ -50,9 +52,9 @@ export default class NewModule extends Component {
     <header class="page-header">
       <h1 class="page-title">
         {{#if @model.module}}
-          Création d’un draft
+          {{t "modules.new.draft-title"}}
         {{else}}
-          Création d’un module
+          {{t "modules.new.module-title"}}
         {{/if}}
       </h1>
     </header>

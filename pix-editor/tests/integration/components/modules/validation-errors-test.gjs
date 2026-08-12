@@ -1,5 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
+import { t } from 'ember-intl/test-support';
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
 import { module, test } from 'qunit';
 
@@ -16,7 +17,9 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
     const screen = await render(<template><ModuleValidationErrors @validationErrors={{validationErrors}} /></template>);
 
     // then
-    const accordion = screen.getByRole('button', { name: 'Erreurs de validation 2 erreurs' });
+    const accordion = screen.getByRole('button', {
+      name: `${t('modules.components.validation-errors.title')} ${t('modules.components.validation-errors.error-count', { count: 2 })}`,
+    });
     await click(accordion);
     const listItems = screen.getAllByRole('listitem');
     assert.dom(listItems[0]).hasText('Le slug est mal formatté');

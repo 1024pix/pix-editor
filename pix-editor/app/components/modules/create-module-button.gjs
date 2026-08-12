@@ -1,5 +1,6 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import Component from '@glimmer/component';
+import t from 'ember-intl/helpers/t';
 
 export default class CreateModuleButton extends Component {
   get isDisplayed() {
@@ -23,9 +24,9 @@ export default class CreateModuleButton extends Component {
         @iconBefore="add"
       >
         {{#if @module}}
-          Créer un draft
+          {{t "modules.components.create-module-button.create-draft"}}
         {{else}}
-          Créer un module
+          {{t "modules.components.create-module-button.create-module"}}
         {{/if}}
       </PixButtonLink>
     {{/if}}

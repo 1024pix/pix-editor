@@ -1,18 +1,19 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixNotificationAlert from '@1024pix/pix-ui/components/pix-notification-alert';
 import Component from '@glimmer/component';
+import t from 'ember-intl/helpers/t';
 
 const NOTIFICATION_STATES = {
   DRAFT: {
     color: 'warning',
-    information: 'Ce module possède une version disponible en production.',
-    redirectionButtonLabel: 'Voir le détail du module en prod',
+    informationKey: 'modules.components.module-notification.draft-information',
+    redirectionButtonLabelKey: 'modules.components.module-notification.draft-redirection',
     route: 'authenticated.modules.production-module',
   },
   PRODUCTION: {
     color: 'info',
-    information: 'Ce module possède une version en cours de modification.',
-    redirectionButtonLabel: 'Voir le détail des modifications',
+    informationKey: 'modules.components.module-notification.production-information',
+    redirectionButtonLabelKey: 'modules.components.module-notification.production-redirection',
     route: 'authenticated.modules.draft-module',
   },
 };
@@ -41,9 +42,9 @@ export default class ModuleNotification extends Component {
         @type={{this.notificationState.color}}
         class="module-form-notification--{{this.notificationState.color}}"
       >
-        {{this.notificationState.information}}
+        {{t this.notificationState.informationKey}}
         <PixButtonLink @route={{this.notificationState.route}} @model={{this.moduleId}} @variant="secondary">
-          {{this.notificationState.redirectionButtonLabel}}
+          {{t this.notificationState.redirectionButtonLabelKey}}
         </PixButtonLink>
       </PixNotificationAlert>
     {{/if}}
