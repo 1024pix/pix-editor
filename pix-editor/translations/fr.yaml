@@ -70,6 +70,21 @@ prototype:
     update-status: Épreuve mise à jour
     update-error: Erreur lors de la mise à jour
 modules:
+  breadcrumb:
+    all-modules:
+      label: Liste des modules
+    workbench:
+      label: Liste des brouillons
+    production:
+      label: Liste des modules en production
+    draft-module:
+      label: Détail du brouillon
+    production-module:
+      label: Détail du module
+    edit-draft-module:
+      label: Édition du brouillon
+    new-module:
+      label: Création du brouillon
   new:
     draft-title: Création d’un draft
     module-title: Création d’un module

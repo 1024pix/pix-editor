@@ -1,3 +1,4 @@
+import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
@@ -47,8 +48,27 @@ export default class NewModule extends Component {
     return this.args.model.draftModule.validationErrors;
   }
 
+  get links() {
+    return [
+      {
+        route: 'authenticated.modules.workbench',
+        label: this.intl.t('modules.breadcrumb.workbench.label'),
+      },
+      {
+        route: 'authenticated.modules.draft-module',
+        label: this.intl.t('modules.breadcrumb.draft-module.label'),
+        model: this.args.model.draftModule.id,
+      },
+      {
+        label: this.intl.t('modules.breadcrumb.edit-draft-module.label'),
+      },
+    ];
+  }
+
   <template>
     <header class="page-header">
+      <PixBreadcrumb @links={{this.links}} />
+
       <h1 class="page-title">
         {{t "modules.edit-draft-module.title"}}
       </h1>

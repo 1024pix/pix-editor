@@ -1,3 +1,4 @@
+import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { inject as service } from '@ember/service';
@@ -36,8 +37,22 @@ export default class DraftModule extends Component {
     return this.validationStatus ? 'green' : 'error';
   }
 
+  get links() {
+    return [
+      {
+        route: 'authenticated.modules.workbench',
+        label: this.intl.t('modules.breadcrumb.workbench.label'),
+      },
+      {
+        label: this.intl.t('modules.breadcrumb.draft-module.label'),
+      },
+    ];
+  }
+
   <template>
     <header class="page-header">
+      <PixBreadcrumb @links={{this.links}} />
+
       <h1 class="page-title">{{t "modules.draft-module.title"}}</h1>
       <div class="page-actions">
         <PlayModuleButtons @module={{@model.draftModule}} />

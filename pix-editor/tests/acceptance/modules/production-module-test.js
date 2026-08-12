@@ -1,4 +1,4 @@
-import { visit } from '@1024pix/ember-testing-library';
+import { visit, within } from '@1024pix/ember-testing-library';
 import { click, currentURL } from '@ember/test-helpers';
 import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -20,6 +20,20 @@ module('Acceptance | Modules | Production Module', function (hooks) {
     this.server.create('draft-module', { id, module, internalTitle: 'MON_BEAU_MODULE' });
 
     return authenticateSession();
+  });
+
+  test('displays a breadcrumb', async function (assert) {
+    // when
+    const screen = await visit('/modules/production');
+    await click(await screen.getByRole('link', { name: t('modules.components.modules-list.detail') }));
+
+    // then
+    const breadcrumb = screen.getByRole('navigation');
+    assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.production.label') })).exists();
+    assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.production-module.label'))).exists();
+
+    // WORKAROUND: let some time for monaco-editor to settle
+    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   module('when user clicks on "Voir le détail"', function () {
