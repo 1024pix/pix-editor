@@ -140,8 +140,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.getByRole('term')).hasText(t('modules.draft-module.validation-status-label'));
-      assert.dom(screen.getByRole('definition')).hasText(t('modules.draft-module.validation-failure'));
+      assert.dom(screen.getByText(t('modules.draft-module.validation-failure'))).exists();
     });
   });
 
@@ -177,8 +176,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.getByRole('term')).hasText(t('modules.draft-module.validation-status-label'));
-      assert.dom(screen.getByRole('definition')).hasText(t('modules.draft-module.validation-success'));
+      assert.dom(screen.getByText(t('modules.draft-module.validation-success'))).exists();
     });
   });
 });

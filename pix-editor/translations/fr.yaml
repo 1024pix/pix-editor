@@ -97,9 +97,8 @@ modules:
     title: Modules
   draft-module:
     edit: Modifier
-    validation-status-label: 'Statut de validation :'
-    validation-success: Succès
-    validation-failure: Échec
+    validation-success: Validation en succès
+    validation-failure: Validation en échec
   edit-draft-module:
     title: Édition du draft de module
   components:

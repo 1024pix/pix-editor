@@ -26,14 +26,10 @@ export default class DraftModule extends Component {
     return this.args.model.draftModule.hasBeenValidated;
   }
 
-  get validationStatusLabel() {
+  get validationStatusInformation() {
     return this.validationStatus
-      ? this.intl.t('modules.draft-module.validation-success')
-      : this.intl.t('modules.draft-module.validation-failure');
-  }
-
-  get validationStatusColor() {
-    return this.validationStatus ? 'green' : 'error';
+      ? { label: this.intl.t('modules.draft-module.validation-success'), color: 'green', state: 'success' }
+      : { label: this.intl.t('modules.draft-module.validation-failure'), color: 'error', state: 'failure' };
   }
 
   get links() {
@@ -53,7 +49,13 @@ export default class DraftModule extends Component {
       <div>
         <PixBreadcrumb class="module-header__breadcrumb" @links={{this.links}} />
 
-        <h1 class="module-header__title">{{@model.draftModule.internalTitle}}</h1>
+        <div class="draft-module-header__information">
+          <h1 class="module-header__title">{{@model.draftModule.internalTitle}}</h1>
+          <PixTag @color={{this.validationStatusInformation.color}}>
+            <span class="draft-module-header__tag--{{this.validationStatusInformation.state}}">&#9679;</span>
+            {{this.validationStatusInformation.label}}
+          </PixTag>
+        </div>
       </div>
 
       <div class="page-actions">
@@ -75,14 +77,6 @@ export default class DraftModule extends Component {
     <main class="page-body">
       <section class="page-section module-form">
         <ModuleNotification @module={{@model.draftModule}} />
-        <dl class="draft-module__description">
-          <dt>
-            {{t "modules.draft-module.validation-status-label"}}
-          </dt>
-          <dd><PixTag @color={{this.validationStatusColor}}>
-              {{this.validationStatusLabel}}
-            </PixTag></dd>
-        </dl>
         {{#if this.hasValidationErrors}}
           <ModuleValidationErrors @validationErrors={{this.validationErrors}} />
         {{/if}}
