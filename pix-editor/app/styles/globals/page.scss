@@ -2,7 +2,7 @@
 @use 'pix-design-tokens/fonts';
 
 .page {
-  background-color: colors.$pix-neutral-15;
+  background-color: var(--pix-orga-50);
   width: 100%;
 
   .page-header {
