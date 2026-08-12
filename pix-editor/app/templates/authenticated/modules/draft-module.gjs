@@ -61,8 +61,6 @@ export default class DraftModule extends Component {
       <div class="page-actions">
         <PlayModuleButtons @module={{@model.draftModule}} />
 
-        <div class="module__separator"></div>
-
         <PixButtonLink
           @route="authenticated.modules.edit-draft-module"
           @model={{@model.draftModule.id}}

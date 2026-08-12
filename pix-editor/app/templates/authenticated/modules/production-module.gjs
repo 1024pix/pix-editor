@@ -29,7 +29,7 @@ export default class ProductionModule extends Component {
       </div>
       <div class="page-actions">
         <PlayModuleButtons @module={{@model.module}} />
-        <div class="module__separator"></div>
+
         <CreateModuleButton @module={{@model.module}} />
       </div>
     </header>
