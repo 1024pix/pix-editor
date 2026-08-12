@@ -67,10 +67,20 @@ td.modules-list__actions {
 
 .module-header {
   &__breadcrumb {
-    padding-bottom : var(--pix-spacing-2x);
+    padding-bottom : var(--pix-spacing-4x);
+  }
+
+  &__tag {
+    text-transform: uppercase;
   }
 
   &__title {
     @extend %pix-title-s;
+  }
+
+  &__information {
+    display: flex;
+    gap: var(--pix-spacing-2x);
+    align-items: center;
   }
 }

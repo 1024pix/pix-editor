@@ -96,13 +96,14 @@ modules:
   production:
     title: Modules
   draft-module:
+    information-tag: brouillon
     edit: Modifier
     validation-success: Validation en succès
     validation-failure: Validation en échec
     diff:
       label: Modifications
-  edit-draft-module:
-    title: Édition du draft de module
+  production-module:
+    information-tag: en production
   components:
     publish-module-button:
       success: Le module "{title}" a été publié.

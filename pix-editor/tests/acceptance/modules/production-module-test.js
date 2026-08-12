@@ -46,6 +46,8 @@ module('Acceptance | Modules | Production Module', function (hooks) {
 
       // then
       assert.strictEqual(currentURL(), `/modules/production/${id}`);
+      assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
+      assert.dom(screen.getByText(t('modules.production-module.information-tag'))).exists();
 
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));

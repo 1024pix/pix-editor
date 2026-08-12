@@ -1,5 +1,6 @@
 import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
@@ -49,8 +50,12 @@ export default class DraftModule extends Component {
       <div>
         <PixBreadcrumb class="module-header__breadcrumb" @links={{this.links}} />
 
-        <div class="draft-module-header__information">
+        <div class="module-header__information">
           <h1 class="module-header__title">{{@model.draftModule.internalTitle}}</h1>
+          <PixTag class="module-header__tag" @color="yellow">
+            <PixIcon @name="edit" @plainIcon={{true}} @ariaHidden={{true}} />
+            {{t "modules.draft-module.information-tag"}}
+          </PixTag>
           <PixTag @color={{this.validationStatusInformation.color}}>
             <span class="draft-module-header__tag--{{this.validationStatusInformation.state}}">&#9679;</span>
             {{this.validationStatusInformation.label}}
