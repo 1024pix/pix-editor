@@ -43,6 +43,7 @@
 @use 'components/markdown-editor/markdown-editor';
 @use 'components/modules/module-form';
 @use 'components/modules/validation-errors';
+@use 'components/modules/validation-success';
 @use 'components/field';
 @use 'components/field/quality';
 @use 'components/field/select-search';

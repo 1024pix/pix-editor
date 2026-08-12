@@ -1,15 +1,15 @@
+import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
 import DraftModuleDiff from 'pixeditor/components/modules/draft-module-diff';
-import ModuleBackButton from 'pixeditor/components/modules/module-back-button';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModuleNotification from 'pixeditor/components/modules/module-notification';
 import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
-import PublishModuleButton from 'pixeditor/components/modules/publish-module-button';
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
+import ModuleValidationSuccess from 'pixeditor/components/modules/validation-success';
 
 export default class DraftModule extends Component {
   @service intl;
@@ -26,21 +26,41 @@ export default class DraftModule extends Component {
     return this.args.model.draftModule.hasBeenValidated;
   }
 
-  get validationStatusLabel() {
+  get validationStatusInformation() {
     return this.validationStatus
-      ? this.intl.t('modules.draft-module.validation-success')
-      : this.intl.t('modules.draft-module.validation-failure');
+      ? { label: this.intl.t('modules.draft-module.validation-success'), color: 'green', state: 'success' }
+      : { label: this.intl.t('modules.draft-module.validation-failure'), color: 'error', state: 'failure' };
   }
 
-  get validationStatusColor() {
-    return this.validationStatus ? 'green' : 'error';
+  get links() {
+    return [
+      {
+        route: 'authenticated.modules.workbench',
+        label: this.intl.t('modules.breadcrumb.workbench.label'),
+      },
+      {
+        label: this.intl.t('modules.breadcrumb.draft-module.label'),
+      },
+    ];
   }
 
   <template>
-    <header class="page-header">
-      <h1 class="page-title">{{t "modules.draft-module.title"}}</h1>
+    <header class="module__header">
+      <div>
+        <PixBreadcrumb class="module-header__breadcrumb" @links={{this.links}} />
+
+        <div class="draft-module-header__information">
+          <h1 class="module-header__title">{{@model.draftModule.internalTitle}}</h1>
+          <PixTag @color={{this.validationStatusInformation.color}}>
+            <span class="draft-module-header__tag--{{this.validationStatusInformation.state}}">&#9679;</span>
+            {{this.validationStatusInformation.label}}
+          </PixTag>
+        </div>
+      </div>
+
       <div class="page-actions">
         <PlayModuleButtons @module={{@model.draftModule}} />
+
         <PixButtonLink
           @route="authenticated.modules.edit-draft-module"
           @model={{@model.draftModule.id}}
@@ -49,22 +69,15 @@ export default class DraftModule extends Component {
         >
           {{t "modules.draft-module.edit"}}
         </PixButtonLink>
-        <PublishModuleButton @draftModule={{@model.draftModule}} />
       </div>
     </header>
     <main class="page-body">
       <section class="page-section module-form">
         <ModuleNotification @module={{@model.draftModule}} />
-        <dl class="draft-module__description">
-          <dt>
-            {{t "modules.draft-module.validation-status-label"}}
-          </dt>
-          <dd><PixTag @color={{this.validationStatusColor}}>
-              {{this.validationStatusLabel}}
-            </PixTag></dd>
-        </dl>
         {{#if this.hasValidationErrors}}
           <ModuleValidationErrors @validationErrors={{this.validationErrors}} />
+        {{else}}
+          <ModuleValidationSuccess @draftModule={{@model.draftModule}} />
         {{/if}}
 
         {{#if @model.draftModule.isEditionDraft}}
@@ -72,9 +85,6 @@ export default class DraftModule extends Component {
         {{else}}
           <ModuleForm @module={{@model.draftModule}} @readonly={{true}} />
         {{/if}}
-        <div class="page-actions">
-          <ModuleBackButton />
-        </div>
       </section>
     </main>
   </template>

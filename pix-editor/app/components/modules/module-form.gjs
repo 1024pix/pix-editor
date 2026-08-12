@@ -81,9 +81,7 @@ export default class ModuleForm extends Component {
         </PixNotificationAlert>
       {{/if}}
 
-      {{#if @readonly}}
-        <h2 class="module-internal-title">{{this.internalTitle}}</h2>
-      {{else}}
+      {{#unless @readonly}}
         <PixInput
           @id="internalTitle"
           @value={{this.internalTitle}}
@@ -92,7 +90,7 @@ export default class ModuleForm extends Component {
         >
           <:label>{{t "modules.components.module-form.internal-title-label"}}</:label>
         </PixInput>
-      {{/if}}
+      {{/unless}}
 
       <div class="module-form__data-field">
         <PixLabel @requiredLabel={{t "modules.components.module-form.required-field"}}>

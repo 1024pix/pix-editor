@@ -1,4 +1,4 @@
-import { clickByName, visit } from '@1024pix/ember-testing-library';
+import { clickByName, visit, within } from '@1024pix/ember-testing-library';
 import { click, currentURL } from '@ember/test-helpers';
 import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -21,6 +21,21 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
     return authenticateSession();
   });
 
+  test('displays a breadcrumb', async function (assert) {
+    // when
+    const screen = await visit('/');
+    await clickByName('Modules');
+    await clickByName(t('modules.components.modules-list.detail'));
+
+    // then
+    const breadcrumb = screen.getByRole('navigation');
+    assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.workbench.label') })).exists();
+    assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.draft-module.label'))).exists();
+
+    // WORKAROUND: let some time for monaco-editor to settle
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  });
+
   test('displays module details page on click', async function (assert) {
     // when
     const screen = await visit('/');
@@ -29,7 +44,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
 
     // then
     assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
-    assert.dom(screen.getByRole('heading', { name: t('modules.draft-module.title') })).exists();
+    assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
 
     // WORKAROUND: let some time for monaco-editor to settle
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -45,7 +60,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
 
       // then
       assert.strictEqual(currentURL(), `/modules/workbench/${id}/edit`);
-      assert.dom(screen.getByRole('heading', { name: t('modules.edit-draft-module.title') })).exists();
+      assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -125,8 +140,27 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.getByRole('term')).hasText(t('modules.draft-module.validation-status-label'));
-      assert.dom(screen.getByRole('definition')).hasText(t('modules.draft-module.validation-failure'));
+      assert.dom(screen.getByText(t('modules.draft-module.validation-failure'))).exists();
+    });
+
+    test('it should not display publish button', async function (assert) {
+      // given
+      const moduleWithErrors = this.server.create('draft-module', {
+        id: crypto.randomUUID(),
+        internalTitle: 'MODULE_DRAFT',
+        validationErrors: ['oups !'],
+        hasBeenValidated: false,
+      });
+
+      // when
+      const screen = await visit(`/modules/workbench/${moduleWithErrors.id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // then
+      assert
+        .dom(screen.queryByRole('button', { name: t('modules.components.publish-module-button.publish') }))
+        .doesNotExist();
     });
   });
 
@@ -162,8 +196,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert.dom(screen.getByRole('term')).hasText(t('modules.draft-module.validation-status-label'));
-      assert.dom(screen.getByRole('definition')).hasText(t('modules.draft-module.validation-success'));
+      assert.dom(screen.getByText(t('modules.draft-module.validation-success'))).exists();
     });
   });
 });

@@ -23,10 +23,6 @@ td.modules-list__actions {
   gap: var(--pix-spacing-2x);
 }
 
-.module-internal-title {
-  @extend %pix-title-xs;
-}
-
 .draft-module-diff {
   pre.shiki {
     max-height: 70vh;
@@ -40,5 +36,26 @@ td.modules-list__actions {
       font-size: 14px;
       line-height: 14px;
     }
+  }
+}
+
+
+.module {
+  &__header {
+    background: var(--pix-neutral-0);
+    padding: var(--pix-spacing-4x) var(--pix-spacing-5x);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.module-header {
+  &__breadcrumb {
+    padding-bottom : var(--pix-spacing-2x);
+  }
+
+  &__title {
+    @extend %pix-title-s;
   }
 }

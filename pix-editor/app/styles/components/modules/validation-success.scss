@@ -1,0 +1,13 @@
+@use 'pix-design-tokens/typography';
+
+.module-validation-success {
+  span {
+    @extend %pix-body-m;
+
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    font-weight: var(--pix-font-bold);
+  }
+}
