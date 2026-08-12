@@ -1,5 +1,22 @@
 
 
+## v4.47.0 (12/08/2026)
+
+
+### :rocket: Amélioration
+- [#1580](https://github.com/1024pix/pix-editor/pull/1580) [FEATURE] Limiter l'accès à l'inversion de la généalogie aux admin (PIX-23801).
+- [#1583](https://github.com/1024pix/pix-editor/pull/1583) [FEATURE] Ajouter le statut de validation d'un module (PIX-23588).
+- [#1581](https://github.com/1024pix/pix-editor/pull/1581) [FEATURE] Afficher les erreurs de la page de détails (PIX-23278).
+- [#1573](https://github.com/1024pix/pix-editor/pull/1573) [FEATURE] Renvoyer le status de validation des modules (PIX-23276).
+- [#1572](https://github.com/1024pix/pix-editor/pull/1572) [FEATURE] Valider les modules lors de leur création(PIX-23791).
+- [#1569](https://github.com/1024pix/pix-editor/pull/1569) [FEATURE] Ajouter un usecase pour la validation des modules (PIX-23275).
+
+### :arrow_up: Montée de version
+- [#1578](https://github.com/1024pix/pix-editor/pull/1578) [BUMP] Update dependency @playwright/test to v1.62.0.
+- [#1575](https://github.com/1024pix/pix-editor/pull/1575) [BUMP] Update dependency js-yaml to v5 (pix-editor).
+- [#1577](https://github.com/1024pix/pix-editor/pull/1577) [BUMP] Update dependency sinon to v22 (pix-editor).
+- [#1576](https://github.com/1024pix/pix-editor/pull/1576) [BUMP] Update dependency npm-run-all2 to v9 (pix-editor).
+
 ## v4.46.0 (04/08/2026)
 
 
