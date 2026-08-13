@@ -60,6 +60,7 @@ describe('Acceptance | Route | draft-modules', () => {
             'preview-url': expect.stringMatching(new RegExp(`^${config.pixApp.recette.baseUrlFr.replace(/([.])/g, '\\$1')}/modules/preview/.{8}/${draftModule.slug}$`)),
             'has-been-validated': true,
             'validation-errors': [],
+            'updated-at': expect.any(Date),
           },
           relationships: { module: { data: null } },
         },
@@ -164,6 +165,7 @@ describe('Acceptance | Route | draft-modules', () => {
               'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
               'has-been-validated': true,
               'validation-errors': [],
+              'updated-at': expect.any(Date),
             },
             relationships: {
               module: {
@@ -376,6 +378,7 @@ describe('Acceptance | Route | draft-modules', () => {
             'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
             'has-been-validated': draftModule.hasBeenValidated,
             'validation-errors': draftModule.validationErrors,
+            'updated-at': draftModule.updatedAt,
           },
           relationships: {
             module: {
@@ -544,6 +547,7 @@ describe('Acceptance | Route | draft-modules', () => {
             'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/kebab-royal`,
             'has-been-validated': true,
             'validation-errors': [],
+            'updated-at': expect.any(Date),
           },
           relationships: { module: { data: null } },
         },
