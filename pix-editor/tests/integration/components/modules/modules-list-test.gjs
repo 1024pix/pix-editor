@@ -38,73 +38,48 @@ module('Integration | Component | modules-list', function (hooks) {
       ];
     });
 
-    module('when @showStatus is true', () => {
-      test('it renders with status column', async function (assert) {
-        const screen = await render(<template><ModulesList @modules={{modules}} @showStatus={{true}} /></template>);
+    test('it renders with status column', async function (assert) {
+      const screen = await render(<template><ModulesList @modules={{modules}} /></template>);
 
-        assert.dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.status') })).exists();
-        assert
-          .dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.internal-title') }))
-          .exists();
-        assert.dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.level') })).exists();
+      assert.dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.status') })).exists();
+      assert
+        .dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.internal-title') }))
+        .exists();
+      assert.dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.level') })).exists();
 
-        assert.dom(screen.getByText('MOD_super_1')).exists();
-        assert.dom(screen.getByText('MOD_super_2')).exists();
+      assert.dom(screen.getByText('MOD_super_1')).exists();
+      assert.dom(screen.getByText('MOD_super_2')).exists();
 
-        const firstRow = screen.getByText('MOD_super_1').closest('tr');
-        assert.dom(getByText(firstRow, 'Public')).exists();
-        assert.dom(queryByText(firstRow, 'Beta')).doesNotExist();
-        assert.dom(getByText(firstRow, 'Novice')).exists();
+      const firstRow = screen.getByText('MOD_super_1').closest('tr');
+      assert.dom(getByText(firstRow, 'Public')).exists();
+      assert.dom(queryByText(firstRow, 'Beta')).doesNotExist();
+      assert.dom(getByText(firstRow, 'Novice')).exists();
 
-        assert.dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.detail') })).exists();
-        assert
-          .dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.detail') }))
-          .hasAttribute('href', `/modules/production/super-1`);
-        assert
-          .dom(getByRole(firstRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
-          .exists();
-        assert
-          .dom(getByRole(firstRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
-          .hasAttribute('href', 'https://graou.prod.asso/modules/super-1');
+      assert.dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.detail') })).exists();
+      assert
+        .dom(getByRole(firstRow, 'link', { name: t('modules.components.modules-list.detail') }))
+        .hasAttribute('href', `/modules/production/super-1`);
+      assert
+        .dom(getByRole(firstRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
+        .exists();
+      assert
+        .dom(getByRole(firstRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
+        .hasAttribute('href', 'https://graou.prod.asso/modules/super-1');
 
-        const secondRow = screen.getByText('MOD_super_2').closest('tr');
-        assert.dom(getByText(secondRow, 'Privé')).exists();
-        assert.dom(getByText(secondRow, 'Beta')).exists();
-        assert.dom(getByText(secondRow, 'Avancé')).exists();
-        assert.dom(getByRole(secondRow, 'link', { name: t('modules.components.modules-list.detail') })).exists();
-        assert
-          .dom(getByRole(secondRow, 'link', { name: t('modules.components.modules-list.detail') }))
-          .hasAttribute('href', `/modules/production/super-2`);
-        assert
-          .dom(getByRole(secondRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
-          .exists();
-        assert
-          .dom(getByRole(secondRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
-          .hasAttribute('href', 'https://graou.prod.asso/modules/super-2');
-      });
-    });
-
-    module('when @showStatus is false', () => {
-      test('it renders without status column', async function (assert) {
-        const screen = await render(<template><ModulesList @modules={{modules}} @showStatus={{false}} /></template>);
-
-        assert
-          .dom(screen.queryByRole('columnheader', { name: t('modules.components.modules-list.status') }))
-          .doesNotExist();
-        assert
-          .dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.internal-title') }))
-          .exists();
-        assert.dom(screen.getByRole('columnheader', { name: t('modules.components.modules-list.level') })).exists();
-
-        assert.dom(screen.getByText('MOD_super_1')).exists();
-        assert.dom(screen.getByText('MOD_super_2')).exists();
-
-        const firstRow = screen.getByText('MOD_super_1').closest('tr');
-        assert.dom(getByText(firstRow, 'Novice')).exists();
-
-        const secondRow = screen.getByText('MOD_super_2').closest('tr');
-        assert.dom(getByText(secondRow, 'Avancé')).exists();
-      });
+      const secondRow = screen.getByText('MOD_super_2').closest('tr');
+      assert.dom(getByText(secondRow, 'Privé')).exists();
+      assert.dom(getByText(secondRow, 'Beta')).exists();
+      assert.dom(getByText(secondRow, 'Avancé')).exists();
+      assert.dom(getByRole(secondRow, 'link', { name: t('modules.components.modules-list.detail') })).exists();
+      assert
+        .dom(getByRole(secondRow, 'link', { name: t('modules.components.modules-list.detail') }))
+        .hasAttribute('href', `/modules/production/super-2`);
+      assert
+        .dom(getByRole(secondRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
+        .exists();
+      assert
+        .dom(getByRole(secondRow, 'link', { name: t('modules.components.play-module-button.play-module') }))
+        .hasAttribute('href', 'https://graou.prod.asso/modules/super-2');
     });
   });
 
@@ -179,6 +154,45 @@ module('Integration | Component | modules-list', function (hooks) {
       assert
         .dom(getByRole(secondRow, 'link', { name: t('modules.components.play-module-button.preview') }))
         .hasAttribute('href', 'https://graou.asso/modules/preview/super-2');
+    });
+
+    test('it displays a validation tag', async function (assert) {
+      // given
+      const store = this.owner.lookup('service:store');
+      const validatedDraftModules = [
+        store.createRecord('draft-module', {
+          id: 'validated-1',
+          internalTitle: 'MOD_validated',
+          hasBeenValidated: true,
+          isBeta: false,
+          visibility: 'public',
+          details: {
+            level: 'novice',
+          },
+          previewUrl: 'https://graou.asso/modules/preview/super-1',
+        }),
+        store.createRecord('draft-module', {
+          id: 'invalidated-1',
+          internalTitle: 'MOD_invalidated',
+          hasBeenValidated: false,
+          isBeta: false,
+          visibility: 'public',
+          details: {
+            level: 'novice',
+          },
+          previewUrl: 'https://graou.asso/modules/preview/super-1',
+        }),
+      ];
+
+      // when
+      const screen = await render(<template><ModulesList @modules={{validatedDraftModules}} /></template>);
+
+      // then
+      const validatedRow = screen.getByText('MOD_validated').closest('tr');
+      assert.dom(getByText(validatedRow, t('modules.draft-module.validation-success'))).exists();
+
+      const invalidatedRow = screen.getByText('MOD_invalidated').closest('tr');
+      assert.dom(getByText(invalidatedRow, t('modules.draft-module.validation-failure'))).exists();
     });
   });
 });
