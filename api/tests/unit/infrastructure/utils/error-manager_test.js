@@ -223,6 +223,19 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
+        } else if (domainErrorName === 'DraftModuleValidationError') {
+          const errorInstance = new domainErrorClass(['erreur 1', 'erreur 2']);
+          const responseForError = send(hFake, errorInstance);
+          expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(422);
+          expect(responseForError.source).toStrictEqual({
+            errors: [
+              {
+                status: '422',
+                title: 'Unprocessable entity',
+                code: 'DRAFT_MODULE_VALIDATION_ERROR',
+              },
+            ],
+          });
         } else {
           expect(true, `Conversion for ${domainErrorName} not tested`).toBe(false);
         }

@@ -13,6 +13,7 @@ export function serialize(infrastructureError) {
         status: `${error.status}`,
         title: error.title,
         detail: error.detail ?? error.message,
+        code: error.code,
         source,
       };
     }),

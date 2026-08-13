@@ -121,6 +121,14 @@ function _mapToInfrastructureError(error) {
     };
   }
 
+  if (error instanceof DomainErrors.DraftModuleValidationError) {
+    const infraError = new InfraErrors.UnprocessableEntityError({ code: 'DRAFT_MODULE_VALIDATION_ERROR' });
+    return {
+      infraErrors: [infraError],
+      statusCode: 422,
+    };
+  }
+
   const infraError = new InfraErrors.InfrastructureError(error.message);
   return {
     infraErrors: [infraError],
