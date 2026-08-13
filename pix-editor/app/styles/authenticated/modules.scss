@@ -24,6 +24,8 @@ td.modules-list__actions {
 }
 
 .draft-module-diff {
+  border-top: 1px solid var(--pix-neutral-500);
+
   pre.shiki {
     max-height: 70vh;
     margin: 0;
@@ -48,14 +50,37 @@ td.modules-list__actions {
     align-items: center;
     justify-content: space-between;
   }
+
+  &__data-field {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--pix-neutral-20);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border: 1px solid var(--pix-neutral-500);
+
+    label {
+      padding: var(--pix-spacing-4x);
+    }
+  }
 }
 
 .module-header {
   &__breadcrumb {
-    padding-bottom : var(--pix-spacing-2x);
+    padding-bottom : var(--pix-spacing-4x);
+  }
+
+  &__tag {
+    text-transform: uppercase;
   }
 
   &__title {
     @extend %pix-title-s;
+  }
+
+  &__information {
+    display: flex;
+    gap: var(--pix-spacing-2x);
+    align-items: center;
   }
 }

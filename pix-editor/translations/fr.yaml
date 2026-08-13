@@ -96,11 +96,14 @@ modules:
   production:
     title: Modules
   draft-module:
+    information-tag: brouillon
     edit: Modifier
     validation-success: Validation en succès
     validation-failure: Validation en échec
-  edit-draft-module:
-    title: Édition du draft de module
+    diff:
+      label: Modifications
+  production-module:
+    information-tag: en production
   components:
     publish-module-button:
       success: Le module "{title}" a été publié.
@@ -129,8 +132,8 @@ modules:
       detail: Voir le détail
       production-detail: Voir le détail du module en prod
     validation-errors:
-      title: Erreurs de validation
-      error-count: '{count, plural, one {1 erreur} other {# erreurs}}'
+      title: '{count, plural, one {1 erreur} other {# erreurs}} de validation'
+      information: La publication est impossible tant que des erreurs subsistent.
     validation-success:
       content: Aucune erreur de validation
     create-module-button:

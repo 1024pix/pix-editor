@@ -18,7 +18,7 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
 
     // then
     const accordion = screen.getByRole('button', {
-      name: `${t('modules.components.validation-errors.title')} ${t('modules.components.validation-errors.error-count', { count: 2 })}`,
+      name: `${t('modules.components.validation-errors.title', { count: 2 })} ${t('modules.components.validation-errors.information')}`,
     });
     await click(accordion);
     const listItems = screen.getAllByRole('listitem');
