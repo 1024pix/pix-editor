@@ -65,6 +65,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
         'isBeta',
         'module',
         'previewUrl',
+        'hasBeenValidated',
       ];
 
       // when
@@ -81,6 +82,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
               'is-beta': draftModules[0].isBeta,
               visibility: draftModules[0].visibility,
               details: draftModules[0].details,
+              'has-been-validated': draftModules[0].hasBeenValidated,
               'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
             },
             relationships: {
@@ -100,8 +102,10 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
               'is-beta': draftModules[1].isBeta,
               visibility: draftModules[1].visibility,
               details: draftModules[1].details,
+              'has-been-validated': draftModules[1].hasBeenValidated,
               'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[1].shortId}/${draftModules[1].slug}`,
             },
+
             relationships: { module: { data: null } },
           },
         ],

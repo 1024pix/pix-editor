@@ -25,6 +25,7 @@ export function register(server) {
             attributes: [
               'internalTitle',
               'details',
+              'hasBeenValidated',
               'module',
               'previewUrl',
             ], meta,
