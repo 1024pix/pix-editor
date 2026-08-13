@@ -29,6 +29,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
             'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModule.shortId}/${draftModule.slug}`,
             'has-been-validated': draftModule.hasBeenValidated,
             'validation-errors': draftModule.validationErrors,
+            'updated-at': draftModule.updatedAt,
           },
           relationships: {
             module: {
@@ -49,7 +50,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
       expect(serializedPayload).toStrictEqual(expectedPayload);
     });
 
-    it('serializes a paginated draft modules excerpt list to a payload', () => {
+    it('serializes a paginated draft modules list to a payload', () => {
       // given
       const draftModules = [domainBuilder.buildDraftModule({ id: 'module1', moduleId: 'module1', internalTitle: 'MOD_1', details: { level: Module.LEVELS.EXPERT }, visibility: Module.VISIBILITIES.PRIVATE, isBeta: true }), domainBuilder.buildDraftModule({ id: 'module2', internalTitle: 'MOD_2', details: { level: Module.LEVELS.INDEPENDENT }, visibility: Module.VISIBILITIES.PUBLIC, isBeta: false })];
       const meta = {
@@ -65,6 +66,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
         'isBeta',
         'module',
         'previewUrl',
+        'hasBeenValidated',
       ];
 
       // when
@@ -81,6 +83,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
               'is-beta': draftModules[0].isBeta,
               visibility: draftModules[0].visibility,
               details: draftModules[0].details,
+              'has-been-validated': draftModules[0].hasBeenValidated,
               'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
             },
             relationships: {
@@ -100,8 +103,10 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
               'is-beta': draftModules[1].isBeta,
               visibility: draftModules[1].visibility,
               details: draftModules[1].details,
+              'has-been-validated': draftModules[1].hasBeenValidated,
               'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[1].shortId}/${draftModules[1].slug}`,
             },
+
             relationships: { module: { data: null } },
           },
         ],
