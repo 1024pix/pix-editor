@@ -108,6 +108,7 @@ modules:
     publish-module-button:
       success: Le module "{title}" a été publié.
       error: Erreur lors de la publication du module.
+      validation-error: Le brouillon ne peut pas être publié car il contient des erreurs de validation.
       aria-label: Publier le brouillon "{title}"
       publish: Publier ce brouillon
     modules-tabs:

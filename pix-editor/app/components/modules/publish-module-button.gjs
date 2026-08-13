@@ -17,8 +17,13 @@ export default class PublishModuleButton extends Component {
         this.intl.t('modules.components.publish-module-button.success', { title: module.internalTitle }),
       );
       this.router.replaceWith('authenticated.modules.production-module', module.id);
-    } catch {
-      this.notifications.sendError(this.intl.t('modules.components.publish-module-button.error'));
+    } catch (error) {
+      const isValidationError = error.errors?.some((error) => error.code === 'DRAFT_MODULE_VALIDATION_ERROR');
+      if (isValidationError) {
+        this.notifications.sendError(this.intl.t('modules.components.publish-module-button.validation-error'));
+      } else {
+        this.notifications.sendError(this.intl.t('modules.components.publish-module-button.error'));
+      }
     } finally {
       this.loader.stop();
     }
