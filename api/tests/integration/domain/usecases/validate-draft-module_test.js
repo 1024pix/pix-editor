@@ -224,11 +224,11 @@ describe('Integration | Usecases | Validate draft module', () => {
     expect(result.hasBeenValidated).to.equal(false);
     expect(result.validationErrors).to.deep.equal([
       `
-Error: "slug" with value "not valid slug" fails to match the required pattern: /^[a-z0-9-]+$/.
+"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/.
 Valeur concernée à rechercher : "not valid slug"
 `,
       `
-Error: "sections[0].type" must be one of [question-yourself, explore-to-understand, retain-the-essentials, practise, go-further, blank].
+"sections[0].type" doit être l’une des valeurs suivantes : [question-yourself, explore-to-understand, retain-the-essentials, practise, go-further, blank].
 Valeur concernée à rechercher : "pamplemousse"
 `,
     ]);
@@ -298,6 +298,6 @@ Valeur concernée à rechercher : "pamplemousse"
 
     // then
     expect(result.hasBeenValidated).to.equal(false);
-    expect(result.validationErrors).to.deep.equal([`Modules have duplicate ids: ${duplicateIds.join(', ')}`]);
+    expect(result.validationErrors).to.deep.equal([`Le brouillon a des ids dupliqués : ${duplicateIds.join(', ')}`]);
   });
 });

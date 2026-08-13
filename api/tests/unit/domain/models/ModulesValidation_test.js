@@ -60,7 +60,7 @@ describe('Unit | Domain | Modules', () => {
           } catch (error) {
             // then
             const duplicateIds = [draftModule.sections[0].id, draftModule.sections[0].grains[0].id];
-            expect(error.message).to.equal(`Modules have duplicate ids: ${duplicateIds.join(', ')}`);
+            expect(error.message).to.equal(`Le brouillon a des ids dupliqués : ${duplicateIds.join(', ')}`);
             expect(error.duplicateIds).to.deep.equal(duplicateIds);
           }
         });
@@ -81,7 +81,7 @@ describe('Unit | Domain | Modules', () => {
             expect.fail('should have thrown a ModuleDuplicateIdsError');
           } catch (error) {
             // then
-            expect(error.message).to.equal(`Modules have duplicate ids: ${duplicateId}`);
+            expect(error.message).to.equal(`Le brouillon a des ids dupliqués : ${duplicateId}`);
             expect(error.duplicateIds).to.deep.equal([duplicateId]);
           }
         });
@@ -102,7 +102,7 @@ describe('Unit | Domain | Modules', () => {
             expect.fail('should have thrown a ModuleDuplicateIdsError');
           } catch (error) {
             // then
-            expect(error.message).to.equal(`Modules have duplicate ids: ${duplicateId}`);
+            expect(error.message).to.equal(`Le brouillon a des ids dupliqués : ${duplicateId}`);
             expect(error.duplicateIds).to.deep.equal([duplicateId]);
           }
         });

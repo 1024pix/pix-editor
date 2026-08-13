@@ -50,17 +50,17 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
     const expectedLog = `
 ============================================================
 
-Error: "id" must be a valid GUID.
+"id" must be a valid GUID.
 Valeur concernée à rechercher : "f7b3a2-1a3d8f7e9f5d"
 
 ────────────────────────────────────────────────────────────
 
-Error: "grains[0].components[0].element" does not match any of the allowed types.
+"grains[0].components[0].element" does not match any of the allowed types.
 Valeur concernée à rechercher : {"id":"3a9f2269-99ba-4631-b6fd-6802c88d5c26","type":"videox","title":"Le format des adresses mail","url":"https://videos.pix.fr/modulix/chat_animation_2.mp4","subtitles":"https://videos.pix.fr/modulix/chat_animation_2.vtt","transcription":"<p>Coucou</p>"}
 
 ────────────────────────────────────────────────────────────
 
-Error: "grains[5].id" must be a valid GUID.
+"grains[5].id" must be a valid GUID.
 Valeur concernée à rechercher : "b7ea7630-824"
 
 ============================================================
@@ -82,7 +82,7 @@ Valeur concernée à rechercher : "b7ea7630-824"
         ],
       };
 
-      const expectedLog = `\nError: "id" must be a valid GUID.
+      const expectedLog = `\n"id" must be a valid GUID.
 Valeur concernée à rechercher : "f7b3a2-1a3d8f7e9f5d"\n`;
       expect(joiErrorParser.format({ error, objectErrorSeparator: '', visualSeparator: '' })).to.equal(expectedLog);
     });
