@@ -1,3 +1,4 @@
+import { loadTranslations } from '@ember-intl/vite';
 import { classicEmberSupport, ember, extensions } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
 import url from 'postcss-url';
@@ -13,6 +14,7 @@ export default defineConfig({
       babelHelpers: 'runtime',
       extensions,
     }),
+    loadTranslations(),
   ],
   server: {
     port: 4300,
