@@ -9,7 +9,7 @@ import qunitRecommendedConfig from 'eslint-plugin-qunit/configs/recommended';
 import globals from 'globals';
 
 const unconventionalJsFiles = ['blueprints/**/files/*', 'app/vendor/*'];
-const compiledOutputFiles = ['dist/*', 'tmp/*'];
+const compiledOutputFiles = ['dist/*', 'playwright-report/*', 'test-results/*', 'tmp/*'];
 const dependenciesFiles = ['node_modules/*'];
 const miscFiles = ['coverage/*', '!**/.*', '**/.eslintcache', 'external/*'];
 const emberTryFiles = ['.node_modules.ember-try/*', 'bower.json.ember-try', 'package.json.ember-try'];
