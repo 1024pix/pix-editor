@@ -11,6 +11,7 @@ import ModuleNotification from 'pixeditor/components/modules/module-notification
 import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
 import ModuleValidationSuccess from 'pixeditor/components/modules/validation-success';
+import ModuleValidationTag from 'pixeditor/components/modules/validation-tag';
 
 export default class DraftModule extends Component {
   @service intl;
@@ -21,16 +22,6 @@ export default class DraftModule extends Component {
 
   get validationErrors() {
     return this.args.model.draftModule.validationErrors;
-  }
-
-  get validationStatus() {
-    return this.args.model.draftModule.hasBeenValidated;
-  }
-
-  get validationStatusInformation() {
-    return this.validationStatus
-      ? { label: this.intl.t('modules.draft-module.validation-success'), color: 'green', state: 'success' }
-      : { label: this.intl.t('modules.draft-module.validation-failure'), color: 'error', state: 'failure' };
   }
 
   get links() {
@@ -56,10 +47,7 @@ export default class DraftModule extends Component {
             <PixIcon @name="edit" @plainIcon={{true}} @ariaHidden={{true}} />
             {{t "modules.draft-module.information-tag"}}
           </PixTag>
-          <PixTag @color={{this.validationStatusInformation.color}}>
-            <span class="draft-module-header__tag--{{this.validationStatusInformation.state}}">&#9679;</span>
-            {{this.validationStatusInformation.label}}
-          </PixTag>
+          <ModuleValidationTag @hasBeenValidated={{@model.draftModule.hasBeenValidated}} />
         </div>
       </div>
 
