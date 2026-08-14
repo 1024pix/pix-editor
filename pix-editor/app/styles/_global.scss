@@ -46,6 +46,10 @@ a, p, span, li {
   a, p, span, li {
     font-family: revert;
   }
+
+  &__error-line {
+    background-color: rgba(255, 0, 0, 0.10);
+  }
 }
 
 .waiting {
