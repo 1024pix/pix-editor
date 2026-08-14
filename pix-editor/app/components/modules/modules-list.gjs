@@ -6,6 +6,7 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
+import ModuleValidationTag from 'pixeditor/components/modules/validation-tag';
 
 import PlayModuleButton from './play-module-button';
 
@@ -13,7 +14,11 @@ function getVisibilityColor(visibility) {
   return { public: 'green', private: 'grey' }[visibility];
 }
 
-export default class Product extends Component {
+function hasValidationStatus(module) {
+  return module.hasBeenValidated !== undefined;
+}
+
+export default class ModulesList extends Component {
   @service router;
 
   @action
@@ -24,12 +29,14 @@ export default class Product extends Component {
   <template>
     <PixTable @variant="modulix" @data={{@modules}} @caption={{t "modules.components.modules-list.caption"}}>
       <:columns as |module context|>
-        {{#if @showStatus}}
-          <PixTableColumn @context={{context}}>
-            <:header>
-              {{t "modules.components.modules-list.status"}}
-            </:header>
-            <:cell>
+        <PixTableColumn @context={{context}}>
+          <:header>
+            {{t "modules.components.modules-list.status"}}
+          </:header>
+          <:cell>
+            {{#if (hasValidationStatus module)}}
+              <ModuleValidationTag @hasBeenValidated={{module.hasBeenValidated}} />
+            {{else}}
               <div class="modules-list__status">
                 <PixTag @color={{getVisibilityColor module.visibility}}>
                   {{module.visibilityForDisplay}}
@@ -38,9 +45,9 @@ export default class Product extends Component {
                   <PixTag @color="yellow">Beta</PixTag>
                 {{/if}}
               </div>
-            </:cell>
-          </PixTableColumn>
-        {{/if}}
+            {{/if}}
+          </:cell>
+        </PixTableColumn>
         <PixTableColumn @context={{context}}>
           <:header>
             {{t "modules.components.modules-list.internal-title"}}

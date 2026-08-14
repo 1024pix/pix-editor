@@ -14,7 +14,7 @@ import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
   <main class="page-body">
     <section class="page-section modules-list">
       <ModulesTabs />
-      <ModuleList @modules={{@model.modules}} @showStatus={{true}} @goToDetailPage={{this.goToDetailPage}} />
+      <ModuleList @modules={{@model.modules}} @goToDetailPage={{this.goToDetailPage}} />
       <PixPagination @pagination={{@model.modules.meta}} />
     </section>
   </main>
