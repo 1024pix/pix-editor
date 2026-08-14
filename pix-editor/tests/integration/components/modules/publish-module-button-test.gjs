@@ -1,6 +1,7 @@
-import { render } from '@1024pix/ember-testing-library';
+import { render, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click } from '@ember/test-helpers';
+import { waitForElementToBeRemoved } from '@testing-library/dom';
 import { t } from 'ember-intl/test-support';
 import PublishModuleButton from 'pixeditor/components/modules/publish-module-button';
 import { module, test } from 'qunit';
@@ -33,6 +34,31 @@ module('Integration | Component | modules/publish-module-button', function (hook
     replaceWithStub = this.owner.lookup('service:router').replaceWith;
   });
 
+  module('when publish button is clicked', function () {
+    test('it display a confirmation dialog', async function (assert) {
+      // given
+      const store = this.owner.lookup('service:store');
+      const draftModule = store.createRecord('draft-module', { internalTitle: 'Mon module' });
+
+      // when
+      const screen = await render(<template><PublishModuleButton @draftModule={{draftModule}} /></template>);
+      await click(
+        screen.getByRole('button', {
+          name: t('modules.components.publish-module-button.aria-label', { title: 'Mon module' }),
+        }),
+      );
+
+      const dialog = await screen.findByRole('dialog', {
+        name: t('modules.components.publish-module-button.confirmation-dialog.title'),
+      });
+
+      // then
+      assert
+        .dom(within(dialog).getByText(t('modules.components.publish-module-button.confirmation-dialog.message')))
+        .exists();
+    });
+  });
+
   test('it publishes the draft module and redirects to the production module', async function (assert) {
     // given
     const store = this.owner.lookup('service:store');
@@ -48,6 +74,17 @@ module('Integration | Component | modules/publish-module-button', function (hook
         name: t('modules.components.publish-module-button.aria-label', { title: 'Mon module' }),
       }),
     );
+
+    const dialog = await screen.findByRole('dialog', {
+      name: t('modules.components.publish-module-button.confirmation-dialog.title'),
+    });
+    await click(
+      within(dialog).getByRole('button', {
+        name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
+      }),
+    );
+
+    await waitForElementToBeRemoved(() => screen.queryByRole('dialog'));
 
     // then
     assert.ok(
@@ -73,6 +110,17 @@ module('Integration | Component | modules/publish-module-button', function (hook
         }),
       );
 
+      const dialog = await screen.findByRole('dialog', {
+        name: t('modules.components.publish-module-button.confirmation-dialog.title'),
+      });
+      await click(
+        within(dialog).getByRole('button', {
+          name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
+        }),
+      );
+
+      await waitForElementToBeRemoved(() => screen.queryByRole('dialog'));
+
       // then
       assert.ok(sendErrorStub.calledWith(t('modules.components.publish-module-button.validation-error')));
     });
@@ -93,6 +141,17 @@ module('Integration | Component | modules/publish-module-button', function (hook
           name: t('modules.components.publish-module-button.aria-label', { title: 'Mon module' }),
         }),
       );
+
+      const dialog = await screen.findByRole('dialog', {
+        name: t('modules.components.publish-module-button.confirmation-dialog.title'),
+      });
+      await click(
+        within(dialog).getByRole('button', {
+          name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
+        }),
+      );
+
+      await waitForElementToBeRemoved(() => screen.queryByRole('dialog'));
 
       // then
       assert.ok(sendErrorStub.calledWith(t('modules.components.publish-module-button.error')));

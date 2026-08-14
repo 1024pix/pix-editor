@@ -1,13 +1,28 @@
 @use 'pix-design-tokens/typography';
 
 .module-validation-success {
-  span {
-    @extend %pix-body-m;
-
+  .pix-notification-alert__content {
     display: flex;
     justify-content: space-between;
     width: 100%;
     align-items: center;
+  }
+
+  &__information {
+    @extend %pix-body-s;
+
+    display: flex;
+    flex-direction: column;
+    color: var(--pix-success-900);
+  }
+}
+
+.module-validation-success-information {
+
+  &--bold {
+    @extend %pix-body-m;
+
     font-weight: var(--pix-font-bold);
+    color: var(--pix-success-700);
   }
 }

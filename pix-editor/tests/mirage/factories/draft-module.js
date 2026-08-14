@@ -42,4 +42,5 @@ export default Factory.extend({
 
   isBeta: false,
   visibility: 'public',
+  updatedAt: '2026-08-14T08:54:10.449Z',
 });

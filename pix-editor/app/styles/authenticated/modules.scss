@@ -82,5 +82,6 @@ td.modules-list__actions {
     display: flex;
     gap: var(--pix-spacing-2x);
     align-items: center;
+    flex-wrap: wrap;
   }
 }

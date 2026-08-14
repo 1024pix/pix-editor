@@ -98,6 +98,7 @@ modules:
   draft-module:
     information-tag: brouillon
     edit: Modifier
+    last-modified-at: Dernière modification le {modifiedDate}
     validation-success: Validation en succès
     validation-failure: Validation en échec
     diff:
@@ -110,7 +111,12 @@ modules:
       error: Erreur lors de la publication du module.
       validation-error: Le brouillon ne peut pas être publié car il contient des erreurs de validation.
       aria-label: Publier le brouillon "{title}"
-      publish: Publier ce brouillon
+      confirmation-dialog:
+        confirm: Confirmer la publication
+        title: Confirmation de publication
+        question: Voulez-vous vraiment publier ce brouillon {title} ?
+        message: Cette action transformera le brouillon en module de production.
+      publish: Publier
     modules-tabs:
       navigation: Navigation
       workbench: Atelier
@@ -136,9 +142,10 @@ modules:
       title: '{count, plural, one {1 erreur} other {# erreurs}} de validation'
       information: La publication est impossible tant que des erreurs subsistent.
     validation-success:
-      content: Aucune erreur de validation
+      title: Aucune erreur de validation.
+      subtitle: Il est désormais possible de publier ce brouillon.
     create-module-button:
-      create-draft: Créer un draft
+      create-draft: Créer un brouillon
       create-module: Créer un module
     module-form:
       required-field: Champ obligatoire

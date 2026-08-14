@@ -4,6 +4,7 @@ import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import formatDate from 'ember-intl/helpers/format-date';
 import t from 'ember-intl/helpers/t';
 import DraftModuleDiff from 'pixeditor/components/modules/draft-module-diff';
 import ModuleForm from 'pixeditor/components/modules/module-form';
@@ -48,6 +49,12 @@ export default class DraftModule extends Component {
             {{t "modules.draft-module.information-tag"}}
           </PixTag>
           <ModuleValidationTag @hasBeenValidated={{@model.draftModule.hasBeenValidated}} />
+          <p class="draft-module-header__last-modified-at"><span
+              class="draft-module-header__last-modified-at--bullet"
+            >&#9679;</span>{{t
+              "modules.draft-module.last-modified-at"
+              modifiedDate=(formatDate @model.draftModule.updatedAt "DD/MM/YYYY")
+            }}</p>
         </div>
       </div>
 
