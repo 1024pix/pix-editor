@@ -139,7 +139,7 @@ modules:
     validation-success:
       content: Aucune erreur de validation
     create-module-button:
-      create-draft: Créer un draft
+      create-draft: Créer un brouillon
       create-module: Créer un module
     module-form:
       required-field: Champ obligatoire
