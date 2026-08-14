@@ -17,7 +17,8 @@ module('Integration | Component | modules/validation-success', function (hooks) 
     const screen = await render(<template><ModuleValidationSuccess @draftModule={{draftModule}} /></template>);
 
     // then
-    assert.dom(screen.getByText(t('modules.components.validation-success.content'))).exists();
+    assert.dom(screen.getByText(t('modules.components.validation-success.title'))).exists();
+    assert.dom(screen.getByText(t('modules.components.validation-success.subtitle'))).exists();
     assert
       .dom(
         screen.getByRole('button', {
