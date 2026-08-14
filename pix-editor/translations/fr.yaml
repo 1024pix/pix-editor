@@ -111,6 +111,11 @@ modules:
       error: Erreur lors de la publication du module.
       validation-error: Le brouillon ne peut pas être publié car il contient des erreurs de validation.
       aria-label: Publier le brouillon "{title}"
+      confirmation-dialog:
+        confirm: Confirmer la publication
+        title: Confirmation de publication
+        question: Voulez-vous vraiment publier ce brouillon {title} ?
+        message: Cette action transformera le brouillon en module de production.
       publish: Publier
     modules-tabs:
       navigation: Navigation

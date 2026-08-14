@@ -87,10 +87,19 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      // when
       await click(
         screen.getByRole('button', {
           name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
+        }),
+      );
+      const dialog = await screen.findByRole('dialog', {
+        name: t('modules.components.publish-module-button.confirmation-dialog.title'),
+      });
+
+      // when
+      await click(
+        within(dialog).getByRole('button', {
+          name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
         }),
       );
 
