@@ -8,5 +8,6 @@ export default class DraftModuleSerializer extends ApplicationSerializer {
     url: { serialize: false },
     hasBeenValidated: { serialize: false },
     validationErrors: { serialize: false },
+    updatedAt: { serialize: false },
   };
 }

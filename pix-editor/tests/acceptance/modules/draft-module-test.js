@@ -16,7 +16,11 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
     this.server.create('user', { trigram: 'ABC' });
 
     id = crypto.randomUUID();
-    this.server.create('draft-module', { id, internalTitle: 'MON_BEAU_MODULE' });
+    this.server.create('draft-module', {
+      id,
+      internalTitle: 'MON_BEAU_MODULE',
+      updatedAt: '2026-08-14T08:54:10.449Z',
+    });
 
     return authenticateSession();
   });
@@ -46,6 +50,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
     assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
     assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
     assert.dom(screen.getByText(t('modules.draft-module.information-tag'))).exists();
+    assert.dom(screen.getByText(t('modules.draft-module.last-modified-at', { modifiedDate: '14/08/2026' }))).exists();
 
     // WORKAROUND: let some time for monaco-editor to settle
     await new Promise((resolve) => setTimeout(resolve, 100));

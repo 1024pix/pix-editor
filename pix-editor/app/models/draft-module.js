@@ -8,6 +8,7 @@ export default class DraftModule extends BaseModule {
 
   @attr hasBeenValidated;
   @attr validationErrors;
+  @attr updatedAt;
 
   get isDraft() {
     return true;

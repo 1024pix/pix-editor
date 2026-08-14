@@ -98,6 +98,7 @@ modules:
   draft-module:
     information-tag: brouillon
     edit: Modifier
+    last-modified-at: Dernière modification le {modifiedDate}
     validation-success: Validation en succès
     validation-failure: Validation en échec
     diff:

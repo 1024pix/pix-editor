@@ -1,4 +1,21 @@
+@use 'pix-design-tokens/typography';
+
 .draft-module-header {
+  &__last-modified-at {
+    @extend %pix-monospace;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    font-weight: var(--pix-font-bold);
+    align-items: center;
+    color: var(--pix-neutral-500);
+    display: flex;
+    gap: var(--pix-spacing-2x);
+
+    &--bullet {
+      color: currentColor;
+    }
+  }
+
   &__tag {
     display: flex;
     gap: var(--pix-spacing-4x);
