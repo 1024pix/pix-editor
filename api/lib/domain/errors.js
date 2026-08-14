@@ -110,3 +110,9 @@ export class ModuleDuplicateIdsError extends DomainError {
     this.duplicateIds = duplicateIds;
   }
 }
+
+export class DraftModuleValidationError extends DomainError {
+  constructor(message = 'Le module ne peut pas être publié car il est invalide.') {
+    super(message);
+  }
+}

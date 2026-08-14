@@ -661,5 +661,43 @@ describe('Acceptance | Route | draft-modules', () => {
         },
       ]);
     });
+
+    describe('when the draft module is invalid', () => {
+      it('responds with status 422 and a DRAFT_MODULE_VALIDATION_ERROR code', async () => {
+        // given
+        const draftModule = domainBuilder.buildDraftModule({ slug: 'not valid slug' });
+        databaseBuilder.factory.buildDraftModule(draftModule);
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: `/api/draft-modules/${draftModule.id}/publish`,
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(422);
+        expect(response.result.errors).toContainEqual(
+          expect.objectContaining({
+            status: '422',
+            code: 'DRAFT_MODULE_VALIDATION_ERROR',
+          }),
+        );
+
+        await expect(knex.select('*').from('modules')).resolves.toStrictEqual([]);
+
+        const nonValidatedDraftModule = await knex.select('*').from('draft-modules').first();
+        expect(nonValidatedDraftModule.hasBeenValidated).toStrictEqual(false);
+        expect(nonValidatedDraftModule.validationErrors).toStrictEqual([
+          `
+"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/.
+Valeur concernée à rechercher : "not valid slug"
+`,
+        ]);
+      });
+    });
   });
 });

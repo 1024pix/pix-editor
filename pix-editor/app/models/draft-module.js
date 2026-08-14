@@ -26,12 +26,17 @@ export default class DraftModule extends BaseModule {
   }
 
   async publish() {
-    const module = await this.store.queryRecord(
-      'module',
-      { draftModuleId: this.id },
-      { adapterOptions: { publish: true } },
-    );
-    this.store.unloadRecord(this);
-    return module;
+    try {
+      const module = await this.store.queryRecord(
+        'module',
+        { draftModuleId: this.id },
+        { adapterOptions: { publish: true } },
+      );
+      this.store.unloadRecord(this);
+      return module;
+    } catch (error) {
+      await this.reload();
+      throw error;
+    }
   }
 }
