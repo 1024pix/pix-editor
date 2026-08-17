@@ -56,6 +56,7 @@
     "countries-list": "^3.2.2",
     "css-element-queries": "file:external/css-element-queries",
     "decorator-transforms": "^2.3.0",
+    "dotenv": "^17.4.2",
     "easymde": "^2.20.0",
     "ember-auto-import": "^2.12.0",
     "ember-cli": "^6.9.1",
