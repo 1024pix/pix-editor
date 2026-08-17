@@ -71,7 +71,23 @@ td.modules-list__actions {
   }
 
   &__tag {
+    @extend %pix-body-xs;
     text-transform: uppercase;
+    font-weight: var(--pix-font-bold);
+    border-radius: 8px;
+    padding: var(--pix-spacing-1x) var(--pix-spacing-2x);
+
+    &--yellow {
+      color: var(--pix-warning-700);
+      border: 1px solid var(--pix-warning-700);
+      background-color: var(--pix-warning-50);
+    }
+
+    &--blue {
+      color: var(--pix-info-700);
+      border: 1px solid var(--pix-info-700);
+      background-color: var(--pix-info-50);
+    }
   }
 
   &__title {

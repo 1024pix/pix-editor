@@ -1,7 +1,5 @@
 import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import formatDate from 'ember-intl/helpers/format-date';
@@ -12,7 +10,6 @@ import ModuleNotification from 'pixeditor/components/modules/module-notification
 import PlayModuleButtons from 'pixeditor/components/modules/play-module-buttons';
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
 import ModuleValidationSuccess from 'pixeditor/components/modules/validation-success';
-import ModuleValidationTag from 'pixeditor/components/modules/validation-tag';
 
 export default class DraftModule extends Component {
   @service intl;
@@ -44,14 +41,13 @@ export default class DraftModule extends Component {
 
         <div class="module-header__information">
           <h1 class="module-header__title">{{@model.draftModule.internalTitle}}</h1>
-          <PixTag class="module-header__tag" @color="yellow">
-            <PixIcon @name="edit" @plainIcon={{true}} @ariaHidden={{true}} />
+          <div class="module-header__tag module-header__tag--yellow">
+            &#9679;
             {{t "modules.draft-module.information-tag"}}
-          </PixTag>
-          <ModuleValidationTag @hasBeenValidated={{@model.draftModule.hasBeenValidated}} />
+          </div>
           <p class="draft-module-header__last-modified-at"><span
               class="draft-module-header__last-modified-at--bullet"
-            >&#9679;</span>{{t
+            >&#65372;</span>{{t
               "modules.draft-module.last-modified-at"
               modifiedDate=(formatDate @model.draftModule.updatedAt "DD/MM/YYYY")
             }}</p>
