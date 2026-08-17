@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
+import ENV from 'pixeditor/config/environment';
 
 export default class ModulixEditorButton extends Component {
   @tracked previewWindow;
@@ -27,7 +28,7 @@ export default class ModulixEditorButton extends Component {
   @action
   onModulixEditorButtonClicked() {
     const windowName = 'modulix-editor-edit';
-    this.previewWindow = window.open('http://localhost:5173/modulix-editor/', windowName);
+    this.previewWindow = window.open(ENV.APP.MODULIX_EDITOR_URL, windowName);
   }
 
   <template>

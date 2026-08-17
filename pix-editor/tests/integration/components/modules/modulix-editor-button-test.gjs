@@ -57,7 +57,7 @@ module('Integration | Components | modules/modulix-editor-button', function (hoo
 
         // then
         assert.true(postMessageStub.calledWithExactly({ from: 'pix-editor', moduleContent: draftModule }, '*'));
-        assert.true(openStub.calledWithExactly('http://localhost:5173/modulix-editor/', 'modulix-editor-edit'));
+        sinon.assert.calledOnceWithExactly(openStub, 'https://app.modulix-editor.io', 'modulix-editor-edit');
       });
     });
 
@@ -81,7 +81,7 @@ module('Integration | Components | modules/modulix-editor-button', function (hoo
 
         // then
         assert.false(postMessageStub.calledOnce);
-        assert.true(openStub.calledWithExactly('http://localhost:5173/modulix-editor/', 'modulix-editor-edit'));
+        assert.true(openStub.calledWithExactly('https://app.modulix-editor.io', 'modulix-editor-edit'));
       });
     });
   });
