@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
 import ModuleForm from 'pixeditor/components/modules/module-form';
+import ModulixEditorButton from 'pixeditor/components/modules/modulix-editor-button';
 
 export default class NewModule extends Component {
   @service intl;
@@ -90,6 +91,7 @@ export default class NewModule extends Component {
           {{/if}}
         </h1>
       </div>
+      <ModulixEditorButton />
     </header>
     <main class="page-body">
       <section class="page-section module-form">
