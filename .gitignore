@@ -56,3 +56,4 @@ pix-editor/app/config-private-test.js
 
 # VSCode
 .vscode/settings.json
+pix-editor/.env

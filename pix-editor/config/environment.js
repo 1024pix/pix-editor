@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config({ quiet: true });
+
 module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'pixeditor',
@@ -23,6 +25,7 @@ module.exports = function (environment) {
         defaultValue: 4,
         minValue: 1,
       }),
+      MODULIX_EDITOR_URL: process.env.MODULIX_EDITOR_URL || 'https://1024pix.github.io/modulix-editor/',
     },
 
     'ember-simple-auth': { routeAfterAuthentication: 'authenticated' },
@@ -46,6 +49,7 @@ module.exports = function (environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+    ENV.APP.MODULIX_EDITOR_URL = 'https://app.modulix-editor.io';
   }
 
   return ENV;

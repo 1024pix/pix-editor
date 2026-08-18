@@ -70,6 +70,8 @@ prototype:
     update-status: Épreuve mise à jour
     update-error: Erreur lors de la mise à jour
 modules:
+  modulix-editor-button:
+    label: Ouvrir dans Modulix Editor
   breadcrumb:
     all-modules:
       label: Liste des modules
