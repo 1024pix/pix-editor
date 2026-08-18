@@ -1,6 +1,4 @@
 import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
@@ -31,10 +29,10 @@ export default class ProductionModule extends Component {
 
         <div class="module-header__information">
           <h1 class="module-header__title">{{@model.module.internalTitle}}</h1>
-          <PixTag class="module-header__tag" @color="blue">
-            <PixIcon @name="bolt" @plainIcon={{true}} @ariaHidden={{true}} />
+          <div class="module-header__tag module-header__tag--blue">
+            &#9679;
             {{t "modules.production-module.information-tag"}}
-          </PixTag>
+          </div>
         </div>
       </div>
       <div class="page-actions">

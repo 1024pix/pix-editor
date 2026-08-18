@@ -1,4 +1,5 @@
 @use 'pix-design-tokens/typography';
+@use 'pix-design-tokens/breakpoints';
 
 .modules-list {
   display: flex;
@@ -47,8 +48,16 @@ td.modules-list__actions {
     background: var(--pix-neutral-0);
     padding: var(--pix-spacing-4x) var(--pix-spacing-5x);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    flex-direction: column;
+    gap: var(--pix-spacing-4x);
+
+    @include breakpoints.device-is('desktop') {
+      flex-direction: row;
+      align-items: center;
+      gap: unset;
+    }
   }
 
   &__data-field {
@@ -71,7 +80,23 @@ td.modules-list__actions {
   }
 
   &__tag {
+    @extend %pix-body-xs;
     text-transform: uppercase;
+    font-weight: var(--pix-font-bold);
+    border-radius: 8px;
+    padding: var(--pix-spacing-1x) var(--pix-spacing-2x);
+
+    &--yellow {
+      color: var(--pix-warning-700);
+      border: 1px solid var(--pix-warning-700);
+      background-color: var(--pix-warning-50);
+    }
+
+    &--blue {
+      color: var(--pix-info-700);
+      border: 1px solid var(--pix-info-700);
+      background-color: var(--pix-info-50);
+    }
   }
 
   &__title {

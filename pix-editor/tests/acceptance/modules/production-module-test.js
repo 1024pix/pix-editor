@@ -43,11 +43,10 @@ module('Acceptance | Modules | Production Module', function (hooks) {
       await click(await screen.getByRole('link', { name: 'Modules' }));
       await click(await screen.getByRole('link', { name: t('modules.components.modules-tabs.production') }));
       await click(await screen.getByRole('link', { name: t('modules.components.modules-list.detail') }));
-
       // then
       assert.strictEqual(currentURL(), `/modules/production/${id}`);
       assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
-      assert.dom(screen.getByText(t('modules.production-module.information-tag'))).exists();
+      assert.dom(screen.getByText(`● ${t('modules.production-module.information-tag')}`)).exists();
 
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
