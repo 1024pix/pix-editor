@@ -27,6 +27,7 @@ describe('Draft Module Version Repository', () => {
           draftModuleId: draftModule.id,
           version: draftModule.version,
           structuredDiff: { test: 'ceci est un diff structuré de test...' },
+          createdAt: expect.any(Date),
         },
       ]);
     });
