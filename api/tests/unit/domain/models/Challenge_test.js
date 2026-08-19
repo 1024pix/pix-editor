@@ -338,7 +338,7 @@ describe('Unit | Domain | Challenge', () => {
   });
 
   describe('#switchToPrototype', () => {
-    it('should update genealogy and remove alternativeVersion', function() {
+    it('should update genealogy and prototype-only fields and remove alternativeVersion', function() {
       // given
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         locale: 'fr',
@@ -357,6 +357,10 @@ describe('Unit | Domain | Challenge', () => {
         author: ['TOTO'],
         accessibility1: Challenge.ACCESSIBILITY1.ACQUIS_NON_PERTINENT,
         accessibility2: Challenge.ACCESSIBILITY2.KO,
+        spoil: Challenge.SPOILS.DIFFICILEMENT_SPOILABLE,
+        responsive: Challenge.RESPONSIVES.TABLETTE,
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FIRSTNAMES],
         locales: ['fr'],
         localizedChallenges: [localizedChallenge],
       });
@@ -365,6 +369,10 @@ describe('Unit | Domain | Challenge', () => {
       challenge.switchToPrototype({
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
         accessibility2: Challenge.ACCESSIBILITY2.NONE,
+        spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
+        responsive: Challenge.RESPONSIVES.SMARTPHONE,
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
         requireGafamWebsiteAccess: true,
         isIncompatibleIpadCertif: true,
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.ACQUIS_NON_PERTINENT,
@@ -382,6 +390,10 @@ describe('Unit | Domain | Challenge', () => {
         author: challenge.author,
         accessibility1: challenge.accessibility1,
         accessibility2: challenge.accessibility2,
+        spoil: challenge.spoil,
+        responsive: challenge.responsive,
+        translationMaintenanceTags: challenge.translationMaintenanceTags,
+        assessmentMaintenanceTags: challenge.assessmentMaintenanceTags,
         requireGafamWebsiteAccess: challenge.primaryLocalizedChallenge.requireGafamWebsiteAccess,
         isIncompatibleIpadCertif: challenge.primaryLocalizedChallenge.isIncompatibleIpadCertif,
         deafAndHardOfHearing: challenge.primaryLocalizedChallenge.deafAndHardOfHearing,
@@ -396,6 +408,10 @@ describe('Unit | Domain | Challenge', () => {
         author: ['TOTO'],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
         accessibility2: Challenge.ACCESSIBILITY2.NONE,
+        spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
+        responsive: Challenge.RESPONSIVES.SMARTPHONE,
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.FILE_TO_REDO],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
         requireGafamWebsiteAccess: true,
         isIncompatibleIpadCertif: true,
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.ACQUIS_NON_PERTINENT,
@@ -533,6 +549,10 @@ describe('Unit | Domain | Challenge', () => {
         accessibility2: Challenge.ACCESSIBILITY2.KO,
         locales: ['fr'],
         localizedChallenges: [localizedChallenge],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FIRSTNAMES],
+        translationMaintenanceTags: [Challenge.PEDAGOGIES],
+        responsive: Challenge.RESPONSIVES.SMARTPHONE,
+        spoil: Challenge.SPOILS.DIFFICILEMENT_SPOILABLE,
       });
 
       // when
@@ -545,6 +565,10 @@ describe('Unit | Domain | Challenge', () => {
         alternativeVersion: null,
         accessibility1: challenge.accessibility1,
         accessibility2: challenge.accessibility2,
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.FIRSTNAMES],
+        translationMaintenanceTags: [Challenge.PEDAGOGIES],
+        responsive: Challenge.RESPONSIVES.SMARTPHONE,
+        spoil: Challenge.SPOILS.DIFFICILEMENT_SPOILABLE,
         updatedAt: expect.any(Date),
       }).toEqual(expectedPojo);
     });
