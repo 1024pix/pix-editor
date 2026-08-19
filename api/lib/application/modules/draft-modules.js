@@ -65,6 +65,7 @@ export function register(server) {
       config: {
         validate: {
           failAction: handleFailActionWithDetails,
+          options: { abortEarly: false },
           payload: Joi.object({
             data: Joi.object({
               type: Joi.string().valid('draft-modules').required(),
@@ -109,6 +110,7 @@ export function register(server) {
         },
         validate: {
           failAction: handleFailActionWithDetails,
+          options: { abortEarly: false },
           params: Joi.object({ id: Types.moduleId().required() }).required(),
           payload: Joi.object({
             data: Joi.object({

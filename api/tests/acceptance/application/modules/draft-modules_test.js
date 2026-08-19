@@ -640,7 +640,6 @@ describe('Acceptance | Route | draft-modules', () => {
 
         const draftModulePayload = {
           slug: draftModule.slug,
-          title: draftModule.title,
           'internal-title': '',
           'is-beta': draftModule.isBeta,
           visibility: draftModule.visibility,
@@ -674,6 +673,11 @@ describe('Acceptance | Route | draft-modules', () => {
               status: '400',
               title: 'Invalid Request Payload',
               detail: '"data.attributes.internal-title" ne doit pas être vide',
+            },
+            {
+              status: '400',
+              title: 'Invalid Request Payload',
+              detail: '"data.attributes.title" est requis',
             },
           ],
         });
