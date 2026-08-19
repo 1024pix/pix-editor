@@ -1,6 +1,7 @@
 import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
 import ModuleForm from 'pixeditor/components/modules/module-form';
@@ -39,12 +40,16 @@ export default class NewModule extends Component {
         this.router.replaceWith('authenticated.modules.workbench');
         this.notifications.sendSuccess(this.intl.t('modules.new.module-success', { title: newModule.internalTitle }));
       }
-    } catch {
-      if (module) {
-        this.notifications.sendError(this.intl.t('modules.new.draft-error'));
-      } else {
-        this.notifications.sendError(this.intl.t('modules.new.module-error'));
+    } catch (error) {
+      const genericErrorMessage = this.intl.t('modules.new.draft-error');
+      let errorMessage = genericErrorMessage;
+
+      if (error.errors?.length) {
+        const details = error.errors.map((error) => error.detail.replace(/"data\.attributes\.([^"]+)"/, '$1'));
+        const detailLabel = this.intl.t('modules.new.draft-error-detail');
+        errorMessage = `${genericErrorMessage}<br><br>${detailLabel} ${details.join(', ')}.`;
       }
+      this.notifications.sendError(htmlSafe(errorMessage));
     } finally {
       this.loader.stop();
     }

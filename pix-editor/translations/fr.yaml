@@ -91,8 +91,8 @@ modules:
     module-title: Création d’un module
     draft-success: Le draft "{title}" a été enregistré.
     module-success: Le module "{title}" a été enregistré.
-    draft-error: Erreur lors de l’enregistrement du draft.
-    module-error: Erreur lors de l’enregistrement du module.
+    draft-error: Une erreur est survenue lors de l’enregistrement du draft.
+    draft-error-detail: 'Détail de l’erreur :'
   workbench:
     title: Modules
   production:
