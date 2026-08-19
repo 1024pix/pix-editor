@@ -211,6 +211,51 @@ describe('Acceptance | Route | draft-modules', () => {
         ]);
       });
     });
+
+    describe('when payload is invalid', () => {
+      it('responds with status 400 and error detail', async () => {
+        // given
+        const draftModule = domainBuilder.buildDraftModule({ version: '0.1' });
+        const draftModulePayload = {
+          slug: draftModule.slug,
+          title: draftModule.title,
+          'internal-title': '',
+          'is-beta': draftModule.isBeta,
+          visibility: draftModule.visibility,
+          details: draftModule.details,
+          sections: draftModule.sections,
+          glossary: draftModule.glossary,
+        };
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/draft-modules',
+          headers: generateAuthorizationHeader(editorUser),
+          payload: {
+            data: {
+              type: 'draft-modules',
+              attributes: draftModulePayload,
+              relationships: { module: { data: null } },
+            },
+          },
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+        expect(response.result).toStrictEqual({
+          errors: [
+            {
+              status: '400',
+              title: 'Invalid Request Payload',
+              detail: '"data.attributes.internal-title" ne doit pas être vide',
+            },
+          ],
+        });
+      });
+    });
   });
 
   describe('GET /draft-modules', () => {
@@ -584,6 +629,55 @@ describe('Acceptance | Route | draft-modules', () => {
           createdAt: expect.any(Date),
         },
       ]);
+    });
+
+    describe('when payload is invalid', () => {
+      it('responds with status 400 and error detail', async () => {
+        // given
+        const draftModule = domainBuilder.buildDraftModule({ version: '0.1' });
+        databaseBuilder.factory.buildDraftModule(draftModule);
+        await databaseBuilder.commit();
+
+        const draftModulePayload = {
+          slug: draftModule.slug,
+          title: draftModule.title,
+          'internal-title': '',
+          'is-beta': draftModule.isBeta,
+          visibility: draftModule.visibility,
+          details: draftModule.details,
+          sections: draftModule.sections,
+          glossary: draftModule.glossary,
+        };
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'PATCH',
+          url: `/api/draft-modules/${draftModule.id}`,
+          headers: generateAuthorizationHeader(editorUser),
+          payload: {
+            data: {
+              type: 'draft-modules',
+              id: draftModule.id,
+              attributes: draftModulePayload,
+              relationships: { module: { data: null } },
+            },
+          },
+        });
+
+        // then
+        expect(response.statusCode).toBe(400);
+        expect(response.result).toStrictEqual({
+          errors: [
+            {
+              status: '400',
+              title: 'Invalid Request Payload',
+              detail: '"data.attributes.internal-title" ne doit pas être vide',
+            },
+          ],
+        });
+      });
     });
   });
 

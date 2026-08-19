@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 import { createDraftModule, updateDraftModule, getDraftModuleById, getDraftModuleDiff, listPaginatedDraftModules, publishDraftModule, validateDraftModule } from '../../domain/usecases/index.js';
 import { draftModuleDiffSerializer, draftModuleSerializer, moduleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import { joiFrErrorMessages } from '../../infrastructure/schemas/joi-fr-error-messages.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 import { handleFailActionWithDetails } from '../../infrastructure/validation.js';
 import * as Types from '../types.js';
@@ -86,7 +87,7 @@ export function register(server) {
                 }).optional(),
               }).optional(),
             }).required(),
-          }).required(),
+          }).required().messages(joiFrErrorMessages),
         },
         handler: async (request, h) => {
           const module = await draftModuleSerializer.deserialize(request.payload);
@@ -132,7 +133,7 @@ export function register(server) {
                 }).optional(),
               }).optional(),
             }).required(),
-          }).required(),
+          }).required().messages(joiFrErrorMessages),
         },
       },
     },
