@@ -14,6 +14,10 @@ describe('Integration | Usecases | Switch Genealogy', function() {
         accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: Challenge.ACCESSIBILITY2.KO,
         status: Challenge.STATUSES.VALIDE,
+        spoil: Challenge.SPOILS.NONE,
+        responsive: Challenge.RESPONSIVES.NONE,
+        translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME],
+        assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
         locales: ['fr-FR'],
       },
       localizedChallenge: {
@@ -36,6 +40,10 @@ describe('Integration | Usecases | Switch Genealogy', function() {
       alternativeVersion: 56,
       accessibility1: Challenge.ACCESSIBILITY1.OK,
       accessibility2: Challenge.ACCESSIBILITY2.OK,
+      spoil: Challenge.SPOILS.FACILEMENT_SPOILABLE,
+      responsive: Challenge.RESPONSIVES.SMARTPHONE,
+      translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_TO_REDO],
+      assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
       locales: ['fr-FR'],
       version: challengePrototype.version,
     });
@@ -60,7 +68,7 @@ describe('Integration | Usecases | Switch Genealogy', function() {
       .where('id', challengePrototype.id)
       .first();
     const updatedAlternativeChallengeToBePrototype = await knex('challenges')
-      .select('version', 'genealogy', 'alternativeVersion', 'accessibility1', 'accessibility2')
+      .select('version', 'genealogy', 'alternativeVersion', 'accessibility1', 'accessibility2', 'spoil', 'responsive', 'translationMaintenanceTags', 'assessmentMaintenanceTags')
       .where('id', alternativeChallenge.id)
       .first();
     const updatedLocalizedChallenge = await knex('localized_challenges')
@@ -81,6 +89,10 @@ describe('Integration | Usecases | Switch Genealogy', function() {
       alternativeVersion: null,
       accessibility1: Challenge.ACCESSIBILITY1.KO,
       accessibility2: Challenge.ACCESSIBILITY2.KO,
+      spoil: Challenge.SPOILS.NONE,
+      responsive: Challenge.RESPONSIVES.NONE,
+      translationMaintenanceTags: [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME],
+      assessmentMaintenanceTags: [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS],
     });
 
     expect(updatedLocalizedChallenge).toStrictEqual({

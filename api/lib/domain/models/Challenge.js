@@ -341,6 +341,10 @@ export class Challenge {
         alternativeVersion: this.alternativeVersion,
         accessibility1: this.accessibility1,
         accessibility2: this.accessibility2,
+        spoil: this.spoil,
+        responsive: this.responsive,
+        translationMaintenanceTags: this.translationMaintenanceTags,
+        assessmentMaintenanceTags: this.assessmentMaintenanceTags,
         updatedAt: new Date(),
       };
     }
@@ -365,6 +369,10 @@ export class Challenge {
   switchToPrototype({
     accessibility1,
     accessibility2,
+    spoil,
+    responsive,
+    translationMaintenanceTags,
+    assessmentMaintenanceTags,
     requireGafamWebsiteAccess,
     isIncompatibleIpadCertif,
     deafAndHardOfHearing,
@@ -383,6 +391,10 @@ export class Challenge {
     this.alternativeVersion = null;
     this.accessibility1 = accessibility1;
     this.accessibility2 = accessibility2;
+    this.spoil = spoil;
+    this.responsive = responsive;
+    this.translationMaintenanceTags = translationMaintenanceTags;
+    this.assessmentMaintenanceTags = assessmentMaintenanceTags;
     this.primaryLocalizedChallenge.switchToPrototype({
       requireGafamWebsiteAccess,
       isIncompatibleIpadCertif,

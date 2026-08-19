@@ -10,6 +10,10 @@ export async function switchGenealogy({ alternativeChallengeId, dependencies = {
   alternativeChallenge.switchToPrototype({
     accessibility1: prototypeChallenge.accessibility1,
     accessibility2: prototypeChallenge.accessibility2,
+    spoil: prototypeChallenge.spoil,
+    responsive: prototypeChallenge.responsive,
+    translationMaintenanceTags: prototypeChallenge.translationMaintenanceTags,
+    assessmentMaintenanceTags: prototypeChallenge.assessmentMaintenanceTags,
     requireGafamWebsiteAccess: localizedPrototypeChallenge.requireGafamWebsiteAccess,
     isIncompatibleIpadCertif: localizedPrototypeChallenge.isIncompatibleIpadCertif,
     deafAndHardOfHearing: localizedPrototypeChallenge.deafAndHardOfHearing,
