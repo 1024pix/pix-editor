@@ -66,6 +66,7 @@ const blockSelectSchema = Joi.object({
     ),
   placeholder: htmlNotAllowedSchema
     .allow('')
+    .default('- Sélectionner -')
     .required()
     .description("Texte de substitution qui s'affiche dans le champ lorsqu’aucune option n'est sélectionnée."),
   ariaLabel: htmlNotAllowedSchema
