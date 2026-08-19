@@ -29,8 +29,12 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
   });
 
   it('prepares draft module for creation and saves it', async () => {
+    // given
+    const draftModuleJSON = Symbol('draftModuleJSON');
+    vi.spyOn(savedDraftModule, 'serializeToJSON').mockReturnValueOnce(draftModuleJSON);
+
     // when
-    const result = createDraftModule(draftModule, { draftModuleRepository, updatePixApiReleaseCache });
+    const result = createDraftModule(draftModule, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
 
     // then
     await expect(result).resolves.toBe(savedDraftModule);
@@ -38,6 +42,12 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
     expect(prepareForCreation).toHaveBeenCalledExactlyOnceWith(undefined);
     expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith(draftModule);
     expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
+    expect(structuredPatch).toHaveBeenCalledExactlyOnceWith('', '', '', draftModuleJSON);
+    expect(draftModuleVersionRepository.create).toHaveBeenCalledExactlyOnceWith(new DraftModuleVersion({
+      draftModuleId: savedDraftModule.id,
+      version: savedDraftModule.version,
+      structuredDiff,
+    }));
   });
 
   describe('when draft module has a moduleId', () => {

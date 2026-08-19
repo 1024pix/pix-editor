@@ -206,6 +206,7 @@ describe('Acceptance | Route | draft-modules', () => {
             draftModuleId: draftModule.id,
             version: draftModule.version,
             structuredDiff: expect.any(Object),
+            createdAt: expect.any(Date),
           },
         ]);
       });
@@ -580,6 +581,7 @@ describe('Acceptance | Route | draft-modules', () => {
           draftModuleId: draftModule.id,
           version: '6.5',
           structuredDiff: expect.any(Object),
+          createdAt: expect.any(Date),
         },
       ]);
     });

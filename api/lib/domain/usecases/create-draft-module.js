@@ -18,14 +18,12 @@ export async function createDraftModule(draftModule, dependencies = { draftModul
     draftModule.prepareForCreation(module);
     const savedDraftModule = await dependencies.draftModuleRepository.save(draftModule);
 
-    if (module) {
-      const structuredDiff = dependencies.structuredPatch('', '', module.serializeToJSON(), savedDraftModule.serializeToJSON());
-      await dependencies.draftModuleVersionRepository.create(new DraftModuleVersion({
-        draftModuleId: savedDraftModule.id,
-        version: savedDraftModule.version,
-        structuredDiff,
-      }));
-    }
+    const structuredDiff = dependencies.structuredPatch('', '', module?.serializeToJSON() ?? '', savedDraftModule.serializeToJSON());
+    await dependencies.draftModuleVersionRepository.create(new DraftModuleVersion({
+      draftModuleId: savedDraftModule.id,
+      version: savedDraftModule.version,
+      structuredDiff,
+    }));
 
     await dependencies.updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated(savedDraftModule);
 
