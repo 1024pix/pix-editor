@@ -2504,9 +2504,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
     let locale;
     let challengeDecli;
     let challengeProto;
-    let localizedChallengeProto;
-    let localizedChallengeDecli;
-    let decliToBecomeProto;
 
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
@@ -2543,7 +2540,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildChallenge(challengeDecli);
       databaseBuilder.factory.buildChallenge(challengeProto);
 
-      localizedChallengeDecli = databaseBuilder.factory.buildLocalizedChallenge({
+      databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeDecliId,
         challengeId: challengeDecliId,
         locale,
@@ -2555,7 +2552,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         hasEmbedInternalValidation: false,
         noValidationNeeded: false,
       });
-      localizedChallengeProto = databaseBuilder.factory.buildLocalizedChallenge({
+      databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeProtoId,
         challengeId: challengeProtoId,
         locale,
@@ -2629,15 +2626,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: 'challengeDecli.embedTitle',
       });
       await databaseBuilder.commit();
-
-      decliToBecomeProto = {
-        ...challengeDecli,
-        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
-        accessibility1: Challenge.ACCESSIBILITY1.OK,
-        accessibility2: Challenge.ACCESSIBILITY2.OK,
-        locales: ['fr'],
-        localizedChallenges: [localizedChallengeDecli, localizedChallengeProto],
-      };
     });
 
     it('should NOT authorize connection if it is NOT decli', async () => {
@@ -2649,77 +2637,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
         method: 'PATCH',
         url: `/api/challenges/${challengeProtoId}/switch-genealogy`,
         headers: generateAuthorizationHeader(user),
-        payload: {
-          data: {
-            type: 'challenges',
-            id: decliToBecomeProto.id,
-            attributes: {
-              'airtable-id': decliToBecomeProto.airtableId,
-              instruction: decliToBecomeProto.instruction,
-              'alternative-instruction': decliToBecomeProto.alternativeInstruction,
-              type: decliToBecomeProto.type,
-              format: decliToBecomeProto.format,
-              proposals: decliToBecomeProto.proposals,
-              solution: decliToBecomeProto.solution,
-              'solution-to-display': decliToBecomeProto.solutionToDisplay,
-              't1-status': decliToBecomeProto.t1Status,
-              't2-status': decliToBecomeProto.t2Status,
-              't3-status': decliToBecomeProto.t3Status,
-              pedagogy: decliToBecomeProto.pedagogy,
-              author: decliToBecomeProto.author,
-              declinable: decliToBecomeProto.declinable,
-              version: decliToBecomeProto.version,
-              genealogy: decliToBecomeProto.genealogy,
-              status: decliToBecomeProto.status,
-              preview: decliToBecomeProto.preview,
-              timer: decliToBecomeProto.timer,
-              'embed-url': decliToBecomeProto.embedUrl,
-              'embed-title': decliToBecomeProto.embedTitle,
-              'embed-height': decliToBecomeProto.embedHeight,
-              'alternative-version': decliToBecomeProto.alternativeVersion,
-              accessibility1: decliToBecomeProto.accessibility1,
-              accessibility2: decliToBecomeProto.accessibility2,
-              spoil: decliToBecomeProto.spoil,
-              responsive: decliToBecomeProto.responsive,
-              locales: decliToBecomeProto.locales,
-              geography: decliToBecomeProto.geography,
-              'urls-to-consult': ['pouet.com'],
-              'auto-reply': decliToBecomeProto.autoReply,
-              focusable: decliToBecomeProto.focusable,
-              'updated-at': new Date('2021-10-04'),
-              'validated-at': new Date('2023-02-02T14:17:30Z'),
-              'archived-at': new Date('2023-03-03T10:47:05Z'),
-              'made-obsolete-at': new Date('2023-04-04T10:47:05Z'),
-              shuffled: false,
-              'require-gafam-website-access': false,
-              'is-incompatible-ipad-certif': false,
-              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
-              'is-awareness-challenge': false,
-              'to-rephrase': false,
-              'has-embed-internal-validation': true,
-              'no-validation-needed': true,
-              'is-quality-ok': true,
-              'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS, Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
-              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME, Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
-            },
-            relationships: {
-              skill: {
-                data: {
-                  type: 'skills',
-                  id: challengeDecli.skills[0],
-                },
-              },
-              attachments: {
-                data: challengeDecli.files.map(({ fileId }) => {
-                  return {
-                    type: 'attachments',
-                    id: fileId,
-                  };
-                }),
-              },
-            },
-          },
-        },
       });
 
       // Then
@@ -2735,77 +2652,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
         method: 'PATCH',
         url: `/api/challenges/${challengeDecliId}/switch-genealogy`,
         headers: generateAuthorizationHeader(user),
-        payload: {
-          data: {
-            type: 'challenges',
-            id: decliToBecomeProto.id,
-            attributes: {
-              'airtable-id': decliToBecomeProto.airtableId,
-              instruction: decliToBecomeProto.instruction,
-              'alternative-instruction': decliToBecomeProto.alternativeInstruction,
-              type: decliToBecomeProto.type,
-              format: decliToBecomeProto.format,
-              proposals: decliToBecomeProto.proposals,
-              solution: decliToBecomeProto.solution,
-              'solution-to-display': decliToBecomeProto.solutionToDisplay,
-              't1-status': decliToBecomeProto.t1Status,
-              't2-status': decliToBecomeProto.t2Status,
-              't3-status': decliToBecomeProto.t3Status,
-              pedagogy: decliToBecomeProto.pedagogy,
-              author: decliToBecomeProto.author,
-              declinable: decliToBecomeProto.declinable,
-              version: decliToBecomeProto.version,
-              genealogy: decliToBecomeProto.genealogy,
-              status: decliToBecomeProto.status,
-              preview: decliToBecomeProto.preview,
-              timer: decliToBecomeProto.timer,
-              'embed-url': decliToBecomeProto.embedUrl,
-              'embed-title': decliToBecomeProto.embedTitle,
-              'embed-height': decliToBecomeProto.embedHeight,
-              'alternative-version': decliToBecomeProto.alternativeVersion,
-              accessibility1: decliToBecomeProto.accessibility1,
-              accessibility2: decliToBecomeProto.accessibility2,
-              spoil: decliToBecomeProto.spoil,
-              responsive: decliToBecomeProto.responsive,
-              locales: decliToBecomeProto.locales,
-              geography: decliToBecomeProto.geography,
-              'urls-to-consult': ['pouet.com'],
-              'auto-reply': decliToBecomeProto.autoReply,
-              focusable: decliToBecomeProto.focusable,
-              'updated-at': new Date('2021-10-04'),
-              'validated-at': new Date('2023-02-02T14:17:30Z'),
-              'archived-at': new Date('2023-03-03T10:47:05Z'),
-              'made-obsolete-at': new Date('2023-04-04T10:47:05Z'),
-              shuffled: false,
-              'require-gafam-website-access': false,
-              'is-incompatible-ipad-certif': false,
-              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
-              'is-awareness-challenge': false,
-              'to-rephrase': false,
-              'has-embed-internal-validation': true,
-              'no-validation-needed': true,
-              'is-quality-ok': true,
-              'assessment-maintenance-tags': [Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS, Challenge.ASSESSMENT_MAINTENANCE_TAGS.EXTERNAL_LINKS],
-              'translation-maintenance-tags': [Challenge.TRANSLATION_MAINTENANCE_TAGS.EMBED_NAME, Challenge.TRANSLATION_MAINTENANCE_TAGS.ENGLISH_WORD],
-            },
-            relationships: {
-              skill: {
-                data: {
-                  type: 'skills',
-                  id: challengeDecli.skills[0],
-                },
-              },
-              attachments: {
-                data: challengeDecli.files.map(({ fileId }) => {
-                  return {
-                    type: 'attachments',
-                    id: fileId,
-                  };
-                }),
-              },
-            },
-          },
-        },
       });
 
       // Then
@@ -2852,7 +2698,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           'noValidationNeeded',
         )
         .orderBy('id');
-      const expectedPrototypeI18nSettings = {
+      const expectedPrototypeA11ySettings = {
         requireGafamWebsiteAccess: false,
         isIncompatibleIpadCertif: false,
         deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
@@ -2861,7 +2707,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         hasEmbedInternalValidation: true,
         noValidationNeeded: true,
       };
-      expect(localizedChallengesAfterSwitch).to.deep.equal([{ id: challengeProtoId, challengeId: challengeProtoId, ...expectedPrototypeI18nSettings }, { id: challengeDecliId, challengeId: challengeDecliId, ...expectedPrototypeI18nSettings }]);
+      expect(localizedChallengesAfterSwitch).to.deep.equal([{ id: challengeProtoId, challengeId: challengeProtoId, ...expectedPrototypeA11ySettings }, { id: challengeDecliId, challengeId: challengeDecliId, ...expectedPrototypeA11ySettings }]);
 
       const translationsAfterSwitch = await knex('translations').orderBy('key').select('key', 'locale', 'value');
       expect(translationsAfterSwitch).to.deep.equal([
