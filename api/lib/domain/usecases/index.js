@@ -45,6 +45,7 @@ export * from './update-attachment.js';
 export * from './update-challenge.js';
 export * from './update-competence.js';
 export * from './update-draft-module.js';
+export * from './update-module.js';
 export * from './update-mission.js';
 export * from './update-skill.js';
 export * from './update-thematic.js';
