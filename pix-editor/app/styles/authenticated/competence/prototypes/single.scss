@@ -66,7 +66,7 @@
 
   // Header action buttons (log, versions, move).
   &__action {
-    color: #fff;
+    color: black;
 
     &--text {
       display: inline-flex;
@@ -107,7 +107,8 @@
 
     &:hover,
     &:focus {
-      background-color: rgba(0, 0, 0, 0.03);
+      background-color: rgb(var(--pix-neutral-100));
+      color: rgb(var(--pix-neutral-900));
     }
 
     svg {
@@ -120,8 +121,13 @@
     }
 
     &--archive {
-      color: global.$archived-color;
+      color: var(--pix-neutral-0);
       background-color: global.$archived-background-color;
+    }
+
+    &--delete {
+      color: var(--pix-neutral-0);
+      background-color: global.$deleted-background-color;
     }
   }
 
@@ -179,53 +185,6 @@
           margin-bottom: 20px;
         }
       }
-    }
-  }
-
-  &__menu {
-    display: flex;
-    flex-direction: column;
-    margin-top: 0;
-    overflow-y: auto;
-    border: none;
-    border-left: 1px solid rgba(34, 36, 38, 0.15);
-    box-shadow: none;
-  }
-
-  &__menu-item {
-    display: flex;
-    align-items: center;
-    padding: 0.85em 1.14em;
-    color: #000;
-    font-weight: normal;
-    font-size: 1em;
-    text-align: left;
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      background-color: rgba(0, 0, 0, 0.03);
-    }
-
-    svg {
-      margin-right: 10px;
-      font-size: 1.2em;
-    }
-
-    &--important {
-      color: #d02181;
-
-      &:hover,
-      &:focus {
-        color: #d02181;
-      }
-    }
-
-    &--alternatives {
-      color: #2185d0;
     }
   }
 }

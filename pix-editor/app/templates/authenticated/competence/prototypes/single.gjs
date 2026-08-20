@@ -1,4 +1,5 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import { on } from '@ember/modifier';
@@ -17,7 +18,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
 
 <template>
   <ChallengeHeader
-    @class={{@controller.challenge.statusCSS}}
+    @class="challenge"
     @maximized={{@controller.maximized}}
     @minimize={{@controller.minimize}}
     @maximize={{@controller.maximize}}
@@ -29,17 +30,19 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
           class="prototype-view__action"
           @iconName="chat"
           @ariaLabel="Journal"
+          title="Journal"
           @triggerAction={{@controller.challengeLog}}
         />
       {{/if}}
       {{#unless @controller.edition}}
         {{#if @controller.mayHaveDifferentChallengeVersions}}
-          <PixButton
-            class="prototype-view__action prototype-view__action--text"
-            @iconBefore="copy"
-            @triggerAction={{@controller.showVersions}}
+          <PixIconButton
+            class="prototype-view__action"
+            @iconName="copy"
+            @ariaLabel="Afficher les différentes versions d'épreuves"
             title="Afficher les différentes versions d'épreuves"
-          >v{{@controller.challenge.version}}</PixButton>
+            @triggerAction={{@controller.showVersions}}
+          />
         {{/if}}
         {{#if @controller.shouldDisplayStatusActionsMenu}}
           <div class="prototype-view__status-actions" id={{@controller.challengeStatusActionsId}}>
@@ -84,7 +87,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
                 {{/if}}
                 {{#if @controller.mayObsolete}}
                   <button
-                    class="prototype-view__status-menu-item prototype-view__status-menu-item--archive"
+                    class="prototype-view__status-menu-item prototype-view__status-menu-item--delete"
                     {{on "click" @controller.obsolete}}
                     type="button"
                   >
@@ -110,6 +113,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
     <:default>
       <div class={{if @controller.creation "prototype-view__title--creation" ""}}>
         {{@controller.challengeTitle}}
+        (v{{@controller.challenge.version}})
       </div>
       <div
         class="prototype-view__status-label prototype-view__status-label--{{@controller.challenge.statusCSS}}"
@@ -151,37 +155,36 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @setEmbedTimer={{@controller.setEmbedTimer}}
       />
     </div>
-    <div class="prototype-view__menu">
+    <div class="lateral-menu">
       {{#if @controller.edition}}
-        <button
-          data-test-save-challenge-button
-          class="prototype-view__menu-item prototype-view__menu-item--important"
-          {{on "click" @controller.save}}
-          type="button"
-        >
-          <PixIcon @name="check" @ariaHidden={{true}} />
+        <PixButton data-test-save-challenge-button @triggerAction={{@controller.save}} @iconBefore="check">
           Enregistrer
-        </button>
-        <button
-          data-test-cancel-challenge-button
-          class="prototype-view__menu-item"
-          {{on "click" @controller.cancelEdit}}
-          type="button"
+        </PixButton>
+
+        <PixButton
+          data-test-save-challenge-button
+          @variant="secondary"
+          @triggerAction={{@controller.cancelEdit}}
+          @iconBefore="close"
         >
-          <PixIcon @name="close" @ariaHidden={{true}} />
           Annuler
-        </button>
+        </PixButton>
       {{else}}
-        <a class="prototype-view__menu-item" href={{@controller.challenge.previewUrl}} target="_blank">
-          <PixIcon @name="eye" @ariaHidden={{true}} />
+        <PixButtonLink
+          class="lateral-menu__item"
+          @variant="secondary"
+          href={{@controller.challenge.previewUrl}}
+          target="_blank"
+          @iconBefore="eye"
+        >
           Prévisualiser
-        </a>
-        <CopyLink @link={{@controller.challenge.previewUrl}} />
+        </PixButtonLink>
+        <CopyLink @link={{@controller.challenge.previewUrl}} class="lateral-menu__item" />
         {{#each @controller.challenge.otherLocalizedChallenges as |localizedChallenge|}}
           <LinkTo
             @route={{@controller.localizedChallengeLinkRoute}}
             @models={{@controller.getLocalizedChallengeLinkModels localizedChallenge}}
-            class="prototype-view__menu-item"
+            class="lateral-menu__item"
           >
             <PixIcon @name="globe" @ariaHidden={{true}} />
             Version
@@ -189,45 +192,46 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
           </LinkTo>
         {{/each}}
         {{#if @controller.mayEdit}}
-          <button
+          <PixButton
             data-test-modify-challenge-button={{@controller.challenge.id}}
-            class="prototype-view__menu-item"
-            {{on "click" @controller.edit}}
-            type="button"
+            class="lateral-menu__item"
+            @variant="secondary"
+            @triggerAction={{@controller.edit}}
+            @iconBefore="edit"
           >
-            <PixIcon @name="edit" @ariaHidden={{true}} />
             Modifier
-          </button>
+          </PixButton>
         {{/if}}
         {{#if @controller.mayDuplicate}}
-          <button class="prototype-view__menu-item" {{on "click" @controller.duplicate}} type="button">
-            <PixIcon @name="copy" @ariaHidden={{true}} />
+          <PixButton
+            class="lateral-menu__item"
+            @variant="secondary"
+            @triggerAction={{@controller.duplicate}}
+            @iconBefore="copy"
+          >
             Dupliquer
-          </button>
+          </PixButton>
         {{/if}}
         {{#if @controller.mayAccessAlternatives}}
-          <button
-            class="prototype-view__menu-item prototype-view__menu-item--alternatives"
-            {{on "click" @controller.showAlternatives}}
-            type="button"
+          <PixButton
+            class="lateral-menu__item"
+            @variant="secondary"
+            @triggerAction={{@controller.showAlternatives}}
+            @iconBefore="copy"
           >
-            <PixIcon @name="extension" @ariaHidden={{true}} />
             Déclinaisons &gt;&gt;
-          </button>
+          </PixButton>
         {{/if}}
         {{#if @controller.maySwitchGenealogy}}
-          <button
-            class="ui button item switch-genealogy"
-            {{on "click" @controller.switchGenealogy}}
-            type="button"
-            title="Inverser cette déclinaison avec le prototype"
+          <PixButton
+            class="lateral-menu__item"
+            @variant="secondary"
+            @triggerAction={{@controller.switchGenealogy}}
+            @iconBefore="signpost"
           >
-            <i class="exchange icon"></i>
-            <span>
-              Inverser avec
-              <br />le prototype
-            </span>
-          </button>
+            Inverser avec
+            <br />le prototype
+          </PixButton>
         {{/if}}
       {{/if}}
     </div>
