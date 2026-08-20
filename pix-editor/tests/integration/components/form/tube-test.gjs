@@ -1,5 +1,5 @@
+import { render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
-import { render } from '@ember/test-helpers';
 import Tube from 'pixeditor/components/form/tube';
 import { module, test } from 'qunit';
 
@@ -16,16 +16,18 @@ module('Integration | Component | tube-form', function (hooks) {
     this.tube = tube;
 
     // when
-    await render(<template><Tube @tube={{self.tube}} /></template>);
+    const screen = await render(<template><Tube @tube={{self.tube}} /></template>);
 
     // then
-    assert.dom('[data-test-practical-title-fr-field]').exists();
-    assert.dom('[data-test-practical-description-fr-field]').exists();
-    assert.dom('[data-test-practical-title-en-field]').exists();
-    assert.dom('[data-test-practical-description-en-field]').exists();
+    assert.dom(screen.getByRole('textbox', { name: 'Titre pratique (fr) :' })).exists();
+    assert.dom(screen.getByRole('textbox', { name: 'Description pratique (fr)' })).exists();
+    assert.dom(screen.getByRole('textbox', { name: 'Titre pratique (en) :' })).exists();
+    assert.dom(screen.getByRole('textbox', { name: 'Description pratique (en)' })).exists();
   });
 
   module('#not edition', function (hooks) {
+    let screen;
+
     hooks.beforeEach(async function () {
       const self = this;
 
@@ -33,21 +35,22 @@ module('Integration | Component | tube-form', function (hooks) {
       this.tube = tube;
       this.edition = false;
 
-      await render(<template><Tube @tube={{self.tube}} @edition={{self.edition}} /></template>);
+      screen = await render(<template><Tube @tube={{self.tube}} @edition={{self.edition}} /></template>);
     });
 
     test('it should display `pixId` field', function (assert) {
       // then
-      assert.dom('[data-test-pix-id-field]').exists();
+      assert.dom(screen.getByRole('textbox', { name: 'Id :' })).exists();
     });
 
     test('it should not display `tube.name` field', function (assert) {
       // then
-      assert.dom('[data-test-name-field]').doesNotExist();
+      assert.dom(screen.queryByRole('textbox', { name: 'Nom :' })).doesNotExist();
     });
   });
 
   module('#edition', function (hooks) {
+    let screen;
     hooks.beforeEach(async function () {
       const self = this;
 
@@ -55,17 +58,17 @@ module('Integration | Component | tube-form', function (hooks) {
       this.tube = tube;
       this.edition = true;
 
-      await render(<template><Tube @tube={{self.tube}} @edition={{self.edition}} /></template>);
+      screen = await render(<template><Tube @tube={{self.tube}} @edition={{self.edition}} /></template>);
     });
 
     test('it should not display `pixId` field', function (assert) {
       // then
-      assert.dom('[data-test-pix-id-field]').doesNotExist();
+      assert.dom(screen.queryByRole('textbox', { name: 'Id :' })).doesNotExist();
     });
 
     test('it should display `tube.name` field', function (assert) {
       // then
-      assert.dom('[data-test-name-field]').exists();
+      assert.dom(screen.getByRole('textbox', { name: 'Nom :' })).exists();
     });
   });
 });

@@ -15,6 +15,7 @@ import Textarea from 'pixeditor/components/field/textarea';
         <form action class="competence-management-view__form">
           <Input
             @value={{@controller.competence.title}}
+            @change={{@controller.setTitle}}
             @edition={{@controller.edition}}
             @label="Titre"
             @id="competence-title-fr"
@@ -29,6 +30,7 @@ import Textarea from 'pixeditor/components/field/textarea';
             <span class="flag competence-management-view__flag">🇬🇧</span>
             <Input
               @value={{@controller.competence.titleEn}}
+              @change={{@controller.setTitleEn}}
               @edition={{@controller.edition}}
               @label="Titre (en)"
               @id="competence-title-en"
@@ -41,7 +43,7 @@ import Textarea from 'pixeditor/components/field/textarea';
             />
           </div>
           {{#unless @controller.edition}}
-            <Input @value={{@controller.competence.pixId}} @title="Id" @edition={{false}} />
+            <Input @value={{@controller.competence.pixId}} @label="Id" @edition={{false}} />
           {{/unless}}
         </form>
       </div>

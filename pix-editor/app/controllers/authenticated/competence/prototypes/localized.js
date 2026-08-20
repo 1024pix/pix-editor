@@ -382,10 +382,10 @@ export default class LocalizedController extends Controller {
   }
 
   @action
-  checkEmbedURL() {
+  setEmbedURL(value) {
     this.invalidEmbedURL = '';
-    let embedURL = this.localizedChallenge.embedURL;
-    embedURL = embedURL.trim();
+    this.localizedChallenge.embedURL = value.trim();
+    const embedURL = this.localizedChallenge.embedURL;
     try {
       new URL(embedURL);
       return true;

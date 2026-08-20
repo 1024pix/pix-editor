@@ -27,8 +27,8 @@ module('Acceptance | Create-Framework', function (hooks) {
     const screen = await visit('/');
     await clickByName('Sélectionner un référentiel');
     await clickByText('Créer un nouveau référentiel');
-    await fillIn('[data-test-framework-name-input] input', newFrameworkName);
-    await click(find('[data-test-save-action]'));
+    await fillIn(screen.getByRole('textbox', { name: 'Nom :' }), newFrameworkName);
+    await click(screen.getByRole('button', { name: 'Enregistrer' }));
 
     // then
     const frameworks = await store.findAll('framework');

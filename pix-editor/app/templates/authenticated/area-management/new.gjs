@@ -12,13 +12,20 @@ import Input from 'pixeditor/components/field/input';
           <Input
             data-test-area-title-input
             @value={{@controller.area.titleFrFr}}
+            @change={{@controller.setTitleFrFr}}
             @edition={{true}}
             @label="Titre"
             @id="area-title-fr"
           />
           <div class="segment segment--raised">
             <span class="flag">🇬🇧</span>
-            <Input @value={{@controller.area.titleEnUs}} @edition={{true}} @label="Titre (en)" @id="area-title-en" />
+            <Input
+              @value={{@controller.area.titleEnUs}}
+              @change={{@controller.setTitleEnUs}}
+              @edition={{true}}
+              @label="Titre (en)"
+              @id="area-title-en"
+            />
           </div>
         </form>
       </div>

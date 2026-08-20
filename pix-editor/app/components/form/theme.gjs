@@ -1,17 +1,11 @@
 import Input from 'pixeditor/components/field/input';
 <template>
   <form action class="form">
+    <Input @value={{@theme.name}} @edition={{@edition}} @change={{@setNameFr}} @label="Nom fr-fr" @id="theme-name-fr" />
     <Input
-      data-test-theme-name-field
-      @value={{@theme.name}}
-      @edition={{@edition}}
-      @label="Nom fr-fr"
-      @id="theme-name-fr"
-    />
-    <Input
-      data-test-theme-name-en-us-field
       @value={{@theme.nameEnUs}}
       @edition={{@edition}}
+      @change={{@setNameEnUs}}
       @label="Nom en-us"
       @id="theme-name-en"
     />

@@ -11,7 +11,7 @@ export default class PopInNewFrameworkComponent extends Component {
       <:content>
         {{#if @framework}}
           <form action class="form" {{on "submit" this.saveOnSubmit}}>
-            <Input data-test-framework-name-input @value={{@framework.name}} @edition={{true}} @title="Nom" />
+            <Input @value={{@framework.name}} @edition={{true}} @label="Nom" @change={{this.setFrameWorkName}} />
           </form>
         {{/if}}
       </:content>
@@ -38,6 +38,11 @@ export default class PopInNewFrameworkComponent extends Component {
 
   _fieldIsEmpty(field) {
     return field === undefined || field.trim() === '';
+  }
+
+  @action
+  setFrameWorkName(value) {
+    this.args.framework.name = value;
   }
 
   @action

@@ -130,7 +130,8 @@ module('Acceptance | Controller | Get Alternative challenge', function (hooks) {
     assert.dom(alternativePanel.getByLabelText('Titre :')).hasValue('Titre de mon embed');
     assert.strictEqual(alternativePanel.getByLabelText('Langue(s)').textContent.trim(), 'Francophone');
     assert.strictEqual(alternativePanel.getByLabelText('Géographie').textContent.trim(), 'Brésil');
-    assert.dom(alternativePanel.getByLabelText('Id')).hasValue('challenge1-1');
+
+    assert.dom(alternativePanel.getByLabelText('Id :')).hasValue('challenge1-1');
   });
 
   test('it should be switchable with the prototype', async function (assert) {

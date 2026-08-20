@@ -219,22 +219,36 @@ export default class ChallengeForm extends Component {
         @removeAttachment={{@removeAttachment}}
         data-test-file-input-attachment
       />
-      <Input
-        @title="Embed"
-        @value={{@challenge.embedURL}}
-        @edition={{@edition}}
-        @label="URL"
-        @id={{this.embedUrlFieldId}}
-        @change={{@checkEmbedURL}}
-      />
-      {{#if @invalidEmbedURL}}
-        <p class="message message--red" data-test-invalid-embed-url>
-          URL invalide :
-          {{@invalidEmbedURL}}
-        </p>
-      {{/if}}
-      <Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" @id={{this.embedHeightFieldId}} />
-      <Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" @id={{this.embedTitleFieldId}} />
+      <fieldset class="fields">
+        <legend>Embed</legend>
+        <Input
+          @value={{@challenge.embedURL}}
+          @edition={{@edition}}
+          @label="URL"
+          @id={{this.embedUrlFieldId}}
+          @change={{@setEmbedURL}}
+        />
+        {{#if @invalidEmbedURL}}
+          <p class="message message--red" data-test-invalid-embed-url>
+            URL invalide :
+            {{@invalidEmbedURL}}
+          </p>
+        {{/if}}
+        <Input
+          @value={{@challenge.embedHeight}}
+          @edition={{@edition}}
+          @label="Hauteur"
+          @change={{@setEmbedHeight}}
+          @id={{this.embedHeightFieldId}}
+        />
+        <Input
+          @value={{@challenge.embedTitle}}
+          @change={{@setEmbedTitle}}
+          @edition={{@edition}}
+          @label="Titre"
+          @id={{this.embedTitleFieldId}}
+        />
+      </fieldset>
       {{#if @challenge.isPrototype}}
         <div class="fields--selectors">
           <div class="field">
@@ -275,7 +289,13 @@ export default class ChallengeForm extends Component {
             <:label>Timer</:label>
           </PixCheckbox>
           {{#if @challenge.timer}}
-            <Input @value={{@challenge.timer}} @edition={{@edition}} />
+            <Input
+              @value={{@challenge.timer}}
+              @change={{@setTimer}}
+              @edition={{@edition}}
+              @label="Durée du Timer"
+              @screenReaderOnly={{true}}
+            />
           {{/if}}
         </div>
         <div class="field {{if @edition '' 'disabled'}}">
@@ -356,7 +376,7 @@ export default class ChallengeForm extends Component {
         </div>
       </div>
       {{#unless @edition}}
-        <Input @id={{this.idFieldId}} @value={{@challenge.id}} @title="Id" @edition={{false}} />
+        <Input @id={{this.idFieldId}} @value={{@challenge.id}} @label="Id" @edition={{false}} />
       {{/unless}}
     </form>
   </template>

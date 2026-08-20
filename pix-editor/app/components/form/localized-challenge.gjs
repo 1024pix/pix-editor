@@ -48,7 +48,7 @@ export default class LocalizedChallengeForm extends Component {
         @value={{@localizedChallenge.embedURL}}
         @edition={{@edition}}
         @placeholder="Url de l'embed"
-        @change={{@checkEmbedURL}}
+        @change={{@setEmbedURL}}
       />
       {{#if @shouldDisplayPrimaryEmbedUrl}}
         <div class="message message--blue">

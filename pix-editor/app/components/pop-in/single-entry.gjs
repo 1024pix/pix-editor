@@ -10,7 +10,7 @@ export default class PopinSingleEntry extends Component {
     <PixModal @title={{this.title}} @onCloseButtonClick={{this.closeModal}} @showModal={{@showModal}}>
       <:content>
         <label>{{@label}}</label>
-        <Input @value={{this.value}} @edition={{true}} />
+        <Input @value={{this.value}} @change={{this.setValue}} @edition={{true}} />
       </:content>
       <:footer>
         <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{this.closeModal}}>
@@ -39,6 +39,11 @@ export default class PopinSingleEntry extends Component {
     e.preventDefault();
     this.args.setValue(this.value);
     this.closeModal();
+  }
+
+  @action
+  setValue(value) {
+    this.setValue(value);
   }
 
   @action

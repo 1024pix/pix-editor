@@ -24,6 +24,16 @@ export default class AreaManagementNewController extends Controller {
   }
 
   @action
+  setTitleFrFr(value) {
+    this.model.area.titleFrFr = value;
+  }
+
+  @action
+  setTitleEnUs(value) {
+    this.model.area.titleEnUs = value;
+  }
+
+  @action
   async save() {
     try {
       this.loader.start();

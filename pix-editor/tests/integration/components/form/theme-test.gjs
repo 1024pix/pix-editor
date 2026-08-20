@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
 import Theme from 'pixeditor/components/form/theme';
 import { module, test } from 'qunit';
 
@@ -18,13 +18,17 @@ module('Integration | Component | form/theme', function (hooks) {
     this.theme = theme;
 
     // when
-    await render(<template><Theme @theme={{self.theme}} /></template>);
+    const screen = await render(<template><Theme @theme={{self.theme}} /></template>);
     // then
 
-    assert.dom('[data-test-theme-name-field]').hasText('Nom fr-fr :');
-    assert.dom('[data-test-theme-name-field] input').hasValue('themeName');
+    const themeNameFr = screen.queryByRole('textbox', { name: 'Nom fr-fr :' });
 
-    assert.dom('[data-test-theme-name-en-us-field]').hasText('Nom en-us :');
-    assert.dom('[data-test-theme-name-en-us-field] input').hasValue('themeNameEnUs');
+    assert.dom(themeNameFr).exists();
+    assert.dom(themeNameFr).hasValue('themeName');
+
+    const themeNameEnUs = screen.queryByRole('textbox', { name: 'Nom en-us :' });
+
+    assert.dom(themeNameEnUs).exists();
+    assert.dom(themeNameEnUs).hasValue('themeNameEnUs');
   });
 });

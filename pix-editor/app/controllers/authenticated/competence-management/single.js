@@ -22,6 +22,15 @@ export default class CompetenceManagementSingleController extends Controller {
   edit() {
     this.edition = true;
   }
+  @action
+  setTitle(value) {
+    this.model.title = value;
+  }
+
+  @action
+  setTitleEn(value) {
+    this.model.titleEn = value;
+  }
 
   @action
   cancelEdit() {

@@ -129,7 +129,7 @@ export default class SkillForm extends Component {
         <:label>Internationalisation</:label>
       </PixSelect>
       {{#unless @edition}}
-        <Input @value={{@skill.pixId}} @title="Id" @edition={{false}} />
+        <Input @value={{@skill.pixId}} @label="Id" @edition={{false}} />
       {{/unless}}
     </form>
   </template>

@@ -142,7 +142,10 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @urlsToConsult={{@controller.urlsToConsult}}
         @setUrlsToConsult={{@controller.setUrlsToConsult}}
         @invalidEmbedURL={{@controller.invalidEmbedURL}}
-        @checkEmbedURL={{@controller.checkEmbedURL}}
+        @setEmbedURL={{@controller.setEmbedURL}}
+        @setEmbedHeight={{@controller.setEmbedHeight}}
+        @setEmbedTitle={{@controller.setEmbedTitle}}
+        @setEmbedTimer={{@controller.setEmbedTimer}}
       />
     </div>
     <div class="prototype-view__menu">
