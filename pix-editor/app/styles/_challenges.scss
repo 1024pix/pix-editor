@@ -91,6 +91,8 @@ img.clickable {
 }
 
 .challenge-header {
+  padding: 10px;
+  background-color: rgba(var(--pix-neutral-300-inline) , 0.6);
   border-top: 1px solid rgba(34, 36, 38, 0.15);
   border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 
@@ -100,7 +102,9 @@ img.clickable {
 
   &__menu {
     display: flex;
+    gap: 20px;
     align-items: center;
+    justify-content: space-between;
     color: inherit;
     background: transparent;
   }
@@ -108,13 +112,15 @@ img.clickable {
   &__left,
   &__right {
     display: flex;
+    gap: 12px;
     align-items: center;
   }
 
   &__title {
-    flex: 1;
+    display: flex;
+    gap: 12px;
+    align-items: center;
     justify-content: center;
-    padding: 10px;
     color: inherit;
     font-weight: normal;
     font-size: 20px;
@@ -122,7 +128,6 @@ img.clickable {
   }
 
   &__action {
-    padding: 10px;
     color: inherit;
     background: transparent;
     border: none;
@@ -133,15 +138,19 @@ img.clickable {
       background-color: rgba(0, 0, 0, 0.03);
     }
   }
+}
 
-  &.prevalidated,
-  &.validated_no_test,
-  &.validated,
-  &.suggested,
-  &.archived,
-  &.deleted,
-  &.to-be-submitted,
-  &.need-work {
+.bullet_status {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  &.skill {
+    background-color: global.$skill-background-color !important;
+  }
+
+  &.challenge {
     background-color: global.$challenge-background-color !important;
   }
 }
