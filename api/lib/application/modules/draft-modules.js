@@ -2,7 +2,9 @@ import Joi from 'joi';
 
 import { createDraftModule, updateDraftModule, getDraftModuleById, getDraftModuleDiff, listPaginatedDraftModules, publishDraftModule, validateDraftModule } from '../../domain/usecases/index.js';
 import { draftModuleDiffSerializer, draftModuleSerializer, moduleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import { joiFrErrorMessages } from '../../infrastructure/schemas/joi-fr-error-messages.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
+import { handleFailActionWithDetails } from '../../infrastructure/validation.js';
 import * as Types from '../types.js';
 
 export function register(server) {
@@ -62,6 +64,8 @@ export function register(server) {
       path: '/api/draft-modules',
       config: {
         validate: {
+          failAction: handleFailActionWithDetails,
+          options: { abortEarly: false },
           payload: Joi.object({
             data: Joi.object({
               type: Joi.string().valid('draft-modules').required(),
@@ -84,7 +88,7 @@ export function register(server) {
                 }).optional(),
               }).optional(),
             }).required(),
-          }).required(),
+          }).required().messages(joiFrErrorMessages),
         },
         handler: async (request, h) => {
           const module = await draftModuleSerializer.deserialize(request.payload);
@@ -105,6 +109,8 @@ export function register(server) {
           return h.response(draftModuleSerializer.serialize(validatedModule)).code(200);
         },
         validate: {
+          failAction: handleFailActionWithDetails,
+          options: { abortEarly: false },
           params: Joi.object({ id: Types.moduleId().required() }).required(),
           payload: Joi.object({
             data: Joi.object({
@@ -129,7 +135,7 @@ export function register(server) {
                 }).optional(),
               }).optional(),
             }).required(),
-          }).required(),
+          }).required().messages(joiFrErrorMessages),
         },
       },
     },
