@@ -1,4 +1,3 @@
-import { Textarea } from '@ember/component';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import EasyMDE from 'easymde';
@@ -28,7 +27,9 @@ const toolbar = [
 ];
 
 export default class MarkdownEditor extends Component {
-  <template><Textarea {{this.easyMDESetup}} @value={{@value}} /></template>
+  <template>
+    <textarea {{this.easyMDESetup}} ...attributes>{{@value}}</textarea>
+  </template>
 
   @tracked easyMDE;
 

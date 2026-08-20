@@ -11,7 +11,7 @@ import MarkdownEditor from 'pixeditor/components/markdown-editor/markdown-editor
 export default class Mde extends Component {
   <template>
     <div class={{concat "field textArea mde"}} ...attributes>
-      <label>
+      <label for={{@id}}>
         {{@title}}
         <span>
           {{#if @edition}}
@@ -31,7 +31,7 @@ export default class Mde extends Component {
         </span>
       </label>
       {{#if @edition}}
-        <MarkdownEditor @value={{@value}} @onChange={{@setValue}} />
+        <MarkdownEditor id={{@id}} @value={{@value}} @onChange={{@setValue}} />
       {{else}}
         <div data-test-markdow-to-html class="mde-preview">
           <MarkdownToHtml @strikethrough={{true}} @tables={{true}} @markdown={{@value}} @maximized={{this.maximized}} />
