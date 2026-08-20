@@ -1,4 +1,5 @@
-import { click, render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
+import { click } from '@ember/test-helpers';
 import CompetenceActions from 'pixeditor/components/competence/competence-actions';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -25,7 +26,7 @@ module('Integration | Component | competence/competence-actions', function (hook
       const self = this;
 
       // when
-      await render(
+      const screen = await render(
         <template>
           <CompetenceActions
             @section={{self.section}}
@@ -36,7 +37,7 @@ module('Integration | Component | competence/competence-actions', function (hook
         </template>,
       );
 
-      await click('[data-test-select-draft-view]');
+      await click(screen.getByText('En construction'));
 
       // then
       assert.ok(selectViewStub.calledOnce);
@@ -46,24 +47,21 @@ module('Integration | Component | competence/competence-actions', function (hook
     test('it should have draft active tab if view is set to `draft`', async function (assert) {
       const self = this;
 
-      // given
-      this.view = 'draft';
-
       // when
-      await render(
+      const screen = await render(
         <template>
           <CompetenceActions
             @section={{self.section}}
             @refresh={{self.refresh}}
             @selectView={{self.selectView}}
-            @view={{self.view}}
+            @view="draft"
             @shareSkills={{self.exportSkills}}
           />
         </template>,
       );
 
       // then
-      assert.dom('[data-test-select-draft-view]').hasClass('active');
+      assert.dom(screen.getByText('En construction')).hasClass('active');
     });
   });
 
@@ -75,7 +73,7 @@ module('Integration | Component | competence/competence-actions', function (hook
     this.externalAction = () => {};
 
     // when
-    await render(
+    const screen = await render(
       <template>
         <CompetenceActions
           @section="challenges"
@@ -88,6 +86,6 @@ module('Integration | Component | competence/competence-actions', function (hook
 
     // then
 
-    assert.dom(this.element.querySelector('.production')).hasText('En production');
+    assert.dom(screen.getByText('En production')).exists();
   });
 });
