@@ -1,5 +1,29 @@
 
 
+## v4.47.1 (20/08/2026)
+
+
+### :rocket: Amélioration
+- [#1596](https://github.com/1024pix/pix-editor/pull/1596) [FEATURE] Ajout de la colonne createdAt dans la table draft-module-versions (PIX-23886).
+- [#1595](https://github.com/1024pix/pix-editor/pull/1595) [FEATURE] Améliorer le tag indiquant brouillon/en production.
+- [#1594](https://github.com/1024pix/pix-editor/pull/1594) [FEATURE] Accéder à Modulix Editor depuis la page d'édition/création (PIX-23287).
+- [#1593](https://github.com/1024pix/pix-editor/pull/1593) [FEATURE] Amélioration des pages de module (partie 3) (PIX-23885).
+- [#1592](https://github.com/1024pix/pix-editor/pull/1592) [FEATURE] Valider avant la publication d'un brouillon (PIX-23279).
+- [#1591](https://github.com/1024pix/pix-editor/pull/1591) [FEATURE] Afficher la validation dans la liste des brouillons (PIX-23882).
+- [#1588](https://github.com/1024pix/pix-editor/pull/1588) [FEATURE] Amélioration des pages de module (partie 2) (PIX-23866).
+- [#1586](https://github.com/1024pix/pix-editor/pull/1586) [FEATURE] Amélioration des pages de modules (partie 1) (PIX-23819).
+
+### :building_construction: Tech
+- [#1598](https://github.com/1024pix/pix-editor/pull/1598) [TECH] Ajouter une valeur par défault sur le placeholder des blocs select des QROCM (PIX-23818).
+- [#1590](https://github.com/1024pix/pix-editor/pull/1590) [TECH] Ajouter la dépendance @ember-intl/vite.
+- [#1589](https://github.com/1024pix/pix-editor/pull/1589) [TECH] Renvoyer plus d'informations sur les API de modules (PIX-23875).
+- [#1585](https://github.com/1024pix/pix-editor/pull/1585) [TECH] Traduire les erreurs de validation des modules en français.
+- [#1587](https://github.com/1024pix/pix-editor/pull/1587) [TECH] Améliorer les performances du lint en local.
+- [#1584](https://github.com/1024pix/pix-editor/pull/1584) [TECH] Utiliser des clés de traductions sur les pages des modules (PIX-23839).
+
+### :bug: Correction
+- [#1597](https://github.com/1024pix/pix-editor/pull/1597) [BUGFIX] Ajouter les champs manquants à l'inversion d'une déclinaison avec son prototype (PIX-23914).
+
 ## v4.47.0 (12/08/2026)
 
 
