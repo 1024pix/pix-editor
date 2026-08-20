@@ -1,6 +1,7 @@
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
+import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
 import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
-import { Textarea } from '@ember/component';
 import { concat } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
@@ -31,40 +32,40 @@ export default class FieldTextarea extends Component {
       class={{concat "field textArea" (if @edition "" " disabled") (if this.maximized " maximized" "")}}
       ...attributes
     >
-      <div>
-        <label class="bold" for={{@id}}>
-          {{@title}}
-        </label>
-        {{#if @edition}}
-          <button
-            {{on "click" this.toggleMaximized}}
-            class={{concat "field-textarea__button" (if this.maximized " field-textarea__button--active" "")}}
-            type="button"
-          >
-            <PixIcon @name={{if this.maximized "minus" "openInFull"}} @ariaHidden={{true}} />
-          </button>
-          {{#if @helpContent}}
-            <div class="field-textarea__help">
-              <PixTooltip @id="info-tooltip" @position="left" @isInline={{true}}>
-                <:triggerElement>
-                  <PixIcon aria-describedby="info-tooltip" @name="help" />
-                </:triggerElement>
-                <:tooltip>
-                  {{this.safeHelpContent}}
-                </:tooltip>
-              </PixTooltip>
-            </div>
+      {{#unless @hideActionBar}}
+        <div class="field__textarea-actions">
+          {{#if @edition}}
+            <PixIconButton
+              @iconName={{if this.maximized "minus" "openInFull"}}
+              {{on "click" this.toggleMaximized}}
+              class={{if this.maximized " field-textarea__button--active" ""}}
+            />
+            {{#if @helpContent}}
+              <div class="field-textarea__help">
+                <PixTooltip @id="info-tooltip" @position="left" @isInline={{true}}>
+                  <:triggerElement>
+                    <PixIcon aria-describedby="info-tooltip" @name="help" />
+                  </:triggerElement>
+                  <:tooltip>
+                    {{this.safeHelpContent}}
+                  </:tooltip>
+                </PixTooltip>
+              </div>
+            {{/if}}
           {{/if}}
-        {{/if}}
-      </div>
-      <Textarea
-        id={{@id}}
+        </div>
+      {{/unless}}
+      <PixTextarea
+        @id={{@id}}
+        @size="small"
         @value={{@value}}
         rows="4"
         readonly={{not @edition}}
         class="attached"
         {{on "change" this.change}}
-      />
+      >
+        <:label>{{@title}}</:label>
+      </PixTextarea>
     </div>
   </template>
 }

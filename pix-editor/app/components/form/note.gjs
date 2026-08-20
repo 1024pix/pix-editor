@@ -1,10 +1,10 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
-import { Textarea } from '@ember/component';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { not } from 'ember-truth-helpers';
+import Textarea from 'pixeditor/components/field/textarea';
 
 const statusList = [
   {
@@ -43,6 +43,11 @@ export default class NoteForm extends Component {
     this.status = selectedStatus;
   }
 
+  @action
+  updateText(value) {
+    this.args.entry.text = value;
+  }
+
   <template>
     <div class="note-form">
       <form class="form">
@@ -61,10 +66,16 @@ export default class NoteForm extends Component {
           </PixSelect>
         </div>
         <div class="field {{if @edition '' 'disabled'}}">
-          <label for="note">Texte</label>
-          <div class="input">
-            <Textarea id="note" @value={{@entry.text}} rows="4" readonly={{not @edition}} />
-          </div>
+          <Textarea
+            @hideActionBar={{true}}
+            @title="Texte"
+            id="note"
+            @value={{@entry.text}}
+            rows="4"
+            readonly={{not @edition}}
+            @change={{this.updateText}}
+            @edition={{true}}
+          />
         </div>
       </form>
       <div class="note-form__actions">

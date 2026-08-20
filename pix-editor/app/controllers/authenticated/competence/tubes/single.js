@@ -113,6 +113,15 @@ export default class SingleController extends Controller {
     this.tube.practicalTitleEn = value;
   }
 
+  @action
+  setPracticalDescriptionFr(value) {
+    this.tube.practicalDescriptionFr = value;
+  }
+
+  @action
+  setPracticalDescriptionEn(value) {
+    this.tube.practicalDescriptionEn = value;
+  }
 
   @action
   selectCompetence() {

@@ -141,6 +141,9 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @setDisplayUrlsToConsultField={{@controller.setDisplayUrlsToConsultField}}
         @urlsToConsult={{@controller.urlsToConsult}}
         @setUrlsToConsult={{@controller.setUrlsToConsult}}
+        @setSolutions={{@controller.setSolutions}}
+        @setSolutionToDisplay={{@controller.setSolutionToDisplay}}
+        @setIllustrationAlt={{@controller.setIllustrationAlt}}
         @invalidEmbedURL={{@controller.invalidEmbedURL}}
         @setEmbedURL={{@controller.setEmbedURL}}
         @setEmbedHeight={{@controller.setEmbedHeight}}

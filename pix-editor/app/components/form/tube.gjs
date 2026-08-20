@@ -14,9 +14,9 @@ import Textarea from 'pixeditor/components/field/textarea';
         @id="tube-title-fr"
       />
       <Textarea
-        data-test-practical-description-fr-field
-        @title="Description pratique (fr) :"
+        @title="Description pratique (fr)"
         @value={{@tube.practicalDescriptionFr}}
+        @change={{@setPracticalDescriptionFr}}
         @edition={{@edition}}
         @id="tube-description-fr"
       />
@@ -30,9 +30,9 @@ import Textarea from 'pixeditor/components/field/textarea';
         @id="tube-title-en"
       />
       <Textarea
-        data-test-practical-description-en-field
-        @title="Description pratique (en) :"
+        @title="Description pratique (en)"
         @value={{@tube.practicalDescriptionEn}}
+        @change={{@setPracticalDescriptionEn}}
         @edition={{@edition}}
         @id="tube-description-en"
       />

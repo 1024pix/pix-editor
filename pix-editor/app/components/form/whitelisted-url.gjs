@@ -53,6 +53,7 @@ export default class WhitelistedUrlForm extends Component {
         </PixInput>
         <PixTextarea
           @id="whitelisted-url-comment"
+          @size="small"
           @maxlength="1024"
           rows="5"
           @value={{this.comment.value}}

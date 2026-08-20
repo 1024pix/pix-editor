@@ -48,6 +48,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @setDisplayUrlsToConsultField={{@controller.setDisplayUrlsToConsultField}}
         @urlsToConsult={{@controller.urlsToConsult}}
         @setUrlsToConsult={{@controller.setUrlsToConsult}}
+        @setIllustrationAlt={{@controller.setIllustrationAlt}}
         @helpUrlsToConsult={{@controller.helpUrlsToConsult}}
         @invalidUrlsToConsult={{@controller.invalidUrlsToConsult}}
       />

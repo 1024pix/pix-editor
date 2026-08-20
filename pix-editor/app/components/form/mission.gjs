@@ -69,6 +69,7 @@ export default class MissionForm extends Component {
         <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de début de mission.</p>
         <PixTextarea
           @id="mission-learning-objectives"
+          @size="small"
           @value={{this.learningObjectives}}
           {{on "change" this.updateLearningObjectives}}
         />
@@ -79,6 +80,7 @@ export default class MissionForm extends Component {
           pour le moment, cet élément n'est utilisé que pour de l’affichage dans Pix Junior</p>
         <PixTextarea
           @id="mission-validated-objectives"
+          @size="small"
           @value={{this.validatedObjectives}}
           {{on "change" this.updateValidatedObjectives}}
         />

@@ -26,6 +26,7 @@ export default class StaticCourseForm extends Component {
         ><:label>Nom du test statique</:label></PixInput>
         <PixTextarea
           @id="static-course-description"
+          @size="small"
           @maxlength="1000"
           rows="5"
           @value={{@initialDescription}}
@@ -60,6 +61,7 @@ export default class StaticCourseForm extends Component {
         </span>
         <PixTextarea
           @id="static-course-challenges"
+          @size="small"
           @maxlength="1000"
           rows="20"
           @value={{@initialChallengeIds}}

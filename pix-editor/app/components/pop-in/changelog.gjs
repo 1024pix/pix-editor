@@ -1,10 +1,10 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import { Textarea } from '@ember/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import Textarea from 'pixeditor/components/field/textarea';
 
 export default class PopinChangelog extends Component {
   <template>
@@ -14,10 +14,14 @@ export default class PopinChangelog extends Component {
           <div class="description">
             <form class="form">
               <div class="field">
-                <label>Texte</label>
-                <div class="input" for="textarea_changelog">
-                  <Textarea id="textarea_changelog" @value={{this.value}} rows="4" />
-                </div>
+                <Textarea
+                  @title="Texte"
+                  @value={{this.value}}
+                  rows="4"
+                  @change={{this.change}}
+                  @edition={{true}}
+                  @hideActionBar={{true}}
+                />
               </div>
             </form>
           </div>
@@ -43,6 +47,11 @@ export default class PopinChangelog extends Component {
   set value(value) {
     this._value = value;
     return value;
+  }
+
+  @action
+  change(value) {
+    this.value = value;
   }
 
   @action

@@ -47,10 +47,10 @@ export default class ChallengeViewProduction extends Component {
     />
 
     <div class="challenge-view">
-      <PixTextarea @value={{@challenge.instruction}} readonly rows="5">
+      <PixTextarea @value={{@challenge.instruction}} readonly rows="5" @size="small">
         <:label>Consigne</:label>
       </PixTextarea>
-      <PixTextarea @value={{@challenge.alternativeInstruction}} readonly rows="5">
+      <PixTextarea @value={{@challenge.alternativeInstruction}} readonly rows="5" @size="small">
         <:label>Alternative textuelle</:label>
       </PixTextarea>
       <PixSelect @options={{this.challengeTypeOptions}} @value={{@challenge.type}} @isDisabled={{true}}>
@@ -62,10 +62,10 @@ export default class ChallengeViewProduction extends Component {
           <:label>Format</:label>
         </PixInput>
       {{/if}}
-      <PixTextarea @value={{@challenge.proposals}} readonly rows="5">
+      <PixTextarea @value={{@challenge.proposals}} readonly rows="5" @size="small">
         <:label>Propositions</:label>
       </PixTextarea>
-      <PixTextarea @value={{@challenge.solution}} readonly rows="3">
+      <PixTextarea @value={{@challenge.solution}} readonly rows="3" @size="small">
         <:label>Réponses</:label>
       </PixTextarea>
       {{#if @challenge.illustration}}

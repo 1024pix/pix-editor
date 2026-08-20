@@ -1,14 +1,13 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import { Textarea } from '@ember/component';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
-import Checkbox from 'pixeditor/components/field/checkbox';
+import Textarea from 'pixeditor/components/field/textarea';
 
 export default class PopInConfirmLog extends Component {
   <template>
@@ -27,10 +26,15 @@ export default class PopInConfirmLog extends Component {
           </PixCheckbox>
           {{#if this.displayTextarea}}
             <div class="changelog-layout">
-              <label for={{this.inputId}}>
-                {{@label}}
-              </label>
-              <Textarea id={{this.inputId}} @value={{this.defaultValue}} rows="4" class="changelog-textarea" />
+              <Textarea
+                @title={{@label}}
+                @hideActionBar={{true}}
+                @value={{@defaultValue}}
+                rows="4"
+                class="changelog-textarea"
+                @edition={{true}}
+                @change={{this.change}}
+              />
             </div>
           {{/if}}
         </form>
@@ -52,17 +56,24 @@ export default class PopInConfirmLog extends Component {
   </template>
 
   @tracked displayTextarea = false;
-  defaultValue = this.args.defaultValue;
+  textareaValue = null;
   inputId = this.args.inputId;
+
   @action
   toggleDisplayTextarea() {
     this.displayTextarea = !this.displayTextarea;
   }
 
+  @action
+  change(value) {
+    this.textareaValue = value;
+  }
+
   get changeLogValue() {
     if (this.displayTextarea) {
-      return this.defaultValue;
+      return this.textareaValue ?? this.defaultValue;
     }
+
     return null;
   }
 }

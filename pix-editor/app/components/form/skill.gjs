@@ -1,12 +1,12 @@
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
+import { fn } from '@ember/helper';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { not } from 'ember-truth-helpers';
-
-import Input from '../field/input';
-import Quality from '../field/quality';
-import Textarea from '../field/textarea';
-import Tutorials from '../field/tutorials';
+import Input from 'pixeditor/components/field/input';
+import Quality from 'pixeditor/components/field/quality';
+import Textarea from 'pixeditor/components/field/textarea';
+import Tutorials from 'pixeditor/components/field/tutorials';
 
 const descriptionStatusList = [
   {
@@ -53,6 +53,11 @@ export default class SkillForm extends Component {
   }
 
   @action
+  setTextAreaValue(key, value) {
+    this.args.skill[key] = value;
+  }
+
+  @action
   setI18n(value) {
     this.args.skill.i18n = value;
   }
@@ -74,7 +79,13 @@ export default class SkillForm extends Component {
 
   <template>
     <form action="" class="form">
-      <Textarea @title="Description" @value={{@skill.description}} @edition={{@edition}} @id="skill-description" />
+      <Textarea
+        @title="Description"
+        @value={{@skill.description}}
+        @edition={{@edition}}
+        @change={{fn this.setTextAreaValue "description"}}
+        @id="skill-description"
+      />
       <PixSelect
         @id="select-description-status"
         @value={{@skill.descriptionStatus}}
@@ -85,8 +96,20 @@ export default class SkillForm extends Component {
       >
         <:label>Statut de la description</:label>
       </PixSelect>
-      <Textarea @title="Indice (fr)" @value={{@skill.clue}} @edition={{@edition}} @id="skill-clue-fr" />
-      <Textarea @title="Indice (en)" @value={{@skill.clueEn}} @edition={{@edition}} @id="skill-clue-en" />
+      <Textarea
+        @title="Indice (fr)"
+        @value={{@skill.clue}}
+        @edition={{@edition}}
+        @change={{fn this.setTextAreaValue "clue"}}
+        @id="skill-clue-fr"
+      />
+      <Textarea
+        @title="Indice (en)"
+        @value={{@skill.clueEn}}
+        @edition={{@edition}}
+        @change={{fn this.setTextAreaValue "clueEn"}}
+        @id="skill-clue-en"
+      />
       <PixSelect
         @id="select-clue-status"
         @value={{@skill.clueStatus}}

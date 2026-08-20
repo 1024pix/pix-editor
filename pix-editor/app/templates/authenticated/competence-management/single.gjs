@@ -23,6 +23,8 @@ import Textarea from 'pixeditor/components/field/textarea';
           <Textarea
             @title="Description :"
             @value={{@controller.competence.description}}
+            @change={{@controller.setDescription}}
+            @hideActionBar={{true}}
             @edition={{@controller.edition}}
             @id="competence-description-fr"
           />
@@ -37,7 +39,9 @@ import Textarea from 'pixeditor/components/field/textarea';
             />
             <Textarea
               @title="Description (en) :"
+              @hideActionBar={{true}}
               @value={{@controller.competence.descriptionEn}}
+              @change={{@controller.setDescriptionEn}}
               @edition={{@controller.edition}}
               @id="competence-description-en"
             />

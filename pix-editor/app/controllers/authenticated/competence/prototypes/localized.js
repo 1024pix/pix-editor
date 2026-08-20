@@ -141,6 +141,11 @@ export default class LocalizedController extends Controller {
   }
 
   @action
+  setIllustrationAlt(value) {
+    this.localizedChallenge.illustration.alt = value;
+  }
+
+  @action
   setDisplayUrlsToConsultField(boolean) {
     this.displayUrlsToConsultField = boolean;
     if (!boolean) {

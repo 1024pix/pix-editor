@@ -21,6 +21,12 @@ export default class CompetenceManagementNewController extends Controller {
     this.router.transitionTo('authenticated');
     this.store.deleteRecord(this.competence);
   }
+
+  @action
+  setDescription(value) {
+    this.model.competence.description = value;
+  }
+
   @action
   setTitle(value) {
     this.model.competence.title = value;
@@ -29,6 +35,11 @@ export default class CompetenceManagementNewController extends Controller {
   @action
   setTitleEn(value) {
     this.model.competence.titleEn = value;
+  }
+
+  @action
+  setDescriptionEn(value) {
+    this.model.competence.descriptionEn = value;
   }
 
   @action

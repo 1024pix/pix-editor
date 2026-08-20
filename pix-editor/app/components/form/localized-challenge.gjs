@@ -2,12 +2,11 @@ import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { fn } from '@ember/helper';
 import Component from '@glimmer/component';
 import { not } from 'ember-truth-helpers';
-
-import Files from '../field/files';
-import Illustration from '../field/illustration';
-import Input from '../field/input';
-import Textarea from '../field/textarea';
-import FieldToggleFieldComponent from '../field/toggle-field';
+import Files from 'pixeditor/components/field/files';
+import Illustration from 'pixeditor/components/field/illustration';
+import Input from 'pixeditor/components/field/input';
+import Textarea from 'pixeditor/components/field/textarea';
+import FieldToggleFieldComponent from 'pixeditor/components/field/toggle-field';
 
 export default class LocalizedChallengeForm extends Component {
   get localizedChallengeGeographyValue() {
@@ -28,6 +27,7 @@ export default class LocalizedChallengeForm extends Component {
       {{#if @localizedChallenge.illustration}}
         <Textarea
           @value={{@localizedChallenge.illustration.alt}}
+          @change={{@setIllustrationAlt}}
           @title="Texte alternatif"
           @edition={{false}}
           @id="challenge-illustration-alt"
