@@ -312,71 +312,67 @@ export default class ChallengeForm extends Component {
         <Quality @edition={{@edition}} @challenge={{@challenge}} />
       {{/if}}
       {{#if @challenge.isPrototype}}
-        <div class="field {{if @edition '' 'disabled'}}">
-          <label>Maintenance</label>
-          <div class="fields">
-            <div class="field">
-              <PixMultiSelect
-                @isSearchable={{true}}
-                @placeholder="Choisir un ou plusieurs types de maintenance"
-                @onChange={{fn (mut @challenge.assessmentMaintenanceTags)}}
-                @emptyMessage="Aucun type de maintenance sélectionné"
-                @values={{@challenge.assessmentMaintenanceTags}}
-                @options={{this.assessmentMaintenanceTagOptions}}
-                @isDisabled={{not @edition}}
-              >
-                <:label>Évaluation</:label>
-                <:default as |option|>{{option.label}}</:default>
-              </PixMultiSelect>
-            </div>
-            <div class="field" data-testid="translationSelect">
-              <PixMultiSelect
-                @isSearchable={{true}}
-                @placeholder="Choisir un ou plusieurs types de maintenance"
-                @onChange={{fn (mut @challenge.translationMaintenanceTags)}}
-                @emptyMessage="Aucun type de maintenance sélectionné"
-                @values={{@challenge.translationMaintenanceTags}}
-                @options={{this.translationMaintenanceTagOptions}}
-                @isDisabled={{not @edition}}
-              >
-                <:label>Traduction</:label>
-                <:default as |option|>{{option.label}}</:default>
-              </PixMultiSelect>
-            </div>
-          </div>
-        </div>
-      {{/if}}
-      <div class="field {{if @edition '' 'disabled'}}">
-        <label>Internationalisation</label>
-        <div class="fields">
-          <div class="field">
+        <fieldset class="fields">
+          <legend>Maintenance</legend>
+          <div class="field {{if @edition '' 'disabled'}}">
             <PixMultiSelect
-              @placeholder="Choisir une ou plusieurs langues"
-              @onChange={{this.setLocales}}
-              @emptyMessage="Aucune langue sélectionnée"
-              @values={{this.languages}}
-              @options={{this.languageOptions}}
+              @isSearchable={{true}}
+              @placeholder="Choisir un ou plusieurs types de maintenance"
+              @onChange={{fn (mut @challenge.assessmentMaintenanceTags)}}
+              @emptyMessage="Aucun type de maintenance sélectionné"
+              @values={{@challenge.assessmentMaintenanceTags}}
+              @options={{this.assessmentMaintenanceTagOptions}}
               @isDisabled={{not @edition}}
             >
-              <:label>Langue(s)</:label>
+              <:label>Évaluation</:label>
               <:default as |option|>{{option.label}}</:default>
             </PixMultiSelect>
           </div>
-          <div class="field">
-            <PixSelect
-              @id={{this.geographyFieldId}}
-              @placeholder="Géographie"
-              @onChange={{fn (mut @challenge.geography)}}
-              @value={{this.challengeGeographyValue}}
-              @options={{@countries}}
+          <div class="field {{if @edition '' 'disabled'}}" data-testid="translationSelect">
+            <PixMultiSelect
+              @isSearchable={{true}}
+              @placeholder="Choisir un ou plusieurs types de maintenance"
+              @onChange={{fn (mut @challenge.translationMaintenanceTags)}}
+              @emptyMessage="Aucun type de maintenance sélectionné"
+              @values={{@challenge.translationMaintenanceTags}}
+              @options={{this.translationMaintenanceTagOptions}}
               @isDisabled={{not @edition}}
-              @hideDefaultOption={{true}}
             >
-              <:label>Géographie</:label>
-            </PixSelect>
+              <:label>Traduction</:label>
+              <:default as |option|>{{option.label}}</:default>
+            </PixMultiSelect>
           </div>
+        </fieldset>
+      {{/if}}
+      <fieldset class="fields">
+        <legend>Internationalisation</legend>
+        <div class="field {{if @edition '' 'disabled'}}">
+          <PixMultiSelect
+            @placeholder="Choisir une ou plusieurs langues"
+            @onChange={{this.setLocales}}
+            @emptyMessage="Aucune langue sélectionnée"
+            @values={{this.languages}}
+            @options={{this.languageOptions}}
+            @isDisabled={{not @edition}}
+          >
+            <:label>Langue(s)</:label>
+            <:default as |option|>{{option.label}}</:default>
+          </PixMultiSelect>
         </div>
-      </div>
+        <div class="field {{if @edition '' 'disabled'}}">
+          <PixSelect
+            @id={{this.geographyFieldId}}
+            @placeholder="Géographie"
+            @onChange={{fn (mut @challenge.geography)}}
+            @value={{this.challengeGeographyValue}}
+            @options={{@countries}}
+            @isDisabled={{not @edition}}
+            @hideDefaultOption={{true}}
+          >
+            <:label>Géographie</:label>
+          </PixSelect>
+        </div>
+      </fieldset>
       {{#unless @edition}}
         <Input @id={{this.idFieldId}} @value={{@challenge.id}} @label="Id" @edition={{false}} />
       {{/unless}}
