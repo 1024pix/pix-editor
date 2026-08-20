@@ -1,5 +1,4 @@
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import { on } from '@ember/modifier';
+import PixButton from '@1024pix/pix-ui/components/pix-button';
 import Input from 'pixeditor/components/field/input';
 <template>
   <div class="main-left area-management">
@@ -29,25 +28,19 @@ import Input from 'pixeditor/components/field/input';
           </div>
         </form>
       </div>
-      <div class="area-management__menu">
-        <button
-          data-test-save-button
-          class="area-management__menu-button area-management__menu-button--important"
-          {{on "click" @controller.save}}
-          type="button"
-        >
-          <PixIcon @name="save" @ariaHidden={{true}} />
+      <div class="lateral-menu">
+        <PixButton data-test-save-button @triggerAction={{@controller.save}} type="button" @iconBefore="check">
           Enregistrer
-        </button>
-        <button
+        </PixButton>
+        <PixButton
           data-test-cancel-button
-          class="area-management__menu-button"
-          {{on "click" @controller.cancelEdit}}
+          @variant="secondary"
+          @triggerAction={{@controller.cancelEdit}}
           type="button"
+          @iconBefore="close"
         >
-          <PixIcon @name="block" @ariaHidden={{true}} />
           Annuler
-        </button>
+        </PixButton>
       </div>
     </div>
   </div>
