@@ -176,49 +176,4 @@
     padding: 10px 20px;
     overflow: scroll;
   }
-
-  &__side-menu {
-    display: flex;
-    flex-direction: column;
-    margin-top: 0;
-    overflow-y: auto;
-    border: none;
-    border-left: 1px solid rgba(34, 36, 38, 0.15);
-    box-shadow: none;
-  }
-
-  &__side-menu-item {
-    justify-content: flex-start;
-    padding: 0.85em 1.14em;
-    color: #000;
-    text-align: left;
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-
-    &:hover,
-    &:focus {
-      background-color: rgba(0, 0, 0, 0.03);
-    }
-
-    &--important {
-      color: #d02181;
-
-      &:hover,
-      &:focus {
-        color: #d02181;
-      }
-    }
-  }
-
-  &__sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-    clip-path: inset(50%);
-  }
 }
