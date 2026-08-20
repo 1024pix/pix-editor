@@ -1,4 +1,5 @@
 import { draftModuleRepository, moduleRepository } from '../../lib/infrastructure/repositories/index.js';
+import { updateDraftModule, updateModule } from '../../lib/domain/usecases/index.js';
 import { Script } from '../../lib/application/scripts/script.js';
 import { ScriptRunner } from '../../lib/application/scripts/script-runner.js';
 
@@ -134,14 +135,12 @@ export class UpdateQrocmSelectBlockPlaceholder extends Script {
 
     for (const module of moduleById.values()) {
       logger.info(`Updating module ${module.internalTitle}`);
-      await moduleRepository.save(module);
-      // Aussi ajouter une entrée dans la table module-versions
+      await updateModule(module);
     }
 
     for (const draftModule of draftModules.values()) {
       logger.info(`Updating draftModule ${draftModule.internalTitle}`);
-      await draftModuleRepository.save(draftModule);
-      // Mettre à jour les versions dans la table draft-module-versions
+      await updateDraftModule(draftModule);
     }
   }
 }
