@@ -15,47 +15,6 @@
     overflow: scroll;
   }
 
-  &__menu {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    overflow-y: auto;
-    border-left: 1px solid rgba(34, 36, 38, 0.15);
-  }
-
-  &__action {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    color: #000;
-    font-weight: normal;
-    text-align: left;
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      color: #000;
-      background-color: rgba(0, 0, 0, 0.03);
-    }
-
-    &--important {
-      &,
-      &:hover,
-      &:focus {
-        color: #d02181;
-      }
-    }
-  }
-
-  &__action-icon {
-    margin-right: 10px;
-    font-size: 1.2em;
-  }
-
   &__status {
     display: inline-block;
     padding: 0.4em 0.6em;

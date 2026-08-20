@@ -1,7 +1,6 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';
 import { eq } from 'ember-truth-helpers';
 import CopyLink from 'pixeditor/components/buttons/copy-link';
@@ -40,7 +39,7 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @showIllustration={{@controller.showIllustration}}
         @addAttachment={{@controller.addAttachment}}
         @removeAttachment={{@controller.removeAttachment}}
-        @checkEmbedURL={{@controller.checkEmbedURL}}
+        @setEmbedURL={{@controller.setEmbedURL}}
         @shouldDisplayPrimaryEmbedUrl={{@controller.shouldDisplayPrimaryEmbedUrl}}
         @invalidEmbedURL={{@controller.invalidEmbedURL}}
         @countryList={{@controller.countryList}}
@@ -53,37 +52,27 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         @invalidUrlsToConsult={{@controller.invalidUrlsToConsult}}
       />
     </div>
-    <div class="localized-prototype-view__menu">
+    <div class="lateral-menu">
       {{#if @controller.edition}}
-        <PixButton
-          class="localized-prototype-view__action localized-prototype-view__action--important"
-          @variant="tertiary"
-          @iconBefore="save"
-          @triggerAction={{@controller.save}}
-        >
+        <PixButton @iconBefore="check" @triggerAction={{@controller.save}}>
           Enregistrer
         </PixButton>
-        <PixButton
-          class="localized-prototype-view__action"
-          @variant="tertiary"
-          @iconBefore="block"
-          @triggerAction={{@controller.cancelEdit}}
-        >
+        <PixButton @variant="secondary" @iconBefore="close" @triggerAction={{@controller.cancelEdit}}>
           Annuler
         </PixButton>
       {{else}}
         <PixButtonLink
-          class="localized-prototype-view__action"
-          @variant="tertiary"
+          class="lateral-menu__item"
+          @variant="secondary"
           @href={{@controller.previewUrl}}
           target="_blank"
           @iconBefore="eye"
         >
           Prévisualiser
         </PixButtonLink>
-        <CopyLink @link={{@controller.previewUrl}} />
+        <CopyLink @link={{@controller.previewUrl}} class="lateral-menu__item" />
         <LinkTo
-          class="localized-prototype-view__action"
+          class="lateral-menu__item"
           @route={{@controller.challengeRoute}}
           @models={{@controller.challengeModels}}
         >
@@ -91,8 +80,8 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
           Version originale
         </LinkTo>
         <PixButtonLink
-          class="localized-prototype-view__action"
-          @variant="tertiary"
+          class="lateral-menu__item"
+          @variant="secondary"
           @href={{@controller.translationsUrl}}
           target="_blank"
           referrerpolicy="strict-origin"
@@ -102,8 +91,8 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
         </PixButtonLink>
         {{#if @controller.mayEdit}}
           <PixButton
-            class="localized-prototype-view__action"
-            @variant="tertiary"
+            class="lateral-menu__item"
+            @variant="secondary"
             @iconBefore="edit"
             @triggerAction={{@controller.edit}}
           >
@@ -111,14 +100,14 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
           </PixButton>
         {{/if}}
         {{#if @controller.mayChangeStatus}}
-          <button class="localized-prototype-view__action" {{on "click" @controller.editStatus}} type="button">
-            <PixIcon
-              @name={{@controller.changeStatusButtonIcon}}
-              class="localized-prototype-view__action-icon"
-              @ariaHidden={{true}}
-            />
+          <PixButton
+            class="lateral-menu__item"
+            @variant="secondary"
+            @triggerAction={{@controller.editStatus}}
+            @iconBefore={{@controller.changeStatusButtonIcon}}
+          >
             {{@controller.changeStatusButtonText}}
-          </button>
+          </PixButton>
         {{/if}}
       {{/if}}
     </div>
