@@ -2,16 +2,6 @@
 // `.field-title` / `.field` spacing now live in `components/form.scss`.
 // stylelint-disable color-no-hex, color-named
 
-.checkbox {
-  display: inline-flex;
-  gap: 0.5rem;
-  align-items: center;
-
-  input {
-    margin: 0;
-  }
-}
-
 .file-remove {
   color: rgba(0, 0, 0, 0.6);
   background: transparent;

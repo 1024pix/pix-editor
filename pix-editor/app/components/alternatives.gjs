@@ -1,6 +1,8 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
+import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import { Input } from '@ember/component';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
@@ -31,8 +33,14 @@ export default class Alternatives extends Component {
       <div class="alternatives__footer">
         <div class="alternatives__info">
           <div>
-            <Input id="hide-perime" @type="checkbox" @checked={{this.arePerimeDeclisDisplayed}} />
-            <label for="hide-perime">Afficher les déclinaisons périmées</label>
+            <PixCheckbox
+              @id="hide-perime"
+              @type="checkbox"
+              @checked={{this.arePerimeDeclisDisplayed}}
+              {{on "change" this.togglePerimeDecliDisplayed}}
+            >
+              <:label>Afficher les déclinaisons périmées</:label>
+            </PixCheckbox>
           </div>
           <div>En production :
             <span
@@ -70,5 +78,10 @@ export default class Alternatives extends Component {
 
   get canCreateAlternative() {
     return this.args.mayCreateAlternative && this.args.challenge.isLive;
+  }
+
+  @action
+  togglePerimeDecliDisplayed() {
+    this.arePerimeDeclisDisplayed = !this.arePerimeDeclisDisplayed;
   }
 }

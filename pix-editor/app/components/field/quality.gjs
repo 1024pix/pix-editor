@@ -1,8 +1,10 @@
+import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { concat, fn } from '@ember/helper';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import not from 'ember-truth-helpers/helpers/not';
-import Checkbox from 'pixeditor/components/field/checkbox';
 
 export default class Quality extends Component {
   <template>
@@ -61,33 +63,46 @@ export default class Quality extends Component {
         </PixSelect>
       </div>
       <div class="fields--selectors">
-        <Checkbox
+        <PixCheckbox
           data-test-is-awareness-challenge-challenge-id={{@challenge.id}}
-          @label="Épreuve de sensibilisation"
+          {{on "click" (fn this.toggleChallengeField "isAwarenessChallenge")}}
           @checked={{@challenge.isAwarenessChallenge}}
-          @disabled={{not @edition}}
-        />
-        <Checkbox
+          disabled={{not @edition}}
+        >
+          <:label>Épreuve de sensibilisation</:label>
+        </PixCheckbox>
+        <PixCheckbox
           data-test-require-gafam-website-access-challenge-challenge-id={{@challenge.id}}
-          @label="Accès GAFAM requis"
+          {{on "click" (fn this.toggleChallengeField "requireGafamWebsiteAccess")}}
           @checked={{@challenge.requireGafamWebsiteAccess}}
-          @disabled={{not @edition}}
-        />
-        <Checkbox
+          disabled={{not @edition}}
+        >
+          <:label>Accès GAFAM requis</:label>
+        </PixCheckbox>
+        <PixCheckbox
           data-test-to-rephrase-challenge-id={{@challenge.id}}
-          @label="Épreuve à revoir"
+          {{on "click" (fn this.toggleChallengeField "toRephrase")}}
           @checked={{@challenge.toRephrase}}
-          @disabled={{not @edition}}
-        />
-        <Checkbox
+          disabled={{not @edition}}
+        >
+          <:label>Épreuve à revoir</:label>
+        </PixCheckbox>
+        <PixCheckbox
           data-test-is-incompatible-ipad-certif-challenge-id={{@challenge.id}}
-          @label="Incompatible iPad certif"
+          {{on "click" (fn this.toggleChallengeField "isIncompatibleIpadCertif")}}
           @checked={{@challenge.isIncompatibleIpadCertif}}
-          @disabled={{not @edition}}
-        />
+          disabled={{not @edition}}
+        >
+          <:label>Incompatible iPad certif</:label>
+        </PixCheckbox>
       </div>
     </div>
   </template>
+
+  @action
+  toggleChallengeField(field) {
+    this.args.challenge[field] = !this.args.challenge[field];
+  }
 
   accessibility1Options = [
     { value: 'RAS', label: 'RAS' },

@@ -1,13 +1,14 @@
+import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import and from 'ember-truth-helpers/helpers/and';
 import not from 'ember-truth-helpers/helpers/not';
-import Checkbox from 'pixeditor/components/field/checkbox';
 import Files from 'pixeditor/components/field/files';
 import Illustration from 'pixeditor/components/field/illustration';
 import Input from 'pixeditor/components/field/input';
@@ -58,20 +59,24 @@ export default class ChallengeForm extends Component {
           <:label>Modalité</:label>
         </PixSelect>
         <div class="field">
-          <Checkbox
-            @label="Sans validation (Pix Junior)"
+          <PixCheckbox
+            {{on "click" (fn this.toggleChallengeField "noValidationNeeded")}}
             @checked={{@challenge.noValidationNeeded}}
-            @disabled={{not @edition}}
+            disabled={{not @edition}}
             data-test-no-validation-needed-checkbox={{@challenge.id}}
-          />
+          >
+            <:label>Sans validation (Pix Junior)</:label>
+          </PixCheckbox>
         </div>
         {{#if this.typeIsQCUOrQCM}}
-          <Checkbox
-            @label="Afficher aléatoirement l'ordre des propositions"
+          <PixCheckbox
+            {{on "click" (fn this.toggleChallengeField "shuffled")}}
             @checked={{@challenge.shuffled}}
-            @disabled={{not @edition}}
+            disabled={{not @edition}}
             data-test-checkbox-shuffle
-          />
+          >
+            <:label>Afficher aléatoirement l'ordre des propositions</:label>
+          </PixCheckbox>
         {{/if}}
       {{/if}}
       {{#if (and this.typeIsQROCOrQROCMInd (not this.isAutoReply))}}
@@ -108,17 +113,31 @@ export default class ChallengeForm extends Component {
           <label>Tolérance</label>
           <div class="fields">
             <div class="field">
-              <Checkbox
-                @label="T1 (espaces/casse/accents)"
+              <PixCheckbox
+                {{on "click" (fn this.toggleChallengeField "t1Status")}}
                 @checked={{@challenge.t1Status}}
-                @disabled={{not @edition}}
-              />
+                disabled={{not @edition}}
+              >
+                <:label>T1 (espaces/casse/accents)</:label>
+              </PixCheckbox>
             </div>
             <div class="field">
-              <Checkbox @label="T2 (ponctuation)" @checked={{@challenge.t2Status}} @disabled={{not @edition}} />
+              <PixCheckbox
+                {{on "click" (fn this.toggleChallengeField "t2Status")}}
+                @checked={{@challenge.t2Status}}
+                disabled={{not @edition}}
+              >
+                <:label>T2 (ponctuation)</:label>
+              </PixCheckbox>
             </div>
             <div class="field">
-              <Checkbox @label="T3 (distance d'édition)" @checked={{@challenge.t3Status}} @disabled={{not @edition}} />
+              <PixCheckbox
+                {{on "click" (fn this.toggleChallengeField "t3Status")}}
+                @checked={{@challenge.t3Status}}
+                disabled={{not @edition}}
+              >
+                <:label>T3 (distance d'édition)</:label>
+              </PixCheckbox>
             </div>
           </div>
         </div>
@@ -215,12 +234,14 @@ export default class ChallengeForm extends Component {
       {{#if @challenge.isPrototype}}
         <div class="fields--selectors">
           <div class="field">
-            <Checkbox
-              @label="Validation par l'embed (Pix Junior)"
+            <PixCheckbox
+              {{on "click" (fn this.toggleChallengeField "hasEmbedInternalValidation")}}
               @checked={{@challenge.hasEmbedInternalValidation}}
-              @disabled={{not @edition}}
+              disabled={{not @edition}}
               data-test-has-embed-internal-validation-checkbox={{@challenge.id}}
-            />
+            >
+              <:label>Validation par l'embed (Pix Junior)</:label>
+            </PixCheckbox>
           </div>
         </div>
         <PixSelect
@@ -242,13 +263,25 @@ export default class ChallengeForm extends Component {
           <:label>Déclinable</:label>
         </PixSelect>
         <div class="field {{if @edition '' 'disabled'}}">
-          <Checkbox @label="Timer" @checked={{@challenge.timerOn}} @disabled={{not @edition}} />
+          <PixCheckbox
+            {{on "click" (fn this.toggleChallengeField "timerOn")}}
+            @checked={{@challenge.timerOn}}
+            disabled={{not @edition}}
+          >
+            <:label>Timer</:label>
+          </PixCheckbox>
           {{#if @challenge.timer}}
             <Input @value={{@challenge.timer}} @edition={{@edition}} />
           {{/if}}
         </div>
         <div class="field {{if @edition '' 'disabled'}}">
-          <Checkbox @label="Focus" @checked={{@challenge.focusable}} @disabled={{not @edition}} />
+          <PixCheckbox
+            {{on "click" (fn this.toggleChallengeField "focusable")}}
+            @checked={{@challenge.focusable}}
+            disabled={{not @edition}}
+          >
+            <:label>Focus</:label>
+          </PixCheckbox>
         </div>
         <Quality @edition={{@edition}} @challenge={{@challenge}} />
       {{/if}}
@@ -505,6 +538,11 @@ export default class ChallengeForm extends Component {
   }
 
   shouldDisplayQualitySection = (challenge) => challenge.isDraft && challenge.isPrototype;
+
+  @action
+  toggleChallengeField(field) {
+    this.args.challenge[field] = !this.args.challenge[field];
+  }
 
   @action
   setChallengeType(value) {

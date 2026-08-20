@@ -8,7 +8,7 @@
     justify-content: space-between;
     box-sizing: border-box;
     padding: 10px;
-    background-color: #3498db;
+    background-color: var(--pix-orga-500);
     border-bottom: 1px solid rgba(34, 36, 38, 0.15);
   }
 
@@ -21,41 +21,30 @@
     color: #fff;
     font-weight: normal;
     font-size: 20px;
+    gap: 24px;
   }
 
   &__filter {
     display: flex;
     align-items: center;
-    float: right;
-    margin-top: 2px;
-    margin-left: 20px;
+    gap: 20px;
     color: rgba(255, 255, 255, 0.5);
     font-weight: normal;
     font-size: 14px;
 
     &--active {
-      color: rgba(255, 255, 255, 0.9);
+      & .pix-checkbox label {
+        color: rgba(255, 255, 255, 0.9);
+      }
     }
   }
 
-  &__toggle {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 20px;
-    margin-left: 10px;
+  & .pix-checkbox label {
+    margin-left: 45px;
+    color: var(--pix-neutral-0);
   }
 
-  &__toggle-input {
-    position: absolute;
-    width: 40px;
-    height: 20px;
-    margin: 0;
-    cursor: pointer;
-    opacity: 0;
-  }
-
-  &__toggle-label {
+  & .pix-checkbox input[type="checkbox"]  {
     position: absolute;
     top: 0;
     left: 0;
@@ -66,6 +55,13 @@
     border-radius: 500rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    border: none;
+
+    &:hover {
+      &::before {
+        background-color: transparent;
+      }
+    }
 
     &::after {
       position: absolute;
@@ -81,15 +77,15 @@
     }
   }
 
-  &__toggle-input:checked + &__toggle-label {
-    background-color: #2185d0;
+  & .pix-checkbox input[type="checkbox"]:checked {
+    background-color: var(--pix-orga-300);
 
     &::after {
       left: 21px;
     }
   }
 
-  &__toggle-input:focus + &__toggle-label {
+  & .pix-checkbox input[type="checkbox"]::focus {
     box-shadow: 0 0 0 2px rgba(33, 133, 208, 0.5);
   }
 

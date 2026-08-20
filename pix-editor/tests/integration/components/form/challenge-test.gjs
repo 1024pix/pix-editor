@@ -150,7 +150,7 @@ module('Integration | Component | challenge-form', function (hooks) {
 
         // Then
         assert.dom('[data-test-checkbox-shuffle]').exists();
-        assert.dom('[data-test-checkbox-shuffle] > input').isChecked();
+        assert.dom('[data-test-checkbox-shuffle]').isChecked();
 
         // WORKAROUND: https://github.com/1024pix/pix-editor/pull/107#issuecomment-1547481515
         await new Promise((resolve) => setTimeout(resolve, 400));
@@ -189,7 +189,7 @@ module('Integration | Component | challenge-form', function (hooks) {
 
         // Then
         assert.dom('[data-test-checkbox-shuffle]').exists();
-        assert.dom('[data-test-checkbox-shuffle] > input').isChecked();
+        assert.dom('[data-test-checkbox-shuffle]').isChecked();
 
         // WORKAROUND: https://github.com/1024pix/pix-editor/pull/107#issuecomment-1547481515
         await new Promise((resolve) => setTimeout(resolve, 400));
