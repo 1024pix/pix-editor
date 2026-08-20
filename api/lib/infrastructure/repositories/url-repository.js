@@ -132,3 +132,19 @@ export async function exportExternalUrls(dataToUpload) {
   await clearOlderSheets(config.exportExternalUrlsJob.spreadsheetId);
   return addSheetToGoogleSheet(dataToUpload, sheetName, config.exportExternalUrlsJob.spreadsheetId);
 }
+
+/**
+ * getByUrlList
+ * @param {string[]} urlList
+ */
+export async function getByUrlList(urlList) {
+  const knex = DomainTransaction.getConnection();
+  return await knex
+    .select(knex.raw('challenge_id AS id'), 'url', knex.raw('\'challenge\' AS type'))
+    .from('challenge_external_urls')
+    .unionAll(function() {
+      this.select(knex.raw('tutorial_id AS id'), 'url', knex.raw('\'tutorial\' AS type')).from('tutorial_external_urls');
+    })
+    .whereIn('url', urlList)
+    .orderBy('type', 'id');
+}

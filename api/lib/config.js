@@ -137,6 +137,8 @@ export const exportExternalUrlsJob = { spreadsheetId: process.env.EXPORT_EXTERNA
 export const urlBrokenLinksMonitor = {
   authSecret: process.env.URL_BROKEN_LINKS_MONITOR_AUTH_API_KEY,
   pageSize: _getNumber(process.env.URL_BROKEN_LINKS_MONITOR_PAGE_SIZE, 100),
+  ohdearToken: process.env.URL_BROKEN_LINKS_MONITOR_OHDEAR_TOKEN,
+  ohdearBaseUrl: process.env.URL_BROKEN_LINKS_MONITOR_OHDEAR_BASE_URL,
 };
 
 export const phrase = {
@@ -217,4 +219,6 @@ if (process.env.NODE_ENV === 'test') {
 
   urlBrokenLinksMonitor.authSecret = 'LE_SECRET_DU_MONITEUR_DES_URL_EXTERNES';
   urlBrokenLinksMonitor.pageSize = 2;
+  urlBrokenLinksMonitor.ohdearToken = 'LE_SECRET_DE_OHDEAR';
+  urlBrokenLinksMonitor.ohdearBaseUrl = 'https://test.ceci_nest_pas_un_nom_de_domaine.org';
 }
