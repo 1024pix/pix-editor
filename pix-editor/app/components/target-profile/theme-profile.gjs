@@ -4,7 +4,7 @@ import TubeProfile from 'pixeditor/components/target-profile/tube-profile';
 
 export default class ThemeProfile extends Component {
   <template>
-    <div data-test-theme-profile class="theme-profile">
+    <div class="theme-profile">
       <div class="theme-profile__name theme-name">
         <p>{{@theme.name}}</p>
       </div>
