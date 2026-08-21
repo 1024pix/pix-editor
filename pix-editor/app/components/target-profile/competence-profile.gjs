@@ -15,11 +15,7 @@ export default class CompetenceProfile extends Component {
 
   <template>
     <div class="competence-profile-grid">
-      <h2
-        data-test-competence-profile
-        id="competence-profile-anchor-{{@competence.id}}"
-        class="competence-profile area-profile-{{@areaCode}}"
-      >
+      <h2 id="competence-profile-anchor-{{@competence.id}}" class="competence-profile area-profile-{{@areaCode}}">
         <div class="competence-profile__code">
           {{@competence.code}}
         </div>
