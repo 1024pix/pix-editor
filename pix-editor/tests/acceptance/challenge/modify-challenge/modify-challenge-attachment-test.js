@@ -90,7 +90,8 @@ module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
 
     await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
@@ -130,7 +131,8 @@ module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
     await selectFiles('[data-test-file-input-attachment] input', attachmentA);
     await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     // replace attachmentA with attachmentB
     await click(find('[data-test-modify-challenge-button]'));
@@ -138,7 +140,8 @@ module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
     await selectFiles('[data-test-file-input-attachment] input', attachmentB);
     await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     const store = this.owner.lookup('service:store');
     const attachments = store.peekAll('attachment').slice();
@@ -167,7 +170,8 @@ module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
 
     await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
@@ -193,7 +197,7 @@ module('Acceptance | Modify-Challenge-Attachment', function (hooks) {
     await click(screen.getByRole('button', { name: 'Supprimer le fichier' }));
 
     await runTask(this, async () => {}, 200);
-    await click(find('[data-test-cancel-challenge-button]'));
+    await click(screen.getByRole('button', { name: /Annuler/ }));
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');

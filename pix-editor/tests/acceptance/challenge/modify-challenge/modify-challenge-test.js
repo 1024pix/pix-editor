@@ -158,7 +158,8 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       await click(await screen.findByRole('option', { name: 'Japon' }));
       await waitForSelectToBeClosed(screen);
       await click(find('[data-test-save-challenge-button]'));
-      await click(find('[data-test-confirm-log-approve]'));
+      await screen.findByRole('dialog');
+      await click(screen.getByRole('button', { name: /Valider/ }));
 
       const challenge = await store.peekRecord('challenge', 'recChallenge1');
       assert.dom(screen.getByText('Épreuve mise à jour')).exists();
@@ -209,7 +210,8 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       assert.dom(find('[data-test-no-validation-needed-checkbox="recChallenge2"]')).doesNotExist();
       assert.dom(find('[data-test-has-embed-internal-validation-checkbox="recChallenge2"]')).doesNotExist();
       await click(find('[data-test-save-challenge-button]'));
-      await click(find('[data-test-confirm-log-approve]'));
+      await screen.findByRole('dialog');
+      await click(screen.getByRole('button', { name: /Valider/ }));
 
       const challenge = await store.peekRecord('challenge', 'recChallenge2');
       assert.dom(screen.getByText('Épreuve mise à jour')).exists();
@@ -331,7 +333,8 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       await click(await screen.findByRole('option', { name: 'Japon' }));
       await waitForSelectToBeClosed(screen);
       await click(find('[data-test-save-challenge-button]'));
-      await click(find('[data-test-confirm-log-approve]'));
+      await screen.findByRole('dialog');
+      await click(screen.getByRole('button', { name: /Valider/ }));
 
       const challenge = await store.peekRecord('challenge', 'recChallenge1');
       assert.dom(screen.getByText('Épreuve mise à jour')).exists();
@@ -501,7 +504,8 @@ module('Acceptance | Modify-Challenge', function (hooks) {
       await waitForSelectToBeClosed(screen);
 
       await click(find('[data-test-save-challenge-button]'));
-      await click(find('[data-test-confirm-log-approve]'));
+      await screen.findByRole('dialog');
+      await click(screen.getByRole('button', { name: /Valider/ }));
 
       const challenge = await store.peekRecord('challenge', 'recChallenge1');
       assert.dom(screen.getByText('Épreuve mise à jour')).exists();

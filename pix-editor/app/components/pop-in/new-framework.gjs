@@ -16,15 +16,10 @@ export default class PopInNewFrameworkComponent extends Component {
         {{/if}}
       </:content>
       <:footer>
-        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{@close}}>
+        <PixButton @variant="secondary" @triggerAction={{@close}}>
           Annuler
         </PixButton>
-        <PixButton
-          data-test-save-action
-          @iconAfter="save"
-          @triggerAction={{@save}}
-          @isDisabled={{this.hasEmptyMandatoryField}}
-        >
+        <PixButton @iconAfter="check" @triggerAction={{@save}} @isDisabled={{this.hasEmptyMandatoryField}}>
           Enregistrer
         </PixButton>
       </:footer>

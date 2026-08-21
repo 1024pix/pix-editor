@@ -40,15 +40,10 @@ export default class PopInConfirmLog extends Component {
         </form>
       </:content>
       <:footer>
-        <PixButton
-          data-test-confirm-log-cancel
-          @backgroundColor="transparent-light"
-          @isBorderVisible={{true}}
-          @triggerAction={{@onDeny}}
-        >
+        <PixButton @variant="secondary" @iconBefore="close" @triggerAction={{@onDeny}}>
           {{t "common.cancel"}}
         </PixButton>
-        <PixButton data-test-confirm-log-approve @triggerAction={{fn @onApprove this.changeLogValue}}>{{t
+        <PixButton @iconBefore="check" @triggerAction={{fn @onApprove this.changeLogValue}}>{{t
             "common.validate"
           }}</PixButton>
       </:footer>

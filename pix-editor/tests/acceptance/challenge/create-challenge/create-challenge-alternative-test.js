@@ -158,9 +158,10 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     await click(find('[data-test-save-challenge-button]'));
 
     await click(findAll('[data-test-modify-challenge-button]')[1]);
-    await click(screen.getByRole('button', { name: 'Supprimer le fichier' }));
+    await click(screen.getByRole('button', { name: /Supprimer le fichier/ }));
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-confirm-log-approve]'));
+    await screen.findByRole('dialog');
+    await click(screen.getByRole('button', { name: /Valider/ }));
 
     // then
     assert.dom(screen.getByText('Déclinaison numéro 1 enregistrée')).exists();

@@ -17,7 +17,7 @@ export default class CopyLink extends Component {
   }
 
   <template>
-    <PixButton @variant="tertiary" @size="small" @iconBefore="link" @triggerAction={{this.copyLink}}>
+    <PixButton @variant="secondary" @size="small" @iconBefore="link" @triggerAction={{this.copyLink}} ...attributes>
       Copier le lien
     </PixButton>
   </template>
