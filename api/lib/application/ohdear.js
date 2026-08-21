@@ -1,6 +1,7 @@
 import { child } from '../infrastructure/logger.js';
 import * as config from '../config.js';
 import * as usecases from '../domain/usecases/index.js';
+import * as brokenUrlSerializer from '../infrastructure/serializers/ohdear/broken-url-serializer.js';
 
 const logger = child('application:ohdear', { event: 'ohdear' });
 
@@ -14,7 +15,8 @@ export async function register(server) {
         payload: { parse: false },
         pre: [{ method: checkOhDearSignature }, { method: validateOhDearWebhookRequest }],
         handler: async function(request, h) {
-          await usecases.refreshBrokenUrls(request.payload.run.result_payload.crawled_urls);
+          const brokenUrlList = await brokenUrlSerializer.deserialize(request.payload.run.result_payload.broken_links);
+          await usecases.updateBrokenUrlList(brokenUrlList);
           return h.response().code(200);
         },
         tags: [

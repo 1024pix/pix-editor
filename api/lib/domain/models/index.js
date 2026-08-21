@@ -1,5 +1,6 @@
 export * from './Area.js';
 export * from './Attachment.js';
+export * from './BrokenUrl.js';
 export * from './Challenge.js';
 export * from './ChangelogEntry.js';
 export * from './Competence.js';
