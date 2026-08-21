@@ -1,4 +1,4 @@
-import { render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
 import TubeProfile from 'pixeditor/components/target-profile/tube-profile';
 import { module, test } from 'qunit';
 
@@ -28,7 +28,7 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     this.showTubeDetails = false;
 
     // when
-    await render(
+    const screen = await render(
       <template>
         <TubeProfile
           @tube={{self.tube}}
@@ -40,9 +40,7 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     );
 
     // then
-    assert.dom(this.element.querySelector('[data-test-tube-profile]')).hasClass('active');
-    assert.dom(this.element.querySelector('.square.icon')).hasClass('active');
-    assert.dom(this.element.querySelector('.square.icon')).hasClass('check');
+    assert.dom(screen.getByRole('img', { name: 'Actif' })).exists();
   });
 
   test('it should display a `selectedSkillLevel` if `showTubeDetails` is `true`', async function (assert) {
@@ -53,7 +51,7 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     this.selectedLevel = 6;
 
     // when
-    await render(
+    const screen = await render(
       <template>
         <TubeProfile
           @tube={{self.tube}}
@@ -65,6 +63,6 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     );
 
     // then
-    assert.dom('.max-skill-level').hasText('6');
+    assert.dom(screen.getByText('6')).exists();
   });
 });

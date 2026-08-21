@@ -3,11 +3,11 @@ import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 <template>
   <div {{on "click" (fn @clickAction @tube)}} ...attributes>
-    <div data-test-tube-profile class={{if @selectedSkillLevel "active" ""}}>
+    <div class={{if @selectedSkillLevel "active" ""}}>
       <PixIcon
         @name={{if @selectedSkillLevel "checkCircle" "stopCircle"}}
         class="tube-profile__check {{if @selectedSkillLevel 'active' ''}}"
-        @ariaHidden={{true}}
+        @title={{if @selectedSkillLevel "Actif" "Inactif"}}
       />
       {{#if @showTubeDetails}}
         <div class="max-skill-level"><p>{{if @selectedSkillLevel @selectedSkillLevel ""}}</p></div>
