@@ -1,5 +1,5 @@
+import { render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
-import { render } from '@ember/test-helpers';
 import AreaProfile from 'pixeditor/components/target-profile/area-profile';
 import { module, test } from 'qunit';
 
@@ -13,17 +13,17 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
 
     // given
     const competence_1 = EmberObject.create({
-      name: 'competence_1',
+      code: 'competence_1',
       selectedProductionTubeCount: 2,
       sortedThemes: [{ productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }] }],
     });
     const competence_2 = EmberObject.create({
-      name: 'competence_2',
+      code: 'competence_2',
       selectedProductionTubeCount: 0,
       sortedThemes: [{ productionTubes: [{ selectedLevel: false }, { selectedLevel: false }] }],
     });
     const competence_3 = EmberObject.create({
-      name: 'competence_3',
+      code: 'competence_3',
       selectedProductionTubeCount: 2,
       sortedThemes: [{ productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }] }],
     });
@@ -36,9 +36,11 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
     this.filter = true;
 
     // when
-    await render(<template><AreaProfile @area={{self.area}} @filter={{self.filter}} /></template>);
+    const screen = await render(<template><AreaProfile @area={{self.area}} @filter={{self.filter}} /></template>);
 
     // then
-    assert.dom('[data-test-competence-profile]').exists({ count: 2 });
+    assert.dom(screen.getByText(/competence_3/)).exists();
+    assert.dom(screen.getByText(/competence_1/)).exists();
+    assert.dom(screen.queryByText(/competence_2/)).doesNotExist();
   });
 });
