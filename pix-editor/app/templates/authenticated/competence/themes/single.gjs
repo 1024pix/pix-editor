@@ -29,21 +29,17 @@ import scrollTop from 'pixeditor/modifiers/scroll-top';
     <div class="theme-view__data" {{scrollTop @controller.edition}}>
       <Theme @theme={{@controller.theme}} @edition={{@controller.edition}} />
     </div>
-    <div class="theme-view__actions-menu">
+    <div class="lateral-menu">
       {{#if @controller.edition}}
-        <PixButton
-          class="theme-view__action theme-view__action--important"
-          @iconBefore="save"
-          @triggerAction={{@controller.save}}
-        >
+        <PixButton @iconBefore="check" @triggerAction={{@controller.save}}>
           Enregistrer
         </PixButton>
-        <PixButton class="theme-view__action" @iconBefore="block" @triggerAction={{@controller.cancelEdit}}>
+        <PixButton @variant="secondary" @iconBefore="close" @triggerAction={{@controller.cancelEdit}}>
           Annuler
         </PixButton>
       {{else}}
         {{#if @controller.mayEdit}}
-          <PixButton class="theme-view__action" @iconBefore="edit" @triggerAction={{@controller.edit}}>
+          <PixButton @iconBefore="edit" @triggerAction={{@controller.edit}}>
             Modifier
           </PixButton>
         {{/if}}
