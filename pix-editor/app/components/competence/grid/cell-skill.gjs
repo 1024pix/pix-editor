@@ -14,11 +14,16 @@ export default class CompetenceGridCellSkillComponent extends Component {
         </div>
         <div class="help">
           {{#if (and @languageFilter this.hasNoClueByLanguage)}}
-            <PixIcon @name="lightBulb" class="idea empty" title="Indice manquant" />
+            <PixIcon @name="lightBulb" @plainIcon={{true}} class="idea empty" title="Indice manquant" />
           {{else if @languageFilter}}
-            <PixIcon @name="lightBulb" class="idea validated" title="Indice présent" />
+            <PixIcon @name="lightBulb" @plainIcon={{true}} class="idea validated" title="Indice présent" />
           {{else if (or @skill.clue @skill.clueNA)}}
-            <PixIcon @name="lightBulb" class={{concat "idea " @skill.clueCSS}} title="Indice {{@skill.clueStatus}}" />
+            <PixIcon
+              @name="lightBulb"
+              @plainIcon={{true}}
+              class={{concat "idea " @skill.clueCSS}}
+              title="Indice {{@skill.clueStatus}}"
+            />
           {{/if}}
           <span class="tuto-count">
             <span title="Nombre de tutoriels pour réussir la prochaine fois">{{this.tutoSolutionCountByLanguage}}</span>

@@ -42,7 +42,7 @@ module('Integration | Component | competence/grid/cell-skill', function (hooks) 
 
     // then
     assert.dom('.skill-name').hasText('skill_name');
-    assert.dom('.idea.icon').hasClass('validated');
+    assert.dom('.idea').hasClass('validated');
     assert.dom('.tuto-count').hasText('2 - 1');
   });
 
@@ -57,7 +57,7 @@ module('Integration | Component | competence/grid/cell-skill', function (hooks) 
       await render(<template><CellSkill @skill={{self.skill}} @languageFilter={{self.languageFilter}} /></template>);
 
       // then
-      assert.dom('.idea.icon').hasClass('empty');
+      assert.dom('.idea').hasClass('empty');
       assert.dom('.tuto-count').hasText('1 - 0');
     });
 
