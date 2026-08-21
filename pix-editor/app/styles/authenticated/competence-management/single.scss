@@ -19,11 +19,10 @@
     justify-content: space-between;
     box-sizing: border-box;
     padding: 10px;
-    background-color: #3498db;
+    background-color: var(--pix-orga-500);
     border-bottom: 1px solid rgba(34, 36, 38, 0.15);
   }
 
-  // Reproduces `h1.ui.header` inside `.main-title`
   &__heading {
     margin: 0;
     padding: 6px 0;
@@ -48,12 +47,10 @@
     overflow: scroll;
   }
 
-  // Reproduces `.ui.form` spacing inside `.challenge-data`
   &__form {
     margin-bottom: 20px;
   }
 
-  // Reproduces `.ui.raised.segment`
   &__segment {
     position: relative;
     margin: 1rem 0;

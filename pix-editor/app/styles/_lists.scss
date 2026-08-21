@@ -1,32 +1,5 @@
 @use "global";
 
-// stylelint-disable color-no-hex, color-named
-.skill-tab {
-  &__status {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    margin-left: .5em;
-    border-radius: 50%;
-
-    &.validated {
-      background: global.$production-background-color;
-    }
-
-    &.suggested {
-      background: global.$suggested-background-color;
-    }
-
-    &.archived {
-      background: global.$archived-background-color;
-    }
-
-    &.deleted {
-      background: global.$deleted-background-color;
-    }
-  }
-}
-
 .ember-table {
   height: 100%;
 
@@ -34,7 +7,7 @@
     th {
       padding: 10px;
       text-align: left;
-      background-color: #F9FAFB;
+      background-color: var(--pix-neutral-20);
       border-bottom: 1px solid rgba(34, 36, 38, 0.1);
       border-left: 1px solid rgba(34, 36, 38, 0.1);
 
@@ -42,7 +15,7 @@
 
         &::before {
           display: inline-block;
-          color: #b9b9b9;
+          color: var(--pix-neutral-300);
           font-family: Icons;
           line-height: 1;
           border: none;
@@ -86,7 +59,7 @@
     }
 
     tr.is-selected td {
-      background-color: #ffc;
+      background-color: var(--pix-secondary-100);
     }
   }
 }

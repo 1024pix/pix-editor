@@ -28,25 +28,6 @@
   flex-direction: row;
   overflow: hidden;
 
-  .ui.labeled.icon.menu {
-    overflow-y: auto;
-
-    .item {
-      text-align: left;
-
-      > .icon:not(.dropdown) {
-        display: inline;
-        margin-right: 10px !important;
-        font-size: 1.2em !important;
-      }
-    }
-  }
-
-  .ui.icon.right {
-    border: none;
-    box-shadow: none;
-  }
-
   .cards > .card {
     > .content,
     > .content > .header {
@@ -255,10 +236,6 @@ img.clickable {
   }
 }
 
-.ui.menu.challenge-menu {
-  @extend %challenge-menu;
-}
-
 #copyZone {
   position: absolute;
   right: 0;
@@ -281,11 +258,6 @@ img.clickable {
 
 .form .field > label.file-upload {
   margin-top: 5px;
-}
-
-.ui.icon.menu .item.important-action,
-.ui.icon.menu .item.important-action:hover {
-  color: #d02181;
 }
 
 .challenge_languages {

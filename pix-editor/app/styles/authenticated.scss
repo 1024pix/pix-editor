@@ -50,7 +50,7 @@
 .main-menu {
   display: flex;
   flex-direction: column;
-  background-color: #3498db;
+  background-color: var(--pix-orga-500);
   border-right: 1px solid rgba(34, 36, 38, 0.15);
 
   &--lite {
@@ -74,6 +74,7 @@
 }
 
 .confidential-footer {
+  margin-left: 288px;
   padding: 0.78em 1em;
   color: #fff;
   text-align: center;
@@ -81,7 +82,6 @@
 
   p {
     position: relative;
-    left: -198px;
     margin: 0;
   }
 }
