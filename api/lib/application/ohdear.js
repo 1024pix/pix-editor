@@ -1,5 +1,6 @@
 import { child } from '../infrastructure/logger.js';
 import * as config from '../config.js';
+import * as usecases from '../domain/usecases/index.js';
 
 const logger = child('application:ohdear', { event: 'ohdear' });
 
@@ -13,6 +14,7 @@ export async function register(server) {
         payload: { parse: false },
         pre: [{ method: checkOhDearSignature }, { method: validateOhDearWebhookRequest }],
         handler: async function(request, h) {
+          await usecases.refreshBrokenUrls(request.payload.run.result_payload.crawled_urls);
           return h.response().code(200);
         },
         tags: [

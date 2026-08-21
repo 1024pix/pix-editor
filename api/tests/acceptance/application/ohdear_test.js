@@ -134,7 +134,6 @@ describe('Acceptance | Controller | ohdear-controller', () => {
         // then
         expect(response.statusCode).toBe(200);
         const brokenUrlList = await knex('broken_urls').select('*');
-        console.log('LIST', brokenUrlList);
         expect(brokenUrlList).toHaveLength(2);
       });
     });
