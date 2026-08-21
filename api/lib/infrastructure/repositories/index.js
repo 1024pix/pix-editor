@@ -2,6 +2,7 @@ export * as adminEntityRepository from './admin-entity-repository.js';
 export * as adminSchemaRepository from './admin-schema-repository.js';
 export * as areaRepository from './area-repository.js';
 export * as attachmentRepository from './attachment-repository.js';
+export * as brokenUrlRepository from './broken-url-repository.js';
 export * as challengeRepository from './challenge-repository.js';
 export * as competenceRepository from './competence-repository.js';
 export * as draftModuleRepository from './draft-module-repository.js';

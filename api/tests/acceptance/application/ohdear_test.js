@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { Buffer } from 'node:buffer';
 import { createServer } from '../../../server';
 import * as config from '../../../lib/config.js';
+import { knex } from '../../test-helper.js';
 
 describe('Acceptance | Controller | ohdear-controller', () => {
   describe('POST /ohdear/webhook', () => {
@@ -47,7 +48,75 @@ describe('Acceptance | Controller | ohdear-controller', () => {
     describe('when event is brokenLinksFoundNotification', () => {
       it('returns a 200 status code', async () => {
         // given
-        const payload = { type: 'brokenLinksFoundNotification' };
+        const payload = {
+          type: 'brokenLinksFoundNotification',
+          date_time: '20191001114254',
+          run: {
+            id: 423155781,
+            check_id: 39681,
+            parameters: null,
+            result: 'failed',
+            result_payload: {
+              broken_links: [
+                {
+                  crawled_url: 'https:\/\/immutable.be\/broken-links-test-page\/0\/404',
+                  status_code: 404,
+                  found_on_url: 'https:\/\/immutable.be\/broken-links-test-page\/',
+                  link_text: 'Broken link 1',
+                  type: 'link',
+                  error_message: null,
+                },
+                {
+                  crawled_url: 'https:\/\/immutable.be\/broken-links-test-page\/1\/404',
+                  status_code: 404,
+                  found_on_url: 'https:\/\/immutable.be\/broken-links-test-page\/',
+                  link_text: 'Broken link 2',
+                  type: 'image',
+                  error_message: null,
+                },
+              ],
+              crawled_urls: [
+                {
+                  crawled_url: 'https:\/\/immutable.be\/broken-links-test-page\/',
+                  status_code: 200,
+                  found_on_url: '',
+                  link_text: null,
+                  type: 'link',
+                  error_message: null,
+                },
+                {
+                  crawled_url: 'https:\/\/immutable.be\/broken-links-test-page\/0\/404',
+                  status_code: 404,
+                  found_on_url: 'https:\/\/immutable.be\/broken-links-test-page\/',
+                  link_text: 'Broken link 1',
+                  type: 'link',
+                  error_message: null,
+                },
+                {
+                  crawled_url: 'https:\/\/immutable.be\/broken-links-test-page\/1\/404',
+                  status_code: 404,
+                  found_on_url: 'https:\/\/immutable.be\/broken-links-test-page\/',
+                  link_text: 'Broken link 2',
+                  type: 'image',
+                  error_message: null,
+                },
+              ],
+              whitelist: [],
+            },
+          },
+          newBrokenLinks: [
+            {
+              crawled_url: 'http://ohdear.app/broken-link-1',
+              relative_crawled_url: '/broken-link-1',
+              status_code: 404,
+              found_on_url: 'http://ohdear.app/',
+              relative_found_on_url: '/',
+              link_text: 'Click here for broken link 1',
+              internal: true,
+            },
+          ],
+          monitor: { id: 1 },
+        };
         const serializedPayload = JSON.stringify(payload);
 
         const signature = await generateOhDearSignature(serializedPayload);
@@ -64,6 +133,9 @@ describe('Acceptance | Controller | ohdear-controller', () => {
 
         // then
         expect(response.statusCode).toBe(200);
+        const brokenUrlList = await knex('broken_urls').select('*');
+        console.log('LIST', brokenUrlList);
+        expect(brokenUrlList).toHaveLength(2);
       });
     });
 
