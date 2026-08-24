@@ -13,6 +13,26 @@ export const joiErrorParser = {
       })
       .join(objectErrorSeparator)}${visualSeparator}`;
   },
+
+  // Maps every Joi validation error to a structured { message, isSchemaError }.
+  // isSchemaError is true for plain JSON-Schema-expressible constraints (type/required/enum/pattern/min-max),
+  // already detected live by Monaco Editor. It's false for errors raised from `.external()` validators
+  // (cross-fields business rules, HTML content validation), which Monaco cannot express by construction.
+  // All errors are kept and returned — callers decide what to display.
+  toStructuredErrors(error) {
+    return error.details.map((errorDetail) => {
+      if (errorDetail.type !== 'external') {
+        return { message: errorDetail.message, isSchemaError: true };
+      }
+
+      const isHtmlValidationError = Array.isArray(errorDetail.context?.value?.results);
+      if (isHtmlValidationError) {
+        return { message: logHtmlErrors(errorDetail, ''), isSchemaError: false };
+      }
+
+      return { message: errorDetail.message, isSchemaError: false };
+    });
+  },
 };
 
 function logHtmlErrors(errorDetail, objectErrorSeparator) {
