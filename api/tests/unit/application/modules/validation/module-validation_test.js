@@ -30,7 +30,7 @@ import {
 
 import { joiErrorParser } from '../../../../../lib/application/modules/joi-error-parser.js';
 
-describe('Unit | Infrastructure | Datasources | Learning Content | Module Datasource | format validation', function() {
+describe('Unit | Application | Modules | Validation | Module validation', function() {
   describe('when element has a valid structure', function() {
     describe('when element is a custom element', function() {
       it('should validate sample custom message-conversation structure', async function() {
@@ -572,6 +572,72 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
       } catch (joiError) {
         const formattedError = joiErrorParser.format(joiError);
         expect(joiError).to.equal(undefined, formattedError);
+      }
+    });
+  });
+
+  describe('grain cross-fields business rules', function() {
+    function _createStepperComponent() {
+      return {
+        type: 'stepper',
+        instruction: 'Une instruction',
+        steps: [
+          { elements: [{ id: randomUUID(), type: 'text', tag: ' ', content: '<p>Étape 1</p>' }] },
+          { elements: [{ id: randomUUID(), type: 'text', tag: ' ', content: '<p>Étape 2</p>' }] },
+        ],
+      };
+    }
+
+    it('rejects a grain with more than one stepper, with a real, resolved message', async function() {
+      // given
+      const grain = {
+        id: randomUUID(),
+        type: 'lesson',
+        title: '',
+        components: [_createStepperComponent(), _createStepperComponent()],
+      };
+
+      // when
+      try {
+        await grainSchema.validateAsync(grain, { abortEarly: false });
+        throw new Error('Joi validation should have thrown');
+      } catch (joiError) {
+        // then
+        expect(joiError.message).to.equal("Il ne peut y avoir qu'un stepper par grain");
+      }
+    });
+
+    it('rejects a grain mixing a stepper with an answerable element, with a real, resolved message', async function() {
+      // given
+      const grain = {
+        id: randomUUID(),
+        type: 'lesson',
+        title: '',
+        components: [
+          _createStepperComponent(),
+          {
+            type: 'element',
+            element: {
+              id: randomUUID(),
+              type: 'qcu',
+              instruction: '<p>Une question ?</p>',
+              proposals: [{ id: '1', content: 'Réponse', feedback: { state: 'Correct !', diagnosis: '<p>Ok</p>' } }],
+              solution: '1',
+              hasShortProposals: false,
+            },
+          },
+        ],
+      };
+
+      // when
+      try {
+        await grainSchema.validateAsync(grain, { abortEarly: false });
+        throw new Error('Joi validation should have thrown');
+      } catch (joiError) {
+        // then
+        expect(joiError.message).to.equal(
+          "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)",
+        );
       }
     });
   });
