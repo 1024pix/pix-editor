@@ -792,10 +792,10 @@ describe('Acceptance | Route | draft-modules', () => {
         const nonValidatedDraftModule = await knex.select('*').from('draft-modules').first();
         expect(nonValidatedDraftModule.hasBeenValidated).toStrictEqual(false);
         expect(nonValidatedDraftModule.validationErrors).toStrictEqual([
-          `
-"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/.
-Valeur concernée à rechercher : "not valid slug"
-`,
+          {
+            isSchemaError: true,
+            message: '"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/',
+          },
         ]);
       });
     });
