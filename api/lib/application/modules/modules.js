@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import { moduleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { getModuleById, listPaginatedModules } from '../../domain/usecases/index.js';
+import { getModuleById, listPaginatedModules, getModuleJsonSchema } from '../../domain/usecases/index.js';
 import * as Types from '../types.js';
 
 export function register(server) {
@@ -43,6 +43,23 @@ export function register(server) {
           const module = await getModuleById(id);
           return moduleSerializer.serialize(module);
         },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/module-schema/module-json-schema.json',
+      config: {
+        auth: false,
+        handler: async (_, h) => {
+          const { jsonSchema, jsonSchemaChecksum } = getModuleJsonSchema();
+          return h
+            .response(jsonSchema)
+            .type('application/json')
+            .charset('UTF-8')
+            .header('Cache-Control', 'public, max-age=900')
+            .etag(jsonSchemaChecksum);
+        },
+        notes: ['- Permet de récupérer le JSON Schema de la structure des modules'],
       },
     },
   ]);

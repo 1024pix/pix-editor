@@ -201,4 +201,25 @@ describe('Acceptance | Route | modules', () => {
       });
     });
   });
+
+  describe('GET /api/module-schema/module-json-schema.json', function() {
+    it('should return a cacheable JSON Schema', async function() {
+      // given
+      const server = await createServer();
+      const options = {
+        method: 'GET',
+        url: '/api/module-schema/module-json-schema.json',
+      };
+
+      // when
+      const response = await server.inject(options);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+      expect(response.headers['cache-control']).to.include('public');
+      expect(response.headers['cache-control']).to.include(900);
+      expect(response.headers['etag']).to.exist;
+      expect(() => JSON.parse(response.payload), 'Response payload is not a valid JSON string').not.to.throw(Error);
+    });
+  });
 });

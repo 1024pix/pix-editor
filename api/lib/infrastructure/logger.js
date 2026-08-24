@@ -48,6 +48,7 @@ export const logger = pino(
 export const SCOPES = {
   REPLICATION: 'replication',
   RELEASE: 'release',
+  DEVCOMP: 'devcomp',
 };
 
 function messageFormatCompact(log, messageKey, _logLevel, { colors }) {

@@ -65,6 +65,17 @@ export function catchErr(promiseFn, ctx) {
   };
 }
 
+export function catchErrSync(fn, ctx) {
+  return (...args) => {
+    try {
+      fn.call(ctx, ...args);
+    } catch (err) {
+      return err;
+    }
+    throw new Error('Expected an error, but none was thrown.');
+  };
+}
+
 export function generateAuthorizationHeader(user) {
   return { 'x-api-key': user.apiKey };
 }
