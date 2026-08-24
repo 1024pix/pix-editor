@@ -48,7 +48,8 @@ a, p, span, li {
   }
 
   &__error-line {
-    background-color: rgba(255, 0, 0, 0.10);
+    background-color: var(--pix-error-50);
+    border-left: 4px solid var(--pix-error-700);
   }
 }
 

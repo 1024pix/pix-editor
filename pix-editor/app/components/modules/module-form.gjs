@@ -7,13 +7,19 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-
 import t from 'ember-intl/helpers/t';
-
 import * as monaco from 'monaco-editor';
 import MonacoEditor from 'pixeditor/components/monaco-editor/monaco-editor';
 
 const MODULE_SCHEMA_URI = 'https://api.integration.pix.fr/api/module-schema/module-json-schema.json';
+
+let schemaPromise;
+function getModuleSchema() {
+  if (!schemaPromise) {
+    schemaPromise = fetch(MODULE_SCHEMA_URI).then((response) => response.json());
+  }
+  return schemaPromise;
+}
 
 export default class ModuleForm extends Component {
   @service intl;
@@ -47,8 +53,7 @@ export default class ModuleForm extends Component {
   }
 
   async loadModuleSchema() {
-    const response = await fetch(MODULE_SCHEMA_URI);
-    const schema = await response.json();
+    const schema = await getModuleSchema();
 
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,
@@ -63,6 +68,11 @@ export default class ModuleForm extends Component {
     } catch {
       this.moduleData = undefined;
     }
+  }
+
+  @action
+  onMarkersChange(editorErrors) {
+    this.args.onEditorErrorsChange?.(editorErrors);
   }
 
   get isSaveDisabled() {
@@ -113,7 +123,12 @@ export default class ModuleForm extends Component {
         <PixLabel @requiredLabel={{t "modules.components.module-form.required-field"}}>
           {{t "modules.components.module-form.content-label"}}
         </PixLabel>
-        <MonacoEditor @options={{this.monacoOptions}} class="module-form__monaco-editor" @onChange={{this.onChange}} />
+        <MonacoEditor
+          @options={{this.monacoOptions}}
+          class="module-form__monaco-editor"
+          @onChange={{this.onChange}}
+          @onMarkersChange={{this.onMarkersChange}}
+        />
       </div>
 
       {{#unless @readonly}}

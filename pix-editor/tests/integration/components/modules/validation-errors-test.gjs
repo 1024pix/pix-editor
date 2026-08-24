@@ -25,4 +25,30 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
     assert.dom(listItems[0]).hasText('Le slug est mal formatté');
     assert.dom(listItems[1]).hasText("Problème de duplications d'Ids");
   });
+
+  test('it should display the detail page information message when not on the edit page', async function (assert) {
+    // given
+    const validationErrors = ['Le slug est mal formatté'];
+
+    // when
+    const screen = await render(<template><ModuleValidationErrors @validationErrors={{validationErrors}} /></template>);
+
+    // then
+    assert.dom(screen.getByText(t('modules.components.validation-errors.information'))).exists();
+    assert.dom(screen.queryByText(t('modules.components.validation-errors.information-edit-page'))).doesNotExist();
+  });
+
+  test('it should display the edit page information message when on the edit page', async function (assert) {
+    // given
+    const validationErrors = ['Le slug est mal formatté'];
+
+    // when
+    const screen = await render(
+      <template><ModuleValidationErrors @validationErrors={{validationErrors}} @isEditPage={{true}} /></template>,
+    );
+
+    // then
+    assert.dom(screen.getByText(t('modules.components.validation-errors.information-edit-page'))).exists();
+    assert.dom(screen.queryByText(t('modules.components.validation-errors.information'))).doesNotExist();
+  });
 });

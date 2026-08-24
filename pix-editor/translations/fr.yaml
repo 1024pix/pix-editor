@@ -143,6 +143,12 @@ modules:
     validation-errors:
       title: '{count, plural, one {1 erreur} other {# erreurs}} de validation'
       information: La publication est impossible tant que des erreurs subsistent.
+      information-edit-page: Il est possible d'enregistrer le brouillon même si des erreurs subsistent. Vous pourrez les traiter plus tard.
+      editor-errors-title: Erreur(s) identifiée(s) en direct par l'éditeur JSON
+      editor-error-line: 'Ligne {line}'
+      api-errors-title: Erreur(s) identifiée(s) lors du précédent enregistrement du brouillon
+      expand: '{count, plural, one {Voir l’erreur} other {Voir les erreurs}}'
+      collapse: Tout replier
     validation-success:
       title: Aucune erreur de validation.
       subtitle: Il est désormais possible de publier ce brouillon.
