@@ -13,6 +13,23 @@ export const joiErrorParser = {
       })
       .join(objectErrorSeparator)}${visualSeparator}`;
   },
+
+  // Set isSchemaError = true for JSON-Schema constraints (type/required/enum/pattern/min-max),
+  // Set isSchemaError = false for errors raised from `.external()` validators
+  toStructuredErrors(error) {
+    return error.details.map((errorDetail) => {
+      if (errorDetail.type !== 'external') {
+        return { message: errorDetail.message, isSchemaError: true };
+      }
+
+      const isHtmlValidationError = Array.isArray(errorDetail.context?.value?.results);
+      if (isHtmlValidationError) {
+        return { message: logHtmlErrors(errorDetail, ''), isSchemaError: false };
+      }
+
+      return { message: errorDetail.message, isSchemaError: false };
+    });
+  },
 };
 
 function logHtmlErrors(errorDetail, objectErrorSeparator) {

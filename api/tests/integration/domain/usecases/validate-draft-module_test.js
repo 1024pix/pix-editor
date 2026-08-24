@@ -130,7 +130,7 @@ describe('Integration | Usecases | Validate draft module', () => {
     expect(result.validationErrors).to.deep.equal([]);
   });
 
-  it('marks the draft module as not validated and stores the errors when the schema is invalid', async () => {
+  it('marks the draft module as not validated and stores schema errors when the schema is invalid', async () => {
     // given
     const sectionsWithInvalidType = [
       {
@@ -223,14 +223,14 @@ describe('Integration | Usecases | Validate draft module', () => {
     // then
     expect(result.hasBeenValidated).to.equal(false);
     expect(result.validationErrors).to.deep.equal([
-      `
-"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/.
-Valeur concernée à rechercher : "not valid slug"
-`,
-      `
-"sections[0].type" doit être l’une des valeurs suivantes : [question-yourself, explore-to-understand, retain-the-essentials, practise, go-further, blank].
-Valeur concernée à rechercher : "pamplemousse"
-`,
+      {
+        isSchemaError: true,
+        message: '"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/',
+      },
+      {
+        isSchemaError: true,
+        message: '"sections[0].type" doit être l’une des valeurs suivantes : [question-yourself, explore-to-understand, retain-the-essentials, practise, go-further, blank]',
+      },
     ]);
   });
 
@@ -298,6 +298,6 @@ Valeur concernée à rechercher : "pamplemousse"
 
     // then
     expect(result.hasBeenValidated).to.equal(false);
-    expect(result.validationErrors).to.deep.equal([`Le brouillon a des ids dupliqués : ${duplicateIds.join(', ')}`]);
+    expect(result.validationErrors).to.deep.equal([{ message: `Le brouillon a des ids dupliqués : ${duplicateIds.join(', ')}`, isSchemaError: false }]);
   });
 });
