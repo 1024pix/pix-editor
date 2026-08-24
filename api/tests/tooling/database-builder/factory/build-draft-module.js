@@ -22,7 +22,7 @@ import { databaseBuffer } from '../database-buffer.js';
  *   glossary?: object[]
  *   version?: string
  *   hasBeenValidated?: boolean
- *   validationErrors?: string[]
+ *   validationErrors?: { message: string, isSchemaError: boolean }[]
  *   createdAt?: string | number | Date
  *   updatedAt?: string | number | Date
  * }} draftModuleToBuild
@@ -68,6 +68,7 @@ export function buildDraftModule({
     ...values,
     sections: JSON.stringify(values.sections),
     glossary: JSON.stringify(values.glossary),
+    validationErrors: values.validationErrors === undefined ? undefined : JSON.stringify(values.validationErrors),
   };
 
   return databaseBuffer.pushInsertable({
