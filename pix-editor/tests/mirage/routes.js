@@ -624,6 +624,10 @@ export default function routes() {
     return { ok: 'cool' };
   });
 
+  this.get('/module-schema/module-json-schema.json', function () {
+    return {};
+  });
+
   this.get('/search', (schema) => schema.searchResults.all());
 }
 

@@ -1,6 +1,7 @@
 import { render } from '@1024pix/ember-testing-library';
-import { click, fillIn } from '@ember/test-helpers';
+import { click, fillIn, waitUntil } from '@ember/test-helpers';
 import { t } from 'ember-intl/test-support';
+import * as monaco from 'monaco-editor';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -8,11 +9,17 @@ import sinon from 'sinon';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 const isChrome = navigator?.userAgent?.includes(' Chrome/');
+const MODULE_SCHEMA_URI = '/api/module-schema/module-json-schema.json';
 
 module('Integration | Component | modules/module-form', function (hooks) {
   setupIntlRenderingTest(hooks);
 
+  hooks.beforeEach(function () {
+    this.sandbox = sinon.createSandbox();
+  });
+
   hooks.afterEach(async function () {
+    this.sandbox.restore();
     // WORKAROUND: let some time for monaco-editor to dismount
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
@@ -111,6 +118,32 @@ module('Integration | Component | modules/module-form', function (hooks) {
       assert
         .dom(await screen.queryByRole('button', { name: t('modules.components.module-form.cancel') }))
         .doesNotExist();
+    });
+  });
+
+  module('when the module JSON schema is loaded', function () {
+    test.if('it configures monaco’s json validation with the fetched schema', !isChrome, async function (assert) {
+      // given
+      const schema = { type: 'object', properties: { slug: { type: 'string' } } };
+      this.sandbox
+        .stub(window, 'fetch')
+        .withArgs(MODULE_SCHEMA_URI)
+        .resolves({ json: () => Promise.resolve(schema) });
+      const setDiagnosticsOptions = this.sandbox.spy(monaco.languages.json.jsonDefaults, 'setDiagnosticsOptions');
+      const saveModule = sinon.stub();
+
+      // when
+      await render(<template><ModuleForm @saveModule={{saveModule}} /></template>);
+      await waitUntil(() => setDiagnosticsOptions.called);
+
+      // then
+      assert.true(window.fetch.calledWith(MODULE_SCHEMA_URI));
+      assert.true(
+        setDiagnosticsOptions.calledWith({
+          validate: true,
+          schemas: [{ uri: MODULE_SCHEMA_URI, fileMatch: ['*'], schema }],
+        }),
+      );
     });
   });
 });
