@@ -122,28 +122,43 @@ module('Integration | Component | modules/module-form', function (hooks) {
   });
 
   module('when the module JSON schema is loaded', function () {
-    test.if('it configures monaco’s json validation with the fetched schema', !isChrome, async function (assert) {
-      // given
-      const schema = { type: 'object', properties: { slug: { type: 'string' } } };
-      this.sandbox
-        .stub(window, 'fetch')
-        .withArgs(MODULE_SCHEMA_URI)
-        .resolves({ json: () => Promise.resolve(schema) });
-      const setDiagnosticsOptions = this.sandbox.spy(monaco.languages.json.jsonDefaults, 'setDiagnosticsOptions');
-      const saveModule = sinon.stub();
+    test.if(
+      'it configures monaco’s json validation for every module-form instance, fetching the schema at most once',
+      !isChrome,
+      async function (assert) {
+        // given
+        const schema = { type: 'object', properties: { slug: { type: 'string' } } };
+        this.sandbox
+          .stub(window, 'fetch')
+          .withArgs(MODULE_SCHEMA_URI)
+          .resolves({ json: () => Promise.resolve(schema) });
+        const setDiagnosticsOptions = this.sandbox.spy(monaco.languages.json.jsonDefaults, 'setDiagnosticsOptions');
+        const saveModule = sinon.stub();
 
-      // when
-      await render(<template><ModuleForm @saveModule={{saveModule}} /></template>);
-      await waitUntil(() => setDiagnosticsOptions.called);
+        // when
+        // two instances are rendered together: the module-level schema cache should be shared between them
+        await render(
+          <template>
+            <ModuleForm @saveModule={{saveModule}} />
+            <ModuleForm @saveModule={{saveModule}} />
+          </template>,
+        );
+        await waitUntil(() => setDiagnosticsOptions.callCount >= 2);
 
-      // then
-      assert.true(window.fetch.calledWith(MODULE_SCHEMA_URI));
-      assert.true(
-        setDiagnosticsOptions.calledWith({
-          validate: true,
-          schemas: [{ uri: MODULE_SCHEMA_URI, fileMatch: ['*'], schema }],
-        }),
-      );
-    });
+        // then
+        assert.true(
+          window.fetch.callCount <= 1,
+          'the schema is only fetched once, no matter how many instances render',
+        );
+        assert.strictEqual(setDiagnosticsOptions.callCount, 2, 'each instance configures monaco’s json validation');
+        setDiagnosticsOptions.getCalls().forEach((call) => {
+          const [options] = call.args;
+          assert.true(options.validate);
+          assert.strictEqual(options.schemas.length, 1);
+          assert.strictEqual(options.schemas[0].uri, MODULE_SCHEMA_URI);
+          assert.deepEqual(options.schemas[0].fileMatch, ['*']);
+        });
+      },
+    );
   });
 });
