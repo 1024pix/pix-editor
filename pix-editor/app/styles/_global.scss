@@ -46,6 +46,11 @@ a, p, span, li {
   a, p, span, li {
     font-family: revert;
   }
+
+  &__error-line {
+    background-color: var(--pix-error-50);
+    border-left: 4px solid var(--pix-error-700);
+  }
 }
 
 .waiting {
