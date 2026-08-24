@@ -104,7 +104,7 @@ export default class NewModule extends Component {
     <main class="page-body">
       <section class="page-section module-form">
         {{#if this.hasValidationErrors}}
-          <ModuleValidationErrors @validationErrors={{this.validationErrors}} />
+          <ModuleValidationErrors @validationErrors={{this.validationErrors}} @isEditPage={{true}} />
         {{/if}}
 
         <ModuleForm @module={{@model.draftModule}} @saveModule={{this.saveModule}} />

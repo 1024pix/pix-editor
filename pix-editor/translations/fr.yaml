@@ -143,6 +143,7 @@ modules:
     validation-errors:
       title: '{count, plural, one {1 erreur} other {# erreurs}} de validation'
       information: La publication est impossible tant que des erreurs subsistent.
+      information-edit-page: Il est possible d'enregistrer le brouillon même si des erreurs subsistent. Vous pourrez les traiter plus tard.
       expand: '{count, plural, one {Voir l’erreur} other {Voir les erreurs}}'
       collapse: Tout replier
     validation-success:
