@@ -48,7 +48,7 @@
     "@embroider/vite": "^1.4.4",
     "@glimmer/component": "^2.0.0",
     "@glimmer/tracking": "^1.1.2",
-    "@playwright/test": "1.62.0",
+    "@playwright/test": "1.62.1",
     "@rollup/plugin-babel": "^7.0.0",
     "acorn": "^8.15.0",
     "babel-plugin-ember-template-compilation": "^4.0.0",
