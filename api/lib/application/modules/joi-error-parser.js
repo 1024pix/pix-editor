@@ -1,19 +1,4 @@
 export const joiErrorParser = {
-  format({ error, objectErrorSeparator, visualSeparator }) {
-    visualSeparator = visualSeparator ?? `\n${'='.repeat(60)}\n`;
-    objectErrorSeparator = objectErrorSeparator ?? `\n${'─'.repeat(60)}\n`;
-
-    return `${visualSeparator}${error.details
-      .map((errorDetail) => {
-        if (errorDetail.type === 'external') {
-          return logHtmlErrors(errorDetail, objectErrorSeparator);
-        } else {
-          return logSchemaErrors(errorDetail);
-        }
-      })
-      .join(objectErrorSeparator)}${visualSeparator}`;
-  },
-
   // Set isSchemaError = true for JSON-Schema constraints (type/required/enum/pattern/min-max),
   // Set isSchemaError = false for errors raised from `.external()` validators
   toStructuredErrors(error) {
@@ -24,7 +9,7 @@ export const joiErrorParser = {
 
       const isHtmlValidationError = Array.isArray(errorDetail.context?.value?.results);
       if (isHtmlValidationError) {
-        return { message: logHtmlErrors(errorDetail, ''), isSchemaError: false };
+        return { message: logHtmlErrors(errorDetail), isSchemaError: false };
       }
 
       return { message: errorDetail.message, isSchemaError: false };
@@ -32,7 +17,7 @@ export const joiErrorParser = {
   },
 };
 
-function logHtmlErrors(errorDetail, objectErrorSeparator) {
+function logHtmlErrors(errorDetail) {
   const severity = [
     '',
     'Warning',
@@ -52,12 +37,5 @@ function logHtmlErrors(errorDetail, objectErrorSeparator) {
       errorLogs.push(errorLog.join('\n'));
     }
   }
-  return errorLogs.join(objectErrorSeparator);
-}
-
-function logSchemaErrors(errorDetail) {
-  const errorLog = [];
-  errorLog.push(`\n${errorDetail.message}.`);
-  errorLog.push(`Valeur concernée à rechercher : ${JSON.stringify(errorDetail.context.value)}\n`);
-  return errorLog.join('\n');
+  return errorLogs.join('');
 }
