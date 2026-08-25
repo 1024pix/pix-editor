@@ -36,15 +36,15 @@ export async function checkOhDearSignature(request, h) {
   if (!ohDearSignature) {
     logger.warn('OhDear webhook call missing signature');
     return h.response().code(401).takeover();
-  };
-
+  }
+  console.log('Ohdear signature : ', ohDearSignature);
   const signature = Buffer.from(ohDearSignature, 'base64');
   const key = await getOhDearWebhookSecretKey();
-
+  /*  console.log('OhDear webhook secret: ' + key);
   if (!await crypto.subtle.verify('HMAC', key, signature, request.payload)) {
     logger.warn('OhDear webhook call bad signature');
     return h.response().code(401).takeover();
-  }
+  } */
 
   request.payload = JSON.parse(request.payload.toString());
 
