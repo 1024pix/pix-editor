@@ -1,5 +1,4 @@
 import { child } from '../infrastructure/logger.js';
-import * as config from '../config.js';
 import * as usecases from '../domain/usecases/index.js';
 import * as brokenUrlSerializer from '../infrastructure/serializers/ohdear/broken-url-serializer.js';
 
@@ -38,9 +37,9 @@ export async function checkOhDearSignature(request, h) {
     return h.response().code(401).takeover();
   }
   console.log('Ohdear signature : ', ohDearSignature);
-  const signature = Buffer.from(ohDearSignature, 'base64');
+  /* const signature = Buffer.from(ohDearSignature, 'base64');
   const key = await getOhDearWebhookSecretKey();
-  /*  console.log('OhDear webhook secret: ' + key);
+    console.log('OhDear webhook secret: ' + key);
   if (!await crypto.subtle.verify('HMAC', key, signature, request.payload)) {
     logger.warn('OhDear webhook call bad signature');
     return h.response().code(401).takeover();
@@ -51,11 +50,12 @@ export async function checkOhDearSignature(request, h) {
   return h.response(true);
 }
 
-let ohDearWebhookSecretKey;
+/* let ohDearWebhookSecretKey; */
 
 /**
  * @returns {Promise<CryptoKey>}
  */
+/*
 async function getOhDearWebhookSecretKey() {
   if (ohDearWebhookSecretKey) return ohDearWebhookSecretKey.promise;
 
@@ -77,6 +77,7 @@ async function getOhDearWebhookSecretKey() {
 
   return ohDearWebhookSecretKey.promise;
 }
+*/
 
 async function validateOhDearWebhookRequest(request, h) {
   if (request.payload.type !== 'brokenLinksFoundNotification') {

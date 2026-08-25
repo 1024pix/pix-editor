@@ -8,7 +8,7 @@ export async function up(knex) {
   await knex.schema.createTable(TABLE_NAME, function(table) {
     table.text('url').primary();
     table.smallint('statusCode').notNullable();
-    table.string('errorMessage').nullable();
+    table.text('errorMessage').nullable();
   });
 }
 

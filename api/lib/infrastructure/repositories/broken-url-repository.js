@@ -4,5 +4,9 @@ export async function updateBrokenUrlTable(brokenUrlList) {
   const knex = DomainTransaction.getConnection();
 
   await knex('broken_urls').del();
-  await knex('broken_urls').insert(brokenUrlList);
+  try {
+    await knex('broken_urls').insert(brokenUrlList);
+  } catch (error) {
+    console.log(error);
+  }
 }
