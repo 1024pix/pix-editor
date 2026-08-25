@@ -1,10 +1,11 @@
 import { draftModuleRepository, moduleRepository, moduleVersionRepository } from '../../infrastructure/repositories/index.js';
+import { moduleSchema } from '../../application/modules/validation/module-schema.js';
 import { DomainTransaction } from '../DomainTransaction.js';
 import { DraftModuleValidationError } from '../errors.js';
 import { ModuleVersion } from '../models/index.js';
 import { validateDraftModule } from './validate-draft-module.js';
 
-export async function publishDraftModule({ draftModuleId }, dependencies = { draftModuleRepository, moduleRepository, moduleVersionRepository, validateDraftModule }) {
+export async function publishDraftModule({ draftModuleId }, dependencies = { draftModuleRepository, moduleRepository, moduleVersionRepository, moduleSchema, validateDraftModule }) {
   const draftModule = await dependencies.draftModuleRepository.getById({ id: draftModuleId, forUpdate: true });
 
   const validatedDraftModule = await dependencies.validateDraftModule(draftModule, dependencies);

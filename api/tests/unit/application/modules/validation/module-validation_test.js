@@ -28,8 +28,6 @@ import {
   moduleSchema,
 } from '../../../../../lib/application/modules/validation/module-schema.js';
 
-import { joiErrorParser } from '../../../../../lib/application/modules/joi-error-parser.js';
-
 describe('Unit | Application | Modules | Validation | Module validation', function() {
   describe('when element has a valid structure', function() {
     describe('when element is a custom element', function() {
@@ -93,8 +91,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
           await customElementSchema.validateAsync(sample, { abortEarly: false });
         } catch (joiError) {
-          const formattedError = joiErrorParser.format(joiError);
-          expect(joiError).to.equal(undefined, formattedError);
+          expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
         }
       });
     });
@@ -112,8 +109,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await customDraftElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -132,8 +128,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await downloadElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -153,8 +148,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await embedElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -194,8 +188,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await flashcardsElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -211,8 +204,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await imageElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -259,8 +251,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await qabElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -290,8 +281,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await qcmElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -311,8 +301,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await qcmDeclarativeElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -333,8 +322,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await qcuElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -355,8 +343,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await qcuDiscoveryElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -424,8 +411,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await qrocmElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -438,8 +424,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await separatorElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -454,8 +439,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await textElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -480,8 +464,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
             await textElementSchema.validateAsync(sample, { abortEarly: false });
           } catch (joiError) {
-            const formattedError = joiErrorParser.format(joiError);
-            expect(joiError).to.equal(undefined, formattedError);
+            expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
           }
         }
       });
@@ -500,8 +483,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await videoElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -517,8 +499,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await shortVideoElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -534,8 +515,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await audioElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -570,8 +550,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
         await componentStepperSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
   });
@@ -990,8 +969,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         try {
           await moduleSchema.validateAsync(moduleWithValidLongAnswer, { abortEarly: false });
         } catch (joiError) {
-          const formattedError = joiErrorParser.format(joiError);
-          expect(joiError).to.equal(undefined, formattedError);
+          expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
         }
       });
     });
