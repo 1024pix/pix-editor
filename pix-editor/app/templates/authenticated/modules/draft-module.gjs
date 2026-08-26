@@ -1,7 +1,9 @@
 import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import formatDate from 'ember-intl/helpers/format-date';
 import t from 'ember-intl/helpers/t';
 import DraftModuleDiff from 'pixeditor/components/modules/draft-module-diff';
@@ -14,8 +16,16 @@ import ModuleValidationSuccess from 'pixeditor/components/modules/validation-suc
 export default class DraftModule extends Component {
   @service intl;
 
+  @tracked editorErrors = [];
+
+  @action
+  onEditorErrorsChange(editorErrors) {
+    this.editorErrors = editorErrors;
+  }
+
   get hasValidationErrors() {
-    return !this.args.model.draftModule.hasBeenValidated && this.validationErrors?.length > 0;
+    const hasDraftValidationErrors = !this.args.model.draftModule.hasBeenValidated && this.validationErrors?.length > 0;
+    return hasDraftValidationErrors || this.editorErrors.length > 0;
   }
 
   get validationErrors() {
@@ -71,7 +81,7 @@ export default class DraftModule extends Component {
       <section class="page-section module-form">
         <ModuleNotification @module={{@model.draftModule}} />
         {{#if this.hasValidationErrors}}
-          <ModuleValidationErrors @validationErrors={{this.validationErrors}} />
+          <ModuleValidationErrors @validationErrors={{this.validationErrors}} @editorErrors={{this.editorErrors}} />
         {{else}}
           <ModuleValidationSuccess @draftModule={{@model.draftModule}} />
         {{/if}}
@@ -79,7 +89,11 @@ export default class DraftModule extends Component {
         {{#if @model.draftModule.isEditionDraft}}
           <DraftModuleDiff @draftModule={{@model.draftModule}} @htmlDiff={{@model.draftModuleDiff.htmlDiff}} />
         {{else}}
-          <ModuleForm @module={{@model.draftModule}} @readonly={{true}} />
+          <ModuleForm
+            @module={{@model.draftModule}}
+            @readonly={{true}}
+            @onEditorErrorsChange={{this.onEditorErrorsChange}}
+          />
         {{/if}}
       </section>
     </main>
