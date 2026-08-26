@@ -22,3 +22,4 @@ export * as thematicSerializer from './thematic-serializer.js';
 export * as tutorialSerializer from './tutorial-serializer.js';
 export * as tubeSerializer from './tube-serializer.js';
 export * as userSerializer from './user-serializer.js';
+export * as brokenUrlSerializer from './broken-url-serializer.js';
