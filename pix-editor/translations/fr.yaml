@@ -146,6 +146,7 @@ modules:
       information-edit-page: Il est possible d'enregistrer le brouillon même si des erreurs subsistent. Vous pourrez les traiter plus tard.
       expand: '{count, plural, one {Voir l’erreur} other {Voir les erreurs}}'
       collapse: Tout replier
+      editor-error-line: 'Ligne {line}'
     validation-success:
       title: Aucune erreur de validation.
       subtitle: Il est désormais possible de publier ce brouillon.
