@@ -22,7 +22,7 @@ describe('Acceptance | Controller | ohdear-controller', () => {
       });
     });
 
-    /* describe('when OhDear-Signature does not match payload', () => {
+    describe('when OhDear-Signature does not match payload', () => {
       it('returns a 401 status code', async () => {
         // given
         const payload = { type: 'brokenLinksFoundNotification' };
@@ -42,7 +42,7 @@ describe('Acceptance | Controller | ohdear-controller', () => {
         // then
         expect(response.statusCode).toBe(401);
       });
-    }); */
+    });
 
     describe('when event is brokenLinksFoundNotification', () => {
       it('returns a 200 status code', async () => {
@@ -176,7 +176,7 @@ async function generateOhDearSignature(payload) {
   const key = await crypto.subtle.importKey(
     'raw',
     encoder.encode(config.urlBrokenLinksMonitor.webhookSecret),
-    { name: 'HMAC', hash: { name: 'SHA-256' } },
+    { name: 'HMAC', hash: { name: 'sha-256' } },
     false,
     ['sign'],
   );
