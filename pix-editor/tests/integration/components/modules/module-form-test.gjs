@@ -123,4 +123,25 @@ module('Integration | Component | modules/module-form', function (hooks) {
         .doesNotExist();
     });
   });
+
+  module('when the monaco editor reports errors', function () {
+    test.if('it forwards them via onEditorErrorsChange', !isChrome, async function (assert) {
+      // given
+      const onEditorErrorsChange = sinon.stub();
+      const saveModule = sinon.stub();
+
+      // when
+      const screen = await render(
+      <template><ModuleForm @saveModule={{saveModule}} @onEditorErrorsChange={{onEditorErrorsChange}} /></template>,
+      );
+      const monacoEditor = await screen.findByLabelText(t('modules.components.module-form.content-label'));
+      await fillIn(monacoEditor, '{ invalid json');
+      await waitUntil(() => onEditorErrorsChange.called && onEditorErrorsChange.lastCall.args[0].length > 0);
+
+      // then
+      const [errors] = onEditorErrorsChange.lastCall.args;
+      assert.strictEqual(errors[0].line, 1);
+      assert.strictEqual(typeof errors[0].message, 'string');
+    });
+  });
 });
