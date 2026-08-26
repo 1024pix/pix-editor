@@ -20,6 +20,16 @@ export default class ModuleValidationErrors extends Component {
     return this.hasUnCollapsedOnce;
   }
 
+  get errors() {
+    const editorErrors = (this.args.editorErrors ?? []).map((error) => ({ line: error.line, message: error.message }));
+    const validationErrors = (this.args.validationErrors ?? []).map((error) => ({ message: error.message }));
+    return [...validationErrors, ...editorErrors];
+  }
+
+  get totalErrorsCount() {
+    return this.errors.length;
+  }
+
   @action
   toggleAccordions() {
     this.isCollapsed = !this.isCollapsed;
@@ -52,7 +62,7 @@ export default class ModuleValidationErrors extends Component {
         <div class="module-validation-errors-button__title-container">
           <PixIcon @ariaHidden={{true}} @name="error" @plainIcon={{true}} />
           <div class="module-validation-errors-button__title">
-            <p>{{t "modules.components.validation-errors.title" count=@validationErrors.length}}</p>
+            <p>{{t "modules.components.validation-errors.title" count=this.totalErrorsCount}}</p>
             {{#if @isEditPage}}
               <p>{{t "modules.components.validation-errors.information-edit-page"}}</p>
             {{else}}
@@ -72,13 +82,21 @@ export default class ModuleValidationErrors extends Component {
         aria-hidden={{if this.isCollapsed "true" "false"}}
         class="module-validation-errors__content"
       >
-        <ul>
-          {{#each @validationErrors as |validationError|}}
-            <li class="module-validation-errors__item">
-              {{validationError}}
-            </li>
-          {{/each}}
-        </ul>
+        {{#if this.errors.length}}
+          <ul>
+            {{#each this.errors as |error|}}
+              <li class="module-validation-errors__item">
+                {{#if error.line}}
+                  <span class="module-validation-errors__item-line">{{t
+                      "modules.components.validation-errors.editor-error-line"
+                      line=error.line
+                    }}</span>
+                {{/if}}
+                {{error.message}}
+              </li>
+            {{/each}}
+          </ul>
+        {{/if}}
       </div>
     </div>
   </template>
