@@ -70,6 +70,11 @@ export default class ModuleForm extends Component {
     }
   }
 
+  @action
+  onMarkersChange(editorErrors) {
+    this.args.onEditorErrorsChange?.(editorErrors);
+  }
+
   get isSaveDisabled() {
     return !this.internalTitle || !this.moduleData;
   }
@@ -118,7 +123,12 @@ export default class ModuleForm extends Component {
         <PixLabel @requiredLabel={{t "modules.components.module-form.required-field"}}>
           {{t "modules.components.module-form.content-label"}}
         </PixLabel>
-        <MonacoEditor @options={{this.monacoOptions}} class="module-form__monaco-editor" @onChange={{this.onChange}} />
+        <MonacoEditor
+          @options={{this.monacoOptions}}
+          class="module-form__monaco-editor"
+          @onChange={{this.onChange}}
+          @onMarkersChange={{this.onMarkersChange}}
+        />
       </div>
 
       {{#unless @readonly}}
