@@ -11,7 +11,10 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
 
   test('it should display errors', async function (assert) {
     // given
-    const validationErrors = ['Le slug est mal formatté', "Problème de duplications d'Ids"];
+    const validationErrors = [
+      { message: 'Le slug est mal formatté' },
+      { message: "Problème de duplications d'Ids" },
+    ];
 
     // where
     const screen = await render(<template><ModuleValidationErrors @validationErrors={{validationErrors}} /></template>);
@@ -65,7 +68,7 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
   module('on edit page', function () {
     test('it should display the edit page information message', async function (assert) {
       // given
-      const validationErrors = ['Le slug est mal formatté'];
+      const validationErrors = [{ message: 'Le slug est mal formatté' }];
 
       // when
       const screen = await render(
@@ -81,7 +84,7 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
   module('on details page', function () {
     test('it should display the detail page information message', async function (assert) {
       // given
-      const validationErrors = ['Le slug est mal formatté'];
+      const validationErrors = [{ message: 'Le slug est mal formatté' }];
 
       // when
       const screen = await render(
@@ -97,7 +100,7 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
   module('errors count', function () {
     test('it sums the validation errors and the editor errors', async function (assert) {
       // given
-      const validationErrors = ['Le slug est mal formatté'];
+      const validationErrors = [{ message: 'Le slug est mal formatté' }];
       const editorErrors = [
         { line: 3, message: 'Unexpected token' },
         { line: 7, message: 'Missing comma' },
@@ -139,7 +142,7 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
   module('when there are both editor and validation errors', function () {
     test('it merges them into a single list', async function (assert) {
       // given
-      const validationErrors = ["Problème de duplications d'Ids"];
+      const validationErrors = [{ message: "Problème de duplications d'Ids" }];
       const editorErrors = [{ line: 3, message: 'Unexpected token' }];
 
       // when

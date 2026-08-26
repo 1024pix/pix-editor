@@ -29,7 +29,11 @@ export default class DraftModule extends Component {
   }
 
   get validationErrors() {
-    return this.args.model.draftModule.validationErrors;
+    const draftModule = this.args.model.draftModule;
+    // Edition drafts (drafts of an existing production module) show a diff instead of the JSON editor
+    // on this page, so Monaco never surfaces schema-shape errors here: display every stored error
+    // instead of only the ones Monaco can't detect, otherwise they'd go unnoticed entirely.
+    return draftModule.isEditionDraft ? (draftModule.validationErrors ?? []) : draftModule.displayedValidationErrors;
   }
 
   get links() {
