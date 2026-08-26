@@ -143,6 +143,8 @@ modules:
     validation-errors:
       title: '{count, plural, one {1 erreur} other {# erreurs}} de validation'
       information: La publication est impossible tant que des erreurs subsistent.
+      expand: '{count, plural, one {Voir l’erreur} other {Voir les erreurs}}'
+      collapse: Tout replier
     validation-success:
       title: Aucune erreur de validation.
       subtitle: Il est désormais possible de publier ce brouillon.
