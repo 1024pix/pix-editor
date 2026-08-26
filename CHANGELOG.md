@@ -1,5 +1,14 @@
 
 
+## v4.48.0 (26/08/2026)
+
+
+### :rocket: Amélioration
+- [#1599](https://github.com/1024pix/pix-editor/pull/1599) [FEATURE] Améliorer le retour d'erreurs lors d'une création/mise à jour des modules (PIX-23792).
+
+### :building_construction: Tech
+- [#1601](https://github.com/1024pix/pix-editor/pull/1601) [TECH] Exposer le JSON Schema des modules sur une route API de Pix Editor (PIX-23585).
+
 ## v4.47.1 (20/08/2026)
 
 
