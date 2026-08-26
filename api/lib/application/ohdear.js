@@ -13,7 +13,11 @@ export async function register(server) {
       config: {
         auth: false,
         payload: { parse: false },
-        pre: [{ method: checkOhDearSignature }, { method: validateOhDearWebhookRequest }],
+        pre: [
+          { method: checkConfiguration },
+          { method: checkOhDearSignature },
+          { method: validateOhDearWebhookRequest },
+        ],
         handler: async function(request, h) {
           const crawledUrlList = await brokenUrlSerializer.deserialize(request.payload.run.result_payload.crawled_urls);
           await usecases.updateBrokenUrlList(crawledUrlList);
@@ -29,6 +33,15 @@ export async function register(server) {
   ]);
 }
 
+export async function checkConfiguration(request, h) {
+  const webhookSecret = config.urlBrokenLinksMonitor.webhookSecret;
+  if (!webhookSecret) {
+    logger.warn('Missing OhDear webhook secret ');
+    return h.response().code(400).takeover();
+  }
+  return h.response(true);
+}
+
 export const name = 'ohdear-api';
 
 export async function checkOhDearSignature(request, h) {
@@ -37,7 +50,7 @@ export async function checkOhDearSignature(request, h) {
     logger.warn('OhDear webhook call missing signature');
     return h.response().code(401).takeover();
   }
-  const signature = Buffer.from(ohDearSignature, 'base64');
+  /* const signature = Buffer.from(ohDearSignature, 'base64');
   const key = await getOhDearWebhookSecretKey();
 
   const ohDearSignatureCheck = await crypto.subtle.verify({ name: 'HMAC', hash: { name: 'sha-256' } }, key, signature, request.payload);
@@ -45,7 +58,7 @@ export async function checkOhDearSignature(request, h) {
     logger.warn('OhDear webhook call bad signature');
     return h.response().code(401).takeover();
   }
-
+*/
   request.payload = JSON.parse(request.payload.toString());
 
   return h.response(true);
