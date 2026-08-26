@@ -1,0 +1,31 @@
+{
+  "$schema": "./$schema.json",
+  "id": "broken-urls-schema",
+  "label": "Liste des URL externes cassées des tutoriels",
+  "entityName": "broken_urls",
+  "editable": false,
+  "deletable": false,
+  "creatable": false,
+  "primaryKey": "url",
+  "defaultSort": {
+    "field": "url",
+    "direction": "asc"
+  },
+  "fields": [
+    {
+      "key": "url",
+      "label": "url",
+      "type": "string"
+    },
+    {
+      "key": "status_code",
+      "label": "Status",
+      "type": "number"
+    },
+    {
+      "key": "error_message",
+      "label": "Message d'erreur",
+      "type": "string"
+    }
+  ]
+}
