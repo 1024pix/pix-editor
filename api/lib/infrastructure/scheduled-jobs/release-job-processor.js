@@ -22,7 +22,6 @@ export default async function releaseJobProcessor(job) {
     logger.info(`Periodic release created with id ${releaseId}`);
     if (config.scheduledJobs.startSaveExternalUrlsJob) {
       await saveExternalUrlsJob.start();
-      // check
     }
     await uploadTranslationJob.start();
     return releaseId;

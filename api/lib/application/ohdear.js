@@ -36,7 +36,7 @@ export async function register(server) {
 export async function checkConfiguration(request, h) {
   const webhookSecret = config.urlBrokenLinksMonitor.webhookSecret;
   if (!webhookSecret) {
-    logger.warn('Missing OhDear webhook secret ');
+    logger.warn('Missing OhDear webhook secret');
     return h.response().code(400).takeover();
   }
   return h.response(true);
@@ -50,6 +50,7 @@ export async function checkOhDearSignature(request, h) {
     logger.warn('OhDear webhook call missing signature');
     return h.response().code(401).takeover();
   }
+  // FIXME works in local, but not with real notifications from ohdear
   /* const signature = Buffer.from(ohDearSignature, 'base64');
   const key = await getOhDearWebhookSecretKey();
 
@@ -64,11 +65,12 @@ export async function checkOhDearSignature(request, h) {
   return h.response(true);
 }
 
+/*
 let ohDearWebhookSecretKey;
 
-/**
+/!**
  * @returns {Promise<CryptoKey>}
- */
+ *!/
 
 async function getOhDearWebhookSecretKey() {
   if (ohDearWebhookSecretKey) return ohDearWebhookSecretKey.promise;
@@ -90,7 +92,7 @@ async function getOhDearWebhookSecretKey() {
   }
 
   return ohDearWebhookSecretKey.promise;
-}
+} */
 
 async function validateOhDearWebhookRequest(request, h) {
   if (request.payload.type !== 'brokenLinksFoundNotification') {
