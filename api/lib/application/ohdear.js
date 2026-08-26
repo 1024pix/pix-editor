@@ -14,8 +14,8 @@ export async function register(server) {
         payload: { parse: false },
         pre: [{ method: checkOhDearSignature }, { method: validateOhDearWebhookRequest }],
         handler: async function(request, h) {
-          const brokenUrlList = await brokenUrlSerializer.deserialize(request.payload.run.result_payload.broken_links);
-          await usecases.updateBrokenUrlList(brokenUrlList);
+          const crawledUrlList = await brokenUrlSerializer.deserialize(request.payload.run.result_payload.crawled_urls);
+          await usecases.updateBrokenUrlList(crawledUrlList);
           return h.response().code(200);
         },
         tags: [
@@ -36,7 +36,7 @@ export async function checkOhDearSignature(request, h) {
     logger.warn('OhDear webhook call missing signature');
     return h.response().code(401).takeover();
   }
-  console.log('Ohdear signature : ', ohDearSignature);
+  // console.log('Ohdear signature : ', ohDearSignature);
   /* const signature = Buffer.from(ohDearSignature, 'base64');
   const key = await getOhDearWebhookSecretKey();
     console.log('OhDear webhook secret: ' + key);
