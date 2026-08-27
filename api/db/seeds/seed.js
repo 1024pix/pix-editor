@@ -11,6 +11,7 @@ import { buildTubesFromConfig } from './data/tubes.js';
 import { buildLocalizedFrameworkTubesFromConfig } from './data/localized-framework-tubes.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
+import { brokenUrlsBuilder } from './data/broken-urls.js';
 import { buildTags } from './data/tags.js';
 import { buildTutorials } from './data/tutorials.js';
 import { buildModules } from './data/modules.js';
@@ -66,6 +67,7 @@ export async function seed(knex) {
 
   staticCoursesBuilder(databaseBuilder);
   whitelistedUrlsBuilder(databaseBuilder, adminId);
+  brokenUrlsBuilder(databaseBuilder, adminId);
 
   const draftModuleIds = buildModules(databaseBuilder);
 
