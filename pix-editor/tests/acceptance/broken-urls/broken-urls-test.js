@@ -25,7 +25,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
 
   test('should display broken urls when accessing list', async function (assert) {
     // when
-    const screen = await visit('/broken-url-list');
+    const screen = await visit('/broken-urls');
 
     // then
     assert.dom(screen.getByText('Liste des URL cassées')).exists();
