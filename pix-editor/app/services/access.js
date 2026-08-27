@@ -174,6 +174,10 @@ export default class AccessService extends Service {
     return this.isEditor();
   }
 
+  mayAccessBrokenUrls() {
+    return this.isEditor();
+  }
+
   mayCreateOrEditWhitelistedUrl() {
     return this.isEditor();
   }
