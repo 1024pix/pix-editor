@@ -15,6 +15,7 @@ describe('Unit | Domain | Modules', () => {
       expect(result.modules).to.deep.equal(modules);
     });
   });
+
   context('validateDraftModuleDoesNotHaveDuplicateIds', function() {
     it('should not throw when draft module has no duplicate ids with existing modules', () => {
       // given
@@ -29,6 +30,24 @@ describe('Unit | Domain | Modules', () => {
         expect.fail(`ModuleDuplicateIdsError should not be thrown ${error}`);
       }
     });
+
+    context('when existing modules already share ids with each other', () => {
+      it('should not throw when the draft module itself has no duplicate ids', () => {
+        // given
+        const modules = _buildModules();
+        modules[1].sections[0].id = modules[0].sections[0].id;
+        const draftModule = _buildDraftModule();
+
+        // when / then
+        try {
+          const result = new ModulesValidation({ modules });
+          result.validateDraftModuleDoesNotHaveDuplicateIds(draftModule);
+        } catch (error) {
+          expect.fail(`ModuleDuplicateIdsError should not be thrown ${error}`);
+        }
+      });
+    });
+
     context('when draft module is a draft of an existing module', () => {
       it('should not throw an error when there is no duplicate ids', function() {
         // given
@@ -44,6 +63,7 @@ describe('Unit | Domain | Modules', () => {
         }
       });
     });
+
     context('errors', () => {
       context('when draft module has duplicate ids with existing modules', () => {
         it('should throw an error which includes duplicate ids', function() {
