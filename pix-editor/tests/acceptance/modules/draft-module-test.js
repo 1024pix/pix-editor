@@ -134,7 +134,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       assert
         .dom(
           screen.getByRole('button', {
-            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')}`,
+            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')} ${t('modules.components.validation-errors.expand', { count: 1 })}`,
           }),
         )
         .exists();

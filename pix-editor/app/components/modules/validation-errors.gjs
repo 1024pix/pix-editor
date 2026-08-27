@@ -1,11 +1,14 @@
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
 
 export default class ModuleValidationErrors extends Component {
+  @service intl;
+
   @tracked isCollapsed = true;
   @tracked hasUnCollapsedOnce = false;
 
@@ -21,6 +24,20 @@ export default class ModuleValidationErrors extends Component {
   toggleAccordions() {
     this.isCollapsed = !this.isCollapsed;
     this.hasUnCollapsedOnce = true;
+  }
+
+  get buttonInformation() {
+    return this.isUnCollapsed
+      ? {
+          label: this.intl.t('modules.components.validation-errors.collapse'),
+          icon: 'chevronTop',
+        }
+      : {
+          label: this.intl.t('modules.components.validation-errors.expand', {
+            count: this.args.validationErrors.length,
+          }),
+          icon: 'chevronBottom',
+        };
   }
 
   <template>
@@ -40,7 +57,10 @@ export default class ModuleValidationErrors extends Component {
           </div>
         </div>
 
-        <PixIcon @ariaHidden={{true}} @name="{{if this.isCollapsed 'chevronBottom' 'chevronTop'}}" />
+        <span class="module-validation-errors__toggle-label">
+          {{this.buttonInformation.label}}
+          <PixIcon @ariaHidden={{true}} @name="{{this.buttonInformation.icon}}" />
+        </span>
       </button>
 
       <div
