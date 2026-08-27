@@ -1,8 +1,13 @@
 export class BrokenUrl {
-  constructor({ id, statusCode, url, errorMessage }) {
+  constructor({
+    id,
+    statusCode,
+    errorMessage,
+    url,
+  }) {
     this.id = id;
     this.statusCode = statusCode;
-    this.url = url;
     this.errorMessage = errorMessage;
+    this.url = url;
   }
 }

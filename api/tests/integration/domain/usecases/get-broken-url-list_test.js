@@ -7,10 +7,12 @@ describe('Integration | Domain | Usecases | Get broken links', function() {
     it('should return all challenges and tutorials with broken links', async function() {
       // given
       databaseBuilder.factory.buildBrokenUrl({
+        id: 1,
         url: 'https://ui.pix.fr',
         statusCode: 400,
       });
       databaseBuilder.factory.buildBrokenUrl({
+        id: 2,
         url: 'http://commant-pix-ui-fonctionne.org',
         statusCode: 404,
       });

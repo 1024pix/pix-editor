@@ -1,11 +1,13 @@
 
-export function brokenUrlsBuilder(databaseBuilder, adminId) {
+export function brokenUrlsBuilder(databaseBuilder) {
   databaseBuilder.factory.buildBrokenUrl({
-    statusCode: 400,
+    id: 1,
+    statusCode: 404,
     errorMessage: 'Not found',
     url: 'https://link-to-tuto1.com',
   });
   databaseBuilder.factory.buildBrokenUrl({
+    id: 2,
     statusCode: 500,
     errorMessage: "C'est cassé",
     url: 'https://link-to-tuto2.com',

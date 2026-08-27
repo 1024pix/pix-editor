@@ -1,5 +1,4 @@
 import { DomainTransaction } from '../../domain/DomainTransaction.js';
-import { BrokenUrl } from '../../domain/models/index.js';
 
 export async function saveNewlyBrokenUrlList(brokenUrlList) {
   const knex = DomainTransaction.getConnection();
@@ -22,15 +21,4 @@ export async function removeRepairedUrlList(repairedUrlList) {
   } catch (error) {
     console.log(error);
   }
-}
-
-export async function list() {
-  const knexConn = DomainTransaction.getConnection();
-  const brokenUrlList = await knexConn('broken_urls').select('*').orderBy('url');
-
-  return toDomainList(brokenUrlList);
-}
-
-function toDomainList(brokenUrlListDtos) {
-  return brokenUrlListDtos.map((dto) => new BrokenUrl(dto));
 }

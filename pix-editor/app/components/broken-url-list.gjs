@@ -1,3 +1,5 @@
+import PixTable from '@1024pix/pix-ui/components/pix-table';
+import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import Component from '@glimmer/component';
 
 export default class BrokenUrlList extends Component {
@@ -8,6 +10,13 @@ export default class BrokenUrlList extends Component {
   }
 
   <template>
-    <h1>Liste des URL cassées</h1>
+    <PixTable @caption="Liste des URLs cassées" @condensed={{true}} @data={{@brokenUrls}} @variant="primary">
+      <:columns as |brokenUrl context|>
+        <PixTableColumn @context={{context}} class="column--wide">
+          <:header>URL</:header>
+          <:cell>{{brokenUrl.url}}</:cell>
+        </PixTableColumn>
+      </:columns>
+    </PixTable>
   </template>
 }

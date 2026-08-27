@@ -13,11 +13,9 @@ module('Acceptance | Broken URLs | List', function (hooks) {
     this.server.create('user', { trigram: 'ABC' });
     this.server.create('broken-url', {
       id: 1,
-      createdAt: new Date('2020-01-01'),
-      updatedAt: new Date('2021-01-01'),
-      creatorName: null,
-      latestUpdatorName: 'Ma maman',
       url: 'http://pipeau-la-grenouille.fr',
+      errorMessage: null,
+      statusCode: 404,
     });
 
     return authenticateSession();

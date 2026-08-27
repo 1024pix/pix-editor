@@ -1,4 +1,4 @@
-import { list } from '../../infrastructure/repositories/broken-url-repository.js';
+import { list } from '../../infrastructure/repositories/broken-url-read-repository.js';
 import { getChallengesFromUrl, getTutorialsFromUrl } from '../../infrastructure/repositories/url-repository.js';
 
 export async function getBrokenUrlList() {

@@ -1,6 +1,7 @@
 export * as adminEntitySerializer from './admin-entity-serializer.js';
 export * as adminSchemaSerializer from './admin-schema-serializer.js';
 export * as areaSerializer from './area-serializer.js';
+export * as brokenUrlSerializer from './broken-url-serializer.js';
 export * as challengeSerializer from './challenge-serializer.js';
 export * as competenceOverviewSerializer from './competence-overview-serializer.js';
 export * as countrySerializer from './country-serializer.js';
@@ -22,4 +23,3 @@ export * as thematicSerializer from './thematic-serializer.js';
 export * as tutorialSerializer from './tutorial-serializer.js';
 export * as tubeSerializer from './tube-serializer.js';
 export * as userSerializer from './user-serializer.js';
-export * as brokenUrlSerializer from './broken-url-serializer.js';

@@ -1,13 +1,13 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
-export default class BrokenUrlsRoute extends Route {
-  @service access;
-  @service router;
+export default class BrokenUrlsListRoute extends Route {
+  @service store;
 
-  beforeModel() {
-    if (!this.access.mayAccessBrokenUrls()) {
-      this.router.transitionTo('authenticated');
-    }
+  async model() {
+    const brokenUrls = await this.store.findAll('broken-url', { reload: true });
+    return {
+      brokenUrls,
+    };
   }
 }

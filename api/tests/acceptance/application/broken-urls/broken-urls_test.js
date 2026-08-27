@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
+import { databaseBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | broken-urls', () => {
   let now;
@@ -19,23 +18,9 @@ describe('Acceptance | Controller | broken-urls', () => {
 
   describe('GET /broken-urls', () => {
     let editorUser, server;
+
     beforeEach(async function() {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'editor' });
-      databaseBuilder.factory.buildBrokenUrl({
-        url: 'http://localhost:8080/',
-        statusCode: 404,
-        errorMessage: 'Not Found',
-      });
-      databaseBuilder.factory.buildBrokenUrl({
-        url: 'http://test.localhost:8080/',
-        statusCode: 500,
-        errorMessage: 'Tout cassé',
-      });
-      databaseBuilder.factory.buildBrokenUrl({
-        url: 'http://www.test.org',
-        statusCode: 401,
-        errorMessage: 'Pas le droit',
-      });
       await databaseBuilder.commit();
       server = await createServer();
     });
