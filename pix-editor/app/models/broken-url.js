@@ -4,4 +4,6 @@ export default class BrokenUrlModel extends Model {
   @attr errorMessage;
   @attr statusCode;
   @attr url;
+  @attr challenges;
+  @attr tutorials;
 }

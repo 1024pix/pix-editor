@@ -3,14 +3,13 @@ import { getChallengesFromUrl, getTutorialsFromUrl } from '../../infrastructure/
 
 export async function getBrokenUrlList() {
   const brokenUrlList = await list();
-
-  const urlToFind = brokenUrlList.map((url) => url.url);
+  const urlToFindList = brokenUrlList.map((url) => url.url);
 
   // Challenges
-  const challenges = await getChallengesFromUrl(urlToFind);
+  const challenges = await getChallengesFromUrl(urlToFindList);
 
   // Tutorials
-  const tutorials = await getTutorialsFromUrl(urlToFind);
+  const tutorials = await getTutorialsFromUrl(urlToFindList);
 
   return brokenUrlList.map((brokenUrl) => ({
     id: brokenUrl.id,
@@ -18,7 +17,7 @@ export async function getBrokenUrlList() {
     statusCode: brokenUrl.statusCode,
     errorMessage: brokenUrl.errorMessage,
     challenges: challenges.filter((challenge) => challenge.url === brokenUrl.url),
-    tutorials: tutorials.filter((tutorial) => tutorial.url === brokenUrl.url),
+    tutorials: tutorials.filter((tutorial) => tutorial.link === brokenUrl.url),
   }));
 }
 

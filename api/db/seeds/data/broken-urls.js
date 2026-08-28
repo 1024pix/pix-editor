@@ -1,4 +1,3 @@
-
 export function brokenUrlsBuilder(databaseBuilder) {
   databaseBuilder.factory.buildBrokenUrl({
     id: 1,

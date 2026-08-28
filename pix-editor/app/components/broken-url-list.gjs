@@ -5,8 +5,6 @@ import Component from '@glimmer/component';
 export default class BrokenUrlList extends Component {
   constructor(...args) {
     super(...args);
-
-    console.log('MODEL', this.args.brokenUrls);
   }
 
   <template>
@@ -15,6 +13,23 @@ export default class BrokenUrlList extends Component {
         <PixTableColumn @context={{context}} class="column--wide">
           <:header>URL</:header>
           <:cell>{{brokenUrl.url}}</:cell>
+        </PixTableColumn>
+        <PixTableColumn @context={{context}} class="column--wide">
+          <:header>ID des challenges concernés</:header>
+          <:cell>
+            {{#each brokenUrl.challenges as |challenge|}}
+              Challenge
+              {{log challenge.challenge_id}}
+            {{/each}}
+          </:cell>
+        </PixTableColumn>
+        <PixTableColumn @context={{context}} class="column--wide">
+          <:header>ID des tutoriels concernés</:header>
+          <:cell>
+            {{#each brokenUrl.tutorials as |tutorial|}}
+              {{tutorial.id}}
+            {{/each}}
+          </:cell>
         </PixTableColumn>
       </:columns>
     </PixTable>

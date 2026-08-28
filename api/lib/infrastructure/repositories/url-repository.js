@@ -134,7 +134,7 @@ export async function getChallengesFromUrl(urlList) {
 
 export async function getTutorialsFromUrl(urlList) {
   const knex = DomainTransaction.getConnection();
-  return knex.select('*').from('tutorial_external_urls').whereIn('url', urlList).orderBy('id');
+  return knex.select('*').from('tutorials').whereIn('link', urlList).orderBy('id');
 }
 
 export async function exportExternalUrls(dataToUpload) {
