@@ -22,4 +22,3 @@ export async function removeRepairedUrlList(repairedUrlList) {
     console.log(error);
   }
 }
-

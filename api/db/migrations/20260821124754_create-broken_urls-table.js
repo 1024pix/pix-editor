@@ -6,7 +6,8 @@ const TABLE_NAME = 'broken_urls';
  */
 export async function up(knex) {
   await knex.schema.createTable(TABLE_NAME, function(table) {
-    table.text('url').primary();
+    table.increments('id').primary();
+    table.text('url').unique();
     table.smallint('statusCode').notNullable();
     table.text('errorMessage').nullable();
   });

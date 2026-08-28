@@ -6,12 +6,17 @@
   "editable": false,
   "deletable": false,
   "creatable": false,
-  "primaryKey": "url",
+  "primaryKey": "id",
   "defaultSort": {
     "field": "url",
     "direction": "asc"
   },
   "fields": [
+    {
+      "key": "id",
+      "label": "id",
+      "type": "number"
+    },
     {
       "key": "url",
       "label": "url",

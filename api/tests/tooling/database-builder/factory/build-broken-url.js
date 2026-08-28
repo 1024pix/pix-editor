@@ -1,6 +1,7 @@
 import { databaseBuffer } from '../database-buffer.js';
 
 export function buildBrokenUrl({
+  id = databaseBuffer.nextId++,
   statusCode = 400,
   errorMessage = null,
   url = 'http://ui.pix.fr',
@@ -9,6 +10,7 @@ export function buildBrokenUrl({
     tableName: 'broken_urls',
     autoId: true,
     values: {
+      id,
       statusCode,
       errorMessage,
       url,

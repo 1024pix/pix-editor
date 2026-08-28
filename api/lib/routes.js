@@ -1,6 +1,7 @@
 import * as adminRoute from './application/admin/index.js';
 import * as attachmentsRoute from './application/attachments.js';
 import * as areasRoute from './application/areas.js';
+import * as brokenUrlsRoute from './application/broken-urls/index.js';
 import * as challengesRoute from './application/challenges/index.js';
 import * as changelogEntriesRoute from './application/changelog-entries.js';
 import { competenceRoutes } from './application/competences/index.js';
@@ -39,6 +40,7 @@ export const routes = [
   adminRoute,
   areasRoute,
   attachmentsRoute,
+  brokenUrlsRoute,
   challengesRoute,
   changelogEntriesRoute,
   configRoute,
