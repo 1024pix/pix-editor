@@ -17,7 +17,7 @@ export async function getBrokenUrlList() {
     statusCode: brokenUrl.statusCode,
     errorMessage: brokenUrl.errorMessage,
     challenges: challenges.filter((challenge) => challenge.url === brokenUrl.url),
-    tutorials: tutorials.filter((tutorial) => tutorial.link === brokenUrl.url),
+    tutorials: tutorials.filter((tutorial) => tutorial.url === brokenUrl.url),
   }));
 }
 

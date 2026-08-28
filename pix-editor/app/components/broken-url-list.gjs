@@ -18,8 +18,7 @@ export default class BrokenUrlList extends Component {
           <:header>ID des challenges concernés</:header>
           <:cell>
             {{#each brokenUrl.challenges as |challenge|}}
-              Challenge
-              {{log challenge.challenge_id}}
+              {{challenge.challenge_id}}
             {{/each}}
           </:cell>
         </PixTableColumn>
@@ -27,7 +26,7 @@ export default class BrokenUrlList extends Component {
           <:header>ID des tutoriels concernés</:header>
           <:cell>
             {{#each brokenUrl.tutorials as |tutorial|}}
-              {{tutorial.id}}
+              {{tutorial.tutorial_id}}
             {{/each}}
           </:cell>
         </PixTableColumn>

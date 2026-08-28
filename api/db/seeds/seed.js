@@ -17,6 +17,7 @@ import { buildTutorials } from './data/tutorials.js';
 import { buildModules } from './data/modules.js';
 import { draftModuleRepository } from '../../lib/infrastructure/repositories/index.js';
 import { validateDraftModule } from '../../lib/domain/usecases/index.js';
+import { externalUrlBuilder } from './data/external-urls.js';
 
 export async function seed(knex) {
   const databaseBuilder = new DatabaseBuilder({ knex });
@@ -67,6 +68,7 @@ export async function seed(knex) {
 
   staticCoursesBuilder(databaseBuilder);
   whitelistedUrlsBuilder(databaseBuilder, adminId);
+  externalUrlBuilder(databaseBuilder, adminId);
   brokenUrlsBuilder(databaseBuilder, adminId);
 
   const draftModuleIds = buildModules(databaseBuilder);

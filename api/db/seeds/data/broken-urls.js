@@ -11,4 +11,16 @@ export function brokenUrlsBuilder(databaseBuilder) {
     errorMessage: "C'est cassé",
     url: 'https://link-to-tuto2.com',
   });
+  databaseBuilder.factory.buildBrokenUrl({
+    id: 3,
+    statusCode: 404,
+    errorMessage: 'Perdu',
+    url: 'https://link-to-challenge1.com',
+  });
+  databaseBuilder.factory.buildBrokenUrl({
+    id: 4,
+    statusCode: 500,
+    errorMessage: "C'est cassé",
+    url: 'https://link-to-challenge2.com',
+  });
 }
