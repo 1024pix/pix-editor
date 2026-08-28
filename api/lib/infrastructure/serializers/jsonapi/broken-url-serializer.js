@@ -7,6 +7,8 @@ const serializer = new Serializer('broken-urls', {
     'url',
     'statusCode',
     'errorMessage',
+    'challenges',
+    'tutorials',
   ],
 });
 

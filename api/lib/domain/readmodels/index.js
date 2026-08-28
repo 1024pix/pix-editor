@@ -1,3 +1,4 @@
+export * from './BrokenUrl.js';
 export * from './ChallengeSummary.js';
 export * from './CompetenceOverview.js';
 export * from './LocalizedChallenge.js';

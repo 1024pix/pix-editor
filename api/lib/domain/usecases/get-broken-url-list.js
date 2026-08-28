@@ -2,9 +2,9 @@ import { list } from '../../infrastructure/repositories/broken-url-read-reposito
 import { getChallengesFromUrl, getTutorialsFromUrl } from '../../infrastructure/repositories/url-repository.js';
 
 export async function getBrokenUrlList() {
-  const brokenUrls = await list();
+  const brokenUrlList = await list();
 
-  const urlToFind = brokenUrls.map((url) => url.url);
+  const urlToFind = brokenUrlList.map((url) => url.url);
 
   // Challenges
   const challenges = await getChallengesFromUrl(urlToFind);
@@ -12,9 +12,13 @@ export async function getBrokenUrlList() {
   // Tutorials
   const tutorials = await getTutorialsFromUrl(urlToFind);
 
-  return {
-    challenges,
-    tutorials,
-  };
+  return brokenUrlList.map((brokenUrl) => ({
+    id: brokenUrl.id,
+    url: brokenUrl.url,
+    statusCode: brokenUrl.statusCode,
+    errorMessage: brokenUrl.errorMessage,
+    challenges: challenges.filter((challenge) => challenge.url === brokenUrl.url),
+    tutorials: tutorials.filter((tutorial) => tutorial.url === brokenUrl.url),
+  }));
 }
 

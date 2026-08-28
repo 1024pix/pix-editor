@@ -1,7 +1,9 @@
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import * as brokenUrlSerializer from '../../infrastructure/serializers/jsonapi/broken-url-serializer.js';
-import { brokenUrlReadRepository } from '../../infrastructure/repositories/index.js';
 import { getBrokenUrlList } from '../../domain/usecases/index.js';
+
+// retourner les brokenurls
+// associées aux infos de challenges / tutorials
 
 export async function register(server) {
   server.route([
@@ -11,9 +13,8 @@ export async function register(server) {
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
-          const rawBrokenUrls = await brokenUrlReadRepository.list();
-          //   const brokenUrlList = await getBrokenUrlList();
-          return h.response(brokenUrlSerializer.serialize(rawBrokenUrls));
+          const brokenUrlList = await getBrokenUrlList();
+          return h.response(brokenUrlSerializer.serialize(brokenUrlList));
         },
       },
     },
