@@ -1,7 +1,7 @@
-import BrokenUrlList from 'pixeditor/components/broken-url-list';
+import BrokenUrlTabs from 'pixeditor/components/broken-url-list';
 
 <template>
   <header class="page-header">
-    <BrokenUrlList @brokenUrls={{@model.brokenUrls}} />
+    <BrokenUrlTabs @brokenUrls={{@model.brokenUrls}} />
   </header>
 </template>
