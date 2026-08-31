@@ -137,6 +137,7 @@ export const exportExternalUrlsJob = { spreadsheetId: process.env.EXPORT_EXTERNA
 export const urlBrokenLinksMonitor = {
   authSecret: process.env.URL_BROKEN_LINKS_MONITOR_AUTH_API_KEY,
   pageSize: _getNumber(process.env.URL_BROKEN_LINKS_MONITOR_PAGE_SIZE, 100),
+  webhookSecret: process.env.URL_BROKEN_LINKS_MONITOR_WEBHOOK_SECRET,
 };
 
 export const phrase = {
@@ -217,4 +218,5 @@ if (process.env.NODE_ENV === 'test') {
 
   urlBrokenLinksMonitor.authSecret = 'LE_SECRET_DU_MONITEUR_DES_URL_EXTERNES';
   urlBrokenLinksMonitor.pageSize = 2;
+  urlBrokenLinksMonitor.webhookSecret = 'LE_SECRET_DU_WEBHOOK_DU_MONITEUR_DES_URL_EXTERNES';
 }

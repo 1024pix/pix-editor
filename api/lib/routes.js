@@ -17,6 +17,7 @@ import * as missionsRoute from './application/missions/index.js';
 import * as modulesRoute from './application/modules/modules.js';
 import * as draftModulesRoute from './application/modules/draft-modules.js';
 import * as notesRoute from './application/notes.js';
+import * as ohdearRoute from './application/ohdear.js';
 import * as phraseRoute from './application/phrase.js';
 import * as releasesRoute from './application/releases.js';
 import * as replicationDataRoute from './application/replication-data.js';
@@ -53,6 +54,7 @@ export const routes = [
   missionsRoute,
   modulesRoute,
   notesRoute,
+  ohdearRoute,
   phraseRoute,
   releasesRoute,
   replicationDataRoute,
