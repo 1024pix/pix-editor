@@ -1,0 +1,120 @@
+import { describe, expect, it } from 'vitest';
+import { databaseBuilder, knex } from '../../../test-helper.js';
+import { saveNewlyBrokenUrlList, removeRepairedUrlList } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
+
+describe('Integration | Repository | broken-url-repository', () => {
+  describe('#saveNewlyBrokenUrlList', () => {
+    it('should add new broken URLs in the database', async () => {
+      const newlyBrokenUrl1 = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/old-broken-link-1', statusCode: 400 });
+      const newlyBrokenUrl2 = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/old-broken-link-2', statusCode: 404 });
+      await databaseBuilder.commit();
+
+      const newlyBrokenUrl3 = { url: 'https://example.com/new-broken-link-3', statusCode: 400 };
+      const newlyBrokenUrl4 = { url: 'https://example.com/new-broken-link-4', statusCode: 404, errorMessage: 'URL pas trouvée' };
+
+      await saveNewlyBrokenUrlList([newlyBrokenUrl3, newlyBrokenUrl4]);
+
+      const updatedUrlList = await knex('broken_urls').select('url', 'errorMessage', 'statusCode');
+
+      expect(updatedUrlList).toEqual([
+        {
+          errorMessage: newlyBrokenUrl1.errorMessage,
+          statusCode: newlyBrokenUrl1.statusCode,
+          url: newlyBrokenUrl1.url,
+        },
+        {
+          errorMessage: newlyBrokenUrl2.errorMessage,
+          statusCode: newlyBrokenUrl2.statusCode,
+          url: newlyBrokenUrl2.url,
+        },
+        {
+          ...newlyBrokenUrl3,
+          errorMessage: null,
+        },
+        {
+          ...newlyBrokenUrl4,
+          errorMessage: 'URL pas trouvée',
+        },
+      ]);
+    });
+
+    it('should not add an already present broken URLs in the database', async () => {
+      const newlyBrokenUrl1 = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/old-broken-link-1', statusCode: 400 });
+      const newlyBrokenUrl2 = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/old-broken-link-2', statusCode: 404 });
+      await databaseBuilder.commit();
+
+      const oldBrokenUrl3 = { url: 'https://example.com/old-broken-link-1', statusCode: 400 };
+      const newlyBrokenUrl4 = { url: 'https://example.com/new-broken-link-4', statusCode: 404, errorMessage: 'URL pas trouvée' };
+
+      await saveNewlyBrokenUrlList([oldBrokenUrl3, newlyBrokenUrl4]);
+
+      const updatedUrlList = await knex('broken_urls').select('url', 'errorMessage', 'statusCode');
+
+      expect(updatedUrlList).toEqual([
+        {
+          errorMessage: newlyBrokenUrl1.errorMessage,
+          statusCode: newlyBrokenUrl1.statusCode,
+          url: newlyBrokenUrl1.url,
+        },
+        {
+          errorMessage: newlyBrokenUrl2.errorMessage,
+          statusCode: newlyBrokenUrl2.statusCode,
+          url: newlyBrokenUrl2.url,
+        },
+        {
+          errorMessage: newlyBrokenUrl4.errorMessage,
+          statusCode: newlyBrokenUrl4.statusCode,
+          url: newlyBrokenUrl4.url,
+        },
+      ]);
+    });
+  });
+
+  describe('#removeRepairedUrlList', () => {
+    it('should remove urls from the broken url table', async function() {
+      databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/old-broken-link-1', statusCode: 400 });
+      const oldBrokenUrl2 = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/old-broken-link-2', statusCode: 404 });
+      await databaseBuilder.commit();
+
+      const repairedUrl = { url: 'https://example.com/old-broken-link-1', statusCode: 200 };
+
+      await removeRepairedUrlList([repairedUrl]);
+
+      const updatedUrlList = await knex('broken_urls').select('url', 'errorMessage', 'statusCode');
+
+      expect(updatedUrlList).toEqual([
+        {
+          errorMessage: oldBrokenUrl2.errorMessage,
+          statusCode: oldBrokenUrl2.statusCode,
+          url: oldBrokenUrl2.url,
+        },
+      ]);
+    });
+
+    it('should not remove URLs from the database if the repaired URLs are not present', async function() {
+      const oldBrokenUrl1 = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/old-broken-link-1', statusCode: 400 });
+      const oldBrokenUrl2 = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/old-broken-link-2', statusCode: 404 });
+      await databaseBuilder.commit();
+
+      const repairedUrl = { url: 'https://example.com/new-broken-link-1', statusCode: 200 };
+
+      await removeRepairedUrlList([repairedUrl]);
+
+      const updatedUrlList = await knex('broken_urls').select('url', 'errorMessage', 'statusCode');
+
+      expect(updatedUrlList).toEqual([
+        {
+          errorMessage: oldBrokenUrl1.errorMessage,
+          statusCode: oldBrokenUrl1.statusCode,
+          url: oldBrokenUrl1.url,
+        },
+        {
+          errorMessage: oldBrokenUrl2.errorMessage,
+          statusCode: oldBrokenUrl2.statusCode,
+          url: oldBrokenUrl2.url,
+        },
+      ]);
+    });
+  });
+});
+

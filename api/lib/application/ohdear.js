@@ -1,6 +1,7 @@
 import { child } from '../infrastructure/logger.js';
 import * as config from '../config.js';
 import * as crawledUrlSerializer from '../infrastructure/serializers/ohdear/crawled-url-serializer.js';
+import { updateBrokenUrlList } from '../domain/usecases/index.js';
 
 const logger = child('application:ohdear', { event: 'ohdear' });
 
@@ -18,7 +19,8 @@ export async function register(server) {
           { method: validateOhDearWebhookRequest },
         ],
         handler: async function(request, h) {
-          const _crawledUrlList = crawledUrlSerializer.deserialize(request.payload);
+          const crawledUrlList = crawledUrlSerializer.deserialize(request.payload);
+          await updateBrokenUrlList(crawledUrlList);
           return h.response().code(200);
         },
         tags: [
