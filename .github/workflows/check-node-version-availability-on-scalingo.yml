@@ -12,6 +12,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v6
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-            - uses: 1024pix/pix-actions/check-node-version-availability-on-scalingo@v0
+            - uses: 1024pix/pix-actions/check-node-version-availability-on-scalingo@267cbee87689c6bfe3d5ecaf9175bc892aa3a477 # v0
