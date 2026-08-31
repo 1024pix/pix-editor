@@ -19,7 +19,7 @@ export default class NewStaticCourseController extends Controller {
       this.notifications.sendError('Une erreur est survenue lors de la création du test statique.');
       const knownErrors = err?.errors.map((error) => error.detail).join('\n');
       const finalErrors = knownErrors ?? JSON.stringify(err);
-      throw new Error(finalErrors);
+      throw new Error(finalErrors, { cause: err });
     }
   }
 

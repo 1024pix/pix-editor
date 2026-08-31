@@ -9,6 +9,7 @@ module('Acceptance | Navigate through frameworks', function (hooks) {
   setupMirage(hooks);
   let apiKey, screen;
   hooks.beforeEach(function () {
+    apiKey = crypto.randomUUID();
     this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });

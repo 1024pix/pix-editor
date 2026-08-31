@@ -18,6 +18,7 @@ module('Acceptance | Admin | Navigation', function (hooks) {
   for (const role of ['readpixonly', 'readonly', 'replicator', 'editor']) {
     module(`when user is ${role}`, function (hooks) {
       hooks.beforeEach(async function () {
+        apiKey = crypto.randomUUID();
         this.server.create('user', { apiKey, trigram: 'ABC', access: role });
         screen = await visit('/administration');
         return authenticateSession();
@@ -46,6 +47,7 @@ module('Acceptance | Admin | Navigation', function (hooks) {
 
   module('when user is `admin`', function (hooks) {
     hooks.beforeEach(async function () {
+      apiKey = crypto.randomUUID();
       this.server.create('user', { apiKey, trigram: 'ABC', access: 'admin' });
       screen = await visit('/');
       return authenticateSession();

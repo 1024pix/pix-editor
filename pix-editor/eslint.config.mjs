@@ -29,10 +29,13 @@ const nodeFiles = [
   'tests/e2e/**/*.js',
 ];
 
+const ignoreYamlFiles = (configs) =>
+  configs.map((config) => ({ ...config, ignores: [...(config.ignores || []), '**/*.yaml'] }));
+
 export default [
   ...pixRecommendedConfig,
-  ...emberRecommendedConfig,
-  ...emberGjsRecommendedConfig,
+  ...ignoreYamlFiles(emberRecommendedConfig),
+  ...ignoreYamlFiles(emberGjsRecommendedConfig),
   qunitRecommendedConfig,
   prettierRecommendedConfig,
   { ignores: [...unconventionalJsFiles, ...compiledOutputFiles, ...dependenciesFiles, ...miscFiles, ...emberTryFiles] },
@@ -59,7 +62,6 @@ export default [
 
     rules: {
       'no-setter-return': 'off',
-
       'ember/no-controller-access-in-routes': ['error', { allowControllerFor: true }],
 
       'qunit/require-expect': ['error', 'except-simple'],

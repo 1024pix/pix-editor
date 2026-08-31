@@ -230,7 +230,7 @@ export default function routes() {
   this.get('/challenges', (schema, request) => {
     const ids = request.queryParams['filter[ids]'];
     const search = request.queryParams['filter[search]'];
-    let records = null;
+    let records;
     if (ids) {
       records = schema.challenges.where((challenge) => ids.includes(challenge.id));
     } else if (search) {
