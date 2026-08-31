@@ -10,6 +10,7 @@ const DOMAIN_NAMES_TO_EXCLUDE = [
 ];
 
 export async function saveUrlsFromRelease({
+  brokenUrlRepository,
   releaseRepository,
   urlRepository,
   localizedChallengeRepository,
@@ -29,6 +30,7 @@ export async function saveUrlsFromRelease({
       { urlRepository, localizedChallengeRepository, UrlUtils },
     );
     await saveTutorialUrls(release, activeWhitelistedUrls, domainNamesToExclude, { urlRepository, UrlUtils });
+    await brokenUrlRepository.deleteUnmentionedBrokenUrls();
   });
 }
 

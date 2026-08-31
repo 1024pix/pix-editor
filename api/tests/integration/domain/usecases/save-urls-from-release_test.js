@@ -4,6 +4,7 @@ import { ChallengeForRelease, SkillForRelease } from '../../../../lib/domain/mod
 import { saveUrlsFromRelease } from '../../../../lib/domain/usecases/index.js';
 import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
+import * as brokenUrlRepository from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
 import * as urlRepository from '../../../../lib/infrastructure/repositories/url-repository.js';
 import * as whitelistedUrlRepository from '../../../../lib/infrastructure/repositories/whitelisted-url-repository.js';
 
@@ -205,12 +206,20 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
       // given
       databaseBuilder.factory.buildChallengeExternalUrl();
       databaseBuilder.factory.buildTutorialExternalUrl();
+
       const domainNamesToExclude = ['google.fr', 'wikipedia.org'];
+
+      // in release
+      const brokenUrl1 = databaseBuilder.factory.buildBrokenUrl({ url: 'https://tuto1.net/' });
+      const brokenUrl2 = databaseBuilder.factory.buildBrokenUrl({ url: 'https://solution_example.net' });
+      // not in release
+      databaseBuilder.factory.buildBrokenUrl({ url: 'https://soon-to-be-deleted.com' });
 
       await databaseBuilder.commit();
 
       // when
       await saveUrlsFromRelease({
+        brokenUrlRepository,
         releaseRepository,
         urlRepository,
         localizedChallengeRepository,
@@ -222,6 +231,7 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
       // then
       const challengeUrls = await knex('challenge_external_urls');
       const tutorialUrls = await knex('tutorial_external_urls');
+      const brokenUrls = await knex('broken_urls').pluck('url');
 
       expect(challengeUrls).toStrictEqual([
         {
@@ -348,6 +358,7 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
           url: 'https://tuto3.net/',
         },
       ]);
+      expect(brokenUrls).toStrictEqual([brokenUrl1.url, brokenUrl2.url]);
     });
   });
 });

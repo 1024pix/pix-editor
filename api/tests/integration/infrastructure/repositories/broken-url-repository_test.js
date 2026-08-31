@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, knex } from '../../../test-helper.js';
-import { saveNewlyBrokenUrlList, removeRepairedUrlList } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
+import { saveNewlyBrokenUrlList, removeRepairedUrlList, deleteUnmentionedBrokenUrls } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
 
 describe('Integration | Repository | broken-url-repository', () => {
   describe('#saveNewlyBrokenUrlList', () => {
@@ -112,6 +112,37 @@ describe('Integration | Repository | broken-url-repository', () => {
           errorMessage: oldBrokenUrl2.errorMessage,
           statusCode: oldBrokenUrl2.statusCode,
           url: oldBrokenUrl2.url,
+        },
+      ]);
+    });
+  });
+
+  describe('#deleteUnmentionedBrokenUrls', () => {
+    it('should remove urls from the broken url table if they are not mentioned anymore in external urls', async function() {
+      const externalUrl1 = databaseBuilder.factory.buildChallengeExternalUrl({ url: 'https://example.com/broken-link-1' });
+      const brokenLink1 = databaseBuilder.factory.buildBrokenUrl({ url: externalUrl1.url, statusCode: 400 });
+
+      const externalUrl2 = databaseBuilder.factory.buildTutorialExternalUrl({ url: 'https://example.com/broken-link-2' });
+      const brokenLink2 = databaseBuilder.factory.buildBrokenUrl({ url: externalUrl2.url, statusCode: 404 });
+
+      databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/unmentioned-tutorial-link', statusCode: 404 });
+
+      await databaseBuilder.commit();
+
+      await deleteUnmentionedBrokenUrls();
+
+      const updatedUrlList = await knex('broken_urls').select('url', 'errorMessage', 'statusCode');
+
+      expect(updatedUrlList).toStrictEqual([
+        {
+          errorMessage: brokenLink1.errorMessage,
+          statusCode: brokenLink1.statusCode,
+          url: brokenLink1.url,
+        },
+        {
+          errorMessage: brokenLink2.errorMessage,
+          statusCode: brokenLink2.statusCode,
+          url: brokenLink2.url,
         },
       ]);
     });
