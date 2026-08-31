@@ -115,24 +115,34 @@ export async function saveChallengeUrls(
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlList = findUrlsFromChallenges(operativeChallenges, release, localizedChallengesById, UrlUtils);
   const finalUrlList = urlList
-    .filter(byWhitelistedUrls(whitelistedUrls))
-    .filter(byDomainName(domainNamesToExclude));
+    .filter(isUrlNotInWhitelist(whitelistedUrls))
+    .filter(isUrlNotADomainToExclude(domainNamesToExclude));
   await urlRepository.updateChallenges(finalUrlList);
 }
 
 export async function saveTutorialUrls(release, whitelistedUrls, domainNamesToExclude, { urlRepository, UrlUtils }) {
   const urlList = findUrlsFromTutorials(release, UrlUtils);
   const finalUrlList = urlList
-    .filter(byWhitelistedUrls(whitelistedUrls))
-    .filter(byDomainName(domainNamesToExclude));
+    .filter(isUrlNotInWhitelist(whitelistedUrls)) // supprime les urls qui sont whitelistée
+    .filter(isUrlNotADomainToExclude(domainNamesToExclude));
   await urlRepository.updateTutorials(finalUrlList);
 }
 
-function byWhitelistedUrls(whitelistedUrls) {
+/**
+ * Check if url is whitelist
+ * if in whitelist : should be ignored
+ * @param whitelistedUrls
+ */
+function isUrlNotInWhitelist(whitelistedUrls) {
   return ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url));
 }
 
-function byDomainName(domainNamesToExclude) {
+/**
+ * Check if url is in excluded domain
+ * if in excluded domain : should be ignored
+ * @param domainNamesToExclude
+ */
+function isUrlNotADomainToExclude(domainNamesToExclude) {
   const regexList = domainNamesToExclude.map((domainName) => new RegExp(`(https://)?.*.${domainName}`, 'gi'));
   return ({ url }) => !regexList.some((regex) => regex.test(url));
 }
