@@ -46,7 +46,10 @@ describe('Acceptance | Controller | ohdear-controller', () => {
     describe('when event is brokenLinksFoundNotification', () => {
       it('returns a 200 status code', async () => {
         // given
-        const payload = { type: 'brokenLinksFoundNotification' };
+        const payload = {
+          type: 'brokenLinksFoundNotification',
+          run: { result_payload: { crawled_urls: [] } },
+        };
         const serializedPayload = JSON.stringify(payload);
 
         const signature = await generateOhDearSignature(serializedPayload);

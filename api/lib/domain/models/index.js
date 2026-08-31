@@ -3,6 +3,7 @@ export * from './Attachment.js';
 export * from './Challenge.js';
 export * from './ChangelogEntry.js';
 export * from './Competence.js';
+export * from './CrawledUrl.js';
 export * from './DraftModule.js';
 export * from './DraftModuleDiff.js';
 export * from './DraftModuleVersion.js';
