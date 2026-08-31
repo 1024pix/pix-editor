@@ -1,0 +1,36 @@
+{
+  "$schema": "./$schema.json",
+  "id": "broken-urls-schema",
+  "label": "URL externes cassées",
+  "entityName": "broken_urls",
+  "editable": false,
+  "deletable": false,
+  "creatable": false,
+  "primaryKey": "id",
+  "defaultSort": {
+    "field": "url",
+    "direction": "asc"
+  },
+  "fields": [
+    {
+      "key": "id",
+      "label": "ID",
+      "type": "number"
+    },
+    {
+      "key": "url",
+      "label": "URL",
+      "type": "string"
+    },
+    {
+      "key": "statusCode",
+      "label": "Statut",
+      "type": "number"
+    },
+    {
+      "key": "errorMessage",
+      "label": "Message d'erreur",
+      "type": "string"
+    }
+  ]
+}
