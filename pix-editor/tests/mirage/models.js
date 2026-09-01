@@ -5,6 +5,7 @@ import adminSchema from './models/admin-schema';
 import api from './models/api';
 import area from './models/area';
 import attachment from './models/attachment';
+import brokenUrl from './models/broken-url';
 import challenge from './models/challenge';
 import challengeLocale from './models/challenge-locale';
 import challengeSummary from './models/challenge-summary';
@@ -39,6 +40,7 @@ export default {
   api,
   area,
   attachment,
+  brokenUrl,
   challengeLocale,
   challengeSummary,
   challenge,

@@ -170,6 +170,10 @@ export default class AccessService extends Service {
     return level >= READ_ONLY;
   }
 
+  mayAccessBrokenUrls() {
+    return this.isEditor();
+  }
+
   mayAccessWhitelistedUrls() {
     return this.isEditor();
   }
