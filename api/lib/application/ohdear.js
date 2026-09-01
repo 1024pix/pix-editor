@@ -50,7 +50,7 @@ export async function checkOhDearSignature(request, h) {
     logger.warn('OhDear webhook call missing signature');
     return h.response().code(401).takeover();
   }
-  const signature = Buffer.from(ohDearSignature, 'base64');
+  const signature = Buffer.from(ohDearSignature, 'hex');
   const key = await getOhDearWebhookSecretKey();
 
   const ohDearSignatureCheck = await crypto.subtle.verify({ name: 'HMAC', hash: { name: 'sha-256' } }, key, signature, request.payload);

@@ -26,7 +26,6 @@ describe('Acceptance | Controller | ohdear-controller', () => {
       it('returns a 401 status code', async () => {
         // given
         const payload = { type: 'brokenLinksFoundNotification' };
-        const serializedPayload = JSON.stringify(payload);
         const wrongSignature = Buffer.from('wrong signature').toString('base64');
 
         const server = await createServer();
@@ -35,7 +34,7 @@ describe('Acceptance | Controller | ohdear-controller', () => {
         const response = await server.inject({
           method: 'POST',
           url: '/api/ohdear/webhook',
-          payload: serializedPayload,
+          payload,
           headers: { 'OhDear-Signature': wrongSignature },
         });
 
@@ -75,9 +74,8 @@ describe('Acceptance | Controller | ohdear-controller', () => {
             },
           },
         };
-        const serializedPayload = JSON.stringify(payload);
 
-        const signature = await generateOhDearSignature(serializedPayload);
+        const signature = await generateOhDearSignature(payload);
 
         const server = await createServer();
 
@@ -85,7 +83,7 @@ describe('Acceptance | Controller | ohdear-controller', () => {
         const response = await server.inject({
           method: 'POST',
           url: '/api/ohdear/webhook',
-          payload: serializedPayload,
+          payload,
           headers: { 'OhDear-Signature': signature },
         });
 
@@ -113,9 +111,7 @@ describe('Acceptance | Controller | ohdear-controller', () => {
       it('returns a 400 status code', async () => {
         const payload = { type: 'unknown' };
 
-        const serializedPayload = JSON.stringify(payload);
-
-        const signature = await generateOhDearSignature(serializedPayload);
+        const signature = await generateOhDearSignature(payload);
 
         const server = await createServer();
 
@@ -123,7 +119,7 @@ describe('Acceptance | Controller | ohdear-controller', () => {
         const response = await server.inject({
           method: 'POST',
           url: '/api/ohdear/webhook',
-          payload: serializedPayload,
+          payload,
           headers: { 'OhDear-Signature': signature },
         });
 
@@ -143,7 +139,7 @@ async function generateOhDearSignature(payload) {
     false,
     ['sign'],
   );
-  const data = encoder.encode(payload);
+  const data = encoder.encode(JSON.stringify(payload));
 
-  return Buffer.from(await crypto.subtle.sign('HMAC', key, data)).toString('base64');
+  return Buffer.from(await crypto.subtle.sign('HMAC', key, data)).toString('hex');
 }
