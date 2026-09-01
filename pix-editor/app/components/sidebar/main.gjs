@@ -66,6 +66,12 @@ export default class SidebarMain extends Component {
             URLs à ne pas analyser
           </LinkTo>
         {{/if}}
+        {{#if this.mayAccessBrokenUrls}}
+          <LinkTo class="secondary-links--action" @route="authenticated.broken-urls" {{on "click" @close}}>
+            <PixIcon @name="desktopOff" @ariaHidden={{true}} />
+            URLs cassées
+          </LinkTo>
+        {{/if}}
         <Export @areas={{this.areas}} />
         <LinkTo @route="authenticated.statistics" {{on "click" @close}}>
           <i class="chart bar icon"></i>
@@ -113,6 +119,10 @@ export default class SidebarMain extends Component {
 
   get mayAccessStaticCourses() {
     return this.access.mayAccessStaticCourses();
+  }
+
+  get mayAccessBrokenUrls() {
+    return this.access.mayAccessBrokenUrls();
   }
 
   get mayAccessWhitelistedUrls() {

@@ -1,0 +1,3 @@
+import BrokenUrlList from 'pixeditor/components/broken-url/list';
+
+<template><BrokenUrlList @brokenUrls={{@model.brokenUrls}} /></template>
