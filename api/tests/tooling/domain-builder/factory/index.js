@@ -1,6 +1,7 @@
 export * from './build-area.js';
 export * from './build-area-for-release.js';
 export * from './build-attachment.js';
+export * from './build-broken-url.js';
 export * from './build-challenge-for-release.js';
 export * from './build-challenge.js';
 export * from './build-challenge-summary.js';
