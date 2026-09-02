@@ -1,5 +1,6 @@
 import { DatabaseBuilder } from '../../tests/tooling/database-builder/database-builder.js';
 import { seedsConfig as learningContentConfig } from '../../lib/config.js';
+import { brokenUrlsBuilder } from './data/broken-urls.js';
 import { buildAreasFromConfig } from './data/areas.js';
 import { buildChallengesFromConfig } from './data/challenges.js';
 import { buildCompetencesFromConfig } from './data/competences.js';
@@ -14,6 +15,7 @@ import { whitelistedUrlsBuilder } from './data/whitelisted-urls.js';
 import { buildTags } from './data/tags.js';
 import { buildTutorials } from './data/tutorials.js';
 import { buildModules } from './data/modules.js';
+import { externalUrlBuilder } from './data/external-urls.js';
 import { draftModuleRepository } from '../../lib/infrastructure/repositories/index.js';
 import { validateDraftModule } from '../../lib/domain/usecases/index.js';
 
@@ -66,6 +68,8 @@ export async function seed(knex) {
 
   staticCoursesBuilder(databaseBuilder);
   whitelistedUrlsBuilder(databaseBuilder, adminId);
+  externalUrlBuilder(databaseBuilder);
+  brokenUrlsBuilder(databaseBuilder);
 
   const draftModuleIds = buildModules(databaseBuilder);
 
