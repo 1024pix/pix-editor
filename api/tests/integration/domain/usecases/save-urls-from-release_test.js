@@ -66,6 +66,7 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
         domainBuilder.buildTutorialForRelease({ id: 'tutorial6', link: 'https://drive.google.fr/drive/folders/totalement_inventé' }),
         domainBuilder.buildTutorialForRelease({ id: 'tutorial7', link: 'https://tuto3.net/', title: 'Le même lien que tutorial3' }),
       ];
+      tutorials.forEach((tutorial) => databaseBuilder.factory.buildTutorial(tutorial));
       const pixChallenge1Skill1 = domainBuilder.buildChallengeForRelease({
         id: 'challenge1',
         instruction:
@@ -141,6 +142,17 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
         status: ChallengeForRelease.STATUSES.VALIDE,
         locales: ['fr'],
       });
+      const challengesForRelease = [
+        pixChallenge1Skill1,
+        pixChallenge2Skill1,
+        challenge2NoSkill,
+        pixChallenge3Skill2,
+        pixChallenge4Skill2,
+        wonderlandChallenge5Skill23,
+        wonderlandChallenge6Skill23,
+        wonderlandChallenge7Skill23,
+        wonderlandChallenge8Skill23,
+      ];
       const latestRelease = domainBuilder.buildDomainRelease.withContent({
         competencesFromRelease: [
           pixCompetence,
@@ -153,34 +165,29 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
           obsoletePixSkill,
           wonderlandSkill1,
         ],
-        challengesFromRelease: [
-          pixChallenge1Skill1,
-          pixChallenge2Skill1,
-          challenge2NoSkill,
-          pixChallenge3Skill2,
-          pixChallenge4Skill2,
-          wonderlandChallenge5Skill23,
-          wonderlandChallenge6Skill23,
-          wonderlandChallenge7Skill23,
-          wonderlandChallenge8Skill23,
-        ],
+        challengesFromRelease: challengesForRelease,
         tutorialsFromRelease: tutorials,
       });
       releaseRepository = { getLatestRelease: vi.fn().mockResolvedValue(latestRelease) };
+
+      const challenges = challengesForRelease.map(transformChallengeForReleaseToBarebonesChallenge)
+        .map((challenge) => databaseBuilder.factory.buildChallenge(challenge));
       const localizedChallenges = [
         domainBuilder.buildLocalizedChallenge({
           id: 'challenge1',
+          challengeId: challenges[0].id,
           urlsToConsult: ['http://google.com', 'https://zouzou.fr'],
         }),
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge1bis', urlsToConsult: [] }),
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge2', urlsToConsult: ['https://editor.pix.fr'] }),
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge3', urlsToConsult: [] }),
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge4', urlsToConsult: null }),
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge5', urlsToConsult: ['http://alice.hole'] }),
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge6', urlsToConsult: [] }),
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge7', urlsToConsult: ['https://fr.wikipedia.org/wiki/Écriture_collaborative'] }),
-        domainBuilder.buildLocalizedChallenge({ id: 'challenge8', urlsToConsult: [] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge1bis', challengeId: challenges[1].id, urlsToConsult: [] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge2', challengeId: challenges[2].id, urlsToConsult: ['https://editor.pix.fr'] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge3', challengeId: challenges[3].id, urlsToConsult: [] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge4', challengeId: challenges[4].id, urlsToConsult: null }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge5', challengeId: challenges[5].id, urlsToConsult: ['http://alice.hole'] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge6', challengeId: challenges[6].id, urlsToConsult: [] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge7', challengeId: challenges[7].id, urlsToConsult: ['https://fr.wikipedia.org/wiki/Écriture_collaborative'] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge8', challengeId: challenges[8].id, urlsToConsult: [] }),
       ];
+      localizedChallenges.forEach((localizedChallenge) => databaseBuilder.factory.buildLocalizedChallenge(localizedChallenge));
       localizedChallengeRepository = { list: vi.fn().mockResolvedValue(localizedChallenges) };
 
       databaseBuilder.factory.buildWhitelistedUrl({
@@ -204,8 +211,7 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
 
     it('should analyze and update KO urls data from tutorials and operative challenges', async function() {
       // given
-      databaseBuilder.factory.buildChallengeExternalUrl();
-      databaseBuilder.factory.buildTutorialExternalUrl();
+      databaseBuilder.factory.buildExternalUrl({ tutorialIds: ['tutorial1'], localizedChallengeIds: [] });
 
       const domainNamesToExclude = ['google.fr', 'wikipedia.org'];
 
@@ -229,136 +235,81 @@ describe('Integration | Domain | Usecases | Save urls from release', function() 
       });
 
       // then
-      const challengeUrls = await knex('challenge_external_urls');
-      const tutorialUrls = await knex('tutorial_external_urls');
+      const externalUrls = await knex('external_urls');
+      const localizedChallengeUrlRelations = await knex('external_urls-localized_challenges');
+      const tutorialUrlRelations = await knex('external_urls-tutorials');
       const brokenUrls = await knex('broken_urls').pluck('url');
 
-      expect(challengeUrls).toStrictEqual([
+      expect(externalUrls).toStrictEqual([
         {
           id: expect.any(Number),
-          challenge_status: 'validé',
-          framework_name: 'Pix',
-          competence_name: 'competence 1.1',
-          skill_name: '@mySkill1',
-          challenge_id: 'challenge1',
-          locale: 'fr',
           url: 'https://example.net/',
         },
         {
           id: expect.any(Number),
-          challenge_status: 'validé',
-          framework_name: 'Pix',
-          competence_name: 'competence 1.1',
-          skill_name: '@mySkill1',
-          challenge_id: 'challenge1',
-          locale: 'fr',
           url: 'https://other_example.net/',
         },
         {
           id: expect.any(Number),
-          challenge_status: 'validé, archivé',
-          framework_name: 'Pix, wonderland',
-          competence_name: 'competence 1.1, competence 4.5',
-          skill_name: '@mySkill1, @mySkill23',
-          challenge_id: 'challenge1, challenge1bis, challenge8',
-          locale: 'fr',
           url: 'https://solution_example.net',
         },
         {
           id: expect.any(Number),
-          challenge_status: 'validé',
-          framework_name: 'Pix',
-          competence_name: 'competence 1.1',
-          skill_name: '@mySkill1',
-          challenge_id: 'challenge1',
-          locale: 'fr',
           url: 'http://google.com',
         },
         {
           id: expect.any(Number),
-          challenge_status: 'validé',
-          framework_name: 'Pix',
-          competence_name: 'competence 1.1',
-          skill_name: '@mySkill1',
-          challenge_id: 'challenge1',
-          locale: 'fr',
           url: 'https://zouzou.fr',
         },
         {
           id: expect.any(Number),
-          framework_name: '',
-          competence_name: '',
-          skill_name: '',
-          challenge_id: 'challenge2',
-          challenge_status: 'archivé',
-          locale: 'fr',
           url: 'https://example.fr/',
         },
         {
           id: expect.any(Number),
-          framework_name: '',
-          competence_name: '',
-          skill_name: '',
-          challenge_id: 'challenge2',
-          challenge_status: 'archivé',
-          locale: 'fr',
           url: 'https://editor.pix.fr',
         },
         {
           id: expect.any(Number),
-          framework_name: 'Pix',
-          competence_name: 'competence 1.1',
-          skill_name: '@mySkill2',
-          challenge_id: 'challenge3',
-          challenge_status: 'validé',
-          locale: 'en',
           url: 'https://solutionToDisplay_example.org/',
         },
         {
           id: expect.any(Number),
-          framework_name: 'Pix',
-          competence_name: 'competence 1.1',
-          skill_name: '@mySkill2',
-          challenge_id: 'challenge4',
-          challenge_status: 'archivé',
-          locale: 'fr',
           url: 'https://solution_challenge4.org/',
         },
         {
           id: expect.any(Number),
-          framework_name: 'wonderland',
-          competence_name: 'competence 4.5',
-          skill_name: '@mySkill23',
-          challenge_id: 'challenge5',
-          challenge_status: 'validé',
-          locale: 'nl',
           url: 'http://alice.hole',
         },
-      ]);
-      expect(tutorialUrls).toStrictEqual([
         {
           id: expect.any(Number),
-          competence_name: 'competence 1.1',
-          skill_name: '@mySkill1',
-          tutorial_id: 'tutorial1',
           url: 'https://tuto1.net/',
         },
         {
           id: expect.any(Number),
-          competence_name: 'competence 4.5',
-          skill_name: '@mySkill23',
-          tutorial_id: 'tutorial2',
           url: 'https://www.tuto2.net/',
         },
         {
           id: expect.any(Number),
-          competence_name: 'competence 1.1, competence 4.5',
-          skill_name: '@mySkill1, @mySkill23',
-          tutorial_id: 'tutorial3, tutorial7',
           url: 'https://tuto3.net/',
         },
       ]);
+      expect(localizedChallengeUrlRelations).toHaveLength(12);
+      expect(tutorialUrlRelations).toHaveLength(4);
       expect(brokenUrls).toStrictEqual([brokenUrl1.url, brokenUrl2.url]);
     });
   });
 });
+
+/**
+ *
+ * @param {*} challengeForRelease
+ * @returns {Parameters<typeof databaseBuilder.factory.buildChallenge>[0]}
+ */
+function transformChallengeForReleaseToBarebonesChallenge(challengeForRelease) {
+  return {
+    id: challengeForRelease.id,
+    genealogy: challengeForRelease.genealogy,
+    contextualizedField: [],
+  };
+}

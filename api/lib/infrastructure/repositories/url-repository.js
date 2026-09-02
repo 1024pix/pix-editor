@@ -86,16 +86,49 @@ async function clearOlderSheets(spreadsheetId) {
   }
 }
 
-export async function updateChallenges(challengeUrls) {
-  const knexConn = DomainTransaction.getConnection();
-  await knexConn('challenge_external_urls').truncate();
-  return knexConn.batchInsert('challenge_external_urls', challengeUrls, 500);
-}
+/**
+ * @param {{
+ *   url: string
+ *   localizedChallengeIds: string[]
+ *   tutorialIds: string[]
+ * }[]} externalUrls
+ */
+export async function batchResetAndInsert(externalUrls) {
+  const knex = DomainTransaction.getConnection();
 
-export async function updateTutorials(tutorialUrls) {
-  const knexConn = DomainTransaction.getConnection();
-  await knexConn('tutorial_external_urls').truncate();
-  return knexConn.batchInsert('tutorial_external_urls', tutorialUrls, 500);
+  await knex('external_urls-localized_challenges').truncate();
+  await knex('external_urls-tutorials').truncate();
+
+  // raw query needed because the table is referenced by a foreign key constraint and knex does not support the CASCADE keyword
+  await knex.raw('TRUNCATE TABLE external_urls CASCADE');
+
+  const urlsToInsert = externalUrls.map(({ url }) => ({ url }));
+  const insertedExternalUrls = await knex.batchInsert('external_urls', urlsToInsert, 500).returning('*');
+  for (const insertedExternalUrl of insertedExternalUrls) {
+    const externalUrl = externalUrls.find((externalUrl) => externalUrl.url === insertedExternalUrl.url);
+    insertedExternalUrl.localizedChallengeIds = externalUrl.localizedChallengeIds;
+    insertedExternalUrl.tutorialIds = externalUrl.tutorialIds;
+  }
+
+  const externalUrlLocalizedChallengeRelations = insertedExternalUrls.flatMap((externalUrl) => {
+    return externalUrl.localizedChallengeIds.map((localizedChallengeId) => {
+      return {
+        externalUrlId: externalUrl.id,
+        localizedChallengeId,
+      };
+    });
+  });
+  await knex.batchInsert('external_urls-localized_challenges', externalUrlLocalizedChallengeRelations, 500);
+
+  const externalUrlTutorialRelations = insertedExternalUrls.flatMap((externalUrl) => {
+    return externalUrl.tutorialIds.map((tutorialId) => {
+      return {
+        externalUrlId: externalUrl.id,
+        tutorialId,
+      };
+    });
+  });
+  await knex.batchInsert('external_urls-tutorials', externalUrlTutorialRelations, 500);
 }
 
 export async function get() {

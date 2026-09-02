@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { databaseBuilder } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { urlRepository } from '../../../../lib/infrastructure/repositories/index.js';
 
 describe('Integration | Repository | url-repository', () => {
@@ -130,6 +130,53 @@ describe('Integration | Repository | url-repository', () => {
           },
         ],
       );
+    });
+  });
+
+  describe('batchResetAndInsert', () => {
+    it('should insert a list of external urls after emptying the base', async () => {
+      // given
+      const existingTutorial = databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ tagIds: [] }));
+      const { localizedChallenge: existingLocalizedChallenge } = databaseBuilder.factory.buildChallengeInGroup({ skill: { tutorialIds: [existingTutorial.id] } });
+      databaseBuilder.factory.buildExternalUrl({ url: 'https://ui.pix.org', localizedChallengeIds: [existingLocalizedChallenge.id], tutorialIds: [existingTutorial.id] });
+
+      const tutorial = databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'recMonTuto', tagIds: [] }));
+      const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge(domainBuilder.buildLocalizedChallenge({
+        id: 'recMonLocalizedChallengeId',
+        challengeId: existingLocalizedChallenge.challengeId,
+        locale: 'fr-FR',
+      }));
+
+      await databaseBuilder.commit();
+
+      const newExternalurl = { url: 'https://pix.fr', localizedChallengeIds: [localizedChallenge.id], tutorialIds: [tutorial.id] };
+
+      // when
+      await urlRepository.batchResetAndInsert([newExternalurl]);
+
+      // then
+      const externalUrls = await knex('external_urls').select('*');
+      const externalUrlLocalizedChallengeRelations = await knex('external_urls-localized_challenges').select('*');
+      const externalUrlTutorialRelations = await knex('external_urls-tutorials').select('*');
+
+      expect(externalUrls).toStrictEqual([
+        {
+          id: expect.any(Number),
+          url: newExternalurl.url,
+        },
+      ]);
+      expect(externalUrlLocalizedChallengeRelations).toStrictEqual([
+        {
+          externalUrlId: externalUrls[0].id,
+          localizedChallengeId: localizedChallenge.id,
+        },
+      ]);
+      expect(externalUrlTutorialRelations).toStrictEqual([
+        {
+          externalUrlId: externalUrls[0].id,
+          tutorialId: tutorial.id,
+        },
+      ]);
     });
   });
 });

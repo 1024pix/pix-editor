@@ -27,17 +27,7 @@ export async function removeRepairedUrlList(repairedUrlList) {
 
 export async function deleteUnmentionedBrokenUrls() {
   const knex = DomainTransaction.getConnection();
-  await knex
-    .with(
-      'external_urls',
-      knex.select('url')
-        .from('challenge_external_urls')
-        .unionAll(function() {
-          this.select('url')
-            .from('tutorial_external_urls');
-        }),
-    )
-    .delete()
+  await knex.delete()
     .from('broken_urls')
     .whereNotIn('url', knex.select('url').from('external_urls'));
 }

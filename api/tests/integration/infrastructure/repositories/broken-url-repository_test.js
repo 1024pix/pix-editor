@@ -119,10 +119,10 @@ describe('Integration | Repository | broken-url-repository', () => {
 
   describe('#deleteUnmentionedBrokenUrls', () => {
     it('should remove urls from the broken url table if they are not mentioned anymore in external urls', async function() {
-      const externalUrl1 = databaseBuilder.factory.buildChallengeExternalUrl({ url: 'https://example.com/broken-link-1' });
+      const externalUrl1 = databaseBuilder.factory.buildExternalUrl({ url: 'https://example.com/broken-link-1', localizedChallengeIds: [], tutorialIds: [] });
       const brokenLink1 = databaseBuilder.factory.buildBrokenUrl({ url: externalUrl1.url, statusCode: 400 });
 
-      const externalUrl2 = databaseBuilder.factory.buildTutorialExternalUrl({ url: 'https://example.com/broken-link-2' });
+      const externalUrl2 = databaseBuilder.factory.buildExternalUrl({ url: 'https://example.com/broken-link-2', localizedChallengeIds: [], tutorialIds: [] });
       const brokenLink2 = databaseBuilder.factory.buildBrokenUrl({ url: externalUrl2.url, statusCode: 404 });
 
       databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/unmentioned-tutorial-link', statusCode: 404 });

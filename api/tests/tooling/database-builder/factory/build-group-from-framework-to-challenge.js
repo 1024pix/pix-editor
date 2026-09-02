@@ -82,7 +82,7 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
     competence: buildCompetence({ id: chalengeDTO.competenceId, index: '1.1', areaId: `area${randomId}` }),
     thematic: buildThematic({ id: `thematic${randomId}`, competenceId: chalengeDTO.competenceId }),
     tube: buildTube({ id: skillDTO.tubeId, name: '@tube', thematicId: `thematic${randomId}`, ...tube }),
-    skill: buildSkill({ ...skillDTO, tutorialIds: [], learningMoreTutorialIds: [] }),
+    skill: buildSkill({ ...skillDTO, tutorialIds: skill?.tutorialIds ?? [], learningMoreTutorialIds: skill?.learningMoreTutorialIds ?? [] }),
     challenge: buildChallenge(chalengeDTO),
     localizedChallenge: buildLocalizedChallenge(localizedChallengeDTO),
     translations: translationDTOs.map(buildTranslation),
