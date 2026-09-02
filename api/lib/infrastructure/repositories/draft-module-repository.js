@@ -2,13 +2,14 @@ import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { DraftModule } from '../../domain/models/index.js';
 import { NotFoundError } from '../errors.js';
 
-export async function save({ details, sections, glossary, ...module }) {
+export async function save({ details, sections, glossary, validationErrors, ...module }) {
   const knexConn = DomainTransaction.getConnection();
   const draftModuleDTO = {
     ...module,
     ...details,
     sections: JSON.stringify(sections),
     glossary: JSON.stringify(glossary),
+    validationErrors: validationErrors === undefined ? undefined : JSON.stringify(validationErrors),
   };
 
   const [savedDraftModule] = await knexConn.insert(draftModuleDTO).into('draft-modules').onConflict('id').merge({ ...draftModuleDTO, updatedAt: knexConn.fn.now() }).returning('*');
@@ -18,7 +19,7 @@ export async function save({ details, sections, glossary, ...module }) {
 
 export async function updateValidationStatus({ id, hasBeenValidated, validationErrors }) {
   const knexConn = DomainTransaction.getConnection();
-  await knexConn('draft-modules').update({ hasBeenValidated, validationErrors, updatedAt: new Date() }).where({ id });
+  await knexConn('draft-modules').update({ hasBeenValidated, validationErrors: JSON.stringify(validationErrors), updatedAt: new Date() }).where({ id });
 }
 
 export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {

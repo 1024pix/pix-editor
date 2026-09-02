@@ -631,6 +631,59 @@ describe('Acceptance | Route | draft-modules', () => {
       ]);
     });
 
+    describe('when the draft module already has stored validation errors', () => {
+      it('responds with status 200 and re-validates instead of crashing on the stored jsonb errors', async () => {
+        // given
+        const validationErrors = [
+          { message: 'oups', isSchemaError: true },
+          { message: 'des ids sont dupliqués', isSchemaError: false },
+        ];
+        const draftModule = domainBuilder.buildDraftModule({
+          version: '6.4',
+          hasBeenValidated: false,
+          validationErrors,
+        });
+        databaseBuilder.factory.buildDraftModule(draftModule);
+        await databaseBuilder.commit();
+
+        const draftModulePayload = {
+          slug: 'kebab-royal-2',
+          title: draftModule.title,
+          'internal-title': draftModule.internalTitle,
+          'is-beta': draftModule.isBeta,
+          visibility: draftModule.visibility,
+          details: draftModule.details,
+          sections: draftModule.sections,
+          glossary: draftModule.glossary,
+        };
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'PATCH',
+          url: `/api/draft-modules/${draftModule.id}`,
+          headers: generateAuthorizationHeader(editorUser),
+          payload: {
+            data: {
+              type: 'draft-modules',
+              id: draftModule.id,
+              attributes: draftModulePayload,
+              relationships: { module: { data: null } },
+            },
+          },
+        });
+
+        // then: it must not crash (500) while writing the pre-existing jsonb validationErrors back to the row,
+        // and since the new payload is valid, validation runs again and clears the previous errors.
+        expect(response.statusCode).toBe(200);
+
+        const updatedDraftModule = await knex.select('*').from('draft-modules').where({ id: draftModule.id }).first();
+        expect(updatedDraftModule.hasBeenValidated).toBe(true);
+        expect(updatedDraftModule.validationErrors).toStrictEqual([]);
+      });
+    });
+
     describe('when payload is invalid', () => {
       it('responds with status 400 and error detail', async () => {
         // given
@@ -792,10 +845,10 @@ describe('Acceptance | Route | draft-modules', () => {
         const nonValidatedDraftModule = await knex.select('*').from('draft-modules').first();
         expect(nonValidatedDraftModule.hasBeenValidated).toStrictEqual(false);
         expect(nonValidatedDraftModule.validationErrors).toStrictEqual([
-          `
-"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/.
-Valeur concernée à rechercher : "not valid slug"
-`,
+          {
+            isSchemaError: true,
+            message: '"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/',
+          },
         ]);
       });
     });

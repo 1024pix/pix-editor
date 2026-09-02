@@ -28,9 +28,7 @@ import {
   moduleSchema,
 } from '../../../../../lib/application/modules/validation/module-schema.js';
 
-import { joiErrorParser } from '../../../../../lib/application/modules/joi-error-parser.js';
-
-describe('Unit | Infrastructure | Datasources | Learning Content | Module Datasource | format validation', function() {
+describe('Unit | Application | Modules | Validation | Module validation', function() {
   describe('when element has a valid structure', function() {
     describe('when element is a custom element', function() {
       it('should validate sample custom message-conversation structure', async function() {
@@ -93,8 +91,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
           await customElementSchema.validateAsync(sample, { abortEarly: false });
         } catch (joiError) {
-          const formattedError = joiErrorParser.format(joiError);
-          expect(joiError).to.equal(undefined, formattedError);
+          expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
         }
       });
     });
@@ -112,8 +109,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await customDraftElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -132,8 +128,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await downloadElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -153,8 +148,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await embedElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -194,8 +188,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await flashcardsElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -211,8 +204,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await imageElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -259,8 +251,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await qabElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -290,8 +281,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await qcmElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -311,8 +301,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await qcmDeclarativeElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -333,8 +322,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await qcuElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -355,8 +343,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await qcuDiscoveryElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -424,8 +411,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await qrocmElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -438,8 +424,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await separatorElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -454,8 +439,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await textElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -480,8 +464,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
             await textElementSchema.validateAsync(sample, { abortEarly: false });
           } catch (joiError) {
-            const formattedError = joiErrorParser.format(joiError);
-            expect(joiError).to.equal(undefined, formattedError);
+            expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
           }
         }
       });
@@ -500,8 +483,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await videoElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -517,8 +499,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await shortVideoElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -534,8 +515,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await audioElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
     });
 
@@ -570,8 +550,73 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
 
         await componentStepperSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
-        const formattedError = joiErrorParser.format(joiError);
-        expect(joiError).to.equal(undefined, formattedError);
+        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+      }
+    });
+  });
+
+  describe('grain cross-fields business rules', function() {
+    function _createStepperComponent() {
+      return {
+        type: 'stepper',
+        instruction: 'Une instruction',
+        steps: [
+          { elements: [{ id: randomUUID(), type: 'text', tag: ' ', content: '<p>Étape 1</p>' }] },
+          { elements: [{ id: randomUUID(), type: 'text', tag: ' ', content: '<p>Étape 2</p>' }] },
+        ],
+      };
+    }
+
+    it('rejects a grain with more than one stepper, with a real, resolved message', async function() {
+      // given
+      const grain = {
+        id: randomUUID(),
+        type: 'lesson',
+        title: '',
+        components: [_createStepperComponent(), _createStepperComponent()],
+      };
+
+      // when
+      try {
+        await grainSchema.validateAsync(grain, { abortEarly: false });
+        throw new Error('Joi validation should have thrown');
+      } catch (joiError) {
+        // then
+        expect(joiError.message).to.equal("Il ne peut y avoir qu'un stepper par grain");
+      }
+    });
+
+    it('rejects a grain mixing a stepper with an answerable element, with a real, resolved message', async function() {
+      // given
+      const grain = {
+        id: randomUUID(),
+        type: 'lesson',
+        title: '',
+        components: [
+          _createStepperComponent(),
+          {
+            type: 'element',
+            element: {
+              id: randomUUID(),
+              type: 'qcu',
+              instruction: '<p>Une question ?</p>',
+              proposals: [{ id: '1', content: 'Réponse', feedback: { state: 'Correct !', diagnosis: '<p>Ok</p>' } }],
+              solution: '1',
+              hasShortProposals: false,
+            },
+          },
+        ],
+      };
+
+      // when
+      try {
+        await grainSchema.validateAsync(grain, { abortEarly: false });
+        throw new Error('Joi validation should have thrown');
+      } catch (joiError) {
+        // then
+        expect(joiError.message).to.equal(
+          "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)",
+        );
       }
     });
   });
@@ -924,8 +969,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
         try {
           await moduleSchema.validateAsync(moduleWithValidLongAnswer, { abortEarly: false });
         } catch (joiError) {
-          const formattedError = joiErrorParser.format(joiError);
-          expect(joiError).to.equal(undefined, formattedError);
+          expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
         }
       });
     });

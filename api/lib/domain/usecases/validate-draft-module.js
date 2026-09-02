@@ -1,10 +1,11 @@
 import { draftModuleRepository, moduleRepository } from '../../infrastructure/repositories/index.js';
 
+import { logger } from '../../infrastructure/logger.js';
 import { moduleSchema } from '../../application/modules/validation/module-schema.js';
 import { joiErrorParser } from '../../application/modules/joi-error-parser.js';
 import { ModulesValidation } from '../models/ModulesValidation.js';
 
-export async function validateDraftModule(draftModule, dependencies = { moduleRepository, draftModuleRepository }) {
+export async function validateDraftModule(draftModule, dependencies = { moduleRepository, draftModuleRepository, moduleSchema }) {
   let hasBeenValidated = true;
   const validationErrors = [];
 
@@ -12,17 +13,20 @@ export async function validateDraftModule(draftModule, dependencies = { moduleRe
   const modules = await dependencies.moduleRepository.list();
 
   try {
-    await moduleSchema.validateAsync(draftModuleJSON, { abortEarly: false });
+    await dependencies.moduleSchema.validateAsync(draftModuleJSON, { abortEarly: false });
   } catch (joiError) {
-    validationErrors.push(
-      ...joiError.details.map((errorDetail) =>
-        joiErrorParser.format({
-          error: { details: [errorDetail] },
-          objectErrorSeparator: '',
-          visualSeparator: '',
-        }),
-      ),
-    );
+    // `.external()` validators (HTML content check, grain business rules) can throw a plain, non-Joi
+    // exception on unexpected input. When that happens, `joiError.details` is undefined: fall back to a
+    // generic error instead of crashing the whole request.
+    if (Array.isArray(joiError.details)) {
+      validationErrors.push(...joiErrorParser.toStructuredErrors(joiError));
+    } else {
+      logger.error(joiError);
+      validationErrors.push({
+        message: 'Une erreur inattendue est survenue lors de la validation du module.',
+        isSchemaError: false,
+      });
+    }
     hasBeenValidated = false;
   }
 
@@ -30,7 +34,7 @@ export async function validateDraftModule(draftModule, dependencies = { moduleRe
     const modulesAgg = new ModulesValidation({ modules });
     modulesAgg.validateDraftModuleDoesNotHaveDuplicateIds(draftModule);
   } catch (error) {
-    validationErrors.push(error.message);
+    validationErrors.push({ message: error.message, isSchemaError: false });
     hasBeenValidated = false;
   }
 

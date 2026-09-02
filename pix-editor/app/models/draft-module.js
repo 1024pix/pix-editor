@@ -14,6 +14,13 @@ export default class DraftModule extends BaseModule {
     return true;
   }
 
+  // Every validation error is stored, but only the ones Monaco Editor cannot detect
+  // (cross-fields business rules, HTML content) are relevant to display, since schema-shape
+  // errors are already surfaced live by Monaco.
+  get displayedValidationErrors() {
+    return (this.validationErrors ?? []).filter((error) => !error.isSchemaError);
+  }
+
   get moduleId() {
     return this.belongsTo('module').id();
   }

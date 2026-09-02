@@ -159,10 +159,8 @@ describe('Integration | Repository | draft-module-repository', () => {
       const { id } = databaseBuilder.factory.buildDraftModule(module);
       const hasBeenValidated = false;
       const validationErrors = [
-        `\nError: "id" must be a valid GUID.
-      Valeur concernée à rechercher : "f7b3a2-1a3d8f7e9f5d"\n`,
-        `\nError: "grains[5].id" must be a valid GUID.
-      Valeur concernée à rechercher : "b7ea7630-824"\n`,
+        { message: 'Le brouillon a des ids dupliqués : f7b3a2-1a3d8f7e9f5d', isSchemaError: false },
+        { message: "Il ne peut y avoir qu'un stepper par grain", isSchemaError: false },
       ];
 
       await databaseBuilder.commit();

@@ -122,7 +122,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       const moduleWithErrors = this.server.create('draft-module', {
         id: crypto.randomUUID(),
         internalTitle: 'MODULE_DRAFT',
-        validationErrors: ['oups !'],
+        validationErrors: [{ message: 'oups !', isSchemaError: false }],
       });
 
       // when
@@ -145,7 +145,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       const moduleWithErrors = this.server.create('draft-module', {
         id: crypto.randomUUID(),
         internalTitle: 'MODULE_DRAFT',
-        validationErrors: ['oups !'],
+        validationErrors: [{ message: 'oups !', isSchemaError: false }],
         hasBeenValidated: false,
       });
 
@@ -190,6 +190,76 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         .dom(
           screen.getByRole('button', {
             name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
+          }),
+        )
+        .exists();
+    });
+  });
+
+  module('when the draft is an edition of a production module', function () {
+    test('it should display schema-shape errors even without a JSON editor on this page', async function (assert) {
+      // given: edition drafts show a diff instead of the JSON editor on this page, so Monaco never
+      // surfaces schema-shape errors here — this draft only has a schema-shape error stored.
+      const productionModule = this.server.create('module', { internalTitle: 'MODULE_PROD' });
+      const editionDraft = this.server.create('draft-module', {
+        id: crypto.randomUUID(),
+        module: productionModule,
+        internalTitle: 'MODULE_PROD',
+        hasBeenValidated: false,
+        validationErrors: [{ message: 'oups !', isSchemaError: true }],
+      });
+
+      // when
+      const screen = await visit(`/modules/workbench/${editionDraft.id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // then
+      assert
+        .dom(
+          screen.getByRole('button', {
+            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')}`,
+          }),
+        )
+        .exists();
+      assert
+        .dom(
+          screen.queryByRole('button', {
+            name: t('modules.components.publish-module-button.aria-label', { title: 'MODULE_PROD' }),
+          }),
+        )
+        .doesNotExist();
+    });
+
+    test('it should display a publish button when there are no errors', async function (assert) {
+      // given: a valid edition draft (no stored validation errors) must still show the success state,
+      // not be mistakenly flagged as invalid just because this page has no JSON editor.
+      const productionModule = this.server.create('module', { internalTitle: 'MODULE_PROD' });
+      const editionDraft = this.server.create('draft-module', {
+        id: crypto.randomUUID(),
+        module: productionModule,
+        internalTitle: 'MODULE_PROD',
+        hasBeenValidated: true,
+        validationErrors: [],
+      });
+
+      // when
+      const screen = await visit(`/modules/workbench/${editionDraft.id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // then
+      assert
+        .dom(
+          screen.queryByRole('button', {
+            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')}`,
+          }),
+        )
+        .doesNotExist();
+      assert
+        .dom(
+          screen.getByRole('button', {
+            name: t('modules.components.publish-module-button.aria-label', { title: 'MODULE_PROD' }),
           }),
         )
         .exists();
