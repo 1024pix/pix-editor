@@ -1,4 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
+import Service from '@ember/service';
 import { click, fillIn } from '@ember/test-helpers';
 import { t } from 'ember-intl/test-support';
 import ModuleForm from 'pixeditor/components/modules/module-form';
@@ -11,6 +12,15 @@ const isChrome = navigator?.userAgent?.includes(' Chrome/');
 
 module('Integration | Component | modules/module-form', function (hooks) {
   setupIntlRenderingTest(hooks);
+
+  hooks.beforeEach(function () {
+    class ModuleSchemaStub extends Service {
+      async load() {
+        return {};
+      }
+    }
+    this.owner.register('service:module-schema', ModuleSchemaStub);
+  });
 
   hooks.afterEach(async function () {
     // WORKAROUND: let some time for monaco-editor to dismount

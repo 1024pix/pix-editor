@@ -8,16 +8,22 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
+import * as monaco from 'monaco-editor';
 import MonacoEditor from 'pixeditor/components/monaco-editor/monaco-editor';
+
+const MODULE_SCHEMA_MONACO_URI = 'inmemory://module-json-schema.json';
 
 export default class ModuleForm extends Component {
   @service intl;
+  @service moduleSchema;
 
   @tracked internalTitle;
   @tracked moduleData;
 
   constructor(...args) {
     super(...args);
+
+    this.loadModuleSchema();
 
     this.monacoOptions = {
       ariaLabel: this.intl.t('modules.components.module-form.content-label'),
@@ -37,6 +43,15 @@ export default class ModuleForm extends Component {
     this.internalTitle = internalTitle;
     this.moduleData = { id, shortId, slug, title, isBeta, visibility, details, sections, glossary };
     this.monacoOptions.value = JSON.stringify(this.moduleData, null, 2);
+  }
+
+  async loadModuleSchema() {
+    const schema = await this.moduleSchema.load();
+
+    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+      validate: true,
+      schemas: [{ uri: MODULE_SCHEMA_MONACO_URI, fileMatch: ['*'], schema }],
+    });
   }
 
   @action

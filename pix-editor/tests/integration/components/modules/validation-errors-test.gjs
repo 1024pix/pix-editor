@@ -61,4 +61,36 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
       assert.dom(screen.queryByText(t('modules.components.validation-errors.expand', { count: 2 }))).doesNotExist();
     });
   });
+
+  module('on edit page', function () {
+    test('it should display the edit page information message', async function (assert) {
+      // given
+      const validationErrors = ['Le slug est mal formatté'];
+
+      // when
+      const screen = await render(
+        <template><ModuleValidationErrors @validationErrors={{validationErrors}} @isEditPage={{true}} /></template>,
+      );
+
+      // then
+      assert.dom(screen.getByText(t('modules.components.validation-errors.information-edit-page'))).exists();
+      assert.dom(screen.queryByText(t('modules.components.validation-errors.information'))).doesNotExist();
+    });
+  });
+
+  module('on details page', function () {
+    test('it should display the detail page information message', async function (assert) {
+      // given
+      const validationErrors = ['Le slug est mal formatté'];
+
+      // when
+      const screen = await render(
+        <template><ModuleValidationErrors @validationErrors={{validationErrors}} /></template>,
+      );
+
+      // then
+      assert.dom(screen.getByText(t('modules.components.validation-errors.information'))).exists();
+      assert.dom(screen.queryByText(t('modules.components.validation-errors.information-edit-page'))).doesNotExist();
+    });
+  });
 });

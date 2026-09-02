@@ -53,7 +53,11 @@ export default class ModuleValidationErrors extends Component {
           <PixIcon @ariaHidden={{true}} @name="error" @plainIcon={{true}} />
           <div class="module-validation-errors-button__title">
             <p>{{t "modules.components.validation-errors.title" count=@validationErrors.length}}</p>
-            <p>{{t "modules.components.validation-errors.information"}}</p>
+            {{#if @isEditPage}}
+              <p>{{t "modules.components.validation-errors.information-edit-page"}}</p>
+            {{else}}
+              <p>{{t "modules.components.validation-errors.information"}}</p>
+            {{/if}}
           </div>
         </div>
 
