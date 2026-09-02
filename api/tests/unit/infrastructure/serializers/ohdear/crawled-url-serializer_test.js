@@ -13,6 +13,7 @@ describe('Unit | Serializer | OHDEAR | crawled-url-serializer', () => {
               {
                 crawled_url: 'https://example.com/broken-link-2',
                 status_code: 404,
+                error_message: 'patate',
               },
             ],
           },
@@ -27,7 +28,7 @@ describe('Unit | Serializer | OHDEAR | crawled-url-serializer', () => {
         new CrawledUrl({
           statusCode: 404,
           url: 'https://example.com/broken-link-2',
-          errorMessage: undefined,
+          errorMessage: 'patate',
         }),
       ]);
     });
