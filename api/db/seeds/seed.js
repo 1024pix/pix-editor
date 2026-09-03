@@ -68,7 +68,7 @@ export async function seed(knex) {
 
   staticCoursesBuilder(databaseBuilder);
   whitelistedUrlsBuilder(databaseBuilder, adminId);
-  externalUrlBuilder(databaseBuilder);
+  externalUrlBuilder({ databaseBuilder, learningContentData, tutorials: tutorialItems });
   brokenUrlsBuilder(databaseBuilder);
 
   const draftModuleIds = buildModules(databaseBuilder);
