@@ -29,7 +29,7 @@
   "devDependencies": {
     "@1024pix/ember-testing-library": "^3.0.41",
     "@1024pix/eslint-plugin": "^3.0.4",
-    "@1024pix/pix-ui": "^61.0.0",
+    "@1024pix/pix-ui": "^62.0.0",
     "@1024pix/stylelint-config": "~5.1.37",
     "@babel/eslint-parser": "^7.28.5",
     "@babel/plugin-proposal-decorators": "^7.28.0",
