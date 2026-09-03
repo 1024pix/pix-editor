@@ -91,7 +91,7 @@ async function getOhDearWebhookSecretKey() {
 }
 
 async function validateOhDearWebhookRequest(request, h) {
-  if (request.payload.type !== 'brokenLinksFoundNotification') {
+  if (!['brokenLinksFoundNotification', 'brokenLinksFixedNotification'].includes(request.payload.type)) {
     logger.warn({ type: request.payload.type }, 'received unexpected type from ohdear webhook');
     return h.response().code(400).takeover();
   }
