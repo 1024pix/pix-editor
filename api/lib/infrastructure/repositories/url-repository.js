@@ -131,16 +131,6 @@ export async function batchResetAndInsert(externalUrls) {
   await knex.batchInsert('external_urls-tutorials', externalUrlTutorialRelations, 500);
 }
 
-export async function get() {
-  const knexConn = DomainTransaction.getConnection();
-  const challengeExternalUrlsDto = await knexConn('challenge_external_urls').orderBy('id');
-  const tutorialExternalUrlsDto = await knexConn('tutorial_external_urls').orderBy('id');
-  return {
-    challengeExternalUrls: challengeExternalUrlsDto,
-    tutorialExternalUrls: tutorialExternalUrlsDto,
-  };
-}
-
 /**
  * @param {object} page
  * @param {number} page.number page number
