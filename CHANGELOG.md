@@ -1,5 +1,26 @@
 
 
+## v4.49.0 (03/09/2026)
+
+
+### :rocket: Amélioration
+- [#1602](https://github.com/1024pix/pix-editor/pull/1602) [FEATURE] Permettre la réception de webhooks OhDear pour enregistrer les URL cassées (PIX-23942).
+- [#1617](https://github.com/1024pix/pix-editor/pull/1617) [FEATURE] Afficher les erreurs de l'éditeur Monaco (PIX-24012).
+- [#1610](https://github.com/1024pix/pix-editor/pull/1610) [FEATURE] Afficher un bouton pour la liste des erreurs de validation d'un module (PIX-24011).
+
+### :bug: Correction
+- [#1614](https://github.com/1024pix/pix-editor/pull/1614) [BUGFIX] Ne pas jeter une erreur d'ids dupliqués quand ça concerne les modules de prod (PIX-24021).
+
+### :arrow_up: Montée de version
+- [#1622](https://github.com/1024pix/pix-editor/pull/1622) [BUMP] Update dependency qs to v6.16.0 [SECURITY].
+- [#1616](https://github.com/1024pix/pix-editor/pull/1616) [BUMP] Update dependency @1024pix/pix-ui to v61.
+- [#1613](https://github.com/1024pix/pix-editor/pull/1613) [BUMP] Update dependency joi to v18.2.1 [SECURITY].
+- [#1609](https://github.com/1024pix/pix-editor/pull/1609) [BUMP] Update dependency @1024pix/eslint-plugin to v3.
+- [#1615](https://github.com/1024pix/pix-editor/pull/1615) [BUMP] Pin dependencies.
+- [#1612](https://github.com/1024pix/pix-editor/pull/1612) [BUMP] Update dependency postcss to v8.5.23 [SECURITY].
+- [#1607](https://github.com/1024pix/pix-editor/pull/1607) [BUMP] Update Node.js to v24.19.0.
+- [#1605](https://github.com/1024pix/pix-editor/pull/1605) [BUMP] Update dependency @playwright/test to v1.62.1.
+
 ## v4.48.0 (26/08/2026)
 
 
