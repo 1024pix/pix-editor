@@ -3,8 +3,7 @@ import translationSchema from './admin-schemas/translation-schema.json' with { t
 import releaseSchema from './admin-schemas/release-schema.json' with { type: 'json' };
 import userSchema from './admin-schemas/user-schema.json' with { type: 'json' };
 import translationsConfigSchema from './admin-schemas/translations-config-schema.json' with { type: 'json' };
-import challengeExternalUrlsSchema from './admin-schemas/challenge-external-urls-schema.json' with { type: 'json' };
-import tutorialExternalUrlsSchema from './admin-schemas/tutorial-external-urls-schema.json' with { type: 'json' };
+import externalUrlsSchema from './admin-schemas/external-urls-schema.json' with { type: 'json' };
 import brokenUrlsSchema from './admin-schemas/broken-urls-schema.json' with { type: 'json' };
 
 export function list() {
@@ -14,8 +13,7 @@ export function list() {
     translationSchema,
     translationsConfigSchema,
     userSchema,
-    challengeExternalUrlsSchema,
-    tutorialExternalUrlsSchema,
+    externalUrlsSchema,
     brokenUrlsSchema,
   ].map(stripJsonSchemaReference);
 }

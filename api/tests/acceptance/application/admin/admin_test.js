@@ -32,8 +32,7 @@ describe('Acceptance | Controller | admin', () => {
           'translation-schema',
           'translations-config-schema',
           'user-schema',
-          'instruction-external-urls-schema',
-          'tutorial-external-urls-schema',
+          'external-urls-schema',
           'broken-urls-schema',
         ]);
         expect(response.result.data.find((schema) => schema.id === 'user-schema')).toStrictEqual({
