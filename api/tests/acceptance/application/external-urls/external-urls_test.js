@@ -126,7 +126,7 @@ describe('Acceptance | Controller | external-urls', () => {
         // when
         const response = await server.inject({
           method: 'GET',
-          url: '/api/external-urls?page=1',
+          url: '/api/external-urls',
           headers: generateBrokenLinksMonitorAuthorizationHeader(),
         });
 

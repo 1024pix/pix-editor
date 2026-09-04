@@ -12,7 +12,7 @@ export async function register(server) {
       config: {
         auth: false,
         pre: [{ method: securityPreHandlers.checkUserIsUrlBrokenLinksMonitor }],
-        validate: { query: Joi.object({ page: Joi.number().required() }) },
+        validate: { query: Joi.object({ page: Joi.number() }) },
         handler: async function(request, h) {
           const externalUrls = await urlRepository.getWithPagination({
             number: request.query.page,
