@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { databaseBuilder, knex } from '../../../test-helper.js';
-import { saveNewlyBrokenUrlList, removeRepairedUrlList, deleteUnmentionedBrokenUrls } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
+import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { saveNewlyBrokenUrlList, removeRepairedUrlList, deleteUnmentionedBrokenUrls, list } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
+import { BrokenUrl } from '../../../../lib/domain/readmodels/index.js';
 
 describe('Integration | Repository | broken-url-repository', () => {
   describe('#saveNewlyBrokenUrlList', () => {
@@ -147,5 +148,74 @@ describe('Integration | Repository | broken-url-repository', () => {
       ]);
     });
   });
-});
 
+  describe('#list', () => {
+    it('should retrieve broken url readmodels ordered by url', async () => {
+      // given
+      const tutorial = databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ tagIds: [] }));
+      const { challenge, skill } = databaseBuilder.factory.buildChallengeInGroup({ skill: { tutorialIds: [tutorial.id] } });
+      const localized2 = databaseBuilder.factory.buildLocalizedChallenge({ id: 'recLocalized2', challengeId: challenge.id, locale: 'nl-NL' });
+
+      databaseBuilder.factory.buildExternalUrl({
+        url: 'http://localhost:8080/',
+        localizedChallengeIds: [challenge.id],
+        tutorialIds: [],
+      });
+      databaseBuilder.factory.buildExternalUrl({
+        url: 'http://www.test.org',
+        localizedChallengeIds: [challenge.id, localized2.id],
+        tutorialIds: [],
+      });
+
+      databaseBuilder.factory.buildExternalUrl({ url: 'http://test.localhost:8080/', localizedChallengeIds: [], tutorialIds: [tutorial.id] });
+      const notFoundUrl = databaseBuilder.factory.buildBrokenUrl({
+        errorMessage: 'Not Found',
+        statusCode: 404,
+        url: 'http://localhost:8080/',
+      });
+      const brokenUrl = databaseBuilder.factory.buildBrokenUrl({
+        errorMessage: 'Tout cassé',
+        statusCode: 500,
+        url: 'http://test.localhost:8080/',
+      });
+      const notAllowedUrl = databaseBuilder.factory.buildBrokenUrl({
+        errorMessage: 'Pas le droit',
+        statusCode: 401,
+        url: 'http://www.test.org',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const brokenUrlList = await list();
+
+      // then
+      expect(brokenUrlList[0]).toBeInstanceOf(BrokenUrl);
+
+      expect(brokenUrlList).toEqual([
+        {
+          ...notFoundUrl,
+          localizedChallengeIds: [challenge.id],
+          skillIds: [],
+        },
+        {
+          ...brokenUrl,
+          skillIds: [skill.id],
+          localizedChallengeIds: [],
+        },
+        {
+          ...notAllowedUrl,
+          localizedChallengeIds: [challenge.id, localized2.id],
+          skillIds: [],
+        },
+      ]);
+    });
+
+    it('should return an empty array when no broken urls was found', async () => {
+      // when
+      const brokenUrls = await list();
+
+      // then
+      expect(brokenUrls).toEqual([]);
+    });
+  });
+});
