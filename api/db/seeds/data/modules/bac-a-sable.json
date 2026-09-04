@@ -1694,6 +1694,29 @@
                     "ariaLabel": "Nom de ce produit",
                     "tolerances": ["t1"],
                     "solutions": ["Modulix"]
+                  },
+                  {
+                    "input": "1",
+                    "type": "select",
+                    "display": "inline",
+                    "placeholder": "",
+                    "ariaLabel": "choisir le mot dans le menu déroulant",
+                    "tolerances": [],
+                    "options": [
+                      {
+                        "id": "4",
+                        "content": "mesurer"
+                      },
+                      {
+                        "id": "5",
+                        "content": "prédire"
+                      },
+                      {
+                        "id": "6",
+                        "content": "superviser"
+                      }
+                    ],
+                    "solutions": ["4"]
                   }
                 ],
                 "feedbacks": {
