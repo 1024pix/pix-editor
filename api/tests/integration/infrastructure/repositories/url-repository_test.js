@@ -1,113 +1,42 @@
 import { describe, expect, it } from 'vitest';
-import { databaseBuilder } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { urlRepository } from '../../../../lib/infrastructure/repositories/index.js';
 
 describe('Integration | Repository | url-repository', () => {
-  describe('get', () => {
-    it('should return the list externale challenge and tutorial urls', async () => {
-      // given
-      databaseBuilder.factory.buildChallengeExternalUrl({
-        framework_name: 'Pix',
-        competence_name: 'Nom de competence',
-        skill_name: '@patateDouce',
-        challenge_id: 'challenge1',
-        challenge_status: 'validé',
-        locale: 'nl',
-        url: 'https://ui.pix.org',
-      });
-      databaseBuilder.factory.buildChallengeExternalUrl({
-        framework_name: 'Pix',
-        competence_name: 'Nom de competence',
-        skill_name: '@patateDouce',
-        challenge_id: 'challenge2',
-        challenge_status: 'validé',
-        locale: 'fr',
-        url: 'https://ui.pix.fr',
-      });
-      databaseBuilder.factory.buildTutorialExternalUrl({
-        competence_name: 'Nom de competence',
-        skill_name: '@patateDouce',
-        tutorial_id: 'tutorial1',
-        url: 'http://commant-pix-ui-fonctionne.org',
-      });
-
-      await databaseBuilder.commit();
-
-      // when
-      const urls = await urlRepository.get();
-
-      // then
-      expect(urls).toStrictEqual({
-        challengeExternalUrls: [
-          {
-            id: expect.any(Number),
-            framework_name: 'Pix',
-            competence_name: 'Nom de competence',
-            skill_name: '@patateDouce',
-            challenge_id: 'challenge1',
-            challenge_status: 'validé',
-            locale: 'nl',
-            url: 'https://ui.pix.org',
-          },
-          {
-            id: expect.any(Number),
-            framework_name: 'Pix',
-            competence_name: 'Nom de competence',
-            skill_name: '@patateDouce',
-            challenge_id: 'challenge2',
-            challenge_status: 'validé',
-            locale: 'fr',
-            url: 'https://ui.pix.fr',
-          },
-        ],
-        tutorialExternalUrls: [
-          {
-            id: expect.any(Number),
-            competence_name: 'Nom de competence',
-            skill_name: '@patateDouce',
-            tutorial_id: 'tutorial1',
-            url: 'http://commant-pix-ui-fonctionne.org',
-          },
-        ],
-      });
-    });
-  });
-
   describe('getWithPagination', () => {
     it('should return a page of external urls', async () => {
       // given
-      databaseBuilder.factory.buildChallengeExternalUrl({
-        framework_name: 'Pix',
-        competence_name: 'Nom de competence',
-        skill_name: '@patateDouce',
-        challenge_id: 'challenge1',
-        challenge_status: 'validé',
-        locale: 'nl',
+      const { challenge } = databaseBuilder.factory.buildChallengeInGroup({});
+
+      const localized1 = databaseBuilder.factory.buildLocalizedChallenge({ id: 'recLocalized1', challengeId: challenge.id, locale: 'fr-FR1' });
+      databaseBuilder.factory.buildExternalUrl({
         url: 'https://ui.pix.org',
+        localizedChallengeIds: [localized1.id],
+        tutorialIds: [],
       });
-      databaseBuilder.factory.buildChallengeExternalUrl({
-        framework_name: 'Pix',
-        competence_name: 'Nom de competence',
-        skill_name: '@patateDouce',
-        challenge_id: 'challenge2',
-        challenge_status: 'validé',
-        locale: 'fr',
+
+      const localized2 = databaseBuilder.factory.buildLocalizedChallenge({ id: 'recLocalized2', challengeId: challenge.id, locale: 'fr-FR2' });
+      const tutorial1 = databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto1', url: 'https://ui.pix.fr', tagIds: [] }));
+      databaseBuilder.factory.buildExternalUrl({
         url: 'https://ui.pix.fr',
+        localizedChallengeIds: [localized2.id],
+        tutorialIds: [tutorial1.id],
       });
-      databaseBuilder.factory.buildChallengeExternalUrl({
-        framework_name: 'Pix',
-        competence_name: 'Nom de competence',
-        skill_name: '@patateDouce',
-        challenge_id: 'challenge3',
-        challenge_status: 'validé',
-        locale: 'fr',
-        url: 'https://ui.pix.fr',
+
+      const localized3 = databaseBuilder.factory.buildLocalizedChallenge({ id: 'recLocalized3', challengeId: challenge.id, locale: 'fr-FR3' });
+      databaseBuilder.factory.buildExternalUrl({
+        url: 'https://orga.pix.fr',
+        tutorialIds: [],
+        localizedChallengeIds: [localized2.id, localized3.id],
       });
-      databaseBuilder.factory.buildTutorialExternalUrl({
-        competence_name: 'Nom de competence',
-        skill_name: '@patateDouce',
-        tutorial_id: 'tutorial1',
-        url: 'http://commant-pix-ui-fonctionne.org',
+
+      const tutorial2 = databaseBuilder.factory.buildTutorial(
+        domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto2', url: 'http://comment-pix-ui-fonctionne.org', tagIds: [] }),
+      );
+      databaseBuilder.factory.buildExternalUrl({
+        tutorialIds: [tutorial2.id],
+        localizedChallengeIds: [],
+        url: 'http://comment-pix-ui-fonctionne.org',
       });
 
       await databaseBuilder.commit();
@@ -119,17 +48,62 @@ describe('Integration | Repository | url-repository', () => {
       expect(urls).toStrictEqual(
         [
           {
-            id: 'challenge3',
+            id: expect.any(Number),
             url: 'https://ui.pix.fr',
-            type: 'challenge',
           },
           {
-            id: 'tutorial1',
-            url: 'http://commant-pix-ui-fonctionne.org',
-            type: 'tutorial',
+            id: expect.any(Number),
+            url: 'https://ui.pix.org',
           },
         ],
       );
+    });
+  });
+
+  describe('batchResetAndInsert', () => {
+    it('should insert a list of external urls after emptying the base', async () => {
+      // given
+      const existingTutorial = databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ tagIds: [] }));
+      const { localizedChallenge: existingLocalizedChallenge } = databaseBuilder.factory.buildChallengeInGroup({ skill: { tutorialIds: [existingTutorial.id] } });
+      databaseBuilder.factory.buildExternalUrl({ url: 'https://ui.pix.org', localizedChallengeIds: [existingLocalizedChallenge.id], tutorialIds: [existingTutorial.id] });
+
+      const tutorial = databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'recMonTuto', tagIds: [] }));
+      const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge(domainBuilder.buildLocalizedChallenge({
+        id: 'recMonLocalizedChallengeId',
+        challengeId: existingLocalizedChallenge.challengeId,
+        locale: 'fr-FR',
+      }));
+
+      await databaseBuilder.commit();
+
+      const newExternalurl = { url: 'https://pix.fr', localizedChallengeIds: [localizedChallenge.id], tutorialIds: [tutorial.id] };
+
+      // when
+      await urlRepository.batchResetAndInsert([newExternalurl]);
+
+      // then
+      const externalUrls = await knex('external_urls').select('*');
+      const externalUrlLocalizedChallengeRelations = await knex('external_urls-localized_challenges').select('*');
+      const externalUrlTutorialRelations = await knex('external_urls-tutorials').select('*');
+
+      expect(externalUrls).toStrictEqual([
+        {
+          id: expect.any(Number),
+          url: newExternalurl.url,
+        },
+      ]);
+      expect(externalUrlLocalizedChallengeRelations).toStrictEqual([
+        {
+          externalUrlId: externalUrls[0].id,
+          localizedChallengeId: localizedChallenge.id,
+        },
+      ]);
+      expect(externalUrlTutorialRelations).toStrictEqual([
+        {
+          externalUrlId: externalUrls[0].id,
+          tutorialId: tutorial.id,
+        },
+      ]);
     });
   });
 });

@@ -34,7 +34,7 @@ import { databaseBuffer } from '../database-buffer.js';
  *   validatedAt?: string | number | Date
  *   archivedAt?: string | number | Date
  *   createdAt?: string | number | Date
- *   madeObsoleteAt: string | number | Date
+ *   madeObsoleteAt?: string | number | Date
  *   updatedAt?: string | number | Date
  * }} challengeToBuild
  */

@@ -86,44 +86,71 @@ async function clearOlderSheets(spreadsheetId) {
   }
 }
 
-export async function updateChallenges(challengeUrls) {
-  const knexConn = DomainTransaction.getConnection();
-  await knexConn('challenge_external_urls').truncate();
-  return knexConn.batchInsert('challenge_external_urls', challengeUrls, 500);
-}
+/**
+ * @param {{
+ *   url: string
+ *   localizedChallengeIds: string[]
+ *   tutorialIds: string[]
+ * }[]} externalUrls
+ */
+export async function batchResetAndInsert(externalUrls) {
+  const knex = DomainTransaction.getConnection();
 
-export async function updateTutorials(tutorialUrls) {
-  const knexConn = DomainTransaction.getConnection();
-  await knexConn('tutorial_external_urls').truncate();
-  return knexConn.batchInsert('tutorial_external_urls', tutorialUrls, 500);
-}
+  await knex('external_urls-localized_challenges').truncate();
+  await knex('external_urls-tutorials').truncate();
 
-export async function get() {
-  const knexConn = DomainTransaction.getConnection();
-  const challengeExternalUrlsDto = await knexConn('challenge_external_urls').orderBy('id');
-  const tutorialExternalUrlsDto = await knexConn('tutorial_external_urls').orderBy('id');
-  return {
-    challengeExternalUrls: challengeExternalUrlsDto,
-    tutorialExternalUrls: tutorialExternalUrlsDto,
-  };
+  // raw query needed because the table is referenced by a foreign key constraint and knex does not support the CASCADE keyword
+  await knex.raw('TRUNCATE TABLE external_urls CASCADE');
+
+  const urlsToInsert = externalUrls.map(({ url }) => ({ url }));
+  const insertedExternalUrls = await knex.batchInsert('external_urls', urlsToInsert, 500).returning('*');
+  for (const insertedExternalUrl of insertedExternalUrls) {
+    const externalUrl = externalUrls.find((externalUrl) => externalUrl.url === insertedExternalUrl.url);
+    insertedExternalUrl.localizedChallengeIds = externalUrl.localizedChallengeIds;
+    insertedExternalUrl.tutorialIds = externalUrl.tutorialIds;
+  }
+
+  const externalUrlLocalizedChallengeRelations = insertedExternalUrls.flatMap((externalUrl) => {
+    return externalUrl.localizedChallengeIds.map((localizedChallengeId) => {
+      return {
+        externalUrlId: externalUrl.id,
+        localizedChallengeId,
+      };
+    });
+  });
+  await knex.batchInsert('external_urls-localized_challenges', externalUrlLocalizedChallengeRelations, 500);
+
+  const externalUrlTutorialRelations = insertedExternalUrls.flatMap((externalUrl) => {
+    return externalUrl.tutorialIds.map((tutorialId) => {
+      return {
+        externalUrlId: externalUrl.id,
+        tutorialId,
+      };
+    });
+  });
+  await knex.batchInsert('external_urls-tutorials', externalUrlTutorialRelations, 500);
 }
 
 /**
  * @param {object} page
  * @param {number} page.number page number
  * @param {number} page.size page size
+ * @returns {Promise<{ id: number, url: string }[]>}
  */
 export async function getWithPagination(page) {
   const knex = DomainTransaction.getConnection();
   const getQuery = knex
-    .select(knex.raw('challenge_id AS id'), 'url', knex.raw('\'challenge\' AS type'))
-    .from('challenge_external_urls')
-    .unionAll(function() {
-      this.select(knex.raw('tutorial_id AS id'), 'url', knex.raw('\'tutorial\' AS type')).from('tutorial_external_urls');
-    })
-    .orderBy('type', 'id');
+    .select('id', 'url')
+    .from('external_urls')
+    .orderByRaw(`EXISTS (
+      SELECT 1
+      FROM "external_urls-localized_challenges"
+      WHERE "external_urls-localized_challenges"."externalUrlId" = "external_urls"."id"
+    )`)
+    .orderBy('url');
 
   const { results: externalUrlDTOs } = await fetchPage(getQuery, page);
+
   return externalUrlDTOs;
 }
 

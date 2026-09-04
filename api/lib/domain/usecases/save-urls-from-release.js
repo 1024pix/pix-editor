@@ -19,23 +19,23 @@ export async function saveUrlsFromRelease({
   domainNamesToExclude = DOMAIN_NAMES_TO_EXCLUDE,
 }) {
   const release = await releaseRepository.getLatestRelease();
+  const localizedChallenges = await localizedChallengeRepository.list();
   const whitelistedUrls = await whitelistedUrlRepository.list();
   const activeWhitelistedUrls = whitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive);
 
+  const urlsFromChallenges = getChallengeUrls(release, localizedChallenges, activeWhitelistedUrls, domainNamesToExclude, UrlUtils);
+  const urlsFromTutorials = getTutorialUrls(release, activeWhitelistedUrls, domainNamesToExclude, UrlUtils);
+
+  const externalUrls = mergeChallengeAndTutorialUrls(urlsFromChallenges, urlsFromTutorials);
+
   return DomainTransaction.execute(async () => {
-    await saveChallengeUrls(
-      release,
-      activeWhitelistedUrls,
-      domainNamesToExclude,
-      { urlRepository, localizedChallengeRepository, UrlUtils },
-    );
-    await saveTutorialUrls(release, activeWhitelistedUrls, domainNamesToExclude, { urlRepository, UrlUtils });
+    await urlRepository.batchResetAndInsert(externalUrls);
     await brokenUrlRepository.deleteUnmentionedBrokenUrls();
   });
 }
 
 function findUrlsFromChallenges(challenges, release, localizedChallengesById, UrlUtils) {
-  const challengeUrlsLocation = challenges.flatMap((challenge) => {
+  const localizedChallengeUrls = challenges.flatMap((challenge) => {
     const functions = [
       (challenge) => UrlUtils.findUrlsInMarkdown(challenge.instruction),
       (challenge) => UrlUtils.findUrlsInMarkdown(challenge.proposals),
@@ -46,27 +46,17 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
     return functions
       .flatMap((fun) => fun(challenge))
       .map((url) => ({
-        framework_name: release.findOriginForChallenge(challenge) ?? '',
-        competence_name: release.findCompetenceNameForChallenge(challenge) ?? '',
-        skill_name: release.findSkillNameForChallenge(challenge) ?? '',
-        challenge_id: challenge.id,
-        challenge_status: challenge.status,
-        locale: challenge.locales[0],
+        localizedChallengeId: challenge.id,
         url,
       }));
   });
 
-  const urlsLocationByUrl = _.groupBy(challengeUrlsLocation, 'url');
+  const urlsLocationByUrl = _.groupBy(localizedChallengeUrls, 'url');
   return Object
     .entries(urlsLocationByUrl)
     .map(([url, values]) => {
       return {
-        framework_name: deduplicateByField(values, 'framework_name').join(', '),
-        competence_name: deduplicateByField(values, 'competence_name').join(', '),
-        skill_name: deduplicateByField(values, 'skill_name').join(', '),
-        challenge_id: deduplicateByField(values, 'challenge_id').join(', '),
-        locale: deduplicateByField(values, 'locale').join(', '),
-        challenge_status: deduplicateByField(values, 'challenge_status').join(', '),
+        localizedChallengeIds: deduplicateByField(values, 'localizedChallengeId'),
         url,
       };
     });
@@ -77,27 +67,19 @@ function findUrlsFromTutorials(release, UrlUtils) {
   const accessibleTutorialIds = new Set(
     notObsoleteSkills.flatMap((skill) => [...skill.tutorialIds, ...skill.learningMoreTutorialIds]),
   );
-  const urlsLocation = release.content.tutorials
+  const tutorialUrls = release.content.tutorials
     .filter((tutorial) => accessibleTutorialIds.has(tutorial.id))
-    .flatMap((tutorial) => {
-      const skills = notObsoleteSkills.filter((skill) => skill.tutorialIds.includes(tutorial.id) || skill.learningMoreTutorialIds.includes(tutorial.id));
+    .map((tutorial) => ({
+      tutorialId: tutorial.id,
+      url: UrlUtils.findUrlsInText(tutorial.link)[0],
+    }));
 
-      return skills.map((skill) => ({
-        skill_name: skill.name,
-        competence_name: release.content.competences.find((competence) => competence.id === skill.competenceId).name_i18n.fr,
-        tutorial_id: tutorial.id,
-        url: UrlUtils.findUrlsInText(tutorial.link)[0],
-      }));
-    });
-
-  const urlsLocationByUrl = _.groupBy(urlsLocation, 'url');
+  const urlsLocationByUrl = _.groupBy(tutorialUrls, 'url');
   return Object
     .entries(urlsLocationByUrl)
     .map(([url, values]) => {
       return {
-        competence_name: deduplicateByField(values, 'competence_name').join(', '),
-        skill_name: deduplicateByField(values, 'skill_name').join(', '),
-        tutorial_id: deduplicateByField(values, 'tutorial_id').join(', '),
+        tutorialIds: deduplicateByField(values, 'tutorialId'),
         url,
       };
     });
@@ -107,27 +89,56 @@ function deduplicateByField(objects, fieldName) {
   return [...new Set(objects.map((object) => object[fieldName]))];
 }
 
-export async function saveChallengeUrls(
+export function getChallengeUrls(
   release,
+  localizedChallenges,
   whitelistedUrls,
   domainNamesToExclude,
-  { urlRepository, localizedChallengeRepository, UrlUtils },
+  UrlUtils,
 ) {
   const operativeChallenges = release.operativeChallenges;
-  const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
+  const localizedChallengesById = _.keyBy(localizedChallenges, 'id');
   const urlList = findUrlsFromChallenges(operativeChallenges, release, localizedChallengesById, UrlUtils);
-  const finalUrlList = urlList
+  return urlList
     .filter(isUrlNotInWhitelist(whitelistedUrls))
     .filter(isUrlNotADomainToExclude(domainNamesToExclude));
-  await urlRepository.updateChallenges(finalUrlList);
 }
 
-export async function saveTutorialUrls(release, whitelistedUrls, domainNamesToExclude, { urlRepository, UrlUtils }) {
+export function getTutorialUrls(release, whitelistedUrls, domainNamesToExclude, UrlUtils) {
   const urlList = findUrlsFromTutorials(release, UrlUtils);
-  const finalUrlList = urlList
-    .filter(isUrlNotInWhitelist(whitelistedUrls)) // supprime les urls qui sont whitelistée
+  return urlList
+    .filter(isUrlNotInWhitelist(whitelistedUrls))
     .filter(isUrlNotADomainToExclude(domainNamesToExclude));
-  await urlRepository.updateTutorials(finalUrlList);
+}
+
+/**
+ * @param {{ url: string, localizedChallengeIds: string[] }[]} urlsFromChallenges
+ * @param {{ url: string, tutorialIds: string[] }[]} urlsFromTutorials
+ * @returns {{ url: string, localizedChallengeIds: string[], tutorialIds: string[] }[]} externalUrls
+ */
+export function mergeChallengeAndTutorialUrls(urlsFromChallenges, urlsFromTutorials) {
+  const idsByUrl = new Map();
+  for (const urlFromChallenge of urlsFromChallenges) {
+    idsByUrl.set(urlFromChallenge.url, { localizedChallengeIds: urlFromChallenge.localizedChallengeIds, tutorialIds: [] });
+  }
+  for (const urlFromTutorial of urlsFromTutorials) {
+    const existingEntry = idsByUrl.get(urlFromTutorial.url);
+    if (existingEntry) {
+      idsByUrl.set(
+        urlFromTutorial.url,
+        {
+          localizedChallengeIds: existingEntry.localizedChallengeIds,
+          tutorialIds: urlFromTutorial.tutorialIds,
+        },
+      );
+    } else {
+      idsByUrl.set(urlFromTutorial.url, { tutorialIds: urlFromTutorial.tutorialIds, localizedChallengeIds: [] });
+    }
+  }
+  return idsByUrl.entries().map(([url, ids]) => ({
+    url,
+    ...ids,
+  })).toArray();
 }
 
 /**

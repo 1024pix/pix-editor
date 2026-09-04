@@ -1,0 +1,26 @@
+{
+  "$schema": "./$schema.json",
+  "id": "external-urls-schema",
+  "label": "URL externes",
+  "entityName": "external_urls",
+  "editable": false,
+  "deletable": false,
+  "creatable": false,
+  "primaryKey": "id",
+  "defaultSort": {
+    "field": "id",
+    "direction": "asc"
+  },
+  "fields": [
+    {
+      "key": "id",
+      "label": "ID",
+      "type": "number"
+    },
+    {
+      "key": "url",
+      "label": "URL",
+      "type": "string"
+    }
+  ]
+}
