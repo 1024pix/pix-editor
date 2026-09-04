@@ -43,7 +43,7 @@
   "author": "GIP Pix",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@1024pix/epreuves-components": "^4.6.2",
+    "@1024pix/epreuves-components": "^4.18.2",
     "@1024pix/oppsy": "^1.0.2",
     "@adminjs/hapi": "^7.0.1",
     "@adminjs/sequelize": "^4.0.0",
