@@ -15,6 +15,7 @@ export * from './delete-attachment.js';
 export * from './delete-unmentioned-keys-after-upload.js';
 export * from './download-translation-from-phrase.js';
 export * from './export-external-urls-from-release.js';
+export * from './export-all-translations-for-weblate.js';
 export * from './export-translations.js';
 export * from './export-translations-for-weblate.js';
 export * from './find-all-missions.js';

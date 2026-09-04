@@ -29,6 +29,25 @@ const ImportExportComponent = () => {
     }
   }
 
+  async function exportAllWeblateTranslations() {
+    setFetching(true);
+    try {
+      const token = currentAdmin?.email;
+      const response = await fetch(`/api/weblate-translations.zip`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const blob = await response.blob();
+      saveAs(blob, 'weblate-translations.zip');
+      sendNotice({ message: 'Exported successfully', type: 'success' });
+    } catch (e) {
+      sendNotice({ message: e.message, type: 'error' });
+    } finally {
+      setFetching(false);
+    }
+  }
+
   async function exportTranslationToPhrase() {
     setFetching(true);
     try {
@@ -113,6 +132,11 @@ const ImportExportComponent = () => {
         <Button mt={10} onClick={exportTranslationToPhrase} variant="outlined" disabled={isFetching}>
           Exporter toutes les traductions FR dans Phrase
         </Button>
+        <br />
+        <Button mt={10} onClick={() => exportAllWeblateTranslations()} variant="outlined" disabled={isFetching}>
+          Exporter toutes les traductions pour Weblate
+        </Button>
+        <br />
       </Box>
       <Box>
         <H3>Import</H3>
