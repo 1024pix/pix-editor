@@ -814,6 +814,95 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
       });
     });
 
+    describe('when qrocm has two proposals with same input value', function() {
+      it('should send an error', async function() {
+        const sample = {
+          id: randomUUID(),
+          type: 'qrocm',
+          instruction: '<p>Complétez le texte ci-dessous.</p>',
+          proposals: [
+            {
+              type: 'text',
+              content: "<p>Il est possible d'utiliser des textes à champs libres&nbsp;:</p>",
+            },
+            {
+              input: 'symbole-separateur-email',
+              type: 'input',
+              inputType: 'text',
+              size: 1,
+              display: 'inline',
+              placeholder: '',
+              ariaLabel: "Remplir avec le caractère qui permet de séparer les deux parties d'une adresse mail",
+              tolerances: ['t1'],
+              solutions: ['@'],
+            },
+            {
+              type: 'text',
+              content: '<p>On peut aussi utiliser des liste déroulantes&nbsp;:</p>',
+            },
+            {
+              input: 'modulix-select',
+              type: 'select',
+              display: 'block',
+              placeholder: '',
+              ariaLabel: "Choisir l'adjectif le plus adapté",
+              tolerances: [],
+              options: [
+                {
+                  id: '1',
+                  content: 'Génial',
+                },
+                {
+                  id: '2',
+                  content: 'Incroyable',
+                },
+                {
+                  id: '3',
+                  content: 'Légendaire',
+                },
+              ],
+              solutions: ['3'],
+            },
+            {
+              input: 'modulix-select',
+              type: 'select',
+              display: 'block',
+              placeholder: '',
+              ariaLabel: "Choisir l'adjectif le plus cool",
+              tolerances: [],
+              options: [
+                {
+                  id: '1',
+                  content: 'Génial',
+                },
+                {
+                  id: '2',
+                  content: 'Incroyable',
+                },
+                {
+                  id: '3',
+                  content: 'Légendaire',
+                },
+              ],
+              solutions: ['2'],
+            },
+          ],
+          feedbacks: {
+            valid: {
+              state: 'Correct',
+              diagnosis: '<p> Un exemple de feedback </p>',
+            },
+            invalid: {
+              state: 'Incorrect !',
+              diagnosis: '<p> Un exemple de feedback </p>',
+            },
+          },
+        };
+
+        await expect(() => qrocmElementSchema.validateAsync(sample, { abortEarly: false })).rejects.toThrow();
+      });
+    });
+
     describe('For elements that support short answers', function() {
       describe('when element requires short answers', function() {
         it('should throw an error when an answer is long', async function() {
@@ -931,7 +1020,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
         });
       });
     });
-  })
+  });
 });
 
 function _createModuleWithElement(element) {

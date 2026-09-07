@@ -109,6 +109,7 @@ const qrocmElementSchema = Joi.object({
         ],
       }),
     )
+    .unique((a, b) => a.input && b.input && a.input === b.input)
     .required()
     .description(
       'Propositions qui vont s’afficher les unes à la suite des autres dans le module (dans l’ordre de contribution)',
