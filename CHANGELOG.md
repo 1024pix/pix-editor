@@ -1,5 +1,12 @@
 
 
+## v4.50.0 (07/09/2026)
+
+
+### :building_construction: Tech
+- [#1625](https://github.com/1024pix/pix-editor/pull/1625) [TECH] Montée de version de epreuves-components sur API PixEditor (PIX-24152).
+- [#1621](https://github.com/1024pix/pix-editor/pull/1621) [TECH] Restructuration des tables d'URL externes (PIX-24127).
+
 ## v4.49.0 (03/09/2026)
 
 
