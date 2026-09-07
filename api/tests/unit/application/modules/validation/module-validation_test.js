@@ -576,360 +576,362 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
     });
   });
 
-  describe('when element contains not allowed HTML', function() {
-    it('should throw htmlNotAllowedSchema custom error for image.alt field', async function() {
-      // given
-      const invalidImage = {
-        id: '167907eb-ee0d-4de0-9fc8-609b2b62ed9f',
-        type: 'image',
-        url: 'https://assets.pix.org/modules/placeholder-image.svg',
-        alt: '<p>cooucou</p>',
-        alternativeText: '',
-      };
+  describe('when element does not have a valid structure', function() {
+    describe('when element contains not allowed HTML', function() {
+      it('should throw htmlNotAllowedSchema custom error for image.alt field', async function() {
+        // given
+        const invalidImage = {
+          id: '167907eb-ee0d-4de0-9fc8-609b2b62ed9f',
+          type: 'image',
+          url: 'https://assets.pix.org/modules/placeholder-image.svg',
+          alt: '<p>cooucou</p>',
+          alternativeText: '',
+        };
 
-      try {
-        await imageElementSchema.validateAsync(invalidImage, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
-        expect(joiError.message).to.deep.equal(
-          '"alt" failed custom validation because HTML is not allowed in this field',
-        );
-      }
+        try {
+          await imageElementSchema.validateAsync(invalidImage, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          expect(joiError.message).to.deep.equal(
+            '"alt" failed custom validation because HTML is not allowed in this field',
+          );
+        }
+      });
+
+      it('should throw htmlNotAllowedSchema custom error for audio.title field', async function() {
+        // given
+        const invalidAudio = {
+          id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
+          type: 'audio',
+          title: '<h1>Un audio</h1>',
+          url: 'https://assets.pix.fr/modulix/placeholder-audio.mp3',
+          transcription: '<p>Audio manquante</p>',
+        };
+
+        try {
+          await audioElementSchema.validateAsync(invalidAudio, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          expect(joiError.message).to.deep.equal(
+            '"title" failed custom validation because HTML is not allowed in this field',
+          );
+        }
+      });
+
+      it('should throw htmlNotAllowedSchema custom error for video.title field', async function() {
+        // given
+        const invalidVideo = {
+          id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
+          type: 'video',
+          title: '<h1>Une vidéo</h1>',
+          url: 'https://videos.pix.fr/modulix/placeholder-video.mp4',
+          subtitles: 'https://videos.pix.fr/modulix/placeholder-video.vtt',
+          transcription: '<p>Vidéo manquante</p>',
+        };
+
+        try {
+          await videoElementSchema.validateAsync(invalidVideo, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          expect(joiError.message).to.deep.equal(
+            '"title" failed custom validation because HTML is not allowed in this field',
+          );
+        }
+      });
+
+      it('should throw htmlNotAllowedSchema custom error for shortVideo.title field', async function() {
+        // given
+        const invalidShortVideo = {
+          id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
+          type: 'short-video',
+          title: '<h1>Une vidéo</h1>',
+          url: 'https://videos.pix.fr/modulix/placeholder-video.mp4',
+          transcription: 'Je clique sur le bouton droit de la souris.',
+        };
+
+        try {
+          await shortVideoElementSchema.validateAsync(invalidShortVideo, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          expect(joiError.message).to.deep.equal(
+            '"title" failed custom validation because HTML is not allowed in this field',
+          );
+        }
+      });
+
+      it('should throw htmlNotAllowedSchema custom error for qrocm.blockInput fields', async function() {
+        // given
+        const invalidQrocmBlockInput = {
+          input: '<h2>symbole-separateur-email</h2>',
+          type: 'input',
+          inputType: 'text',
+          size: 1,
+          display: 'inline',
+          placeholder: '<br> hello',
+          ariaLabel: "Remplir avec le <span>caractère</span> qui permet de séparer les deux parties d'une adresse mail",
+          tolerances: ['t1'],
+          solutions: ['@'],
+        };
+
+        const expectedErrorMessages = [
+          '"input" failed custom validation because HTML is not allowed in this field',
+          '"placeholder" failed custom validation because HTML is not allowed in this field',
+          '"ariaLabel" failed custom validation because HTML is not allowed in this field',
+        ];
+
+        try {
+          await blockInputSchema.validateAsync(invalidQrocmBlockInput, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          expect(joiError.message).to.deep.equal(expectedErrorMessages.join('. '));
+        }
+      });
+
+      it('should throw htmlNotAllowedSchema custom error for qrocm.blockSelect fields', async function() {
+        // given
+        const invalidQrocmBlockSelect = {
+          input: '<h2>symbole-separateur-email</h2>',
+          type: 'select',
+          display: 'block',
+          placeholder: '<br> hello',
+          ariaLabel: "Remplir avec le <span>caractère</span> qui permet de séparer les deux parties d'une adresse mail",
+          tolerances: [],
+          options: [
+            {
+              id: '1',
+              content: '<strong>Génial</strong>',
+            },
+          ],
+          solutions: ['1'],
+        };
+
+        const expectedErrorMessages = [
+          '"input" failed custom validation because HTML is not allowed in this field',
+          '"placeholder" failed custom validation because HTML is not allowed in this field',
+          '"ariaLabel" failed custom validation because HTML is not allowed in this field',
+          '"options[0].content" failed custom validation because HTML is not allowed in this field',
+        ];
+
+        try {
+          await blockSelectSchema.validateAsync(invalidQrocmBlockSelect, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          expect(joiError.message).to.deep.equal(expectedErrorMessages.join('. '));
+        }
+      });
+
+      it('should throw an html validation error if text element content contains a style tag', async function() {
+        // given
+        const invalidTextElement = {
+          id: '774c4c4e-f170-4e2c-ba7a-d2fe40d053c3',
+          type: 'text',
+          tag: ' ',
+          content: '<style>p { color: indianred; }</style> <p>Stylé !</p>',
+        };
+
+        try {
+          await textElementSchema.validateAsync(invalidTextElement, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          const message = joiError.details[0].context.value.results[0].messages[0].message;
+          expect(message).to.deep.equal('Use external stylesheet with <link> instead of <style> tag');
+        }
+      });
     });
 
-    it('should throw htmlNotAllowedSchema custom error for audio.title field', async function() {
-      // given
-      const invalidAudio = {
-        id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
-        type: 'audio',
-        title: '<h1>Un audio</h1>',
-        url: 'https://assets.pix.fr/modulix/placeholder-audio.mp3',
-        transcription: '<p>Audio manquante</p>',
-      };
-
-      try {
-        await audioElementSchema.validateAsync(invalidAudio, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
-        expect(joiError.message).to.deep.equal(
-          '"title" failed custom validation because HTML is not allowed in this field',
-        );
-      }
-    });
-
-    it('should throw htmlNotAllowedSchema custom error for video.title field', async function() {
-      // given
-      const invalidVideo = {
-        id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
-        type: 'video',
-        title: '<h1>Une vidéo</h1>',
-        url: 'https://videos.pix.fr/modulix/placeholder-video.mp4',
-        subtitles: 'https://videos.pix.fr/modulix/placeholder-video.vtt',
-        transcription: '<p>Vidéo manquante</p>',
-      };
-
-      try {
-        await videoElementSchema.validateAsync(invalidVideo, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
-        expect(joiError.message).to.deep.equal(
-          '"title" failed custom validation because HTML is not allowed in this field',
-        );
-      }
-    });
-
-    it('should throw htmlNotAllowedSchema custom error for shortVideo.title field', async function() {
-      // given
-      const invalidShortVideo = {
-        id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
-        type: 'short-video',
-        title: '<h1>Une vidéo</h1>',
-        url: 'https://videos.pix.fr/modulix/placeholder-video.mp4',
-        transcription: 'Je clique sur le bouton droit de la souris.',
-      };
-
-      try {
-        await shortVideoElementSchema.validateAsync(invalidShortVideo, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
-        expect(joiError.message).to.deep.equal(
-          '"title" failed custom validation because HTML is not allowed in this field',
-        );
-      }
-    });
-
-    it('should throw htmlNotAllowedSchema custom error for qrocm.blockInput fields', async function() {
-      // given
-      const invalidQrocmBlockInput = {
-        input: '<h2>symbole-separateur-email</h2>',
-        type: 'input',
-        inputType: 'text',
-        size: 1,
-        display: 'inline',
-        placeholder: '<br> hello',
-        ariaLabel: "Remplir avec le <span>caractère</span> qui permet de séparer les deux parties d'une adresse mail",
-        tolerances: ['t1'],
-        solutions: ['@'],
-      };
-
-      const expectedErrorMessages = [
-        '"input" failed custom validation because HTML is not allowed in this field',
-        '"placeholder" failed custom validation because HTML is not allowed in this field',
-        '"ariaLabel" failed custom validation because HTML is not allowed in this field',
-      ];
-
-      try {
-        await blockInputSchema.validateAsync(invalidQrocmBlockInput, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
-        expect(joiError.message).to.deep.equal(expectedErrorMessages.join('. '));
-      }
-    });
-
-    it('should throw htmlNotAllowedSchema custom error for qrocm.blockSelect fields', async function() {
-      // given
-      const invalidQrocmBlockSelect = {
-        input: '<h2>symbole-separateur-email</h2>',
-        type: 'select',
-        display: 'block',
-        placeholder: '<br> hello',
-        ariaLabel: "Remplir avec le <span>caractère</span> qui permet de séparer les deux parties d'une adresse mail",
-        tolerances: [],
-        options: [
-          {
-            id: '1',
-            content: '<strong>Génial</strong>',
+    describe('When module contains not allowed HTML', function() {
+      it('should throw htmlNotAllowedSchema custom error for title field', async function() {
+        // given
+        const invalidModule = {
+          id: '6282925d-4775-4bca-b513-4c3009ec5886',
+          shortId: 'gle9d3fz',
+          slug: 'bac-a-sable',
+          title: '<h1>Bac à sable</h1>',
+          isBeta: true,
+          visibility: 'public',
+          details: {
+            image: 'https://assets.pix.org/modules/placeholder-details.svg',
+            description: 'Découvrez avec ce didacticiel comment fonctionne Modulix !',
+            duration: 5,
+            level: 'novice',
+            tabletSupport: 'comfortable',
+            objectives: ['Naviguer dans Modulix', 'Découvrir les leçons et les activités'],
           },
-        ],
-        solutions: ['1'],
-      };
-
-      const expectedErrorMessages = [
-        '"input" failed custom validation because HTML is not allowed in this field',
-        '"placeholder" failed custom validation because HTML is not allowed in this field',
-        '"ariaLabel" failed custom validation because HTML is not allowed in this field',
-        '"options[0].content" failed custom validation because HTML is not allowed in this field',
-      ];
-
-      try {
-        await blockSelectSchema.validateAsync(invalidQrocmBlockSelect, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
-        expect(joiError.message).to.deep.equal(expectedErrorMessages.join('. '));
-      }
-    });
-
-    it('should throw an html validation error if text element content contains a style tag', async function() {
-      // given
-      const invalidTextElement = {
-        id: '774c4c4e-f170-4e2c-ba7a-d2fe40d053c3',
-        type: 'text',
-        tag: ' ',
-        content: '<style>p { color: indianred; }</style> <p>Stylé !</p>',
-      };
-
-      try {
-        await textElementSchema.validateAsync(invalidTextElement, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
-        const message = joiError.details[0].context.value.results[0].messages[0].message;
-        expect(message).to.deep.equal('Use external stylesheet with <link> instead of <style> tag');
-      }
-    });
-  });
-
-  describe('When module contains not allowed HTML', function() {
-    it('should throw htmlNotAllowedSchema custom error for title field', async function() {
-      // given
-      const invalidModule = {
-        id: '6282925d-4775-4bca-b513-4c3009ec5886',
-        shortId: 'gle9d3fz',
-        slug: 'bac-a-sable',
-        title: '<h1>Bac à sable</h1>',
-        isBeta: true,
-        visibility: 'public',
-        details: {
-          image: 'https://assets.pix.org/modules/placeholder-details.svg',
-          description: 'Découvrez avec ce didacticiel comment fonctionne Modulix !',
-          duration: 5,
-          level: 'novice',
-          tabletSupport: 'comfortable',
-          objectives: ['Naviguer dans Modulix', 'Découvrir les leçons et les activités'],
-        },
-        sections: [
-          {
-            id: '235c6394-5c43-4dc9-aa77-2895b642de7c',
-            type: 'blank',
-            grains: [
-              {
-                id: 'f312c33d-e7c9-4a69-9ba0-913957b8f7dd',
-                type: 'lesson',
-                title: 'Voici une leçon',
-                components: [
-                  {
-                    type: 'element',
-                    element: {
-                      id: '84726001-1665-457d-8f13-4a74dc4768ea',
-                      type: 'text',
-                      tag: ' ',
-                      content: '<h4>Content.</h4>',
+          sections: [
+            {
+              id: '235c6394-5c43-4dc9-aa77-2895b642de7c',
+              type: 'blank',
+              grains: [
+                {
+                  id: 'f312c33d-e7c9-4a69-9ba0-913957b8f7dd',
+                  type: 'lesson',
+                  title: 'Voici une leçon',
+                  components: [
+                    {
+                      type: 'element',
+                      element: {
+                        id: '84726001-1665-457d-8f13-4a74dc4768ea',
+                        type: 'text',
+                        tag: ' ',
+                        content: '<h4>Content.</h4>',
+                      },
                     },
-                  },
-                ],
+                  ],
+                },
+              ],
+            },
+          ],
+          glossary: [],
+        };
+
+        try {
+          await moduleSchema.validateAsync(invalidModule, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          expect(joiError.message).to.deep.equal(
+            '"title" failed custom validation because HTML is not allowed in this field',
+          );
+        }
+      });
+
+      it('should throw htmlNotAllowedSchema custom error for grains.title field', async function() {
+        // given
+        const invalidGrain = {
+          id: '34d225e8-5d52-4ebd-9acd-8bde8438cfc9',
+          type: 'lesson',
+          title: '<strong>Sûr de ton adresse mail ?</strong>',
+          components: [],
+        };
+
+        try {
+          await grainSchema.validateAsync(invalidGrain, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          expect(joiError.message).to.deep.equal(
+            '"title" failed custom validation because HTML is not allowed in this field',
+          );
+        }
+      });
+    });
+
+    describe('For elements that support short answers', function() {
+      describe('when element requires short answers', function() {
+        it('should throw an error when an answer is long', async function() {
+          // given
+          const moduleWithTooLongShortAnswer = _createModuleWithElement({
+            id: 'ff22d014-ac30-4159-8b49-02a227766151',
+            type: 'qcu',
+            instruction: 'Hello',
+            hasShortProposals: true,
+            proposals: [
+              {
+                id: '1',
+                content: 'Une réponse bien',
+                feedback: {
+                  state: '',
+                  diagnosis: 'Oui',
+                },
+              },
+              {
+                id: '2',
+                content: 'Une réponse bien trop longue',
+                feedback: {
+                  state: '',
+                  diagnosis: 'Non',
+                },
               },
             ],
-          },
-        ],
-        glossary: [],
-      };
+            solution: '1',
+          });
 
-      try {
-        await moduleSchema.validateAsync(invalidModule, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
-        expect(joiError.message).to.deep.equal(
-          '"title" failed custom validation because HTML is not allowed in this field',
-        );
-      }
-    });
-
-    it('should throw htmlNotAllowedSchema custom error for grains.title field', async function() {
-      // given
-      const invalidGrain = {
-        id: '34d225e8-5d52-4ebd-9acd-8bde8438cfc9',
-        type: 'lesson',
-        title: '<strong>Sûr de ton adresse mail ?</strong>',
-        components: [],
-      };
-
-      try {
-        await grainSchema.validateAsync(invalidGrain, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
-        expect(joiError.message).to.deep.equal(
-          '"title" failed custom validation because HTML is not allowed in this field',
-        );
-      }
-    });
-  });
-
-  describe('For elements that support short answers', function() {
-    describe('when element requires short answers', function() {
-      it('should throw an error when an answer is long', async function() {
-        // given
-        const moduleWithTooLongShortAnswer = _createModuleWithElement({
-          id: 'ff22d014-ac30-4159-8b49-02a227766151',
-          type: 'qcu',
-          instruction: 'Hello',
-          hasShortProposals: true,
-          proposals: [
-            {
-              id: '1',
-              content: 'Une réponse bien',
-              feedback: {
-                state: '',
-                diagnosis: 'Oui',
-              },
-            },
-            {
-              id: '2',
-              content: 'Une réponse bien trop longue',
-              feedback: {
-                state: '',
-                diagnosis: 'Non',
-              },
-            },
-          ],
-          solution: '1',
+          try {
+            await moduleSchema.validateAsync(moduleWithTooLongShortAnswer, { abortEarly: false });
+            throw new Error('Joi validation should have thrown');
+          } catch (joiError) {
+            expect(joiError.message).to.deep.equal(
+              '"sections[0].grains[0].components[0].element.proposals[1].content" doit avoir une longueur inférieure ou égale à 20 caractères. "sections[0].grains" ne contient pas 1 valeur(s) requise(s)',
+            );
+          }
         });
 
-        try {
-          await moduleSchema.validateAsync(moduleWithTooLongShortAnswer, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(
-            '"sections[0].grains[0].components[0].element.proposals[1].content" doit avoir une longueur inférieure ou égale à 20 caractères. "sections[0].grains" ne contient pas 1 valeur(s) requise(s)',
-          );
-        }
+        it('should throw an error when an answer short but contains HTML', async function() {
+          // given
+          const moduleWithShortAnswerContainingHTML = _createModuleWithElement({
+            id: 'ff22d014-ac30-4159-8b49-02a227766151',
+            type: 'qcu',
+            instruction: 'Hello',
+            hasShortProposals: true,
+            proposals: [
+              {
+                id: '1',
+                content: 'Une réponse bien',
+                feedback: {
+                  state: '',
+                  diagnosis: 'Oui',
+                },
+              },
+              {
+                id: '2',
+                content: '<blink>!</blink>',
+                feedback: {
+                  state: '',
+                  diagnosis: 'Non',
+                },
+              },
+            ],
+            solution: '1',
+          });
+
+          try {
+            await moduleSchema.validateAsync(moduleWithShortAnswerContainingHTML, { abortEarly: false });
+            throw new Error('Joi validation should have thrown');
+          } catch (joiError) {
+            expect(joiError.message).to.deep.equal(
+              '"sections[0].grains[0].components[0].element.proposals[1].content" failed custom validation because HTML is not allowed in this field. "sections[0].grains" ne contient pas 1 valeur(s) requise(s)',
+            );
+          }
+        });
       });
 
-      it('should throw an error when an answer short but contains HTML', async function() {
-        // given
-        const moduleWithShortAnswerContainingHTML = _createModuleWithElement({
-          id: 'ff22d014-ac30-4159-8b49-02a227766151',
-          type: 'qcu',
-          instruction: 'Hello',
-          hasShortProposals: true,
-          proposals: [
-            {
-              id: '1',
-              content: 'Une réponse bien',
-              feedback: {
-                state: '',
-                diagnosis: 'Oui',
+      describe('when element allows long answers', function() {
+        it('should not throw an error when an answer is long', async function() {
+          // given
+          const moduleWithValidLongAnswer = _createModuleWithElement({
+            id: 'ff22d014-ac30-4159-8b49-02a227766151',
+            type: 'qcu',
+            instruction: 'Hello',
+            hasShortProposals: false,
+            proposals: [
+              {
+                id: '1',
+                content: 'Une réponse bien',
+                feedback: {
+                  state: '',
+                  diagnosis: 'Oui',
+                },
               },
-            },
-            {
-              id: '2',
-              content: '<blink>!</blink>',
-              feedback: {
-                state: '',
-                diagnosis: 'Non',
+              {
+                id: '2',
+                content: 'Une réponse bien trop longue',
+                feedback: {
+                  state: '',
+                  diagnosis: 'Non',
+                },
               },
-            },
-          ],
-          solution: '1',
-        });
+            ],
+            solution: '1',
+          });
 
-        try {
-          await moduleSchema.validateAsync(moduleWithShortAnswerContainingHTML, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(
-            '"sections[0].grains[0].components[0].element.proposals[1].content" failed custom validation because HTML is not allowed in this field. "sections[0].grains" ne contient pas 1 valeur(s) requise(s)',
-          );
-        }
+          try {
+            await moduleSchema.validateAsync(moduleWithValidLongAnswer, { abortEarly: false });
+          } catch (joiError) {
+            const formattedError = joiErrorParser.format(joiError);
+            expect(joiError).to.equal(undefined, formattedError);
+          }
+        });
       });
     });
-
-    describe('when element allows long answers', function() {
-      it('should not throw an error when an answer is long', async function() {
-        // given
-        const moduleWithValidLongAnswer = _createModuleWithElement({
-          id: 'ff22d014-ac30-4159-8b49-02a227766151',
-          type: 'qcu',
-          instruction: 'Hello',
-          hasShortProposals: false,
-          proposals: [
-            {
-              id: '1',
-              content: 'Une réponse bien',
-              feedback: {
-                state: '',
-                diagnosis: 'Oui',
-              },
-            },
-            {
-              id: '2',
-              content: 'Une réponse bien trop longue',
-              feedback: {
-                state: '',
-                diagnosis: 'Non',
-              },
-            },
-          ],
-          solution: '1',
-        });
-
-        try {
-          await moduleSchema.validateAsync(moduleWithValidLongAnswer, { abortEarly: false });
-        } catch (joiError) {
-          const formattedError = joiErrorParser.format(joiError);
-          expect(joiError).to.equal(undefined, formattedError);
-        }
-      });
-    });
-  });
+  })
 });
 
 function _createModuleWithElement(element) {
