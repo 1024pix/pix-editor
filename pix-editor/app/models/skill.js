@@ -1,6 +1,6 @@
 import { service } from '@ember/service';
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
+import Model, { attr, belongsTo, hasMany } from '@warp-drive/legacy/model';
 import Challenge from 'pixeditor/models/challenge';
 
 export default class SkillModel extends Model {
