@@ -1,3 +1,4 @@
+import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 
@@ -16,6 +17,18 @@ import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
         <PixTableColumn @context={{context}} class="column--wide">
           <:header>Message d'erreur</:header>
           <:cell>{{brokenUrl.errorMessage}}</:cell>
+        </PixTableColumn>
+        <PixTableColumn @context={{context}} class="column--wide">
+          <:header>Acquis</:header>
+          <:cell>
+            <div style="display: flex; flex-wrap: wrap;">
+              {{#each brokenUrl.skills as |skill|}}
+                <PixButtonLink @route="authenticated.skill" @model={{skill.id}} @size="small" @variant="tertiary">
+                  {{skill.name}}
+                </PixButtonLink>
+              {{/each}}
+            </div>
+          </:cell>
         </PixTableColumn>
       </:columns>
     </PixTable>

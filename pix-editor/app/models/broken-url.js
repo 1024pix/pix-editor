@@ -1,7 +1,9 @@
-import Model, { attr } from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class BrokenUrlModel extends Model {
   @attr errorMessage;
   @attr statusCode;
   @attr url;
+
+  @hasMany('skills', { async: true, inverse: null }) skills;
 }
