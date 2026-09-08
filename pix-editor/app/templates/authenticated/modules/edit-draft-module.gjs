@@ -77,7 +77,7 @@ export default class NewModule extends Component {
   }
 
   get validationErrors() {
-    return this.args.model.draftModule.validationErrors;
+    return this.args.model.draftModule.displayedValidationErrors;
   }
 
   get links() {
