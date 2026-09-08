@@ -29,7 +29,9 @@ export default class DraftModule extends Component {
   }
 
   get validationErrors() {
-    return this.args.model.draftModule.validationErrors;
+    const draftModule = this.args.model.draftModule;
+    // Edition drafts show a DIFF instead of the Monaco JSON editor
+    return draftModule.isEditionDraft ? (draftModule.validationErrors ?? []) : draftModule.displayedValidationErrors;
   }
 
   get links() {
