@@ -4,27 +4,39 @@ import { createServer } from '../../../../server.js';
 
 describe('Acceptance | Controller | broken-urls', () => {
   describe('GET /broken-urls', () => {
-    let editorUser, server, notFoundUrl, brokenUrl, notAllowedUrl;
+    let brokenUrl,
+      challenge,
+      editorUser,
+      externalUrl1,
+      externalUrl2,
+      externalUrl3,
+      notAllowedUrl,
+      notFoundUrl,
+      server;
 
     beforeEach(async function() {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'editor' });
+      ({ challenge } = databaseBuilder.factory.buildChallengeInGroup({}));
+      externalUrl1 = databaseBuilder.factory.buildExternalUrl({ localizedChallengeIds: [challenge.id], url: 'http://localhost:8080/', tutorialIds: [] });
+      externalUrl2 = databaseBuilder.factory.buildExternalUrl({ localizedChallengeIds: [challenge.id], url: 'http://test.localhost:8080/', tutorialIds: [] });
+      externalUrl3 = databaseBuilder.factory.buildExternalUrl({ localizedChallengeIds: [challenge.id], url: 'http://www.test.org', tutorialIds: [] });
       notFoundUrl = databaseBuilder.factory.buildBrokenUrl({
         id: '1',
         errorMessage: 'Not Found',
         statusCode: 404,
-        url: 'http://localhost:8080/',
+        url: externalUrl1.url,
       });
       brokenUrl = databaseBuilder.factory.buildBrokenUrl({
         id: '2',
         errorMessage: 'Tout cassé',
         statusCode: 500,
-        url: 'http://test.localhost:8080/',
+        url: externalUrl2.url,
       });
       notAllowedUrl = databaseBuilder.factory.buildBrokenUrl({
         id: '3',
         errorMessage: 'Pas le droit',
         statusCode: 401,
-        url: 'http://www.test.org',
+        url: externalUrl3.url,
       });
       await databaseBuilder.commit();
       server = await createServer();
@@ -75,6 +87,17 @@ describe('Acceptance | Controller | broken-urls', () => {
               url: notFoundUrl.url,
             },
             type: 'broken-urls',
+            relationships: {
+              'localized-challenges': {
+                data: [
+                  {
+                    id: challenge.id,
+                    type: 'localizedChallenges',
+                  },
+                ],
+              },
+              skills: { data: [] },
+            },
           },
           {
             id: brokenUrl.id,
@@ -84,6 +107,17 @@ describe('Acceptance | Controller | broken-urls', () => {
               url: brokenUrl.url,
             },
             type: 'broken-urls',
+            relationships: {
+              'localized-challenges': {
+                data: [
+                  {
+                    id: challenge.id,
+                    type: 'localizedChallenges',
+                  },
+                ],
+              },
+              skills: { data: [] },
+            },
           },
           {
             id: notAllowedUrl.id,
@@ -93,6 +127,17 @@ describe('Acceptance | Controller | broken-urls', () => {
               url: notAllowedUrl.url,
             },
             type: 'broken-urls',
+            relationships: {
+              'localized-challenges': {
+                data: [
+                  {
+                    id: challenge.id,
+                    type: 'localizedChallenges',
+                  },
+                ],
+              },
+              skills: { data: [] },
+            },
           },
         ],
       });

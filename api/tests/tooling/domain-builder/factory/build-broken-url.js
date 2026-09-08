@@ -5,7 +5,7 @@ export function buildBrokenUrl({
   errorMessage = 'Not Found',
   statusCode = 404,
   url = 'http://localhost:8080/',
-  challengeIds = ['recChallenge1'],
+  localizedChallengeIds = ['recChallenge1'],
   skillIds = [],
 } = {}) {
   return new BrokenUrl({
@@ -13,7 +13,7 @@ export function buildBrokenUrl({
     errorMessage,
     statusCode,
     url,
-    challengeIds,
+    localizedChallengeIds,
     skillIds,
   });
 }

@@ -3,4 +3,5 @@ export function externalUrlBuilder({ databaseBuilder, tutorials, learningContent
   databaseBuilder.factory.buildExternalUrl({ url: 'https://patate.pix.org', tutorialIds: [], localizedChallengeIds: [localizedChallengeId] });
   databaseBuilder.factory.buildExternalUrl({ url: 'https://chocolat.pix.org', tutorialIds: [tutorials[0].id], localizedChallengeIds: [] });
   databaseBuilder.factory.buildExternalUrl({ url: 'https://fromage.pix.org', tutorialIds: [tutorials[0].id], localizedChallengeIds: [localizedChallengeId] });
+  databaseBuilder.factory.buildExternalUrl({ url: 'https://poire.pix.org', tutorialIds: [tutorials[0].id], localizedChallengeIds: [localizedChallengeId] });
 }

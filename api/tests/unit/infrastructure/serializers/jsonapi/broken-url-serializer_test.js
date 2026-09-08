@@ -6,7 +6,7 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a given broken url with challengeIds', async () => {
       // given
-      const brokenUrl = domainBuilder.buildBrokenUrl({ challengeIds: ['recChallenge1', 'recChallenge2'], tutorialIds: [] });
+      const brokenUrl = domainBuilder.buildBrokenUrl({ localizedChallengeIds: ['recChallenge1', 'recChallenge2'], skillIds: [] });
       const expectedSerializedBrokenUrl = {
         data: {
           type: 'broken-urls',
@@ -17,19 +17,19 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
             url: brokenUrl.url,
           },
           relationships: {
-            challenges: {
+            'localized-challenges': {
               data: [
                 {
-                  id: brokenUrl.challengeIds[0],
-                  type: 'challenges',
+                  id: brokenUrl.localizedChallengeIds[0],
+                  type: 'localizedChallenges',
                 },
                 {
-                  id: brokenUrl.challengeIds[1],
-                  type: 'challenges',
+                  id: brokenUrl.localizedChallengeIds[1],
+                  type: 'localizedChallenges',
                 },
               ],
             },
-            tutorials: { data: [] },
+            skills: { data: [] },
           },
         },
       };
@@ -43,7 +43,7 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
 
     it('should serialize a given broken url with tutorialIds', async () => {
       // given
-      const brokenUrl = domainBuilder.buildBrokenUrl({ tutorialIds: ['recTuto1', 'recTuto2'], challengeIds: [] });
+      const brokenUrl = domainBuilder.buildBrokenUrl({ skillIds: ['recTuto1', 'recTuto2'], localizedChallengeIds: [] });
       const expectedSerializedBrokenUrl = {
         data: {
           type: 'broken-urls',
@@ -54,16 +54,16 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
             url: brokenUrl.url,
           },
           relationships: {
-            challenges: { data: [] },
-            tutorials: {
+            'localized-challenges': { data: [] },
+            skills: {
               data: [
                 {
-                  id: brokenUrl.tutorialIds[0],
-                  type: 'tutorials',
+                  id: brokenUrl.skillIds[0],
+                  type: 'skills',
                 },
                 {
-                  id: brokenUrl.tutorialIds[1],
-                  type: 'tutorials',
+                  id: brokenUrl.skillIds[1],
+                  type: 'skills',
                 },
               ],
             },
