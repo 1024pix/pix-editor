@@ -108,4 +108,5 @@ Router.map(function () {
       });
     });
   });
+  this.route('page-not-found', { path: '*' });
 });
