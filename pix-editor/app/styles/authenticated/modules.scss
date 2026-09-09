@@ -31,7 +31,9 @@ td.modules-list__actions {
     max-height: 70vh;
     margin: 0;
     padding: var(--pix-spacing-4x);
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: pre-wrap;
 
     span {
       @extend %pix-monospace;
