@@ -1,10 +1,13 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
 
 export default class CreateModuleButton extends Component {
+  @service access;
+
   get isDisplayed() {
-    return !this.args.module?.hasDraft;
+    return !this.args.module?.hasDraft && this.access.mayCreateOrEditModule();
   }
 
   get query() {
