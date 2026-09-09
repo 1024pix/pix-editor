@@ -194,6 +194,10 @@ export default class AccessService extends Service {
     return this.isAdmin() && localizedChallenge.isStatusEditable;
   }
 
+  mayCreateOrEditModule() {
+    return this.isEditor() || this.isAdmin();
+  }
+
   isReadOnly() {
     const level = this.config.accessLevel;
     return level >= READ_ONLY;
