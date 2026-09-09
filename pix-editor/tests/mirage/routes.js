@@ -172,7 +172,11 @@ export default function routes() {
       return schema.skills.where({ name });
     }
     if (pixId) {
-      return schema.skills.where({ pixId });
+      let skills = schema.skills.where({ pixId });
+      if (!skills.length) {
+        skills = schema.skills.where({ id: pixId });
+      }
+      return skills;
     }
     return [];
   });
