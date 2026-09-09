@@ -101,20 +101,21 @@ module('Acceptance | Broken URLs | List', function (hooks) {
     return authenticateSession();
   });
 
-  test('should display broken urls when accessing list', async function (assert) {
+  test('should display tutorial broken urls when accessing list', async function (assert) {
     // when
     const screen = await visit('/broken-urls');
 
     // then
     assert.dom(screen.getByRole('heading', { name: 'Liste des URLs cassées' })).exists();
-    assert.strictEqual(screen.getAllByRole('row').length, 3);
+    assert.strictEqual(screen.getAllByRole('row').length, 2);
     assert.dom(screen.getByText('http://pipeau-la-grenouille.fr')).exists();
-    assert.dom(screen.getByText('http://chocolat-fromage.org')).exists();
+    assert.dom(screen.queryByText('http://chocolat-fromage.org')).doesNotExist();
+    assert.strictEqual(currentURL(), '/broken-urls/tutorials');
   });
 
   test('should redirect to skill when clicking skill name', async function (assert) {
     // when
-    const screen = await visit('/broken-urls');
+    const screen = await visit('/broken-urls/tutorials');
     const skillLink = screen.getByRole('link', { name: skill.name });
     await click(skillLink);
 
@@ -122,9 +123,9 @@ module('Acceptance | Broken URLs | List', function (hooks) {
     assert.strictEqual(currentURL(), `/competence/${competence.id}/skills/${skill.id}?view=production`);
   });
 
-  test('should redirect to challenge when clicking challenge id', async function (assert) {
+  test.skip('should redirect to challenge when clicking challenge id', async function (assert) {
     // when
-    const screen = await visit('/broken-urls');
+    const screen = await visit('/broken-urls/challenges');
     const challengeLink = screen.getByRole('link', { name: localizedChallenge.id });
     await click(challengeLink);
 

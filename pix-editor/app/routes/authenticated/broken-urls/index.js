@@ -5,12 +5,7 @@ export default class BrokenUrlsIndexRoute extends Route {
   @service router;
   @service store;
 
-  async model() {
-    const brokenUrls = await this.store.findAll('broken-url', { reload: true });
-    await Promise.all(brokenUrls.flatMap((brokenUrl) => [brokenUrl.skills, brokenUrl.localizedChallenges]));
-
-    return {
-      brokenUrls,
-    };
+  redirect() {
+    this.router.transitionTo('authenticated.broken-urls.tutorials');
   }
 }
