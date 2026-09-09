@@ -123,7 +123,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
     assert.strictEqual(currentURL(), `/competence/${competence.id}/skills/${skill.id}?view=production`);
   });
 
-  test.skip('should redirect to challenge when clicking challenge id', async function (assert) {
+  test('should redirect to challenge when clicking challenge id', async function (assert) {
     // when
     const screen = await visit('/broken-urls/challenges');
     const challengeLink = screen.getByRole('link', { name: localizedChallenge.id });
