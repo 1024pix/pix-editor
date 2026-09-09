@@ -13,6 +13,11 @@ import ModuleValidationSuccess from 'pixeditor/components/modules/validation-suc
 
 export default class DraftModule extends Component {
   @service intl;
+  @service access;
+
+  get mayDisplayEditDraftButton() {
+    return this.access.mayCreateOrEditModule();
+  }
 
   get hasValidationErrors() {
     return !this.args.model.draftModule.hasBeenValidated && this.validationErrors?.length > 0;
@@ -57,14 +62,16 @@ export default class DraftModule extends Component {
       <div class="page-actions">
         <PlayModuleButtons @module={{@model.draftModule}} />
 
-        <PixButtonLink
-          @route="authenticated.modules.edit-draft-module"
-          @model={{@model.draftModule.id}}
-          class="pix-button-link-with-icon white-font"
-          @iconBefore="edit"
-        >
-          {{t "modules.draft-module.edit"}}
-        </PixButtonLink>
+        {{#if this.mayDisplayEditDraftButton}}
+          <PixButtonLink
+            @route="authenticated.modules.edit-draft-module"
+            @model={{@model.draftModule.id}}
+            class="pix-button-link-with-icon white-font"
+            @iconBefore="edit"
+          >
+            {{t "modules.draft-module.edit"}}
+          </PixButtonLink>
+        {{/if}}
       </div>
     </header>
     <main class="page-body">
