@@ -1,10 +1,10 @@
+@charset "utf-8";
 @use 'pkg:@1024pix/pix-ui/addon/styles/addon';
 @use 'authenticated-v2';
 @use 'components/challenges-production';
 @use 'components/challenges-production-header';
 @use 'components/challenge-view';
 @use 'components/challenge-view-header';
-@charset "utf-8";
 @use 'pix-design-tokens';
 @use 'global';
 @use 'sidebar';
@@ -35,6 +35,7 @@
 @use 'authenticated/whitelisted-urls/list' as whitelisted-urls-list;
 @use 'authenticated/whitelisted-urls/new' as whitelisted-urls-new;
 @use 'components/admin';
+@use 'components/broken-urls/list' as broken-urls-list;
 @use 'components/card';
 @use 'components/competence-header';
 @use 'components/competence-overview';
