@@ -1,5 +1,5 @@
-import BrokenUrlList from 'pixeditor/components/broken-url/list';
-import BrokenUrlTabs from 'pixeditor/components/broken-url/tabs';
+import BrokenUrlList from 'pixeditor/components/broken-urls/list';
+import BrokenUrlTabs from 'pixeditor/components/broken-urls/tabs';
 
 <template>
   <BrokenUrlTabs />
