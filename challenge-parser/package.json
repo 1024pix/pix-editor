@@ -11,6 +11,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "vitest": "^4.0.0"
+    "vitest": "^4.1.11"
   }
 }
