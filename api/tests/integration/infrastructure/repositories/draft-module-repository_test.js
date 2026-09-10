@@ -63,6 +63,33 @@ describe('Integration | Repository | draft-module-repository', () => {
       await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails }]);
       expect(savedDraftModule).toStrictEqual(expectedDraftModule);
     });
+
+    it('does not persist validationErrors', async () => {
+      // given
+      const module = domainBuilder.buildModule();
+      databaseBuilder.factory.buildModule(module);
+
+      const existingValidationErrors = [{ message: 'existing error', isSchemaError: false }];
+      const draftModule = domainBuilder.buildDraftModule({
+        ...module,
+        moduleId: module.id,
+        hasBeenValidated: true,
+        validationErrors: existingValidationErrors,
+      });
+      databaseBuilder.factory.buildDraftModule(draftModule);
+
+      await databaseBuilder.commit();
+
+      // when
+      await draftModuleRepository.save({
+        ...draftModule,
+        validationErrors: [{ message: 'error passed to save, should be ignored', isSchemaError: false }],
+      });
+
+      // then
+      const savedDraftModule = await draftModuleRepository.getById({ id: draftModule.id });
+      expect(savedDraftModule.validationErrors).to.deep.equal(existingValidationErrors);
+    });
   });
 
   describe('list', () => {

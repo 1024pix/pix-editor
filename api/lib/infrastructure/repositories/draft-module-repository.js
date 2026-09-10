@@ -2,7 +2,8 @@ import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { DraftModule } from '../../domain/models/index.js';
 import { NotFoundError } from '../errors.js';
 
-export async function save({ details, sections, glossary, ...module }) {
+// eslint-disable-next-line no-unused-vars
+export async function save({ details, sections, glossary, validationErrors, ...module }) {
   const knexConn = DomainTransaction.getConnection();
   const draftModuleDTO = {
     ...module,
