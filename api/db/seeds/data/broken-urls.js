@@ -3,24 +3,24 @@ export function brokenUrlsBuilder(databaseBuilder) {
     id: 1,
     statusCode: 404,
     errorMessage: 'Not found',
-    url: 'https://link-to-tuto1.com',
+    url: 'https://patate.pix.org',
   });
   databaseBuilder.factory.buildBrokenUrl({
     id: 2,
     statusCode: 500,
     errorMessage: "C'est cassé",
-    url: 'https://link-to-tuto2.com',
+    url: 'https://chocolat.pix.org',
   });
   databaseBuilder.factory.buildBrokenUrl({
     id: 3,
     statusCode: 404,
     errorMessage: 'Perdu',
-    url: 'https://link-to-challenge1.com',
+    url: 'https://fromage.pix.org',
   });
   databaseBuilder.factory.buildBrokenUrl({
     id: 4,
     statusCode: 500,
     errorMessage: "C'est cassé",
-    url: 'https://link-to-challenge2.com',
+    url: 'https://poire.pix.org',
   });
 }
