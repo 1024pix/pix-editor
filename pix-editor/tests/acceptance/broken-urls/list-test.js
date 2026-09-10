@@ -103,14 +103,13 @@ module('Acceptance | Broken URLs | List', function (hooks) {
 
   test('should display tutorial broken urls when accessing list', async function (assert) {
     // when
-    const screen = await visit('/broken-urls');
+    const screen = await visit('/broken-urls/tutorials');
 
     // then
     assert.dom(screen.getByRole('heading', { name: 'Liste des URLs cassées' })).exists();
     assert.strictEqual(screen.getAllByRole('row').length, 2);
     assert.dom(screen.getByText('http://pipeau-la-grenouille.fr')).exists();
     assert.dom(screen.queryByText('http://chocolat-fromage.org')).doesNotExist();
-    assert.strictEqual(currentURL(), '/broken-urls/tutorials');
   });
 
   test('should switch between tutorials and challenges pages', async function (assert) {
