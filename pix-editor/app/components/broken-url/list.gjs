@@ -4,7 +4,7 @@ import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 
 <template>
   <section class="page-section broken-urls-list">
-    <PixTable @caption="Liste des URLs cassées" @condensed={{true}} @data={{@brokenUrls}} @variant="primary">
+    <PixTable @caption="Liste des URLs cassées" @condensed={{true}} @data={{@brokenUrls}} @variant="orga">
       <:columns as |brokenUrl context|>
         <PixTableColumn @context={{context}} class="column--wide">
           <:header>URL</:header>

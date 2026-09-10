@@ -113,6 +113,15 @@ module('Acceptance | Broken URLs | List', function (hooks) {
     assert.strictEqual(currentURL(), '/broken-urls/tutorials');
   });
 
+  test('should switch between tutorials and challenges pages', async function (assert) {
+    // when
+    const screen = await visit('/broken-urls/tutorials');
+    await click(screen.getByRole('link', { name: 'Épreuves' }));
+
+    // then
+    assert.strictEqual(currentURL(), '/broken-urls/challenges');
+  });
+
   test('should redirect to skill when clicking skill name', async function (assert) {
     // when
     const screen = await visit('/broken-urls/tutorials');
