@@ -66,8 +66,8 @@ export default class BrokenUrlList extends Component {
             @onSort={{fn this.sortBy "url"}}
             @sortOrder={{this.getColumnSortOrder "url"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}
-            @ariaLabelSortDesc={{this.ariaLabelSortDesc}}
-            @ariaLabelSortAsc={{this.ariaLabelSortAsc}}
+            @ariaLabelSortDesc={{this.ariaLabelSortDesc "url"}}
+            @ariaLabelSortAsc={{this.ariaLabelSortAsc "url"}}
           >
             <:header>URL</:header>
             <:cell>{{brokenUrl.url}}</:cell>
@@ -78,8 +78,8 @@ export default class BrokenUrlList extends Component {
             @onSort={{fn this.sortBy "statusCode"}}
             @sortOrder={{this.getColumnSortOrder "statusCode"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}
-            @ariaLabelSortDesc={{this.ariaLabelSortDesc}}
-            @ariaLabelSortAsc={{this.ariaLabelSortAsc}}
+            @ariaLabelSortDesc={{this.ariaLabelSortDesc "url"}}
+            @ariaLabelSortAsc={{this.ariaLabelSortAsc "url"}}
           >
             <:header>Statut de l'erreur</:header>
             <:cell>{{brokenUrl.statusCode}}</:cell>
@@ -90,8 +90,8 @@ export default class BrokenUrlList extends Component {
             @onSort={{fn this.sortBy "errorMessage"}}
             @sortOrder={{this.getColumnSortOrder "errorMessage"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}
-            @ariaLabelSortDesc={{this.ariaLabelSortDesc}}
-            @ariaLabelSortAsc={{this.ariaLabelSortAsc}}
+            @ariaLabelSortDesc={{this.ariaLabelSortDesc "url"}}
+            @ariaLabelSortAsc={{this.ariaLabelSortAsc "url"}}
           >
             <:header>Message d'erreur</:header>
             <:cell>{{brokenUrl.errorMessage}}</:cell>
