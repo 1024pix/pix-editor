@@ -226,5 +226,34 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         )
         .doesNotExist();
     });
+
+    module('when a module has no errors', function () {
+      test('it should not display a publish button', async function (assert) {
+        // given
+        this.server.create('config', 'default');
+        this.server.create('user', { trigram: 'ABC', access: 'readonly' });
+        id = crypto.randomUUID();
+        this.server.create('draft-module', {
+          id,
+          internalTitle: 'MON_BEAU_MODULE',
+          updatedAt: '2026-08-14T08:54:10.449Z',
+        });
+        await authenticateSession();
+
+        // when
+        const screen = await visit(`/modules/workbench/${id}`);
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // then
+        assert
+          .dom(
+            screen.queryByRole('button', {
+              name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
+            }),
+          )
+          .doesNotExist();
+      });
+    });
   });
 });
