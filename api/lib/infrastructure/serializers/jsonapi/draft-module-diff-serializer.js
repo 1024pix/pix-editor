@@ -10,7 +10,7 @@ const serializer = new Serializer('draft-module-diff', { attributes: ['htmlDiff'
  * @param {import('../../../domain/models/index.js').DraftModuleDiff} draftModuleDiff
  */
 export async function serialize({ draftModuleId: id, structuredDiff }) {
-  const diffText = formatPatch(structuredDiff, OMIT_HEADERS);
+  const diffText = formatPatch(structuredDiff, OMIT_HEADERS).replace(/^@@ .+ @@\n/gm, '');
   const htmlDiff = await codeToHtml(diffText, {
     lang: 'diff',
     theme: 'github-light',
