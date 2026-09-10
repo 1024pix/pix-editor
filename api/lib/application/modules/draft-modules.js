@@ -6,6 +6,7 @@ import { joiFrErrorMessages } from '../../infrastructure/schemas/joi-fr-error-me
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 import { handleFailActionWithDetails } from '../../infrastructure/validation.js';
 import * as Types from '../types.js';
+import * as securityPreHandlers from '../security-pre-handlers.js';
 
 export function register(server) {
   server.route([
@@ -143,6 +144,7 @@ export function register(server) {
       method: 'POST',
       path: '/api/draft-modules/{id}/publish',
       config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         validate: { params: Joi.object({ id: Types.moduleId().required() }).required() },
         handler: async (request, h) => {
           const { id } = request.params;
