@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import Boom from '@hapi/boom';
 import Joi from 'joi';
 
-import { exportTranslations, importTranslations } from '../domain/usecases/index.js';
+import { exportAllTranslationsForWeblate, exportTranslations, importTranslations } from '../domain/usecases/index.js';
 import { logger } from '../infrastructure/logger.js';
 import { releaseRepository, localizedChallengeRepository, frameworkRepository } from '../infrastructure/repositories/index.js';
 import * as config from '../config.js';
@@ -39,6 +39,19 @@ export async function register(server) {
           );
 
           return h.response(stream).header('Content-type', 'text/csv');
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/weblate-translations.zip',
+      config: {
+        handler: async function(request, h) {
+          const stream = new PassThrough();
+
+          await exportAllTranslationsForWeblate({ stream });
+
+          return h.response(stream).header('Content-type', 'application/zip');
         },
       },
     },
