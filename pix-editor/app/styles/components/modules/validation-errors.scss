@@ -33,9 +33,18 @@
   &__item {
     @extend %pix-body-s;
 
-    padding: var(--pix-spacing-4x);
-    font-weight: var(--pix-font-bold);
+    padding: var(--pix-spacing-4x) var(--pix-spacing-6x);
     text-wrap: balance;
+  }
+
+  &__item-line {
+    display: inline-block;
+    margin-right: var(--pix-spacing-1x);
+    padding: var(--pix-spacing-1x) var(--pix-spacing-2x);
+    color: var(--pix-neutral-0);
+    font-weight: var(--pix-font-bold);
+    background-color: var(--pix-error-700);
+    border-radius: 4px;
   }
 }
 

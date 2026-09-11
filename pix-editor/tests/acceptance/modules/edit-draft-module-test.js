@@ -46,7 +46,7 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
       const moduleWithErrors = this.server.create('draft-module', {
         id: crypto.randomUUID(),
         internalTitle: 'MODULE_DRAFT',
-        validationErrors: ['oups !'],
+        validationErrors: [{ message: 'oups !', isSchemaError: false }],
         hasBeenValidated: false,
       });
 

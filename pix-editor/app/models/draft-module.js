@@ -14,6 +14,10 @@ export default class DraftModule extends BaseModule {
     return true;
   }
 
+  get displayedValidationErrors() {
+    return (this.validationErrors ?? []).filter((error) => !error.isSchemaError);
+  }
+
   get moduleId() {
     return this.belongsTo('module').id();
   }

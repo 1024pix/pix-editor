@@ -113,7 +113,7 @@ const grainSchema = Joi.object({
     .external(async (value, helpers) => {
       const steppersInArray = value.filter(({ type }) => type === 'stepper');
       if (steppersInArray.length > 1) {
-        return helpers.error("Il ne peut y avoir qu'un stepper par grain");
+        return helpers.message("Il ne peut y avoir qu'un stepper par grain");
       }
       return value;
     })
@@ -128,7 +128,7 @@ const grainSchema = Joi.object({
         ].includes(element.type),
       );
       if (steppersInArray.length === 1 && containsAnswerableElement) {
-        return helpers.error(
+        return helpers.message(
           "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)",
         );
       }

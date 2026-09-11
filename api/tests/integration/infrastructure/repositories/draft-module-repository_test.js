@@ -63,6 +63,33 @@ describe('Integration | Repository | draft-module-repository', () => {
       await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails }]);
       expect(savedDraftModule).toStrictEqual(expectedDraftModule);
     });
+
+    it('does not persist validationErrors', async () => {
+      // given
+      const module = domainBuilder.buildModule();
+      databaseBuilder.factory.buildModule(module);
+
+      const existingValidationErrors = [{ message: 'existing error', isSchemaError: false }];
+      const draftModule = domainBuilder.buildDraftModule({
+        ...module,
+        moduleId: module.id,
+        hasBeenValidated: true,
+        validationErrors: existingValidationErrors,
+      });
+      databaseBuilder.factory.buildDraftModule(draftModule);
+
+      await databaseBuilder.commit();
+
+      // when
+      await draftModuleRepository.save({
+        ...draftModule,
+        validationErrors: [{ message: 'error passed to save, should be ignored', isSchemaError: false }],
+      });
+
+      // then
+      const savedDraftModule = await draftModuleRepository.getById({ id: draftModule.id });
+      expect(savedDraftModule.validationErrors).to.deep.equal(existingValidationErrors);
+    });
   });
 
   describe('list', () => {
@@ -158,12 +185,7 @@ describe('Integration | Repository | draft-module-repository', () => {
       const module = domainBuilder.buildDraftModule();
       const { id } = databaseBuilder.factory.buildDraftModule(module);
       const hasBeenValidated = false;
-      const validationErrors = [
-        `\nError: "id" must be a valid GUID.
-      Valeur concernée à rechercher : "f7b3a2-1a3d8f7e9f5d"\n`,
-        `\nError: "grains[5].id" must be a valid GUID.
-      Valeur concernée à rechercher : "b7ea7630-824"\n`,
-      ];
+      const validationErrors = [{ message: 'Le brouillon a des ids dupliqués : f7b3a2-1a3d8f7e9f5d', isSchemaError: false }, { message: "Il ne peut y avoir qu'un stepper par grain", isSchemaError: false }];
 
       await databaseBuilder.commit();
 
