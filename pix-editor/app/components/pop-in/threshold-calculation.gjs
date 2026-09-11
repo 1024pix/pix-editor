@@ -31,12 +31,7 @@ export default class PopinThresholdCalculation extends Component {
         </div>
       </:content>
       <:footer>
-        <PixButton
-          data-test-sorting-pop-in-deny
-          @backgroundColor="transparent-light"
-          @isBorderVisible={{true}}
-          @triggerAction={{this.closeModal}}
-        >
+        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{this.closeModal}}>
           Fermer
         </PixButton>
       </:footer>

@@ -75,7 +75,7 @@
     "ember-qunit": "^9.0.4",
     "ember-resolver": "^13.1.1",
     "ember-simple-auth": "^8.2.0",
-    "ember-sortable": "^5.3.3",
+    "ember-sortable": "^5.4.0",
     "ember-source": "^6.9.0",
     "ember-table": "^6.0.0-11",
     "ember-template-lint": "^7.9.3",
