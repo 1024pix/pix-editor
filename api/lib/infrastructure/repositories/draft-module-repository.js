@@ -18,7 +18,7 @@ export async function save({ details, sections, glossary, ...module }) {
 
 export async function updateValidationStatus({ id, hasBeenValidated, validationErrors }) {
   const knexConn = DomainTransaction.getConnection();
-  await knexConn('draft-modules').update({ hasBeenValidated, validationErrors, updatedAt: new Date() }).where({ id });
+  await knexConn('draft-modules').update({ hasBeenValidated, validationErrors: JSON.stringify(validationErrors), updatedAt: new Date() }).where({ id });
 }
 
 export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {

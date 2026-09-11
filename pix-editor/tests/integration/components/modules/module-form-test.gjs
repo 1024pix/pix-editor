@@ -1,6 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { click, fillIn } from '@ember/test-helpers';
+import { click, fillIn, waitUntil } from '@ember/test-helpers';
 import { t } from 'ember-intl/test-support';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import { module, test } from 'qunit';
@@ -121,6 +121,27 @@ module('Integration | Component | modules/module-form', function (hooks) {
       assert
         .dom(await screen.queryByRole('button', { name: t('modules.components.module-form.cancel') }))
         .doesNotExist();
+    });
+  });
+
+  module('when the monaco editor reports errors', function () {
+    test.if('it forwards them via onEditorErrorsChange', !isChrome, async function (assert) {
+      // given
+      const onEditorErrorsChange = sinon.stub();
+      const saveModule = sinon.stub();
+
+      // when
+      const screen = await render(
+        <template><ModuleForm @saveModule={{saveModule}} @onEditorErrorsChange={{onEditorErrorsChange}} /></template>,
+      );
+      const monacoEditor = await screen.findByLabelText(t('modules.components.module-form.content-label'));
+      await fillIn(monacoEditor, '{ invalid json');
+      await waitUntil(() => onEditorErrorsChange.called && onEditorErrorsChange.lastCall.args[0].length > 0);
+
+      // then
+      const [errors] = onEditorErrorsChange.lastCall.args;
+      assert.strictEqual(errors[0].line, 1);
+      assert.strictEqual(typeof errors[0].message, 'string');
     });
   });
 });

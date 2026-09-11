@@ -40,18 +40,18 @@ export default class MonacoEditor extends Component {
       const isThisEditorAffected = changedUris.some((uri) => uri.toString() === model.uri.toString());
       if (!isThisEditorAffected) return;
 
-      decorations.set(this.getErrorLineDecorations(model));
+      const markers = monaco.editor.getModelMarkers({ resource: model.uri });
+      this.args.onMarkersChange?.(markers.map((marker) => ({ line: marker.startLineNumber, message: marker.message })));
+      decorations.set(this.getErrorLineDecorations(markers));
     });
     return () => listener.dispose();
   }
 
-  getErrorLineDecorations(model) {
+  getErrorLineDecorations(markers) {
     // Several errors can land on the same line: use Set() so we don't create overlapping decorations for that line.
-    const errorLineNumbers = new Set(
-      monaco.editor.getModelMarkers({ resource: model.uri }).map((marker) => marker.startLineNumber),
-    );
+    const errorLines = new Set(markers.map((marker) => marker.startLineNumber));
 
-    return [...errorLineNumbers].map((lineNumber) => ({
+    return [...errorLines].map((lineNumber) => ({
       range: new monaco.Range(lineNumber, 1, lineNumber, 1),
       // `isWholeLine: true` => to highlight the full error line.
       options: { isWholeLine: true, className: 'monaco-editor__error-line' },

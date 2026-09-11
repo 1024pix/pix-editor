@@ -496,8 +496,7 @@ describe('Acceptance | Route | draft-modules', () => {
         },
       });
       expect(response.result.data.attributes['html-diff']).toMatchInlineSnapshot(`
-        "<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#6F42C1;font-weight:bold">@@ -9,9 +9,9 @@</span></span>
-        <span class="line"><span style="color:#24292E">   "details": {</span></span>
+        "<pre class="shiki github-light" style="background-color:#fff;color:#24292e" tabindex="0"><code><span class="line"><span style="color:#24292E">   "details": {</span></span>
         <span class="line"><span style="color:#24292E">     "image": "https://assets.pix.org/draft/escargots.jpg",</span></span>
         <span class="line"><span style="color:#24292E">     "description": "&#x3C;p>Ce module est dédié aux escargots&#x3C;/p>&#x3C;p>Il contient normalement l'intégralité de leurs secrets disponibles à date.&#x3C;/p>",</span></span>
         <span class="line"><span style="color:#24292E">     "duration": 7,</span></span>
@@ -507,7 +506,6 @@ describe('Acceptance | Route | draft-modules', () => {
         <span class="line"><span style="color:#24292E">       "Connaître les petits secrets des gastéropodes"</span></span>
         <span class="line"><span style="color:#24292E">     ],</span></span>
         <span class="line"><span style="color:#24292E">     "tabletSupport": "inconvenient"</span></span>
-        <span class="line"><span style="color:#6F42C1;font-weight:bold">@@ -43,7 +43,11 @@</span></span>
         <span class="line"><span style="color:#24292E">   "glossary": [</span></span>
         <span class="line"><span style="color:#24292E">     {</span></span>
         <span class="line"><span style="color:#24292E">       "word": "coquille",</span></span>
@@ -792,10 +790,10 @@ describe('Acceptance | Route | draft-modules', () => {
         const nonValidatedDraftModule = await knex.select('*').from('draft-modules').first();
         expect(nonValidatedDraftModule.hasBeenValidated).toStrictEqual(false);
         expect(nonValidatedDraftModule.validationErrors).toStrictEqual([
-          `
-"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/.
-Valeur concernée à rechercher : "not valid slug"
-`,
+          {
+            isSchemaError: true,
+            message: '"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/',
+          },
         ]);
       });
     });

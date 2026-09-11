@@ -122,7 +122,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       const moduleWithErrors = this.server.create('draft-module', {
         id: crypto.randomUUID(),
         internalTitle: 'MODULE_DRAFT',
-        validationErrors: ['oups !'],
+        validationErrors: [{ message: 'oups !', isSchemaError: false }],
       });
 
       // when
@@ -131,13 +131,8 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert
-        .dom(
-          screen.getByRole('button', {
-            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')} ${t('modules.components.validation-errors.expand', { count: 1 })}`,
-          }),
-        )
-        .exists();
+      assert.dom(screen.getByText(t('modules.components.validation-errors.title', { count: 1 }))).exists();
+      assert.dom(screen.getByText(t('modules.components.validation-errors.information')));
     });
 
     test('it should not display publish button', async function (assert) {
@@ -145,7 +140,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       const moduleWithErrors = this.server.create('draft-module', {
         id: crypto.randomUUID(),
         internalTitle: 'MODULE_DRAFT',
-        validationErrors: ['oups !'],
+        validationErrors: [{ message: 'oups !', isSchemaError: false }],
         hasBeenValidated: false,
       });
 

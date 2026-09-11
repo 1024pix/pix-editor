@@ -14,15 +14,7 @@ export async function validateDraftModule(draftModule, dependencies = { moduleRe
   try {
     await moduleSchema.validateAsync(draftModuleJSON, { abortEarly: false });
   } catch (joiError) {
-    validationErrors.push(
-      ...joiError.details.map((errorDetail) =>
-        joiErrorParser.format({
-          error: { details: [errorDetail] },
-          objectErrorSeparator: '',
-          visualSeparator: '',
-        }),
-      ),
-    );
+    validationErrors.push(...joiErrorParser.toStructuredErrors(joiError));
     hasBeenValidated = false;
   }
 
@@ -30,7 +22,7 @@ export async function validateDraftModule(draftModule, dependencies = { moduleRe
     const modulesAgg = new ModulesValidation({ modules });
     modulesAgg.validateDraftModuleDoesNotHaveDuplicateIds(draftModule);
   } catch (error) {
-    validationErrors.push(error.message);
+    validationErrors.push({ message: error.message, isSchemaError: false });
     hasBeenValidated = false;
   }
 

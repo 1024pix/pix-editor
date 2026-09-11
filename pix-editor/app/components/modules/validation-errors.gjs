@@ -9,77 +9,73 @@ import t from 'ember-intl/helpers/t';
 export default class ModuleValidationErrors extends Component {
   @service intl;
 
-  @tracked isCollapsed = true;
-  @tracked hasUnCollapsedOnce = false;
+  @tracked isOpen = false;
 
-  get isUnCollapsed() {
-    return !this.isCollapsed;
+  get errors() {
+    const editorErrors = (this.args.editorErrors ?? []).map((error) => ({ line: error.line, message: error.message }));
+    const validationErrors = (this.args.validationErrors ?? []).map((error) => ({ message: error.message }));
+    return [...validationErrors, ...editorErrors];
   }
 
-  get isContentRendered() {
-    return this.hasUnCollapsedOnce;
+  get totalErrorsCount() {
+    return this.errors.length;
   }
 
   @action
-  toggleAccordions() {
-    this.isCollapsed = !this.isCollapsed;
-    this.hasUnCollapsedOnce = true;
+  handleToggle(event) {
+    this.isOpen = event.target.open;
   }
 
   get buttonInformation() {
-    return this.isUnCollapsed
+    return this.isOpen
       ? {
           label: this.intl.t('modules.components.validation-errors.collapse'),
           icon: 'chevronTop',
         }
       : {
           label: this.intl.t('modules.components.validation-errors.expand', {
-            count: this.args.validationErrors.length,
+            count: this.totalErrorsCount,
           }),
           icon: 'chevronBottom',
         };
   }
 
   <template>
-    <div class="module-validation-errors">
-      <button
-        type="button"
-        class="module-validation-errors__button"
-        {{on "click" this.toggleAccordions}}
-        aria-controls="validation-errors-accordion"
-        aria-expanded={{if this.isUnCollapsed "true" "false"}}
-      >
-        <div class="module-validation-errors-button__title-container">
+    <details class="module-validation-errors" {{on "toggle" this.handleToggle}}>
+      <summary class="module-validation-errors__button" aria-expanded={{if this.isOpen "true" "false"}}>
+        <span class="module-validation-errors-button__title-container">
           <PixIcon @ariaHidden={{true}} @name="error" @plainIcon={{true}} />
-          <div class="module-validation-errors-button__title">
-            <p>{{t "modules.components.validation-errors.title" count=@validationErrors.length}}</p>
+          <span class="module-validation-errors-button__title">
+            <span>{{t "modules.components.validation-errors.title" count=this.totalErrorsCount}}</span>
             {{#if @isEditPage}}
-              <p>{{t "modules.components.validation-errors.information-edit-page"}}</p>
+              <span>{{t "modules.components.validation-errors.information-edit-page"}}</span>
             {{else}}
-              <p>{{t "modules.components.validation-errors.information"}}</p>
+              <span>{{t "modules.components.validation-errors.information"}}</span>
             {{/if}}
-          </div>
-        </div>
+          </span>
+        </span>
 
         <span class="module-validation-errors__toggle-label">
           {{this.buttonInformation.label}}
           <PixIcon @ariaHidden={{true}} @name="{{this.buttonInformation.icon}}" />
         </span>
-      </button>
+      </summary>
 
-      <div
-        id="validation-errors-accordion"
-        aria-hidden={{if this.isCollapsed "true" "false"}}
-        class="module-validation-errors__content"
-      >
-        <ul>
-          {{#each @validationErrors as |validationError|}}
+      {{#if this.errors.length}}
+        <ul class="module-validation-errors__content">
+          {{#each this.errors as |error|}}
             <li class="module-validation-errors__item">
-              {{validationError}}
+              {{#if error.line}}
+                <span class="module-validation-errors__item-line">{{t
+                    "modules.components.validation-errors.editor-error-line"
+                    line=error.line
+                  }}</span>
+              {{/if}}
+              {{error.message}}
             </li>
           {{/each}}
         </ul>
-      </div>
-    </div>
+      {{/if}}
+    </details>
   </template>
 }
