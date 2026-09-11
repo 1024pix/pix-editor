@@ -35,14 +35,9 @@ export default class PopInSortingComponent extends Component {
   }
 
   <template>
-    <PixModal
-      data-test-sorting-pop-in-title
-      @title={{this.title}}
-      @onCloseButtonClick={{this.onDeny}}
-      @showModal={{@showModal}}
-    >
+    <PixModal @title={{this.title}} @onCloseButtonClick={{this.onDeny}} @showModal={{@showModal}}>
       <:content>
-        <div data-test-sorting-pop-in-content class="sortable-content">
+        <div class="sortable-content">
           <ul {{sortableGroup onChange=this.reorderItems}}>
             {{#each this.models as |model|}}
               <li {{sortableItem model=model}} {{sortableHandle}}>
@@ -53,16 +48,11 @@ export default class PopInSortingComponent extends Component {
         </div>
       </:content>
       <:footer>
-        <PixButton
-          data-test-sorting-pop-in-deny
-          @backgroundColor="transparent-light"
-          @isBorderVisible={{true}}
-          @triggerAction={{this.onDeny}}
-        >
+        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{this.onDeny}}>
           <i class="remove icon"></i>
           {{t "common.cancel"}}
         </PixButton>
-        <PixButton data-test-sorting-pop-in-approve @triggerAction={{this.onApprove}}>
+        <PixButton @triggerAction={{this.onApprove}}>
           <i class="checkmark icon"></i>
           Ok
         </PixButton>

@@ -1,5 +1,6 @@
+import { render, within } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
-import { click, findAll, render } from '@ember/test-helpers';
+import { click } from '@ember/test-helpers';
 import { drag } from 'ember-sortable/test-support';
 import Sorting from 'pixeditor/components/pop-in/sorting';
 import { module, test } from 'qunit';
@@ -9,7 +10,15 @@ import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | pop-in/sorting', function (hooks) {
   setupIntlRenderingTest(hooks);
-  let modelToSort1, modelToSort2, modelToSort3, approveActionStub, denyActionStub;
+  let modelToSort1,
+    modelToSort2,
+    modelToSort3,
+    approveActionStub,
+    denyActionStub,
+    sortingModel,
+    title,
+    approveAction,
+    denyAction;
 
   hooks.beforeEach(function () {
     // given
@@ -27,48 +36,49 @@ module('Integration | Component | pop-in/sorting', function (hooks) {
     });
     approveActionStub = sinon.stub();
     denyActionStub = sinon.stub();
-    this.sortingModel = [modelToSort1, modelToSort2, modelToSort3];
-    this.title = 'My title';
-    this.approveAction = approveActionStub;
-    this.denyAction = denyActionStub;
+    sortingModel = [modelToSort1, modelToSort2, modelToSort3];
+    title = 'My title';
+    approveAction = approveActionStub;
+    denyAction = denyActionStub;
   });
 
   test('it display a list of models', async function (assert) {
-    const self = this;
-
     // when
-    await render(
+    const screen = await render(
       <template>
         <Sorting
-          @title={{self.title}}
-          @model={{self.sortingModel}}
-          @onDeny={{self.denyAction}}
-          @onApprove={{self.approveAction}}
+          @title={{title}}
+          @model={{sortingModel}}
+          @onDeny={{denyAction}}
+          @onApprove={{approveAction}}
+          @showModal={{true}}
         />
       </template>,
     );
 
     // then
-    assert.dom('[data-test-sorting-pop-in-title] h1').hasText('My title');
-    assert.dom('[data-test-sorting-pop-in-content] li').exists({ count: 3 });
+    const dialog = screen.getByRole('dialog', { name: 'My title' });
+    assert.dom(dialog).exists();
+    assert.dom(within(dialog).getByRole('button', { name: 'model_1' })).exists();
+    assert.dom(within(dialog).getByRole('button', { name: 'model_2' })).exists();
+    assert.dom(within(dialog).getByRole('button', { name: 'model_3' })).exists();
   });
 
   test('it should reorder models', async function (assert) {
-    const self = this;
-
     // when
-    await render(
+    const screen = await render(
       <template>
         <Sorting
-          @title={{self.title}}
-          @model={{self.sortingModel}}
-          @onDeny={{self.denyAction}}
-          @onApprove={{self.approveAction}}
+          @title={{title}}
+          @model={{sortingModel}}
+          @onDeny={{denyAction}}
+          @onApprove={{approveAction}}
+          @showModal={{true}}
         />
       </template>,
     );
 
-    const draggableItem = findAll('[data-test-sorting-pop-in-content] .sortable-item')[1];
+    const draggableItem = screen.getByRole('button', { name: 'model_2' });
     await drag('mouse', draggableItem, () => {
       return { dy: draggableItem.offsetHeight * 2 + 1, dx: undefined };
     });
@@ -79,42 +89,40 @@ module('Integration | Component | pop-in/sorting', function (hooks) {
   });
 
   test('it should trigger approve action', async function (assert) {
-    const self = this;
-
     // when
-    await render(
+    const screen = await render(
       <template>
         <Sorting
-          @title={{self.title}}
-          @model={{self.sortingModel}}
-          @onDeny={{self.denyAction}}
-          @onApprove={{self.approveAction}}
+          @title={{title}}
+          @model={{sortingModel}}
+          @onDeny={{denyAction}}
+          @onApprove={{approveAction}}
+          @showModal={{true}}
         />
       </template>,
     );
 
-    await click('[data-test-sorting-pop-in-approve]');
+    await click(screen.getByRole('button', { name: 'Ok' }));
 
     // then
     assert.deepEqual(approveActionStub.getCall(0).args[0], [modelToSort1, modelToSort2, modelToSort3]);
   });
 
   test('it should trigger deny action', async function (assert) {
-    const self = this;
-
     // when
-    await render(
+    const screen = await render(
       <template>
         <Sorting
-          @title={{self.title}}
-          @model={{self.sortingModel}}
-          @onDeny={{self.denyAction}}
-          @onApprove={{self.approveAction}}
+          @title={{title}}
+          @model={{sortingModel}}
+          @onDeny={{denyAction}}
+          @onApprove={{approveAction}}
+          @showModal={{true}}
         />
       </template>,
     );
 
-    await click('[data-test-sorting-pop-in-deny]');
+    await click(screen.getByRole('button', { name: 'Annuler' }));
 
     // then
     assert.deepEqual(denyActionStub.getCall(0).args[0], [modelToSort1, modelToSort2, modelToSort3]);
