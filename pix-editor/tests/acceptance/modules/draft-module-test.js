@@ -11,188 +11,249 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
   setupMirage(hooks);
   let id;
 
-  hooks.beforeEach(function () {
-    this.server.create('config', 'default');
-    this.server.create('user', { trigram: 'ABC' });
+  module('when user is allowed to modify draft modules', function (hooks) {
+    hooks.beforeEach(function () {
+      this.server.create('config', 'default');
+      this.server.create('user', { trigram: 'ABC', access: 'admin' });
+      id = crypto.randomUUID();
+      this.server.create('draft-module', {
+        id,
+        internalTitle: 'MON_BEAU_MODULE',
+        updatedAt: '2026-08-14T08:54:10.449Z',
+      });
 
-    id = crypto.randomUUID();
-    this.server.create('draft-module', {
-      id,
-      internalTitle: 'MON_BEAU_MODULE',
-      updatedAt: '2026-08-14T08:54:10.449Z',
+      return authenticateSession();
     });
 
-    return authenticateSession();
-  });
-
-  test('displays a breadcrumb', async function (assert) {
-    // when
-    const screen = await visit('/');
-    await clickByName('Modules');
-    await clickByName(t('modules.components.modules-list.detail'));
-
-    // then
-    const breadcrumb = screen.getByRole('navigation');
-    assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.workbench.label') })).exists();
-    assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.draft-module.label'))).exists();
-
-    // WORKAROUND: let some time for monaco-editor to settle
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  });
-
-  test('displays module details page on click', async function (assert) {
-    // when
-    const screen = await visit('/');
-    await clickByName('Modules');
-    await clickByName(t('modules.components.modules-list.detail'));
-
-    // then
-    assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
-    assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
-    assert.dom(screen.getByText(`● ${t('modules.draft-module.information-tag')}`)).exists();
-    assert.dom(screen.getByText(t('modules.draft-module.last-modified-at', { modifiedDate: '14/08/2026' }))).exists();
-
-    // WORKAROUND: let some time for monaco-editor to settle
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  });
-
-  module('when user clicks on "Modifier"', function () {
-    test('displays draft module edition page', async function (assert) {
+    test('displays a breadcrumb', async function (assert) {
       // when
-      const screen = await visit(`/modules/workbench/${id}`);
-      // WORKAROUND: let some time for monaco-editor to settle
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      await clickByName(t('modules.draft-module.edit'));
+      const screen = await visit('/');
+      await clickByName('Modules');
+      await clickByName(t('modules.components.modules-list.detail'));
 
       // then
-      assert.strictEqual(currentURL(), `/modules/workbench/${id}/edit`);
-      assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
+      const breadcrumb = screen.getByRole('navigation');
+      assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.workbench.label') })).exists();
+      assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.draft-module.label'))).exists();
+
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
+    });
 
+    test('displays module details page on click', async function (assert) {
       // when
-      await clickByName(t('modules.components.module-form.save'));
+      const screen = await visit('/');
+      await clickByName('Modules');
+      await clickByName(t('modules.components.modules-list.detail'));
 
       // then
       assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
+      assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
+      assert.dom(screen.getByText(`● ${t('modules.draft-module.information-tag')}`)).exists();
+      assert.dom(screen.getByText(t('modules.draft-module.last-modified-at', { modifiedDate: '14/08/2026' }))).exists();
+
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
     });
-  });
 
-  module('when user clicks "Publier"', function () {
-    test('publishes module and navigates to module’s details page', async function (assert) {
-      // given
-      const screen = await visit(`/modules/workbench/${id}`);
-      // WORKAROUND: let some time for monaco-editor to settle
-      await new Promise((resolve) => setTimeout(resolve, 100));
+    module('when user clicks on "Modifier"', function () {
+      test('displays draft module edition page', async function (assert) {
+        // when
+        const screen = await visit(`/modules/workbench/${id}`);
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        await clickByName(t('modules.draft-module.edit'));
 
-      await click(
-        screen.getByRole('button', {
-          name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
-        }),
-      );
-      const dialog = await screen.findByRole('dialog', {
-        name: t('modules.components.publish-module-button.confirmation-dialog.title'),
+        // then
+        assert.strictEqual(currentURL(), `/modules/workbench/${id}/edit`);
+        assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // when
+        await clickByName(t('modules.components.module-form.save'));
+
+        // then
+        assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
       });
-
-      // when
-      await click(
-        within(dialog).getByRole('button', {
-          name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
-        }),
-      );
-
-      // then
-      assert
-        .dom(
-          await screen.findByText(t('modules.components.publish-module-button.success', { title: 'MON_BEAU_MODULE' })),
-        )
-        .exists();
-      assert.strictEqual(currentURL(), `/modules/production/${id}`);
-
-      // WORKAROUND: let some time for monaco-editor to settle
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    });
-  });
-
-  module('when a module has errors', function () {
-    test('it should display errors', async function (assert) {
-      // given
-      const moduleWithErrors = this.server.create('draft-module', {
-        id: crypto.randomUUID(),
-        internalTitle: 'MODULE_DRAFT',
-        validationErrors: ['oups !'],
-      });
-
-      // when
-      const screen = await visit(`/modules/workbench/${moduleWithErrors.id}`);
-      // WORKAROUND: let some time for monaco-editor to settle
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // then
-      assert
-        .dom(
-          screen.getByRole('button', {
-            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')} ${t('modules.components.validation-errors.expand', { count: 1 })}`,
-          }),
-        )
-        .exists();
     });
 
-    test('it should not display publish button', async function (assert) {
-      // given
-      const moduleWithErrors = this.server.create('draft-module', {
-        id: crypto.randomUUID(),
-        internalTitle: 'MODULE_DRAFT',
-        validationErrors: ['oups !'],
-        hasBeenValidated: false,
-      });
+    module('when user clicks "Publier"', function () {
+      test('publishes module and navigates to module’s details page', async function (assert) {
+        // given
+        const screen = await visit(`/modules/workbench/${id}`);
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-      // when
-      const screen = await visit(`/modules/workbench/${moduleWithErrors.id}`);
-      // WORKAROUND: let some time for monaco-editor to settle
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // then
-      assert
-        .dom(screen.queryByRole('button', { name: t('modules.components.publish-module-button.publish') }))
-        .doesNotExist();
-    });
-  });
-
-  module('when a module has no errors', function () {
-    test('it should not display errors', async function (assert) {
-      // given
-      const screen = await visit(`/modules/workbench/${id}`);
-      // WORKAROUND: let some time for monaco-editor to settle
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // then
-      assert
-        .dom(
-          screen.queryByRole('button', {
-            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')}`,
-          }),
-        )
-        .doesNotExist();
-    });
-
-    test('it should display a publish button', async function (assert) {
-      // given
-      // when
-      const screen = await visit(`/modules/workbench/${id}`);
-      // WORKAROUND: let some time for monaco-editor to settle
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // then
-      assert
-        .dom(
+        await click(
           screen.getByRole('button', {
             name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
           }),
+        );
+        const dialog = await screen.findByRole('dialog', {
+          name: t('modules.components.publish-module-button.confirmation-dialog.title'),
+        });
+
+        // when
+        await click(
+          within(dialog).getByRole('button', {
+            name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
+          }),
+        );
+
+        // then
+        assert
+          .dom(
+            await screen.findByText(
+              t('modules.components.publish-module-button.success', { title: 'MON_BEAU_MODULE' }),
+            ),
+          )
+          .exists();
+        assert.strictEqual(currentURL(), `/modules/production/${id}`);
+
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      });
+    });
+
+    module('when a module has errors', function () {
+      test('it should display errors', async function (assert) {
+        // given
+        const moduleWithErrors = this.server.create('draft-module', {
+          id: crypto.randomUUID(),
+          internalTitle: 'MODULE_DRAFT',
+          validationErrors: ['oups !'],
+        });
+
+        // when
+        const screen = await visit(`/modules/workbench/${moduleWithErrors.id}`);
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // then
+        assert
+          .dom(
+            screen.getByRole('button', {
+              name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')} ${t('modules.components.validation-errors.expand', { count: 1 })}`,
+            }),
+          )
+          .exists();
+      });
+
+      test('it should not display publish button', async function (assert) {
+        // given
+        const moduleWithErrors = this.server.create('draft-module', {
+          id: crypto.randomUUID(),
+          internalTitle: 'MODULE_DRAFT',
+          validationErrors: ['oups !'],
+          hasBeenValidated: false,
+        });
+
+        // when
+        const screen = await visit(`/modules/workbench/${moduleWithErrors.id}`);
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // then
+        assert
+          .dom(screen.queryByRole('button', { name: t('modules.components.publish-module-button.publish') }))
+          .doesNotExist();
+      });
+    });
+
+    module('when a module has no errors', function () {
+      test('it should not display errors', async function (assert) {
+        // given
+        const screen = await visit(`/modules/workbench/${id}`);
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // then
+        assert
+          .dom(
+            screen.queryByRole('button', {
+              name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')}`,
+            }),
+          )
+          .doesNotExist();
+      });
+
+      test('it should display a publish button', async function (assert) {
+        // given
+        // when
+        const screen = await visit(`/modules/workbench/${id}`);
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // then
+        assert
+          .dom(
+            screen.getByRole('button', {
+              name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
+            }),
+          )
+          .exists();
+      });
+    });
+  });
+
+  module('when user is not allowed to modify draft modules', function () {
+    test('it should not display the modify draft module button', async function (assert) {
+      // given
+      this.server.create('config', 'default');
+      this.server.create('user', { trigram: 'ABC', access: 'readonly' });
+      id = crypto.randomUUID();
+      this.server.create('draft-module', {
+        id,
+        internalTitle: 'MON_BEAU_MODULE',
+        updatedAt: '2026-08-14T08:54:10.449Z',
+      });
+      await authenticateSession();
+
+      // when
+      const screen = await visit(`/modules/workbench/${id}`);
+      // WORKAROUND: let some time for monaco-editor to settle
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      // then
+
+      assert
+        .dom(
+          screen.queryByRole('link', {
+            name: t('modules.draft-module.edit'),
+          }),
         )
-        .exists();
+        .doesNotExist();
+    });
+
+    module('when a module has no errors', function () {
+      test('it should not display a publish button', async function (assert) {
+        // given
+        this.server.create('config', 'default');
+        this.server.create('user', { trigram: 'ABC', access: 'readonly' });
+        id = crypto.randomUUID();
+        this.server.create('draft-module', {
+          id,
+          internalTitle: 'MON_BEAU_MODULE',
+          updatedAt: '2026-08-14T08:54:10.449Z',
+        });
+        await authenticateSession();
+
+        // when
+        const screen = await visit(`/modules/workbench/${id}`);
+        // WORKAROUND: let some time for monaco-editor to settle
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // then
+        assert
+          .dom(
+            screen.queryByRole('button', {
+              name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
+            }),
+          )
+          .doesNotExist();
+      });
     });
   });
 });

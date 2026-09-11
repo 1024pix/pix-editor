@@ -10,6 +10,7 @@ const shortIdRegExp = /^\p{Hex_Digit}{8}$/u;
 
 describe('Acceptance | Route | draft-modules', () => {
   let editorUser;
+  let readonlyUser;
 
   beforeEach(async function() {
     editorUser = databaseBuilder.factory.buildEditorUser();
@@ -797,6 +798,37 @@ describe('Acceptance | Route | draft-modules', () => {
 Valeur concernée à rechercher : "not valid slug"
 `,
         ]);
+      });
+    });
+
+    describe('when user has no write access', async () => {
+      it('responds with status 403 Forbidden code', async () => {
+        // given
+        readonlyUser = databaseBuilder.factory.buildReadonlyUser();
+        const draftModule = domainBuilder.buildDraftModule({ slug: 'valid-slug' });
+        databaseBuilder.factory.buildDraftModule(draftModule);
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: `/api/draft-modules/${draftModule.id}/publish`,
+          headers: generateAuthorizationHeader(readonlyUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(403);
+        expect(response.result.errors[0]).toEqual(
+          {
+            code: 403,
+            detail: 'Missing or insufficient permissions.',
+            title: 'Forbidden access',
+          },
+        );
+
+        await expect(knex.select('*').from('modules')).resolves.toStrictEqual([]);
       });
     });
   });

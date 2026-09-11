@@ -15,210 +15,227 @@ module('Acceptance | Modules | New', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
-    this.server.create('config', 'default');
-    this.server.create('user', { trigram: 'ABC' });
-
-    return authenticateSession();
-  });
-
-  module('when saving fails with a payload validation error', function () {
-    test('displays the error detail in the notification', async function (assert) {
-      // given
-      class PixToastNotificationsStub extends Service {
-        sendError() {}
-      }
-      this.owner.register('service:notifications', PixToastNotificationsStub);
-      const notificationsStub = this.owner.lookup('service:notifications');
-      const pixToastSendError = sinon.stub(notificationsStub, 'sendError');
-
-      this.server.post(
-        '/draft-modules',
-        () =>
-          new Response(
-            400,
-            {},
-            {
-              errors: [
-                {
-                  status: '400',
-                  title: 'Invalid Request Payload',
-                  detail: '"data.attributes.internal-title" ne doit pas être vide',
-                },
-              ],
-            },
-          ),
-      );
-
-      const screen = await visit('/');
-
-      await click(await screen.findByRole('link', { name: 'Modules' }));
-      await click(
-        await screen.findByRole('link', { name: t('modules.components.create-module-button.create-module') }),
-      );
-
-      await fillIn(
-        await screen.findByRole('textbox', {
-          name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
-        }),
-        'NEW_MODULE',
-      );
-
-      await fillIn(
-        await screen.findByLabelText(t('modules.components.module-form.content-label')),
-        JSON.stringify({
-          title: 'Nouveau module',
-          isBeta: true,
-          slug: 'slug',
-          visibility: 'public',
-          details: {
-            level: 'novice',
-          },
-          sections: [],
-          glossary: [],
-        }),
-      );
-
-      // WORKAROUND: let some time for Monaco
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // when
-      await click(screen.getByRole('button', { name: t('modules.components.module-form.save') }));
-
-      // then
-      const expectedMessage = `${t('modules.new.draft-error')}<br><br>${t('modules.new.draft-error-detail')} internal-title ne doit pas être vide.`;
-      assert.ok(pixToastSendError.calledOnce);
-      assert.strictEqual(pixToastSendError.args[0][0].toString(), expectedMessage);
-    });
-  });
-
-  module.if('when creating a new module', !isChrome, function () {
-    test('displays a breadcrumb', async function (assert) {
-      // when
-      const screen = await visit('/');
-
-      await click(await screen.findByRole('link', { name: 'Modules' }));
-      await click(
-        await screen.findByRole('link', { name: t('modules.components.create-module-button.create-module') }),
-      );
-
-      // then
-      const breadcrumb = screen.getByRole('navigation');
-
-      assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.all-modules.label') })).exists();
-      assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.new-module.label'))).exists();
-
-      // WORKAROUND: let some time for Monaco
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    });
-
-    test('works correctly', async function (assert) {
-      // when
-      const screen = await visit('/');
-
-      await click(await screen.findByRole('link', { name: 'Modules' }));
-      await click(
-        await screen.findByRole('link', { name: t('modules.components.create-module-button.create-module') }),
-      );
-
-      // then
-      assert.dom(await screen.findByRole('heading', { name: t('modules.new.module-title') })).exists();
-      assert.strictEqual(currentURL(), '/modules/workbench/new');
-
-      await fillIn(
-        await screen.findByRole('textbox', {
-          name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
-        }),
-        'NEW_MODULE',
-      );
-
-      await fillIn(
-        await screen.findByLabelText(t('modules.components.module-form.content-label')),
-        JSON.stringify({
-          title: 'Nouveau module',
-          isBeta: true,
-          slug: 'slug',
-          visibility: 'public',
-          details: {
-            level: 'novice',
-          },
-          sections: [
-            {
-              id: 'section1',
-            },
-            {
-              id: 'section2',
-            },
-          ],
-          glossary: [
-            {
-              word: 'pouet',
-              definition: 'sound',
-            },
-          ],
-        }),
-      );
-
-      // WORKAROUND: let some time for Monaco
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      await screen.getByRole('button', { name: t('modules.components.module-form.save') }).click();
-
-      assert.dom(await screen.findByRole('heading', { name: t('modules.workbench.title') })).exists();
-      assert.strictEqual(currentURL(), '/modules/workbench');
-      assert.dom(screen.getByText('NEW_MODULE')).exists();
-      assert.dom(await screen.findByText(t('modules.new.module-success', { title: 'NEW_MODULE' }))).exists();
-    });
-  });
-
-  module.if('when creating a draft from an existing module', !isChrome, function (hooks) {
-    let id;
-    const internalTitle = 'MON_BEAU_MODULE';
-
+  module('when user is allowed to create draft modules', function (hooks) {
     hooks.beforeEach(function () {
-      id = crypto.randomUUID();
-      this.server.create('module', { id, internalTitle });
+      this.server.create('config', 'default');
+      this.server.create('user', { trigram: 'ABC', access: 'admin' });
+
+      return authenticateSession();
     });
 
-    test('displays a breadcrumb with detail module page', async function (assert) {
-      // when
-      const screen = await visit(`/modules/workbench/new?moduleId=${id}`);
+    module('when saving fails with a payload validation error', function () {
+      test('displays the error detail in the notification', async function (assert) {
+        // given
+        class PixToastNotificationsStub extends Service {
+          sendError() {}
+        }
+        this.owner.register('service:notifications', PixToastNotificationsStub);
+        const notificationsStub = this.owner.lookup('service:notifications');
+        const pixToastSendError = sinon.stub(notificationsStub, 'sendError');
 
-      // then
-      const breadcrumb = screen.getByRole('navigation');
-      assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.production.label') })).exists();
-      assert
-        .dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.production-module.label') }))
-        .exists();
-      assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.new-module.label'))).exists();
+        this.server.post(
+          '/draft-modules',
+          () =>
+            new Response(
+              400,
+              {},
+              {
+                errors: [
+                  {
+                    status: '400',
+                    title: 'Invalid Request Payload',
+                    detail: '"data.attributes.internal-title" ne doit pas être vide',
+                  },
+                ],
+              },
+            ),
+        );
 
-      // WORKAROUND: let some time for Monaco
-      await new Promise((resolve) => setTimeout(resolve, 100));
+        const screen = await visit('/');
+
+        await click(await screen.findByRole('link', { name: 'Modules' }));
+        await click(
+          await screen.findByRole('link', { name: t('modules.components.create-module-button.create-module') }),
+        );
+
+        await fillIn(
+          await screen.findByRole('textbox', {
+            name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
+          }),
+          'NEW_MODULE',
+        );
+
+        await fillIn(
+          await screen.findByLabelText(t('modules.components.module-form.content-label')),
+          JSON.stringify({
+            title: 'Nouveau module',
+            isBeta: true,
+            slug: 'slug',
+            visibility: 'public',
+            details: {
+              level: 'novice',
+            },
+            sections: [],
+            glossary: [],
+          }),
+        );
+
+        // WORKAROUND: let some time for Monaco
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // when
+        await click(screen.getByRole('button', { name: t('modules.components.module-form.save') }));
+
+        // then
+        const expectedMessage = `${t('modules.new.draft-error')}<br><br>${t('modules.new.draft-error-detail')} internal-title ne doit pas être vide.`;
+        assert.ok(pixToastSendError.calledOnce);
+        assert.strictEqual(pixToastSendError.args[0][0].toString(), expectedMessage);
+      });
     });
 
-    test('creates a new draft', async function (assert) {
-      // when
-      const screen = await visit(`/modules/workbench/new?moduleId=${id}`);
+    module.if('when creating a new module', !isChrome, function () {
+      test('displays a breadcrumb', async function (assert) {
+        // when
+        const screen = await visit('/');
+
+        await click(await screen.findByRole('link', { name: 'Modules' }));
+        await click(
+          await screen.findByRole('link', { name: t('modules.components.create-module-button.create-module') }),
+        );
+
+        // then
+        const breadcrumb = screen.getByRole('navigation');
+
+        assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.all-modules.label') })).exists();
+        assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.new-module.label'))).exists();
+
+        // WORKAROUND: let some time for Monaco
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      });
+
+      test('works correctly', async function (assert) {
+        // when
+        const screen = await visit('/');
+
+        await click(await screen.findByRole('link', { name: 'Modules' }));
+        await click(
+          await screen.findByRole('link', { name: t('modules.components.create-module-button.create-module') }),
+        );
+
+        // then
+        assert.dom(await screen.findByRole('heading', { name: t('modules.new.module-title') })).exists();
+        assert.strictEqual(currentURL(), '/modules/workbench/new');
+
+        await fillIn(
+          await screen.findByRole('textbox', {
+            name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
+          }),
+          'NEW_MODULE',
+        );
+
+        await fillIn(
+          await screen.findByLabelText(t('modules.components.module-form.content-label')),
+          JSON.stringify({
+            title: 'Nouveau module',
+            isBeta: true,
+            slug: 'slug',
+            visibility: 'public',
+            details: {
+              level: 'novice',
+            },
+            sections: [
+              {
+                id: 'section1',
+              },
+              {
+                id: 'section2',
+              },
+            ],
+            glossary: [
+              {
+                word: 'pouet',
+                definition: 'sound',
+              },
+            ],
+          }),
+        );
+
+        // WORKAROUND: let some time for Monaco
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        await screen.getByRole('button', { name: t('modules.components.module-form.save') }).click();
+
+        assert.dom(await screen.findByRole('heading', { name: t('modules.workbench.title') })).exists();
+        assert.strictEqual(currentURL(), '/modules/workbench');
+        assert.dom(screen.getByText('NEW_MODULE')).exists();
+        assert.dom(await screen.findByText(t('modules.new.module-success', { title: 'NEW_MODULE' }))).exists();
+      });
+    });
+
+    module.if('when creating a draft from an existing module', !isChrome, function (hooks) {
+      let id;
+      const internalTitle = 'MON_BEAU_MODULE';
+
+      hooks.beforeEach(function () {
+        id = crypto.randomUUID();
+        this.server.create('module', { id, internalTitle });
+      });
+
+      test('displays a breadcrumb with detail module page', async function (assert) {
+        // when
+        const screen = await visit(`/modules/workbench/new?moduleId=${id}`);
+
+        // then
+        const breadcrumb = screen.getByRole('navigation');
+        assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.production.label') })).exists();
+        assert
+          .dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.production-module.label') }))
+          .exists();
+        assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.new-module.label'))).exists();
+
+        // WORKAROUND: let some time for Monaco
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      });
+
+      test('creates a new draft', async function (assert) {
+        // when
+        const screen = await visit(`/modules/workbench/new?moduleId=${id}`);
+
+        // then
+        assert.dom(await screen.findByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
+        assert.strictEqual(currentURL(), `/modules/workbench/new?moduleId=${id}`);
+
+        await fillIn(
+          await screen.findByRole('textbox', {
+            name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
+          }),
+          'MOD_666',
+        );
+
+        // WORKAROUND: let some time for Monaco
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        await screen.getByRole('button', { name: t('modules.components.module-form.save') }).click();
+        assert.dom(await screen.findByRole('heading', { name: 'MOD_666' })).exists();
+        assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
+        assert.dom(await screen.findByRole('heading', { name: 'MOD_666' })).exists();
+        assert.dom(await screen.findByText(t('modules.new.draft-success', { title: 'MOD_666' }))).exists();
+      });
+    });
+  });
+
+  module('when user is not allowed to create draft modules', function () {
+    test('it redirects to module list page', async function (assert) {
+      // given
+      this.server.create('config', 'default');
+      this.server.create('user', { trigram: 'ABC', access: 'readonly' });
+
+      await authenticateSession();
+
+      await visit('/modules/workbench/new');
 
       // then
-      assert.dom(await screen.findByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
-      assert.strictEqual(currentURL(), `/modules/workbench/new?moduleId=${id}`);
-
-      await fillIn(
-        await screen.findByRole('textbox', {
-          name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
-        }),
-        'MOD_666',
-      );
-
-      // WORKAROUND: let some time for Monaco
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      await screen.getByRole('button', { name: t('modules.components.module-form.save') }).click();
-      assert.dom(await screen.findByRole('heading', { name: 'MOD_666' })).exists();
-      assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
-      assert.dom(await screen.findByRole('heading', { name: 'MOD_666' })).exists();
-      assert.dom(await screen.findByText(t('modules.new.draft-success', { title: 'MOD_666' }))).exists();
+      assert.strictEqual(currentURL(), '/modules/production');
     });
   });
 });
