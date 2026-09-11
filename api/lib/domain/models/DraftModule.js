@@ -79,6 +79,6 @@ function incrementMinorVersion(version) {
   return version?.replace(/\d+$/, (minorVersion) => parseInt(minorVersion) + 1);
 }
 
-function incrementMajorVersion(version) {
+export function incrementMajorVersion(version) {
   return version?.replace(/^(\d+)\.\d+$/, (_, majorVersion) => `${parseInt(majorVersion) + 1}.0`);
 }
