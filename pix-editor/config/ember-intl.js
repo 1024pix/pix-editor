@@ -10,22 +10,22 @@ module.exports = function (/* environment */) {
      * It's meant as safety net when warnings are enabled.
      * When enabled along with `errorOnMissingTranslations` any fallback attempts will result in an error.
      *
-     * @property fallbackLocale
-     * @type {String?}
+     * @property namespaceKeysByDir
+     * @type {String}
      * @default "null"
      */
-    fallbackLocale: 'fr',
+    namespaceKeysByDir: 'fr',
 
     /**
      * Path where translations are stored.  This is relative to the project root.
      * For example, if your translations are an npm dependency, set this to:
      *`'./node_modules/path/to/translations'`
      *
-     * @property inputPath
+     * @property translationsDir
      * @type {String}
      * @default "'translations'"
      */
-    inputPath: 'translations',
+    translationsDir: 'translations',
 
     /**
      * Prevents the translations from being bundled with the application code.
@@ -34,19 +34,10 @@ module.exports = function (/* environment */) {
      *
      * See: https://ember-intl.github.io/ember-intl/docs/guide/asynchronously-loading-translations
      *
-     * @property publicOnly
+     * @property bundleSeparately
      * @type {Boolean}
      * @default "false"
      */
-    publicOnly: false,
-
-    /**
-     * Add the subdirectories of the translations as a namespace for all keys.
-     *
-     * @property wrapTranslationsWithNamespace
-     * @type {Boolean}
-     * @default "false"
-     */
-    wrapTranslationsWithNamespace: false,
+    bundleSeparately: false,
   };
 };
