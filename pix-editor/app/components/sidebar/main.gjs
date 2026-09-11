@@ -67,7 +67,7 @@ export default class SidebarMain extends Component {
           </LinkTo>
         {{/if}}
         {{#if this.mayAccessBrokenUrls}}
-          <LinkTo class="secondary-links--action" @route="authenticated.broken-urls" {{on "click" @close}}>
+          <LinkTo class="secondary-links--action" @route="authenticated.broken-urls.challenges" {{on "click" @close}}>
             <PixIcon @name="desktopOff" @ariaHidden={{true}} />
             URLs cassées
           </LinkTo>

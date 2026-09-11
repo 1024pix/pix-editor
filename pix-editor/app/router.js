@@ -101,7 +101,8 @@ Router.map(function () {
       });
     });
     this.route('broken-urls', function () {
-      this.route('index', { path: '/' });
+      this.route('challenges');
+      this.route('tutorials');
     });
     this.route('whitelisted-urls', function () {
       this.route('list', { path: '/' });
