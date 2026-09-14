@@ -1,6 +1,7 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
 import PixSearchInput from '@1024pix/pix-ui/components/pix-search-input';
+import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import { fn } from '@ember/helper';
@@ -16,10 +17,20 @@ export default class BrokenUrlList extends Component {
 
   get filteredBrokenUrls() {
     const urlFilter = this.args.urlFilterValue ?? '';
+    const statusCodeFilter = this.args.statusCodeFilterValue ?? '';
 
     return this.args.brokenUrls.filter((brokenUrl) => {
-      return brokenUrl.url.includes(urlFilter);
+      const hasUrlFilter = brokenUrl.url.includes(urlFilter);
+      const hasStatusCodeFilter = brokenUrl.statusCode.toString().includes(statusCodeFilter);
+      return hasUrlFilter && hasStatusCodeFilter;
     });
+  }
+
+  get statusCodeOptionList() {
+    const statusCodes = new Set(this.args.brokenUrls.map((brokenUrl) => brokenUrl.statusCode.toString()));
+    return Array.from(statusCodes)
+      .sort((a, b) => a - b)
+      .map((statusCode) => ({ label: statusCode, value: statusCode }));
   }
 
   columnSortFunctions = {
@@ -70,6 +81,11 @@ export default class BrokenUrlList extends Component {
     return this.args.onApplyFiltersClicked('url', url);
   }
 
+  @action
+  triggerStatusCodeFilter(statusCode) {
+    return this.args.onApplyFiltersClicked('statusCode', statusCode);
+  }
+
   <template>
     <section class="page-section broken-urls-list">
       <PixFilterBanner
@@ -86,6 +102,14 @@ export default class BrokenUrlList extends Component {
         >
           <:label>URL à remplir</:label>
         </PixSearchInput>
+        <PixSelect
+          @id="status-filter"
+          @options={{this.statusCodeOptionList}}
+          @value={{@statusCodeFilterValue}}
+          @placeholder="Filtrer par statut d'erreur"
+          @onChange={{this.triggerStatusCodeFilter}}
+          @screenReaderOnly={{true}}
+        />
       </PixFilterBanner>
 
       <PixTable @caption="Liste des URLs cassées" @condensed={{true}} @data={{this.sortedBrokenUrls}} @variant="orga">

@@ -6,6 +6,8 @@ import BrokenUrlTabs from 'pixeditor/components/broken-urls/tabs';
   <BrokenUrlList
     @brokenUrls={{@model.challengeBrokenUrls}}
     @urlFilterValue={{@controller.url}}
+    @statusCodeList={{@controller.statusCodeList}}
+    @statusCodeFilterValue={{@controller.statusCode}}
     @onApplyFiltersClicked={{@controller.applyFilters}}
     @onClearFiltersClicked={{@controller.clearFilters}}
   />

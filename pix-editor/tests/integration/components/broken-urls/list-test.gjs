@@ -28,8 +28,9 @@ module('Integration | Component | broken-urls/list', function (hooks) {
   test('it should display list of broken tutorials urls', async function (assert) {
     // given
     const brokenUrls = [brokenUrl1, brokenUrl2];
+
     // when
-    await render(<template><BrokenUrlList @brokenUrls={{brokenUrls}} /></template>);
+   const screen = await render(<template><BrokenUrlList @brokenUrls={{brokenUrls}} /></template>);
 
     // then
     assert.ok(screen.getByRole('columnheader', { name: "URL Trier dans l'ordre décroissant des url" }));
@@ -38,8 +39,12 @@ module('Integration | Component | broken-urls/list', function (hooks) {
   test('it should reorder list of broken tutorials urls', async function (assert) {
     // given
     const brokenUrls = [brokenUrl1, brokenUrl2];
+
     // when
-    await render(<template><BrokenUrlList @brokenUrls={{brokenUrls}} /></template>);
+    const screen = await render(
+      <template><BrokenUrlList
+        @brokenUrls={{brokenUrls}}
+      /></template>);
 
     const [, row1, row2] = screen.getAllByRole('row');
     const [cell1] = within(row1).getAllByRole('cell');

@@ -31,7 +31,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
     });
     skill = this.server.create('skill', {
       id: 'skillId1',
-      name: '@monAcquisÀMoi1',
+      name: '@lancerDeCouteau',
       challengeIds: [challenge.id],
       status: 'actif',
       level: 1,
@@ -39,7 +39,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
     });
     skill2 = this.server.create('skill', {
       id: 'skillId2',
-      name: '@monAcquisÀMoi2',
+      name: '@jongleAvecDesHaches',
       challengeIds: [challenge2.id],
       status: 'actif',
       level: 1,
@@ -162,7 +162,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
   });
 
   module('filters', function () {
-    test('should filter challenge list by url', async function (assert) {
+    test('should filter list by url', async function (assert) {
       // when
       const screen = await visit('/broken-urls/challenges');
       await fillByLabel('URL à remplir', 'test');
@@ -172,14 +172,16 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       assert.dom(screen.queryByText('http://chocolat-fromage.org')).doesNotExist();
     });
 
-    test('should filter tutorial list by url', async function (assert) {
+    test('should filter list by status code', async function (assert) {
       // when
-      const screen = await visit('/broken-urls/tutorials');
-      await fillByLabel('URL à remplir', 'test');
+      const screen = await visit('/broken-urls/challenges');
+      await screen.getByRole('button', { name: "Filtrer par statut d'erreur" }).click();
+      await screen.findByRole('listbox');
+      await screen.getByRole('option', { name: '406' }).click();
 
       // then
+      assert.dom(screen.getByText('http://chocolat-fromage.org')).exists();
       assert.dom(screen.queryByText('http://pipeau-la-grenouille.fr')).doesNotExist();
-      assert.dom(screen.queryByText('http://cerise.com')).doesNotExist();
     });
   });
 });
