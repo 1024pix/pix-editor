@@ -3,8 +3,10 @@ import { service } from '@ember/service';
 
 export default class ModulesIndexRoute extends Route {
   @service router;
+  @service access;
 
   redirect() {
-    this.router.transitionTo('authenticated.modules.workbench');
+    const params = this.access.mayCreateOrEditModule() ? 'workbench' : 'production';
+    this.router.transitionTo(`authenticated.modules.${params}`);
   }
 }

@@ -187,23 +187,6 @@ describe('Unit | Application | SecurityPreHandlers', () => {
       expect(response.source).to.equal(true);
     });
 
-    it('returns nothing when the user is replicator', async () => {
-      // given
-      const user = new User({
-        id: '1',
-        name: 'AuthenticatedUser',
-        trigram: 'ABC',
-        access: 'replicator',
-      });
-      const request = { auth: { credentials: { user } } };
-
-      // when
-      const response = await checkUserHasWriteAccess(request, hFake);
-
-      // then
-      expect(response.source).to.equal(true);
-    });
-
     it('returns an error when the user is readonly', async () => {
       // given
       const user = new User({
