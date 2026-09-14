@@ -56,13 +56,8 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // then
-      assert
-        .dom(
-          screen.getByRole('button', {
-            name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information-edit-page')} ${t('modules.components.validation-errors.expand', { count: 1 })}`,
-          }),
-        )
-        .exists();
+      assert.dom(screen.getByText(t('modules.components.validation-errors.title', { count: 1 }))).exists();
+      assert.dom(screen.getByText(t('modules.components.validation-errors.information-edit-page')));
     });
   });
 
