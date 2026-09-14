@@ -8,9 +8,12 @@ import * as updatePixApiReleaseCache from '../services/update-pix-api-release-ca
 /**
  * @param {import('../models/index.js').DraftModule} draftModule
  */
-export async function updateDraftModule(draftModule, dependencies = { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch }) {
+export async function updateDraftModule(draftModule, dependencies = { draftModuleRepository, draftModuleVersionRepository, moduleRepository, updatePixApiReleaseCache, structuredPatch }) {
   return DomainTransaction.execute(async () => {
     const existingDraftModule = await dependencies.draftModuleRepository.getById({ id: draftModule.id });
+
+    // TODO : If draftModule has been created from an existing module
+    // Get module and increment draft module major version if it does not match
     const updatedDraftModule = existingDraftModule.update(draftModule);
 
     const savedDraftModule = await dependencies.draftModuleRepository.save(updatedDraftModule);
