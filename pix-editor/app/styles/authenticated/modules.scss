@@ -11,6 +11,16 @@
     flex-wrap: wrap;
     gap: var(--pix-spacing-1x);
   }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: var(--pix-spacing-3x);
+  }
+
+  &__red-panda {
+    width: 40px;
+  }
 }
 
 th.modules-list__actions {

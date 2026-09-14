@@ -6,7 +6,10 @@ import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
 
 <template>
   <header class="page-header">
-    <h1 class="page-title">{{t "modules.workbench.title"}}</h1>
+    <div class="modules-list__title">
+      <img src="/assets/images/modulix/red-panda.png" alt="" class="modules-list__red-panda" />
+      <h1 class="page-title">{{t "modules.workbench.title"}}</h1>
+    </div>
     <div class="page-actions">
       <CreateModuleButton />
     </div>
