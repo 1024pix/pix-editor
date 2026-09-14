@@ -402,9 +402,10 @@ export default class SingleController extends Controller {
       this._displayChangelogPopIn(this.intl.t('challenge.obsolete.changelog'), async (changelog) => {
         try {
           this.loader.start();
+          const skill = await this._preloadRelationships();
           await this._obsoleteAlternatives(this.challenge);
           await this._handleChangelog(this.challenge, changelog);
-          await this._obsoleteArchiveOrDeactivateSkill(this.challenge);
+          await this._obsoleteArchiveOrDeactivateSkill(this.challenge, skill);
           await this.challenge.obsolete();
           this._message(this.intl.t('challenge.obsolete.success'));
           this.send('close');
@@ -586,6 +587,12 @@ export default class SingleController extends Controller {
     this.urlsToConsult = this.challenge.urlsToConsult?.join('\n') ?? '';
   }
 
+  async _preloadRelationships() {
+    const skill = await this.challenge.skill;
+    await skill.challenges;
+    return skill;
+  }
+
   _saveCheck(challenge) {
     if (challenge.autoReply && !challenge.embedURL) {
       this._errorMessage('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');
@@ -758,9 +765,8 @@ export default class SingleController extends Controller {
     return skill.archive();
   }
 
-  async _obsoleteArchiveOrDeactivateSkill(challenge) {
-    const skill = await challenge.skill;
-    if (!this._isProductionPrototype(challenge)) {
+  async _obsoleteArchiveOrDeactivateSkill(challenge, skill) {
+    if (!this._isProductionPrototype(challenge, skill)) {
       return;
     }
     await Promise.all([skill.tutoMore, skill.tutoSolution]);
@@ -774,8 +780,7 @@ export default class SingleController extends Controller {
     return skill.obsolete();
   }
 
-  _isProductionPrototype(challenge) {
-    const skill = challenge.skill;
+  _isProductionPrototype(challenge, skill) {
     return skill.get('productionPrototype')?.id === challenge.id;
   }
 
