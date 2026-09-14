@@ -369,9 +369,10 @@ export default class SingleController extends Controller {
       this._displayChangelogPopIn("Archivage de l'épreuve", async (changelog) => {
         try {
           this.loader.start();
+          const skill = await this._preloadRelationships();
           await this._archiveAlternatives(this.challenge);
           await this._handleChangelog(this.challenge, changelog);
-          await this._archiveOrDeactivateSkill(this.challenge);
+          await this._archiveOrDeactivateSkill(this.challenge, skill);
           await this.challenge.archive();
           this._message('Épreuve archivée');
           this.send('close');
@@ -751,9 +752,8 @@ export default class SingleController extends Controller {
     }
   }
 
-  async _archiveOrDeactivateSkill(challenge) {
-    const skill = await challenge.skill;
-    if (!this._isProductionPrototype(challenge)) {
+  async _archiveOrDeactivateSkill(challenge, skill) {
+    if (!this._isProductionPrototype(challenge, skill)) {
       return;
     }
     await Promise.all([skill.tutoMore, skill.tutoSolution]);

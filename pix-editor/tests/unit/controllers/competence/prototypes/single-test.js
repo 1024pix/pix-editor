@@ -172,7 +172,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     module('on prototype archive', function () {
       test('it should deactivate the current active skill if there is proposal prototype', async function (assert) {
         // when
-        await controller._archiveOrDeactivateSkill(validatePrototype2_1);
+        await controller._archiveOrDeactivateSkill(validatePrototype2_1, skill2);
 
         // then
         assert.strictEqual(skill2.status, 'en construction');
@@ -182,14 +182,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         proposalPrototype2_2.archive();
 
         // when
-        await controller._archiveOrDeactivateSkill(validatePrototype2_1);
+        await controller._archiveOrDeactivateSkill(validatePrototype2_1, skill2);
 
         // then
         assert.strictEqual(skill2.status, 'archivé');
       });
       test('it should not change the skill status if is not a production prototype', async function (assert) {
         // when
-        await controller._archiveOrDeactivateSkill(proposalPrototype2_2);
+        await controller._archiveOrDeactivateSkill(proposalPrototype2_2, skill2);
 
         // then
         assert.strictEqual(skill2.status, 'actif');
