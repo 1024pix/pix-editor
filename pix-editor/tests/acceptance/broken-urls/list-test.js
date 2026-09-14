@@ -1,4 +1,4 @@
-import { visit } from '@1024pix/ember-testing-library';
+import { fillByLabel, visit } from '@1024pix/ember-testing-library';
 import { click, currentURL } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
@@ -9,13 +9,14 @@ module('Acceptance | Broken URLs | List', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let localizedChallenge, skill, competence;
+  let localizedChallenge, skill, skill2, competence;
 
   hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
     const challenge = this.server.create('challenge', { id: 'recChallenge1', status: 'validé', version: 1 });
+    const challenge2 = this.server.create('challenge', { id: 'recChallenge2', status: 'validé', version: 1 });
     this.server.create('localized-challenge', {
       id: challenge.id,
       challengeId: challenge.id,
@@ -32,6 +33,14 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       id: 'skillId1',
       name: '@monAcquisÀMoi1',
       challengeIds: [challenge.id],
+      status: 'actif',
+      level: 1,
+      description: "Visible dans les détails de l'acquis",
+    });
+    skill2 = this.server.create('skill', {
+      id: 'skillId2',
+      name: '@monAcquisÀMoi2',
+      challengeIds: [challenge2.id],
       status: 'actif',
       level: 1,
       description: "Visible dans les détails de l'acquis",
@@ -97,6 +106,13 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       statusCode: 406,
       localizedChallengeIds: [localizedChallenge.id],
     });
+    this.server.create('broken-url', {
+      id: 3,
+      url: 'http://cerise.com',
+      errorMessage: 'Pas là',
+      statusCode: 408,
+      skillIds: [skill2.id],
+    });
 
     return authenticateSession();
   });
@@ -107,8 +123,9 @@ module('Acceptance | Broken URLs | List', function (hooks) {
 
     // then
     assert.dom(screen.getByRole('heading', { name: 'Liste des URLs cassées' })).exists();
-    assert.strictEqual(screen.getAllByRole('row').length, 2);
+    assert.strictEqual(screen.getAllByRole('row').length, 3);
     assert.dom(screen.getByText('http://pipeau-la-grenouille.fr')).exists();
+    assert.dom(screen.getByText('http://cerise.com')).exists();
     assert.dom(screen.queryByText('http://chocolat-fromage.org')).doesNotExist();
   });
 
@@ -142,5 +159,27 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       currentURL(),
       `/competence/${competence.id}/prototypes/${localizedChallenge.challengeId}/localized/${localizedChallenge.id}?view=production`,
     );
+  });
+
+  module('filters', function () {
+    test('should filter challenge list by url', async function (assert) {
+      // when
+      const screen = await visit('/broken-urls/challenges');
+      await fillByLabel('URL à remplir', 'test');
+
+      // then
+      assert.dom(screen.queryByText('http://pipeau-la-grenouille.fr')).doesNotExist();
+      assert.dom(screen.queryByText('http://chocolat-fromage.org')).doesNotExist();
+    });
+
+    test('should filter tutorial list by url', async function (assert) {
+      // when
+      const screen = await visit('/broken-urls/tutorials');
+      await fillByLabel('URL à remplir', 'test');
+
+      // then
+      assert.dom(screen.queryByText('http://pipeau-la-grenouille.fr')).doesNotExist();
+      assert.dom(screen.queryByText('http://cerise.com')).doesNotExist();
+    });
   });
 });

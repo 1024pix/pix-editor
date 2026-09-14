@@ -1,7 +1,10 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
+import PixSearchInput from '@1024pix/pix-ui/components/pix-search-input';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import { fn } from '@ember/helper';
+import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
@@ -11,11 +14,31 @@ export default class BrokenUrlList extends Component {
     order: 'asc',
   };
 
+  get filteredBrokenUrls() {
+    const urlFilter = this.args.urlFilterValue ?? '';
+
+    return this.args.brokenUrls.filter((brokenUrl) => {
+      return brokenUrl.url.includes(urlFilter);
+    });
+  }
+
   columnSortFunctions = {
     url: (a, b) => a.localeCompare(b),
     statusCode: (a, b) => a - b,
     errorMessage: (a, b) => a.localeCompare(b),
   };
+
+  get sortedBrokenUrls() {
+    if (!this.sortTable.column) return this.filteredBrokenUrls;
+
+    return this.filteredBrokenUrls.toSorted((a, b) => {
+      const aColumn = a[this.sortTable.column].toString();
+      const bColumn = b[this.sortTable.column].toString();
+      const sortFunc = this.columnSortFunctions[this.sortTable.column];
+      const sortResult = sortFunc(aColumn, bColumn);
+      return this.sortTable.order === 'asc' ? sortResult : -sortResult;
+    });
+  }
 
   ariaLabelDefaultSort = 'Rétablir le tri par défaut';
   ariaLabelSortDesc = (label) => `Trier dans l'ordre décroissant des ${label}`;
@@ -23,41 +46,48 @@ export default class BrokenUrlList extends Component {
 
   sortBy = (column) => {
     if (this.sortTable.column !== column) {
-      this.sortTable = { column: column, order: 'asc' };
+      this.sortTable = { column, order: 'asc' };
       return;
     }
-
     if (this.sortTable.order === 'desc') {
-      this.sortTable = {
-        column: null,
-        order: null,
-      };
+      this.sortTable = { column: null, order: null };
       return;
     }
-
-    this.sortTable = { column: column, order: 'desc' };
+    this.sortTable = { column, order: 'desc' };
   };
 
   getColumnSortOrder = (column) => {
-    if (column === this.sortTable.column) return this.sortTable.order;
-    return null;
+    return column === this.sortTable.column ? this.sortTable.order : null;
   };
 
-  get sortedBrokenUrls() {
-    if (!this.sortTable.column) return this.args.brokenUrls;
+  @action
+  clearFilters() {
+    this.args.onClearFiltersClicked();
+  }
 
-    return this.args.brokenUrls.toSorted((a, b) => {
-      const aColumn = a[this.sortTable.column].toString();
-      const bColumn = b[this.sortTable.column].toString();
-      const sortFunc = this.columnSortFunctions[this.sortTable.column];
-      const sortResult = sortFunc(aColumn, bColumn);
-      if (this.sortTable.order === 'asc') return sortResult;
-      return -sortResult;
-    });
+  @action
+  triggerUrlFilter(_id, url) {
+    return this.args.onApplyFiltersClicked('url', url);
   }
 
   <template>
     <section class="page-section broken-urls-list">
+      <PixFilterBanner
+        @clearFiltersLabel="Réinitialiser les filtres"
+        @onClearFilters={{this.clearFilters}}
+        @isClearFilterButtonDisabled={{false}}
+      >
+        <PixSearchInput
+          @id="url-filter"
+          @placeholder="Entrer une URL"
+          @debounceTimeInMs="0"
+          @triggerFiltering={{this.triggerUrlFilter}}
+          @screenReaderOnly={{true}}
+        >
+          <:label>URL à remplir</:label>
+        </PixSearchInput>
+      </PixFilterBanner>
+
       <PixTable @caption="Liste des URLs cassées" @condensed={{true}} @data={{this.sortedBrokenUrls}} @variant="orga">
         <:columns as |brokenUrl context|>
           <PixTableColumn
@@ -78,8 +108,8 @@ export default class BrokenUrlList extends Component {
             @onSort={{fn this.sortBy "statusCode"}}
             @sortOrder={{this.getColumnSortOrder "statusCode"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}
-            @ariaLabelSortDesc={{this.ariaLabelSortDesc "url"}}
-            @ariaLabelSortAsc={{this.ariaLabelSortAsc "url"}}
+            @ariaLabelSortDesc={{this.ariaLabelSortDesc "statuts d'erreur"}}
+            @ariaLabelSortAsc={{this.ariaLabelSortAsc "statuts d'erreur"}}
           >
             <:header>Statut de l'erreur</:header>
             <:cell>{{brokenUrl.statusCode}}</:cell>
@@ -90,8 +120,8 @@ export default class BrokenUrlList extends Component {
             @onSort={{fn this.sortBy "errorMessage"}}
             @sortOrder={{this.getColumnSortOrder "errorMessage"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}
-            @ariaLabelSortDesc={{this.ariaLabelSortDesc "url"}}
-            @ariaLabelSortAsc={{this.ariaLabelSortAsc "url"}}
+            @ariaLabelSortDesc={{this.ariaLabelSortDesc "messages d'erreur"}}
+            @ariaLabelSortAsc={{this.ariaLabelSortAsc "messages d'erreur"}}
           >
             <:header>Message d'erreur</:header>
             <:cell>{{brokenUrl.errorMessage}}</:cell>
