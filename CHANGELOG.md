@@ -1,5 +1,34 @@
 
 
+## v4.51.0 (14/09/2026)
+
+
+### :rocket: Amélioration
+- [#1631](https://github.com/1024pix/pix-editor/pull/1631) [FEATURE] Ne pas permettre aux readonly de modifier/créer les brouillons (PIX-24166).
+- [#1636](https://github.com/1024pix/pix-editor/pull/1636) [FEATURE] Ajout du tri sur la liste des URL cassées (PIX-24213).
+- [#1632](https://github.com/1024pix/pix-editor/pull/1632) [FEATURE] Séparation de la liste des URL cassées en 2 (PIX-24211).
+- [#1620](https://github.com/1024pix/pix-editor/pull/1620) [FEATURE] Afficher la liste des URLs cassées (PIX-23943).
+- [#1626](https://github.com/1024pix/pix-editor/pull/1626) [FEATURE] Empêcher un doublon dans le champ "input" des QROCM (PIX-24091).
+- [#1627](https://github.com/1024pix/pix-editor/pull/1627) [FEATURE] Wrapper le texte à la ligne (PIX-24165).
+
+### :building_construction: Tech
+- [#1570](https://github.com/1024pix/pix-editor/pull/1570) [TECH] Permettre l’export de toutes les traductions pour Weblate.
+- [#1604](https://github.com/1024pix/pix-editor/pull/1604) [TECH] Afficher les erreurs de l'éditeur en direct dans la liste de validation des modules (PIX-23945).
+- [#1637](https://github.com/1024pix/pix-editor/pull/1637) [TECH] Bump la version de PgBoss => 12.30.0.
+
+### :bug: Correction
+- [#1628](https://github.com/1024pix/pix-editor/pull/1628) [BUGFIX] Redirige vers la page d'accueil quand une URL non valide est demandée.
+
+### :arrow_up: Montée de version
+- [#1640](https://github.com/1024pix/pix-editor/pull/1640) [BUMP] Update dependency @playwright/test to v1.63.0.
+- [#1619](https://github.com/1024pix/pix-editor/pull/1619) [BUMP] Update dependency @ember-intl/v1-compat to v2.
+- [#1618](https://github.com/1024pix/pix-editor/pull/1618) [BUMP] Update dependency @1024pix/pix-ui to v62.
+- [#1630](https://github.com/1024pix/pix-editor/pull/1630) [BUMP] Mise à jour d'epreuves components.
+- [#1624](https://github.com/1024pix/pix-editor/pull/1624) [BUMP] Update Node.js to v24.20.0.
+- [#1629](https://github.com/1024pix/pix-editor/pull/1629) [BUMP] Update dependency joi to v18.2.5 [SECURITY].
+- [#1635](https://github.com/1024pix/pix-editor/pull/1635) [BUMP] Update dependency morgan to ^1.12.0 (pix-editor) [SECURITY].
+- [#1634](https://github.com/1024pix/pix-editor/pull/1634) [BUMP] Update dependency vitest to ^4.1.11 (challenge-parser) [SECURITY].
+
 ## v4.50.0 (07/09/2026)
 
 
