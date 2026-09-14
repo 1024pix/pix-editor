@@ -42,7 +42,10 @@ export default class ModuleNotification extends Component {
         @type={{this.notificationState.color}}
         class="module-form-notification--{{this.notificationState.color}}"
       >
-        {{t this.notificationState.informationKey}}
+        <div class="modules-list__title">
+          <img src="/assets/images/modulix/red-panda-info.png" alt="" class="modules-list__red-panda" />
+          {{t this.notificationState.informationKey}}
+        </div>
         <PixButtonLink @route={{this.notificationState.route}} @model={{this.moduleId}} @variant="secondary">
           {{t this.notificationState.redirectionButtonLabelKey}}
         </PixButtonLink>
