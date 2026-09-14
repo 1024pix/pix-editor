@@ -56,6 +56,7 @@
     "@joi/date": "^2.1.1",
     "@octokit/rest": "^22.0.1",
     "adminjs": "7.8.17",
+    "archiver": "^8.0.0",
     "base-x": "^5.0.0",
     "blipp": "^4.0.2",
     "bull": "^4.10.4",
