@@ -3,10 +3,11 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class BrokenUrlsController extends Controller {
-  queryParams = ['url', 'statusCode', 'skills'];
+  queryParams = ['url', 'statusCode', 'skills', 'localizedChallenges'];
   @tracked url = '';
   @tracked statusCode = '';
   @tracked skills = [];
+  @tracked localizedChallenges = [];
 
   @action
   applyFilters(field, filterValue) {
@@ -18,5 +19,6 @@ export default class BrokenUrlsController extends Controller {
     this.url = '';
     this.statusCode = '';
     this.skills = [];
+    this.localizedChallenges = [];
   }
 }

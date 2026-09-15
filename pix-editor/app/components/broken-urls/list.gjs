@@ -20,6 +20,7 @@ export default class BrokenUrlList extends Component {
     const urlFilter = this.args.urlFilterValue ?? '';
     const statusCodeFilter = this.args.statusCodeFilterValue ?? '';
     const skillFilters = this.args.skillFilterValues ?? [];
+    const localizedChallengeFilters = this.args.localizedChallengeFilterValues ?? [];
 
     return this.args.brokenUrls.filter((brokenUrl) => {
       const hasUrlFilter = brokenUrl.url.includes(urlFilter);
@@ -28,7 +29,12 @@ export default class BrokenUrlList extends Component {
       const skills = brokenUrl.hasMany('skills').value() ?? [];
       const hasSkillFilter = skillFilters.length === 0 || skills.some((skill) => skillFilters.includes(skill.id));
 
-      return hasUrlFilter && hasStatusCodeFilter && hasSkillFilter;
+      const localizedChallenges = brokenUrl.hasMany('localizedChallenges').value() ?? [];
+      const hasLocalizedChallengeFilter =
+        localizedChallengeFilters.length === 0 ||
+        localizedChallenges.some((challenge) => localizedChallengeFilters.includes(challenge.id));
+
+      return hasUrlFilter && hasStatusCodeFilter && hasSkillFilter && hasLocalizedChallengeFilter;
     });
   }
 
@@ -48,6 +54,16 @@ export default class BrokenUrlList extends Component {
       }
     }
     return Array.from(skillsById, ([value, label]) => ({ value, label }));
+  }
+
+  get localizedChallengeOptionList() {
+    const ids = new Set();
+    for (const brokenUrl of this.args.brokenUrls) {
+      for (const challenge of brokenUrl.hasMany('localizedChallenges').value() ?? []) {
+        ids.add(challenge.id);
+      }
+    }
+    return Array.from(ids, (id) => ({ label: id, value: id }));
   }
 
   columnSortFunctions = {
@@ -108,6 +124,11 @@ export default class BrokenUrlList extends Component {
     return this.args.onApplyFiltersClicked('skills', skills);
   }
 
+  @action
+  triggerLocalizedChallengeFilter(localizedChallenges) {
+    return this.args.onApplyFiltersClicked('localizedChallenges', localizedChallenges);
+  }
+
   <template>
     <section class="page-section broken-urls-list">
       <PixFilterBanner
@@ -141,6 +162,17 @@ export default class BrokenUrlList extends Component {
           @placeholder="Filtrer par acquis"
         >
           <:label>Acquis</:label>
+          <:default as |option|>{{option.label}}</:default>
+        </PixMultiSelect>
+        <PixMultiSelect
+          @id="localized-challenges-filter"
+          @options={{this.localizedChallengeOptionList}}
+          @values={{@localizedChallengeFilterValues}}
+          @onChange={{this.triggerLocalizedChallengeFilter}}
+          @screenReaderOnly={{true}}
+          @placeholder="Filtrer par épreuve"
+        >
+          <:label>Épreuve</:label>
           <:default as |option|>{{option.label}}</:default>
         </PixMultiSelect>
       </PixFilterBanner>
