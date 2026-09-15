@@ -1,5 +1,6 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
+import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
 import PixSearchInput from '@1024pix/pix-ui/components/pix-search-input';
 import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
@@ -18,11 +19,16 @@ export default class BrokenUrlList extends Component {
   get filteredBrokenUrls() {
     const urlFilter = this.args.urlFilterValue ?? '';
     const statusCodeFilter = this.args.statusCodeFilterValue ?? '';
+    const skillFilters = this.args.skillFilterValues ?? [];
 
     return this.args.brokenUrls.filter((brokenUrl) => {
       const hasUrlFilter = brokenUrl.url.includes(urlFilter);
       const hasStatusCodeFilter = brokenUrl.statusCode.toString().includes(statusCodeFilter);
-      return hasUrlFilter && hasStatusCodeFilter;
+
+      const skills = brokenUrl.hasMany('skills').value() ?? [];
+      const hasSkillFilter = skillFilters.length === 0 || skills.some((skill) => skillFilters.includes(skill.id));
+
+      return hasUrlFilter && hasStatusCodeFilter && hasSkillFilter;
     });
   }
 
@@ -31,6 +37,17 @@ export default class BrokenUrlList extends Component {
     return Array.from(statusCodes)
       .sort((a, b) => a - b)
       .map((statusCode) => ({ label: statusCode, value: statusCode }));
+  }
+
+  get skillOptionList() {
+    const skillsById = new Map();
+    for (const brokenUrl of this.args.brokenUrls) {
+      const skills = brokenUrl.hasMany('skills').value() ?? [];
+      for (const skill of skills) {
+        skillsById.set(skill.id, skill.name);
+      }
+    }
+    return Array.from(skillsById, ([value, label]) => ({ value, label }));
   }
 
   columnSortFunctions = {
@@ -86,6 +103,11 @@ export default class BrokenUrlList extends Component {
     return this.args.onApplyFiltersClicked('statusCode', statusCode);
   }
 
+  @action
+  triggerSkillFilter(skills) {
+    return this.args.onApplyFiltersClicked('skills', skills);
+  }
+
   <template>
     <section class="page-section broken-urls-list">
       <PixFilterBanner
@@ -110,6 +132,17 @@ export default class BrokenUrlList extends Component {
           @onChange={{this.triggerStatusCodeFilter}}
           @screenReaderOnly={{true}}
         />
+        <PixMultiSelect
+          @id="skill-filter"
+          @options={{this.skillOptionList}}
+          @values={{@skillFilterValues}}
+          @onChange={{this.triggerSkillFilter}}
+          @screenReaderOnly={{true}}
+          @placeholder="Filtrer par acquis"
+        >
+          <:label>Acquis</:label>
+          <:default as |option|>{{option.label}}</:default>
+        </PixMultiSelect>
       </PixFilterBanner>
 
       <PixTable @caption="Liste des URLs cassées" @condensed={{true}} @data={{this.sortedBrokenUrls}} @variant="orga">

@@ -8,6 +8,7 @@ import BrokenUrlTabs from 'pixeditor/components/broken-urls/tabs';
     @urlFilterValue={{@controller.url}}
     @statusCodeList={{@controller.statusCodeList}}
     @statusCodeFilterValue={{@controller.statusCode}}
+    @skillFilterValues={{@controller.skills}}
     @onApplyFiltersClicked={{@controller.applyFilters}}
     @onClearFiltersClicked={{@controller.clearFilters}}
   />
