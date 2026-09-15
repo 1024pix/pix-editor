@@ -3,5 +3,13 @@ import BrokenUrlTabs from 'pixeditor/components/broken-urls/tabs';
 
 <template>
   <BrokenUrlTabs />
-  <BrokenUrlList @brokenUrls={{@model.tutorialBrokenUrls}} />
+  <BrokenUrlList
+    @brokenUrls={{@model.tutorialBrokenUrls}}
+    @urlFilterValue={{@controller.url}}
+    @statusCodeFilterValue={{@controller.statusCode}}
+    @skillFilterValues={{@controller.skills}}
+    @localizedChallengeFilterValues={{@controller.localizedChallenges}}
+    @onApplyFiltersClicked={{@controller.applyFilters}}
+    @onClearFiltersClicked={{@controller.clearFilters}}
+  />
 </template>

@@ -38,8 +38,8 @@ export async function list() {
   const brokenUrlList = await knexConn('broken_urls')
     .select(
       'broken_urls.*',
-      knexConn.raw('json_agg("external_urls-localized_challenges"."localizedChallengeId") as "localizedChallengeIds"'),
-      knexConn.raw('json_agg("skills-tutorials"."skillId") as "skillIds"'),
+      knexConn.raw('json_agg(DISTINCT "external_urls-localized_challenges"."localizedChallengeId") as "localizedChallengeIds"'),
+      knexConn.raw('json_agg(DISTINCT "skills-tutorials"."skillId") as "skillIds"'),
     )
     .innerJoin('external_urls', 'broken_urls.url', 'external_urls.url')
     .leftJoin('external_urls-localized_challenges', 'external_urls.id', 'external_urls-localized_challenges.externalUrlId')
