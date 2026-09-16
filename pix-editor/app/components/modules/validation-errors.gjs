@@ -60,7 +60,7 @@ export default class ModuleValidationErrors extends Component {
         aria-expanded={{if this.isUnCollapsed "true" "false"}}
       >
         <div class="module-validation-errors-button__title-container">
-          <PixIcon @ariaHidden={{true}} @name="error" @plainIcon={{true}} />
+          <img src="/assets/images/modulix/red-panda-oups.png" alt="" class="modules-list__red-panda" />
           <div class="module-validation-errors-button__title">
             <p>{{t "modules.components.validation-errors.title" count=this.totalErrorsCount}}</p>
             {{#if @isEditPage}}
