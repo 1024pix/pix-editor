@@ -2,7 +2,7 @@ import { pipeline, Readable } from 'node:stream';
 import csv from 'fast-csv';
 import _ from 'lodash';
 import * as config from '../../config.js';
-import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
+import { extractFromChallengeLimitedToSize } from '../../infrastructure/translations/challenge.js';
 import { localizedChallengeRepository } from '../../infrastructure/repositories/index.js';
 import * as competenceTranslations from '../../infrastructure/translations/competence.js';
 import * as thematicTranslations from '../../infrastructure/translations/thematic.js';
@@ -90,7 +90,7 @@ export async function exportTranslationsForWeblate({ stream, frameworkId, areaId
       challenges,
       (challenge, releaseContent) => extractMetadataFromChallenge(config.lcms.baseUrl, localizedChallenges, challenge, releaseContent),
       releaseContent,
-      extractFromChallenge,
+      extractFromChallengeLimitedToSize(130000),
     ),
   );
 
