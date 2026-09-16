@@ -24,6 +24,20 @@ export function extractFromChallenge(challenge) {
       });
     });
 }
+export function extractFromChallengeLimitedToSize(maxSize) {
+  return (challenge) => {
+    const locale = Challenge.getPrimaryLocale(challenge.locales);
+    return fields
+      .filter((field) => challenge[field]?.length <= maxSize)
+      .map((field) => {
+        return new Translation({
+          key: `${prefixFor(challenge)}${field}`,
+          locale,
+          value: challenge[field],
+        });
+      });
+  };
+}
 
 export function prefixFor(challenge) {
   return `${prefix}${challenge.id}.`;
