@@ -1,3 +1,4 @@
+export * from './bulk-update-modules.js';
 export * from './clone-skill.js';
 export * from './create-area.js';
 export * from './create-attachment.js';
