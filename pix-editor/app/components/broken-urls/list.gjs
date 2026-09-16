@@ -1,12 +1,7 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
-import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import PixSearchInput from '@1024pix/pix-ui/components/pix-search-input';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import { fn } from '@ember/helper';
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
@@ -16,56 +11,6 @@ export default class BrokenUrlList extends Component {
     order: 'asc',
   };
 
-  get filteredBrokenUrls() {
-    const urlFilter = this.args.urlFilterValue ?? '';
-    const statusCodeFilter = this.args.statusCodeFilterValue ?? '';
-    const skillFilters = this.args.skillFilterValues ?? [];
-    const localizedChallengeFilters = this.args.localizedChallengeFilterValues ?? [];
-
-    return this.args.brokenUrls.filter((brokenUrl) => {
-      const hasUrlFilter = brokenUrl.url.includes(urlFilter);
-      const hasStatusCodeFilter = brokenUrl.statusCode.toString().includes(statusCodeFilter);
-
-      const skills = brokenUrl.hasMany('skills').value() ?? [];
-      const hasSkillFilter = skillFilters.length === 0 || skills.some((skill) => skillFilters.includes(skill.id));
-
-      const localizedChallenges = brokenUrl.hasMany('localizedChallenges').value() ?? [];
-      const hasLocalizedChallengeFilter =
-        localizedChallengeFilters.length === 0 ||
-        localizedChallenges.some((challenge) => localizedChallengeFilters.includes(challenge.id));
-
-      return hasUrlFilter && hasStatusCodeFilter && hasSkillFilter && hasLocalizedChallengeFilter;
-    });
-  }
-
-  get statusCodeOptionList() {
-    const statusCodes = new Set(this.args.brokenUrls.map((brokenUrl) => brokenUrl.statusCode.toString()));
-    return Array.from(statusCodes)
-      .sort((a, b) => a - b)
-      .map((statusCode) => ({ label: statusCode, value: statusCode }));
-  }
-
-  get skillOptionList() {
-    const skillsById = new Map();
-    for (const brokenUrl of this.args.brokenUrls) {
-      const skills = brokenUrl.hasMany('skills').value() ?? [];
-      for (const skill of skills) {
-        skillsById.set(skill.id, skill.name);
-      }
-    }
-    return Array.from(skillsById, ([value, label]) => ({ value, label }));
-  }
-
-  get localizedChallengeOptionList() {
-    const ids = new Set();
-    for (const brokenUrl of this.args.brokenUrls) {
-      for (const challenge of brokenUrl.hasMany('localizedChallenges').value() ?? []) {
-        ids.add(challenge.id);
-      }
-    }
-    return Array.from(ids, (id) => ({ label: id, value: id }));
-  }
-
   columnSortFunctions = {
     url: (a, b) => a.localeCompare(b),
     statusCode: (a, b) => a - b,
@@ -73,9 +18,9 @@ export default class BrokenUrlList extends Component {
   };
 
   get sortedBrokenUrls() {
-    if (!this.sortTable.column) return this.filteredBrokenUrls;
+    if (!this.sortTable.column) return this.args.brokenUrls;
 
-    return this.filteredBrokenUrls.toSorted((a, b) => {
+    return this.args.brokenUrls.toSorted((a, b) => {
       const aColumn = a[this.sortTable.column].toString();
       const bColumn = b[this.sortTable.column].toString();
       const sortFunc = this.columnSortFunctions[this.sortTable.column];
@@ -104,79 +49,8 @@ export default class BrokenUrlList extends Component {
     return column === this.sortTable.column ? this.sortTable.order : null;
   };
 
-  @action
-  clearFilters() {
-    this.args.onClearFiltersClicked();
-  }
-
-  @action
-  triggerUrlFilter(_id, url) {
-    return this.args.onApplyFiltersClicked('url', url);
-  }
-
-  @action
-  triggerStatusCodeFilter(statusCode) {
-    return this.args.onApplyFiltersClicked('statusCode', statusCode);
-  }
-
-  @action
-  triggerSkillFilter(skills) {
-    return this.args.onApplyFiltersClicked('skills', skills);
-  }
-
-  @action
-  triggerLocalizedChallengeFilter(localizedChallenges) {
-    return this.args.onApplyFiltersClicked('localizedChallenges', localizedChallenges);
-  }
-
   <template>
     <section class="page-section broken-urls-list">
-      <PixFilterBanner
-        @clearFiltersLabel="Réinitialiser les filtres"
-        @onClearFilters={{this.clearFilters}}
-        @isClearFilterButtonDisabled={{false}}
-      >
-        <PixSearchInput
-          @id="url-filter"
-          @placeholder="Entrer une URL"
-          @debounceTimeInMs="0"
-          @triggerFiltering={{this.triggerUrlFilter}}
-          @screenReaderOnly={{true}}
-        >
-          <:label>URL à remplir</:label>
-        </PixSearchInput>
-        <PixSelect
-          @id="status-filter"
-          @options={{this.statusCodeOptionList}}
-          @value={{@statusCodeFilterValue}}
-          @placeholder="Filtrer par statut d'erreur"
-          @onChange={{this.triggerStatusCodeFilter}}
-          @screenReaderOnly={{true}}
-        />
-        <PixMultiSelect
-          @id="skill-filter"
-          @options={{this.skillOptionList}}
-          @values={{@skillFilterValues}}
-          @onChange={{this.triggerSkillFilter}}
-          @screenReaderOnly={{true}}
-          @placeholder="Filtrer par acquis"
-        >
-          <:label>Acquis</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
-        <PixMultiSelect
-          @id="localized-challenges-filter"
-          @options={{this.localizedChallengeOptionList}}
-          @values={{@localizedChallengeFilterValues}}
-          @onChange={{this.triggerLocalizedChallengeFilter}}
-          @screenReaderOnly={{true}}
-          @placeholder="Filtrer par épreuve"
-        >
-          <:label>Épreuve</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
-      </PixFilterBanner>
-
       <PixTable @caption="Liste des URLs cassées" @condensed={{true}} @data={{this.sortedBrokenUrls}} @variant="orga">
         <:columns as |brokenUrl context|>
           <PixTableColumn

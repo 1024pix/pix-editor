@@ -1,15 +1,17 @@
+import BrokenUrlFilters from 'pixeditor/components/broken-urls/filters';
 import BrokenUrlList from 'pixeditor/components/broken-urls/list';
 import BrokenUrlTabs from 'pixeditor/components/broken-urls/tabs';
 
 <template>
   <BrokenUrlTabs />
-  <BrokenUrlList
-    @brokenUrls={{@model.tutorialBrokenUrls}}
+  <BrokenUrlFilters
+    @brokenUrls={{@model.brokenUrls}}
+    @onApplyFiltersClicked={{@controller.applyFilters}}
+    @onClearFiltersClicked={{@controller.clearFilters}}
     @urlFilterValue={{@controller.url}}
     @statusCodeFilterValue={{@controller.statusCode}}
     @skillFilterValues={{@controller.skills}}
     @localizedChallengeFilterValues={{@controller.localizedChallenges}}
-    @onApplyFiltersClicked={{@controller.applyFilters}}
-    @onClearFiltersClicked={{@controller.clearFilters}}
   />
+  <BrokenUrlList @brokenUrls={{@controller.filteredBrokenUrls}} />
 </template>

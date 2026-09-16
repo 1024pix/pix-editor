@@ -11,7 +11,7 @@ export default class ChallengeBrokenUrlsRoute extends Route {
     await Promise.all(challengeBrokenUrls.map((brokenUrl) => brokenUrl.localizedChallenges));
 
     return {
-      challengeBrokenUrls,
+      brokenUrls: challengeBrokenUrls,
     };
   }
 }

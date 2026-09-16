@@ -101,6 +101,7 @@ Router.map(function () {
       });
     });
     this.route('broken-urls', function () {
+      this.route('index');
       this.route('challenges');
       this.route('tutorials');
     });
