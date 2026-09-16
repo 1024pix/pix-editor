@@ -17,32 +17,6 @@ export default class BrokenUrlList extends Component {
     errorMessage: (a, b) => a.localeCompare(b),
   };
 
-  ariaLabelDefaultSort = 'Rétablir le tri par défaut';
-  ariaLabelSortDesc = (label) => `Trier dans l'ordre décroissant des ${label}`;
-  ariaLabelSortAsc = (label) => `Trier dans l'ordre croissant des ${label}`;
-
-  sortBy = (column) => {
-    if (this.sortTable.column !== column) {
-      this.sortTable = { column: column, order: 'asc' };
-      return;
-    }
-
-    if (this.sortTable.order === 'desc') {
-      this.sortTable = {
-        column: null,
-        order: null,
-      };
-      return;
-    }
-
-    this.sortTable = { column: column, order: 'desc' };
-  };
-
-  getColumnSortOrder = (column) => {
-    if (column === this.sortTable.column) return this.sortTable.order;
-    return null;
-  };
-
   get sortedBrokenUrls() {
     if (!this.sortTable.column) return this.args.brokenUrls;
 
@@ -51,10 +25,29 @@ export default class BrokenUrlList extends Component {
       const bColumn = b[this.sortTable.column].toString();
       const sortFunc = this.columnSortFunctions[this.sortTable.column];
       const sortResult = sortFunc(aColumn, bColumn);
-      if (this.sortTable.order === 'asc') return sortResult;
-      return -sortResult;
+      return this.sortTable.order === 'asc' ? sortResult : -sortResult;
     });
   }
+
+  ariaLabelDefaultSort = 'Rétablir le tri par défaut';
+  ariaLabelSortDesc = (label) => `Trier dans l'ordre décroissant des ${label}`;
+  ariaLabelSortAsc = (label) => `Trier dans l'ordre croissant des ${label}`;
+
+  sortBy = (column) => {
+    if (this.sortTable.column !== column) {
+      this.sortTable = { column, order: 'asc' };
+      return;
+    }
+    if (this.sortTable.order === 'desc') {
+      this.sortTable = { column: null, order: null };
+      return;
+    }
+    this.sortTable = { column, order: 'desc' };
+  };
+
+  getColumnSortOrder = (column) => {
+    return column === this.sortTable.column ? this.sortTable.order : null;
+  };
 
   <template>
     <section class="page-section broken-urls-list">
@@ -78,8 +71,8 @@ export default class BrokenUrlList extends Component {
             @onSort={{fn this.sortBy "statusCode"}}
             @sortOrder={{this.getColumnSortOrder "statusCode"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}
-            @ariaLabelSortDesc={{this.ariaLabelSortDesc "url"}}
-            @ariaLabelSortAsc={{this.ariaLabelSortAsc "url"}}
+            @ariaLabelSortDesc={{this.ariaLabelSortDesc "statuts d'erreur"}}
+            @ariaLabelSortAsc={{this.ariaLabelSortAsc "statuts d'erreur"}}
           >
             <:header>Statut de l'erreur</:header>
             <:cell>{{brokenUrl.statusCode}}</:cell>
@@ -90,8 +83,8 @@ export default class BrokenUrlList extends Component {
             @onSort={{fn this.sortBy "errorMessage"}}
             @sortOrder={{this.getColumnSortOrder "errorMessage"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}
-            @ariaLabelSortDesc={{this.ariaLabelSortDesc "url"}}
-            @ariaLabelSortAsc={{this.ariaLabelSortAsc "url"}}
+            @ariaLabelSortDesc={{this.ariaLabelSortDesc "messages d'erreur"}}
+            @ariaLabelSortAsc={{this.ariaLabelSortAsc "messages d'erreur"}}
           >
             <:header>Message d'erreur</:header>
             <:cell>{{brokenUrl.errorMessage}}</:cell>

@@ -11,7 +11,7 @@ export default class TutorialBrokenUrlsRoute extends Route {
     await Promise.all(tutorialBrokenUrls.map((brokenUrl) => brokenUrl.skills));
 
     return {
-      tutorialBrokenUrls,
+      brokenUrls: tutorialBrokenUrls,
     };
   }
 }

@@ -28,6 +28,7 @@ module('Integration | Component | broken-urls/list', function (hooks) {
   test('it should display list of broken tutorials urls', async function (assert) {
     // given
     const brokenUrls = [brokenUrl1, brokenUrl2];
+
     // when
     const screen = await render(<template><BrokenUrlList @brokenUrls={{brokenUrls}} /></template>);
 
@@ -38,6 +39,7 @@ module('Integration | Component | broken-urls/list', function (hooks) {
   test('it should reorder list of broken tutorials urls', async function (assert) {
     // given
     const brokenUrls = [brokenUrl1, brokenUrl2];
+
     // when
     const screen = await render(<template><BrokenUrlList @brokenUrls={{brokenUrls}} /></template>);
 
