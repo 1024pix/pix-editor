@@ -16,4 +16,8 @@ export class ModuleVersion extends Module {
       moduleId,
     });
   }
+
+  static incrementMajorVersion(version) {
+    return version?.replace(/^(\d+)\.\d+$/, (_, majorVersion) => `${parseInt(majorVersion) + 1}.0`);
+  }
 }
