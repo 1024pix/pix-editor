@@ -76,6 +76,6 @@ export class DraftModule extends Module {
   }
 }
 
-function incrementMinorVersion(version) {
+export function incrementMinorVersion(version) {
   return version?.replace(/\d+$/, (minorVersion) => parseInt(minorVersion) + 1);
 }
