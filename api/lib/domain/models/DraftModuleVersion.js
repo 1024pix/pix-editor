@@ -5,4 +5,8 @@ export class DraftModuleVersion {
     this.version = version;
     this.structuredDiff = structuredDiff;
   }
+
+  static incrementMinorVersion(version) {
+    return version?.replace(/\d+$/, (minorVersion) => parseInt(minorVersion) + 1);
+  }
 }

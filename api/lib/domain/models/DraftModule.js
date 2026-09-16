@@ -1,6 +1,7 @@
 import * as config from '../../config.js';
 import { Module } from './Module.js';
 import { ModuleVersion } from './ModuleVersion.js';
+import { DraftModuleVersion } from './DraftModuleVersion.js';
 
 export class DraftModule extends Module {
   constructor({ moduleId, hasBeenValidated, validationErrors, ...attrs } = {}) {
@@ -16,7 +17,7 @@ export class DraftModule extends Module {
   prepareForCreation(module) {
     this.id = module?.id ?? crypto.randomUUID();
     this.shortId = module?.shortId ?? this.id.slice(0, 8);
-    this.version = incrementMinorVersion(module?.version) ?? '0.1';
+    this.version = DraftModuleVersion.incrementMinorVersion(module?.version) ?? '0.1';
   }
 
   /**
@@ -33,7 +34,7 @@ export class DraftModule extends Module {
       details: draftModule.details,
       sections: draftModule.sections,
       glossary: draftModule.glossary,
-      version: incrementMinorVersion(this.version),
+      version: DraftModuleVersion.incrementMinorVersion(this.version),
     });
   }
 
@@ -74,8 +75,4 @@ export class DraftModule extends Module {
   get previewUrl() {
     return new URL(`/modules/preview/${this.shortId}/${this.slug}`, config.pixApp.recette.baseUrlFr).href;
   }
-}
-
-function incrementMinorVersion(version) {
-  return version?.replace(/\d+$/, (minorVersion) => parseInt(minorVersion) + 1);
 }
