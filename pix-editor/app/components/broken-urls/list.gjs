@@ -89,43 +89,47 @@ export default class BrokenUrlList extends Component {
             <:header>Message d'erreur</:header>
             <:cell>{{brokenUrl.errorMessage}}</:cell>
           </PixTableColumn>
-          <PixTableColumn @context={{context}} class="column column--wide">
-            <:header>Tutoriels</:header>
-            <:cell>
-              {{#each brokenUrl.tutorials as |tutorial|}}
-                {{tutorial.title}}
-              {{/each}}
-            </:cell>
-          </PixTableColumn>
-          <PixTableColumn @context={{context}} class="column--wide">
-            <:header>Acquis</:header>
-            <:cell>
-              <div class="broken-urls-list__links">
-                {{#each brokenUrl.skills as |skill|}}
-                  <PixButtonLink @route="authenticated.skill" @model={{skill.id}} @size="small" @variant="tertiary">
-                    {{skill.name}}
-                  </PixButtonLink>
+          {{#if @showTutorialsColumns}}
+            <PixTableColumn @context={{context}} class="column column--wide">
+              <:header>Tutoriels</:header>
+              <:cell>
+                {{#each brokenUrl.tutorials as |tutorial|}}
+                  {{tutorial.title}}
                 {{/each}}
-              </div>
-            </:cell>
-          </PixTableColumn>
-          <PixTableColumn @context={{context}} class="column--wide">
-            <:header>Épreuves</:header>
-            <:cell>
-              <div class="broken-urls-list__links">
-                {{#each brokenUrl.localizedChallenges as |challenge|}}
-                  <PixButtonLink
-                    @route="authenticated.challenge"
-                    @model={{challenge.id}}
-                    @size="small"
-                    @variant="tertiary"
-                  >
-                    {{challenge.id}}
-                  </PixButtonLink>
-                {{/each}}
-              </div>
-            </:cell>
-          </PixTableColumn>
+              </:cell>
+            </PixTableColumn>
+            <PixTableColumn @context={{context}} class="column--wide">
+              <:header>Acquis</:header>
+              <:cell>
+                <div class="broken-urls-list__links">
+                  {{#each brokenUrl.skills as |skill|}}
+                    <PixButtonLink @route="authenticated.skill" @model={{skill.id}} @size="small" @variant="tertiary">
+                      {{skill.name}}
+                    </PixButtonLink>
+                  {{/each}}
+                </div>
+              </:cell>
+            </PixTableColumn>
+          {{/if}}
+          {{#if @showChallengesColumns}}
+            <PixTableColumn @context={{context}} class="column--wide">
+              <:header>Épreuves</:header>
+              <:cell>
+                <div class="broken-urls-list__links">
+                  {{#each brokenUrl.localizedChallenges as |challenge|}}
+                    <PixButtonLink
+                      @route="authenticated.challenge"
+                      @model={{challenge.id}}
+                      @size="small"
+                      @variant="tertiary"
+                    >
+                      {{challenge.id}}
+                    </PixButtonLink>
+                  {{/each}}
+                </div>
+              </:cell>
+            </PixTableColumn>
+          {{/if}}
         </:columns>
       </PixTable>
     </section>

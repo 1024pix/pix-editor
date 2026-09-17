@@ -93,43 +93,46 @@ export default class BrokenUrlFilters extends Component {
         @onChange={{this.triggerStatusCodeFilter}}
         @screenReaderOnly={{true}}
       />
-      <PixMultiSelect
-        @id="tutorials-filter"
-        @options={{this.tutorialOptionList}}
-        @values={{@tutorialFilterValues}}
-        @onChange={{this.triggerTutorialFilter}}
-        @screenReaderOnly={{true}}
-        @isSearchable={{true}}
-        @placeholder="Filtrer par tutoriel"
-      >
-        <:label>Filtrer par tutoriel</:label>
-        <:default as |option|>{{option.label}}</:default>
-      </PixMultiSelect>
-
-      <PixMultiSelect
-        @id="skill-filter"
-        @options={{this.skillOptionList}}
-        @values={{@skillFilterValues}}
-        @onChange={{this.triggerSkillFilter}}
-        @screenReaderOnly={{true}}
-        @isSearchable={{true}}
-        @placeholder="Filtrer par acquis"
-      >
-        <:label>Filtrer par acquis</:label>
-        <:default as |option|>{{option.label}}</:default>
-      </PixMultiSelect>
-      <PixMultiSelect
-        @id="localized-challenges-filter"
-        @options={{this.localizedChallengeOptionList}}
-        @values={{@localizedChallengeFilterValues}}
-        @onChange={{this.triggerLocalizedChallengeFilter}}
-        @screenReaderOnly={{true}}
-        @isSearchable={{true}}
-        @placeholder="Filtrer par épreuve"
-      >
-        <:label>Filtrer par épreuve</:label>
-        <:default as |option|>{{option.label}}</:default>
-      </PixMultiSelect>
+      {{#if @showTutorialsFilters}}
+        <PixMultiSelect
+          @id="tutorials-filter"
+          @options={{this.tutorialOptionList}}
+          @values={{@tutorialFilterValues}}
+          @onChange={{this.triggerTutorialFilter}}
+          @screenReaderOnly={{true}}
+          @isSearchable={{true}}
+          @placeholder="Filtrer par tutoriel"
+        >
+          <:label>Filtrer par tutoriel</:label>
+          <:default as |option|>{{option.label}}</:default>
+        </PixMultiSelect>
+        <PixMultiSelect
+          @id="skill-filter"
+          @options={{this.skillOptionList}}
+          @values={{@skillFilterValues}}
+          @onChange={{this.triggerSkillFilter}}
+          @screenReaderOnly={{true}}
+          @isSearchable={{true}}
+          @placeholder="Filtrer par acquis"
+        >
+          <:label>Filtrer par acquis</:label>
+          <:default as |option|>{{option.label}}</:default>
+        </PixMultiSelect>
+      {{/if}}
+      {{#if @showChallengesFilters}}
+        <PixMultiSelect
+          @id="localized-challenges-filter"
+          @options={{this.localizedChallengeOptionList}}
+          @values={{@localizedChallengeFilterValues}}
+          @onChange={{this.triggerLocalizedChallengeFilter}}
+          @screenReaderOnly={{true}}
+          @isSearchable={{true}}
+          @placeholder="Filtrer par épreuve"
+        >
+          <:label>Filtrer par épreuve</:label>
+          <:default as |option|>{{option.label}}</:default>
+        </PixMultiSelect>
+      {{/if}}
     </PixFilterBanner>
   </template>
 }

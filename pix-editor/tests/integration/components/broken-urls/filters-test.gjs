@@ -61,6 +61,22 @@ module('Integration | Component | broken-urls/filters', function (hooks) {
     brokenUrls = [brokenUrl1, brokenUrl2, brokenUrl3];
   });
 
+  test('it should hide challenges and tutorials filters by default', async function (assert) {
+    // given
+    const screen = await render(
+      <template>
+        <BrokenUrlFilters @brokenUrls={{brokenUrls}} @onApplyFiltersClicked={{onApplyFiltersClicked}} />
+      </template>,
+    );
+
+    // then
+    assert.dom(screen.getByLabelText('URL à remplir')).exists();
+    assert.dom(screen.getByRole('button', { name: "Filtrer par statut d'erreur" })).exists();
+    assert.dom(await screen.queryByLabelText('Filtrer par acquis')).doesNotExist();
+    assert.dom(await screen.queryByLabelText('Filtrer par tutoriel')).doesNotExist();
+    assert.dom(await screen.queryByLabelText('Filtrer par épreuve')).doesNotExist();
+  });
+
   test('it should filter by url', async function (assert) {
     // given
     await render(
@@ -104,7 +120,11 @@ module('Integration | Component | broken-urls/filters', function (hooks) {
     // given
     const screen = await render(
       <template>
-        <BrokenUrlFilters @brokenUrls={{brokenUrls}} @onApplyFiltersClicked={{onApplyFiltersClicked}} />
+        <BrokenUrlFilters
+          @brokenUrls={{brokenUrls}}
+          @onApplyFiltersClicked={{onApplyFiltersClicked}}
+          @showTutorialsFilters={{true}}
+        />
       </template>,
     );
 
@@ -124,7 +144,11 @@ module('Integration | Component | broken-urls/filters', function (hooks) {
     // given
     const screen = await render(
       <template>
-        <BrokenUrlFilters @brokenUrls={{brokenUrls}} @onApplyFiltersClicked={{onApplyFiltersClicked}} />
+        <BrokenUrlFilters
+          @brokenUrls={{brokenUrls}}
+          @onApplyFiltersClicked={{onApplyFiltersClicked}}
+          @showChallengesFilters={{true}}
+        />
       </template>,
     );
 
@@ -144,7 +168,11 @@ module('Integration | Component | broken-urls/filters', function (hooks) {
     // given
     const screen = await render(
       <template>
-        <BrokenUrlFilters @brokenUrls={{brokenUrls}} @onApplyFiltersClicked={{onApplyFiltersClicked}} />
+        <BrokenUrlFilters
+          @brokenUrls={{brokenUrls}}
+          @onApplyFiltersClicked={{onApplyFiltersClicked}}
+          @showTutorialsFilters={{true}}
+        />
       </template>,
     );
 
