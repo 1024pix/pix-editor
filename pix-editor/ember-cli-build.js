@@ -16,6 +16,13 @@ module.exports = async function (defaults) {
     } */
   });
 
+  const { setConfig } = await import('@warp-drive/build-config');
+  setConfig(app, __dirname, {
+    deprecations: {
+      DEPRECATE_TRACKING_PACKAGE: false,
+    },
+  });
+
   return compatBuild(app, buildOnce, {
     staticModifiers: true,
   });

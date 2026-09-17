@@ -1,4 +1,4 @@
-import { attr } from '@ember-data/model';
+import { attr } from '@warp-drive/legacy/model';
 
 import MissionSummary from './mission-summary';
 

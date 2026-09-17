@@ -1,5 +1,5 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
+import Model, { attr, belongsTo } from '@warp-drive/legacy/model';
 
 export default class Attachment extends Model {
   @attr filename;
