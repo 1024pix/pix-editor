@@ -40,6 +40,7 @@ export async function list() {
       'broken_urls.*',
       knexConn.raw('json_agg(DISTINCT "external_urls-localized_challenges"."localizedChallengeId") as "localizedChallengeIds"'),
       knexConn.raw('json_agg(DISTINCT "skills-tutorials"."skillId") as "skillIds"'),
+      knexConn.raw('json_agg(DISTINCT "skills-tutorials"."tutorialId") as "tutorialIds"'),
     )
     .innerJoin('external_urls', 'broken_urls.url', 'external_urls.url')
     .leftJoin('external_urls-localized_challenges', 'external_urls.id', 'external_urls-localized_challenges.externalUrlId')
@@ -60,6 +61,7 @@ function toDomainList(brokenUrlList) {
       url: dto.url,
       localizedChallengeIds: dto.localizedChallengeIds.filter(removeNullValuesFromJoin).toSorted(),
       skillIds: dto.skillIds.filter(removeNullValuesFromJoin).toSorted(),
+      tutorialIds: dto.tutorialIds.filter(removeNullValuesFromJoin).toSorted(),
     };
 
     return new BrokenUrl(formattedData);

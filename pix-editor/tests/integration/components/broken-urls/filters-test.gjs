@@ -30,12 +30,18 @@ module('Integration | Component | broken-urls/filters', function (hooks) {
       id: 'localizedChallengeId1',
     });
 
+    const tutorial1 = store.createRecord('tutorial', {
+      id: 'tutorialId1',
+      title: 'Tutorial number 1',
+    });
+
     const brokenUrl1 = store.createRecord('broken-url', {
       url: 'https://tomate.com',
       statusCode: 404,
       errorMessage: null,
       skills: [skill1],
       localizedChallenges: [],
+      tutorials: [tutorial1],
     });
     const brokenUrl2 = store.createRecord('broken-url', {
       url: 'https://carotte.com',
@@ -132,5 +138,25 @@ module('Integration | Component | broken-urls/filters', function (hooks) {
 
     // then
     assert.ok(onApplyFiltersClicked.calledOnceWith('localizedChallenges', ['localizedChallengeId1']));
+  });
+
+  test('it should filter by tutorial', async function (assert) {
+    // given
+    const screen = await render(
+      <template>
+        <BrokenUrlFilters @brokenUrls={{brokenUrls}} @onApplyFiltersClicked={{onApplyFiltersClicked}} />
+      </template>,
+    );
+
+    // when
+    await click(screen.getByLabelText('Filtrer par tutoriel'));
+    await click(
+      await screen.findByRole('checkbox', {
+        name: 'Tutorial number 1',
+      }),
+    );
+
+    // then
+    assert.ok(onApplyFiltersClicked.calledOnceWith('tutorials', ['tutorialId1']));
   });
 });

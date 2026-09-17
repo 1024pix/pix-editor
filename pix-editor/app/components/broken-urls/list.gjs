@@ -89,6 +89,14 @@ export default class BrokenUrlList extends Component {
             <:header>Message d'erreur</:header>
             <:cell>{{brokenUrl.errorMessage}}</:cell>
           </PixTableColumn>
+          <PixTableColumn @context={{context}} class="column column--wide">
+            <:header>Tutoriels</:header>
+            <:cell>
+              {{#each brokenUrl.tutorials as |tutorial|}}
+                {{tutorial.title}}
+              {{/each}}
+            </:cell>
+          </PixTableColumn>
           <PixTableColumn @context={{context}} class="column--wide">
             <:header>Acquis</:header>
             <:cell>

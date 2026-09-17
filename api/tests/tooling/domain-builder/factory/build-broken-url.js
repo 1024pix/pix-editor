@@ -7,6 +7,7 @@ export function buildBrokenUrl({
   url = 'http://localhost:8080/',
   localizedChallengeIds = ['recChallenge1'],
   skillIds = [],
+  tutorialIds = [],
 } = {}) {
   return new BrokenUrl({
     id,
@@ -15,5 +16,6 @@ export function buildBrokenUrl({
     url,
     localizedChallengeIds,
     skillIds,
+    tutorialIds,
   });
 }

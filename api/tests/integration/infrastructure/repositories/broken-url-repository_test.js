@@ -167,7 +167,11 @@ describe('Integration | Repository | broken-url-repository', () => {
         tutorialIds: [],
       });
 
-      databaseBuilder.factory.buildExternalUrl({ url: 'http://test.localhost:8080/', localizedChallengeIds: [], tutorialIds: [tutorial.id] });
+      databaseBuilder.factory.buildExternalUrl({
+        url: 'http://test.localhost:8080/',
+        localizedChallengeIds: [],
+        tutorialIds: [tutorial.id],
+      });
       const notFoundUrl = databaseBuilder.factory.buildBrokenUrl({
         errorMessage: 'Not Found',
         statusCode: 404,
@@ -196,16 +200,19 @@ describe('Integration | Repository | broken-url-repository', () => {
           ...notFoundUrl,
           localizedChallengeIds: [challenge.id],
           skillIds: [],
+          tutorialIds: [],
         },
         {
           ...brokenUrl,
           skillIds: [skill.id],
           localizedChallengeIds: [],
+          tutorialIds: [tutorial.id],
         },
         {
           ...notAllowedUrl,
           localizedChallengeIds: [challenge.id, localized2.id],
           skillIds: [],
+          tutorialIds: [],
         },
       ]);
     });

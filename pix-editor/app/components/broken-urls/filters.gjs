@@ -34,6 +34,16 @@ export default class BrokenUrlFilters extends Component {
     return Array.from(ids, (id) => ({ label: id, value: id }));
   }
 
+  get tutorialOptionList() {
+    const ids = new Map();
+    for (const brokenUrl of this.args.brokenUrls) {
+      for (const tutorial of brokenUrl.hasMany('tutorials').value() ?? []) {
+        ids.set(tutorial.id, tutorial.title);
+      }
+    }
+    return Array.from(ids.entries()).map(([id, title]) => ({ label: title, value: id }));
+  }
+
   @action
   triggerSkillFilter(skills) {
     return this.args.onApplyFiltersClicked('skills', skills);
@@ -42,6 +52,11 @@ export default class BrokenUrlFilters extends Component {
   @action
   triggerLocalizedChallengeFilter(localizedChallenges) {
     return this.args.onApplyFiltersClicked('localizedChallenges', localizedChallenges);
+  }
+
+  @action
+  triggerTutorialFilter(tutorials) {
+    return this.args.onApplyFiltersClicked('tutorials', tutorials);
   }
 
   @action
@@ -78,6 +93,19 @@ export default class BrokenUrlFilters extends Component {
         @onChange={{this.triggerStatusCodeFilter}}
         @screenReaderOnly={{true}}
       />
+      <PixMultiSelect
+        @id="tutorials-filter"
+        @options={{this.tutorialOptionList}}
+        @values={{@tutorialFilterValues}}
+        @onChange={{this.triggerTutorialFilter}}
+        @screenReaderOnly={{true}}
+        @isSearchable={{true}}
+        @placeholder="Filtrer par tutoriel"
+      >
+        <:label>Filtrer par tutoriel</:label>
+        <:default as |option|>{{option.label}}</:default>
+      </PixMultiSelect>
+
       <PixMultiSelect
         @id="skill-filter"
         @options={{this.skillOptionList}}

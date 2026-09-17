@@ -6,7 +6,7 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a given broken url with challengeIds', async () => {
       // given
-      const brokenUrl = domainBuilder.buildBrokenUrl({ localizedChallengeIds: ['recChallenge1', 'recChallenge2'], skillIds: [] });
+      const brokenUrl = domainBuilder.buildBrokenUrl({ localizedChallengeIds: ['recChallenge1', 'recChallenge2'], skillIds: [], tutorialIds: ['tutorialId1'] });
       const expectedSerializedBrokenUrl = {
         data: {
           type: 'broken-urls',
@@ -30,6 +30,14 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
               ],
             },
             skills: { data: [] },
+            tutorials: {
+              data: [
+                {
+                  id: brokenUrl.tutorialIds[0],
+                  type: 'tutorials',
+                },
+              ],
+            },
           },
         },
       };
@@ -43,7 +51,7 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
 
     it('should serialize a given broken url with tutorialIds', async () => {
       // given
-      const brokenUrl = domainBuilder.buildBrokenUrl({ skillIds: ['recTuto1', 'recTuto2'], localizedChallengeIds: [] });
+      const brokenUrl = domainBuilder.buildBrokenUrl({ skillIds: ['recTuto1', 'recTuto2'], localizedChallengeIds: [], tutorialIds: ['tutorialId2'] });
       const expectedSerializedBrokenUrl = {
         data: {
           type: 'broken-urls',
@@ -64,6 +72,14 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
                 {
                   id: brokenUrl.skillIds[1],
                   type: 'skills',
+                },
+              ],
+            },
+            tutorials: {
+              data: [
+                {
+                  id: brokenUrl.tutorialIds[0],
+                  type: 'tutorials',
                 },
               ],
             },

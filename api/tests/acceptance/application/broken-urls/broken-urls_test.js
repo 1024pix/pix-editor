@@ -97,6 +97,7 @@ describe('Acceptance | Controller | broken-urls', () => {
                 ],
               },
               skills: { data: [] },
+              tutorials: { data: [] },
             },
           },
           {
@@ -117,6 +118,7 @@ describe('Acceptance | Controller | broken-urls', () => {
                 ],
               },
               skills: { data: [] },
+              tutorials: { data: [] },
             },
           },
           {
@@ -137,6 +139,7 @@ describe('Acceptance | Controller | broken-urls', () => {
                 ],
               },
               skills: { data: [] },
+              tutorials: { data: [] },
             },
           },
         ],
