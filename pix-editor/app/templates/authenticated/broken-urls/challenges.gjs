@@ -12,6 +12,7 @@ import BrokenUrlTabs from 'pixeditor/components/broken-urls/tabs';
     @statusCodeFilterValue={{@controller.statusCode}}
     @skillFilterValues={{@controller.skills}}
     @localizedChallengeFilterValues={{@controller.localizedChallenges}}
+    @showChallengesFilters={{true}}
   />
-  <BrokenUrlList @brokenUrls={{@controller.filteredBrokenUrls}} />
+  <BrokenUrlList @brokenUrls={{@controller.filteredBrokenUrls}} @showChallengesColumns={{true}} />
 </template>

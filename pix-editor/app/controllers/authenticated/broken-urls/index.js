@@ -3,22 +3,19 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class BrokenUrlsIndexController extends Controller {
-  queryParams = ['url', 'statusCode', 'skills', 'localizedChallenges'];
+  queryParams = ['url', 'statusCode', 'skills', 'localizedChallenges', 'tutorials'];
   @tracked url = '';
   @tracked statusCode = '';
   @tracked skills = [];
   @tracked localizedChallenges = [];
-
-  @action
-  applyFilters(field, filterValue) {
-    this[field] = filterValue ?? '';
-  }
+  @tracked tutorials = [];
 
   get filterBrokenUrls() {
     const urlFilter = this.url ?? '';
     const statusCodeFilter = this.statusCode ?? '';
     const skillFilters = this.skills ?? [];
     const localizedChallengeFilters = this.localizedChallenges ?? [];
+    const tutorialFilters = this.tutorials ?? [];
 
     return (brokenUrl) => {
       const hasUrlFilter = brokenUrl.url.includes(urlFilter);
@@ -32,8 +29,17 @@ export default class BrokenUrlsIndexController extends Controller {
         localizedChallengeFilters.length === 0 ||
         localizedChallenges.some((challenge) => localizedChallengeFilters.includes(challenge.id));
 
-      return hasUrlFilter && hasStatusCodeFilter && hasSkillFilter && hasLocalizedChallengeFilter;
+      const tutorials = brokenUrl.hasMany('tutorials').value() ?? [];
+      const hasTutorialFilter =
+        tutorialFilters.length === 0 || tutorials.some((tutorial) => tutorialFilters.includes(tutorial.id));
+
+      return hasUrlFilter && hasStatusCodeFilter && hasSkillFilter && hasLocalizedChallengeFilter && hasTutorialFilter;
     };
+  }
+
+  @action
+  applyFilters(field, filterValue) {
+    this[field] = filterValue ?? '';
   }
 
   @action
@@ -42,5 +48,6 @@ export default class BrokenUrlsIndexController extends Controller {
     this.statusCode = '';
     this.skills = [];
     this.localizedChallenges = [];
+    this.tutorials = [];
   }
 }
