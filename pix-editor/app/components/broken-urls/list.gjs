@@ -16,6 +16,7 @@ export default class BrokenUrlList extends Component {
     statusCode: (a, b) => a - b,
     errorMessage: (a, b) => a.localeCompare(b),
   };
+  ariaLabelDefaultSort = 'Rétablir le tri par défaut';
 
   get sortedBrokenUrls() {
     if (!this.sortTable.column) return this.args.brokenUrls;
@@ -29,7 +30,6 @@ export default class BrokenUrlList extends Component {
     });
   }
 
-  ariaLabelDefaultSort = 'Rétablir le tri par défaut';
   ariaLabelSortDesc = (label) => `Trier dans l'ordre décroissant des ${label}`;
   ariaLabelSortAsc = (label) => `Trier dans l'ordre croissant des ${label}`;
 
@@ -55,7 +55,7 @@ export default class BrokenUrlList extends Component {
         <:columns as |brokenUrl context|>
           <PixTableColumn
             @context={{context}}
-            class="column--wide"
+            class="column column--wide"
             @onSort={{fn this.sortBy "url"}}
             @sortOrder={{this.getColumnSortOrder "url"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}
@@ -63,11 +63,11 @@ export default class BrokenUrlList extends Component {
             @ariaLabelSortAsc={{this.ariaLabelSortAsc "url"}}
           >
             <:header>URL</:header>
-            <:cell>{{brokenUrl.url}}</:cell>
+            <:cell><a href={{brokenUrl.url}} target="_blank">{{brokenUrl.url}}</a></:cell>
           </PixTableColumn>
           <PixTableColumn
             @context={{context}}
-            class="column--wide"
+            class="column column--small"
             @onSort={{fn this.sortBy "statusCode"}}
             @sortOrder={{this.getColumnSortOrder "statusCode"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}
@@ -79,7 +79,7 @@ export default class BrokenUrlList extends Component {
           </PixTableColumn>
           <PixTableColumn
             @context={{context}}
-            class="column--wide"
+            class="column column--wide"
             @onSort={{fn this.sortBy "errorMessage"}}
             @sortOrder={{this.getColumnSortOrder "errorMessage"}}
             @ariaLabelDefaultSort={{this.ariaLabelDefaultSort}}

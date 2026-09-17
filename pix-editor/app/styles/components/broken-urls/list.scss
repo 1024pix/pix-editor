@@ -6,4 +6,17 @@
     overflow: auto;
     scrollbar-width: thin;
   }
+
+  .column{
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &--wide {
+      max-width: 200px;
+    }
+
+    &--small {
+      max-width: 100px;
+    }
+  }
 }
