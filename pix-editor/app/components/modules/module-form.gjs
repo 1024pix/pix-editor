@@ -8,7 +8,7 @@ import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
-import * as monaco from 'monaco-editor';
+import { jsonDefaults } from 'monaco-editor/language/json/monaco.contribution';
 import MonacoEditor from 'pixeditor/components/monaco-editor/monaco-editor';
 
 const MODULE_SCHEMA_MONACO_URI = 'inmemory://module-json-schema.json';
@@ -48,7 +48,7 @@ export default class ModuleForm extends Component {
   async loadModuleSchema() {
     const schema = await this.moduleSchema.load();
 
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+    jsonDefaults.setDiagnosticsOptions({
       validate: true,
       schemas: [{ uri: MODULE_SCHEMA_MONACO_URI, fileMatch: ['*'], schema }],
     });
