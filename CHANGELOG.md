@@ -1,5 +1,19 @@
 
 
+## v4.52.0 (17/09/2026)
+
+
+### :rocket: Amélioration
+- [#1647](https://github.com/1024pix/pix-editor/pull/1647) [FEATURE] Weblate - Ne pas exporter les traductions qui dépassent la taille limite d'un champ CSV (130000 caractères).
+- [#1645](https://github.com/1024pix/pix-editor/pull/1645) [FEATURE] Ajout des filtres sur la page des urls cassées (PIX-24214).
+- [#1642](https://github.com/1024pix/pix-editor/pull/1642) [FEATURE] Un nouvel arrivant chez Pix Editor !.
+
+### :building_construction: Tech
+- [#1638](https://github.com/1024pix/pix-editor/pull/1638) [TECH] Mise à jour du composant qui liste les erreurs des modules (PIX-24068).
+
+### :bug: Correction
+- [#1644](https://github.com/1024pix/pix-editor/pull/1644) [BUGFIX] La péremption d'un prototype n'infère pas le status de son acquis (PIX-24262).
+
 ## v4.51.0 (14/09/2026)
 
 
