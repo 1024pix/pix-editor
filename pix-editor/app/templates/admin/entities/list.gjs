@@ -1,7 +1,7 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import PixPagination from '@1024pix/pix-ui/components/pix-pagination';
 import AdminEntityList from 'pixeditor/components/admin/entity-list';
+import Pagination from 'pixeditor/components/list/pagination';
 
 <template>
   <AdminEntityList
@@ -12,7 +12,7 @@ import AdminEntityList from 'pixeditor/components/admin/entity-list';
     @actions={{@controller.actions}}
   />
   <div class="pagination">
-    <PixPagination @pagination={{@controller.entityList.meta}} />
+    <Pagination @pagination={{@controller.entityList.meta}} />
   </div>
   {{#if @controller.modal}}
     <PixModal

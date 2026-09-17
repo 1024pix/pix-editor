@@ -2,11 +2,11 @@ import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
 import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
 import PixIcon from '@1024pix/pix-ui/components/pix-icon';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import PixPagination from '@1024pix/pix-ui/components/pix-pagination';
 import PixTag from '@1024pix/pix-ui/components/pix-tag';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import formatDate from 'ember-intl/helpers/format-date';
+import Pagination from 'pixeditor/components/list/pagination';
 <template>
   <header class="page-header">
     <h1 class="page-title">Missions</h1>
@@ -82,7 +82,7 @@ import formatDate from 'ember-intl/helpers/format-date';
       </div>
     </section>
     <div class="missions-list__pagination">
-      <PixPagination @pagination={{@controller.model.missions.meta}} />
+      <Pagination @pagination={{@controller.model.missions.meta}} />
     </div>
   </main>
 </template>
