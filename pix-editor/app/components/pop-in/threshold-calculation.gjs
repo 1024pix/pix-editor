@@ -6,7 +6,7 @@ import ThresholdRow from 'pixeditor/components/target-profile/threshold-row';
 
 export default class PopinThresholdCalculation extends Component {
   <template>
-    <PixModal @title={{@title}} @onCloseButtonClick={{this.closeModal}} @showModal={{@showModal}}>
+    <PixModal @title={{@title}} @onCloseButtonClick={{this.closeModal}} @showModal={{@showModal}} @variant="orga">
       <:content>
         <div class="ui column centered grid">
           <table class="ui very basic collapsing celled table">

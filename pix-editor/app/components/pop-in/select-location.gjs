@@ -35,7 +35,7 @@ export default class PopinSelectLocation extends Component {
   }
 
   <template>
-    <PixModal @title={{@title}} @onCloseButtonClick={{this.closeModal}} @showModal={{@showModal}}>
+    <PixModal @title={{@title}} @onCloseButtonClick={{this.closeModal}} @showModal={{@showModal}} @variant="orga">
       <:content>
         {{#if @showModal}}
           <FormSelectLocation

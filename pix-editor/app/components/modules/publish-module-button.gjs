@@ -57,6 +57,7 @@ export default class PublishModuleButton extends Component {
       @showModal={{this.showModal}}
       @title={{t "modules.components.publish-module-button.confirmation-dialog.title"}}
       @onCloseButtonClick={{this.closeModal}}
+      @variant="orga"
     >
       <:content>
         <div class="publish-module-button-modal__content">

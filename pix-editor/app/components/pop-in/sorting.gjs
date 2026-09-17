@@ -35,7 +35,7 @@ export default class PopInSortingComponent extends Component {
   }
 
   <template>
-    <PixModal @title={{this.title}} @onCloseButtonClick={{this.onDeny}} @showModal={{@showModal}}>
+    <PixModal @title={{this.title}} @onCloseButtonClick={{this.onDeny}} @showModal={{@showModal}} @variant="orga">
       <:content>
         <div class="sortable-content">
           <ul {{sortableGroup onChange=this.reorderItems}}>

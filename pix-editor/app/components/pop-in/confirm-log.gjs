@@ -8,8 +8,19 @@ import t from 'ember-intl/helpers/t';
 import Checkbox from 'pixeditor/components/field/checkbox';
 
 export default class PopInConfirmLog extends Component {
+  @tracked displayTextarea = false;
+  defaultValue = this.args.defaultValue;
+  inputId = this.args.inputId;
+
+  get changeLogValue() {
+    if (this.displayTextarea) {
+      return this.defaultValue;
+    }
+    return null;
+  }
+
   <template>
-    <PixModal @title={{@title}} @onCloseButtonClick={{@onDeny}} @showModal={{@showModal}}>
+    <PixModal @title={{@title}} @onCloseButtonClick={{@onDeny}} @showModal={{@showModal}} @variant="orga">
       <:content>
         <p>
           {{@content}}
@@ -46,15 +57,4 @@ export default class PopInConfirmLog extends Component {
       </:footer>
     </PixModal>
   </template>
-
-  @tracked displayTextarea = false;
-  defaultValue = this.args.defaultValue;
-  inputId = this.args.inputId;
-
-  get changeLogValue() {
-    if (this.displayTextarea) {
-      return this.defaultValue;
-    }
-    return null;
-  }
 }

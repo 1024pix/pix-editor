@@ -1,7 +1,7 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
 <template>
-  <PixModal @title="Déconnexion" @onCloseButtonClick={{@onDeny}} @showModal={{@showModal}}>
+  <PixModal @title="Déconnexion" @onCloseButtonClick={{@onDeny}} @showModal={{@showModal}} @variant="orga">
     <:content>
       <p data-test-logout-message>Voulez-vous vraiment vous déconnecter ?</p>
     </:content>

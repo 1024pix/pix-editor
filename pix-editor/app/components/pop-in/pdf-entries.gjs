@@ -53,6 +53,7 @@ export default class PopinPDFEntries extends Component {
       @title={{t "target_profile.pdf_export.title"}}
       @onCloseButtonClick={{this.closeModal}}
       @showModal={{@showModal}}
+      @variant="orga"
     >
       <:content>
         <form class="pdf-entries" {{on "submit" this.validate}}>

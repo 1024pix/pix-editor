@@ -182,6 +182,7 @@ import Card from 'pixeditor/components/card';
     @title="Désactivation"
     @onCloseButtonClick={{@controller.closeDeactivationModal}}
     @showModal={{@controller.shouldDisplayDeactivationModal}}
+    @variant="orga"
   >
     <:content>
       <p>
@@ -212,6 +213,7 @@ import Card from 'pixeditor/components/card';
     @title="Réactivation"
     @onCloseButtonClick={{@controller.closeReactivationModal}}
     @showModal={{@controller.shouldDisplayReactivationModal}}
+    @variant="orga"
   >
     <:content>
       <p>

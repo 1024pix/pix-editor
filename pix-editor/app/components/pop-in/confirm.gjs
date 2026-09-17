@@ -3,8 +3,18 @@ import PixModal from '@1024pix/pix-ui/components/pix-modal';
 import Component from '@glimmer/component';
 
 export default class PopInConfirm extends Component {
+  get title() {
+    return this.args.title || 'no_title';
+  }
+
   <template>
-    <PixModal @title={{this.title}} @onCloseButtonClick={{@onDeny}} @showModal={{@showModal}} ...attributes>
+    <PixModal
+      @title={{this.title}}
+      @onCloseButtonClick={{@onDeny}}
+      @showModal={{@showModal}}
+      @variant="orga"
+      ...attributes
+    >
       <:content>
         {{@content}}
       </:content>
@@ -16,8 +26,4 @@ export default class PopInConfirm extends Component {
       </:footer>
     </PixModal>
   </template>
-
-  get title() {
-    return this.args.title || 'no_title';
-  }
 }

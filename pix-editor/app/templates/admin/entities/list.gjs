@@ -19,6 +19,7 @@ import AdminEntityList from 'pixeditor/components/admin/entity-list';
       @title={{@controller.modal.title}}
       @onCloseButtonClick={{@controller.closeModal}}
       @showModal={{@controller.modal}}
+      @variant="orga"
     >
       <:content>
         <p>{{@controller.modal.description}}</p>
