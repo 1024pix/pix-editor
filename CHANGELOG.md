@@ -1,5 +1,15 @@
 
 
+## v4.53.0 (17/09/2026)
+
+
+### :rocket: Amélioration
+- [#1650](https://github.com/1024pix/pix-editor/pull/1650) [FEATURE] Ajout des noms de tutoriels dans la liste des URLs cassées (PIX-24212).
+- [#1649](https://github.com/1024pix/pix-editor/pull/1649) [FEATURE] Rectification du css pour l'affichage du tableau des urls cassés (PIX-24291).
+
+### :arrow_up: Montée de version
+- [#1606](https://github.com/1024pix/pix-editor/pull/1606) [BUMP] Update dependency monaco-editor to ^0.56.0.
+
 ## v4.52.0 (17/09/2026)
 
 
