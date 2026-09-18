@@ -77,6 +77,16 @@ export default class BrokenUrlList extends Component {
             <:header>Statut de l'erreur</:header>
             <:cell>{{brokenUrl.statusCode}}</:cell>
           </PixTableColumn>
+          <PixTableColumn @context={{context}} class="column column--small">
+            <:header>Référentiel</:header>
+            <:cell>
+              <ul>
+                {{#each brokenUrl.frameworks as |framework|}}
+                  <li title={{framework}}>{{framework}}</li>
+                {{/each}}
+              </ul>
+            </:cell>
+          </PixTableColumn>
           <PixTableColumn
             @context={{context}}
             class="column column--wide"

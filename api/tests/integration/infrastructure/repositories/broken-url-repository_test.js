@@ -153,17 +153,27 @@ describe('Integration | Repository | broken-url-repository', () => {
     it('should retrieve broken url readmodels ordered by url', async () => {
       // given
       const tutorial = databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ tagIds: [] }));
-      const { challenge, skill } = databaseBuilder.factory.buildChallengeInGroup({ skill: { tutorialIds: [tutorial.id] } });
-      const localized2 = databaseBuilder.factory.buildLocalizedChallenge({ id: 'recLocalized2', challengeId: challenge.id, locale: 'nl-NL' });
+
+      const challengeWithGivenFrameworkAndSkill = databaseBuilder.factory.buildChallengeInGroup({
+        framework: { name: 'Mon Référentiel' },
+        skill: { tutorialIds: [tutorial.id] },
+      });
+      const challengeWithGivenSkill = databaseBuilder.factory.buildChallengeInGroup({ skill: { tutorialIds: [tutorial.id] } });
+
+      const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'recLocalized2',
+        challengeId: challengeWithGivenSkill.challenge.id,
+        locale: 'nl-NL',
+      });
 
       databaseBuilder.factory.buildExternalUrl({
         url: 'http://localhost:8080/',
-        localizedChallengeIds: [challenge.id],
+        localizedChallengeIds: [challengeWithGivenSkill.challenge.id],
         tutorialIds: [],
       });
       databaseBuilder.factory.buildExternalUrl({
         url: 'http://www.test.org',
-        localizedChallengeIds: [challenge.id, localized2.id],
+        localizedChallengeIds: [challengeWithGivenSkill.challenge.id, localizedChallenge.id],
         tutorialIds: [],
       });
 
@@ -198,21 +208,24 @@ describe('Integration | Repository | broken-url-repository', () => {
       expect(brokenUrlList).toEqual([
         {
           ...notFoundUrl,
-          localizedChallengeIds: [challenge.id],
+          localizedChallengeIds: [challengeWithGivenSkill.challenge.id],
           skillIds: [],
           tutorialIds: [],
+          frameworkNames: [challengeWithGivenSkill.framework.name],
         },
         {
           ...brokenUrl,
-          skillIds: [skill.id],
+          skillIds: [challengeWithGivenFrameworkAndSkill.skill.id, challengeWithGivenSkill.skill.id],
           localizedChallengeIds: [],
           tutorialIds: [tutorial.id],
+          frameworkNames: [challengeWithGivenFrameworkAndSkill.framework.name, challengeWithGivenSkill.framework.name],
         },
         {
           ...notAllowedUrl,
-          localizedChallengeIds: [challenge.id, localized2.id],
+          localizedChallengeIds: [challengeWithGivenSkill.challenge.id, localizedChallenge.id],
           skillIds: [],
           tutorialIds: [],
+          frameworkNames: [challengeWithGivenSkill.framework.name],
         },
       ]);
     });
