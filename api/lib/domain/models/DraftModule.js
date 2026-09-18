@@ -1,5 +1,6 @@
 import * as config from '../../config.js';
 import { Module } from './Module.js';
+import { ModuleVersion } from './ModuleVersion.js';
 
 export class DraftModule extends Module {
   constructor({ moduleId, hasBeenValidated, validationErrors, ...attrs } = {}) {
@@ -48,7 +49,7 @@ export class DraftModule extends Module {
       slug: this.slug,
       title: this.title,
       visibility: this.visibility,
-      version: incrementMajorVersion(this.version),
+      version: ModuleVersion.incrementMajorVersion(this.version),
     });
   }
 
@@ -75,10 +76,6 @@ export class DraftModule extends Module {
   }
 }
 
-function incrementMinorVersion(version) {
+export function incrementMinorVersion(version) {
   return version?.replace(/\d+$/, (minorVersion) => parseInt(minorVersion) + 1);
-}
-
-function incrementMajorVersion(version) {
-  return version?.replace(/^(\d+)\.\d+$/, (_, majorVersion) => `${parseInt(majorVersion) + 1}.0`);
 }
