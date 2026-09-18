@@ -140,7 +140,7 @@ export default class PopinChallengeLog extends Component {
   }
 
   <template>
-    <PixModal @title={{this.title}} @onCloseButtonClick={{@close}} @showModal={{@showModal}}>
+    <PixModal @title={{this.title}} @onCloseButtonClick={{@close}} @showModal={{@showModal}} @variant="orga">
       <:content>
         {{#if this.list}}
           <div role="tablist" aria-label="Liste des notes" class="challenge-log__tabs">

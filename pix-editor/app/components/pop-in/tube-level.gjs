@@ -13,6 +13,7 @@ export default class PopinTubeLevel extends Component {
       @onCloseButtonClick={{this.closeModal}}
       @showModal={{@showModal}}
       class="popin-tube-level"
+      @variant="orga"
     >
       <:content>
         <div class="levels">

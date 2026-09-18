@@ -1,5 +1,5 @@
-import PixPagination from '@1024pix/pix-ui/components/pix-pagination';
 import t from 'ember-intl/helpers/t';
+import Pagination from 'pixeditor/components/list/pagination';
 import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
 import ModuleList from 'pixeditor/components/modules/modules-list';
 import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
@@ -18,7 +18,7 @@ import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
     <section class="page-section modules-list">
       <ModulesTabs />
       <ModuleList @modules={{@model.modules}} @goToDetailPage={{this.goToDetailPage}} />
-      <PixPagination @pagination={{@model.modules.meta}} />
+      <Pagination @pagination={{@model.modules.meta}} />
     </section>
   </main>
 </template>

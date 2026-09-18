@@ -6,21 +6,6 @@ import { tracked } from '@glimmer/tracking';
 import Input from 'pixeditor/components/field/input';
 
 export default class PopinSingleEntry extends Component {
-  <template>
-    <PixModal @title={{this.title}} @onCloseButtonClick={{this.closeModal}} @showModal={{@showModal}}>
-      <:content>
-        <label>{{@label}}</label>
-        <Input @value={{this.value}} @edition={{true}} />
-      </:content>
-      <:footer>
-        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{this.closeModal}}>
-          Annuler
-        </PixButton>
-        <PixButton @triggerAction={{this.validate}}>Valider</PixButton>
-      </:footer>
-    </PixModal>
-  </template>
-
   @tracked value = '';
 
   constructor() {
@@ -46,4 +31,19 @@ export default class PopinSingleEntry extends Component {
     this.value = '';
     this.args.close();
   }
+
+  <template>
+    <PixModal @title={{this.title}} @onCloseButtonClick={{this.closeModal}} @showModal={{@showModal}} @variant="orga">
+      <:content>
+        <label>{{@label}}</label>
+        <Input @value={{this.value}} @edition={{true}} />
+      </:content>
+      <:footer>
+        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{this.closeModal}}>
+          Annuler
+        </PixButton>
+        <PixButton @triggerAction={{this.validate}}>Valider</PixButton>
+      </:footer>
+    </PixModal>
+  </template>
 }

@@ -28,7 +28,13 @@ export default class TutorialPopIn extends Component {
   }
 
   <template>
-    <PixModal class="tutorial-pop-in" @title={{this.title}} @onCloseButtonClick={{@close}} @showModal={{@showModal}}>
+    <PixModal
+      class="tutorial-pop-in"
+      @title={{this.title}}
+      @onCloseButtonClick={{@close}}
+      @showModal={{@showModal}}
+      @variant="orga"
+    >
       <:content>
         {{#if @tutorial}}
           <TutorialForm @tutorial={{@tutorial}} @onSubmit={{@saveTutorial}} />
