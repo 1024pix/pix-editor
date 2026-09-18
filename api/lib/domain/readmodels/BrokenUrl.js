@@ -1,5 +1,5 @@
 export class BrokenUrl {
-  constructor({ id, errorMessage, statusCode, url, localizedChallengeIds = [], skillIds = [], tutorialIds = [] }) {
+  constructor({ id, errorMessage, statusCode, url, localizedChallengeIds = [], skillIds = [], tutorialIds = [], frameworkNames = [] }) {
     this.id = id;
     this.errorMessage = errorMessage;
     this.statusCode = statusCode;
@@ -7,5 +7,6 @@ export class BrokenUrl {
     this.localizedChallengeIds = localizedChallengeIds;
     this.skillIds = skillIds;
     this.tutorialIds = tutorialIds;
+    this.frameworkNames = frameworkNames;
   }
 }

@@ -10,13 +10,15 @@ const serializer = new Serializer('broken-urls', {
     'localizedChallenges',
     'skills',
     'tutorials',
+    'frameworks',
   ],
-  transform({ localizedChallengeIds, skillIds, tutorialIds, ...brokenUrl }) {
+  transform({ localizedChallengeIds, skillIds, tutorialIds, frameworkNames, ...brokenUrl }) {
     return {
       ...brokenUrl,
       localizedChallenges: localizedChallengeIds.map((id) => ({ id })),
       skills: skillIds.map((id) => ({ id })),
       tutorials: tutorialIds.map((id) => ({ id })),
+      frameworks: frameworkNames,
     };
   },
   localizedChallenges: { ref: 'id' },
