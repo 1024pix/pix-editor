@@ -68,6 +68,7 @@ describe('Acceptance | Controller | broken-urls', () => {
     });
 
     it('should return the broken url list', async () => {
+      // TODO : ajouter la grappe pour que l'attribut frameworks soit ajouté à la fin
       // when
       const response = await server.inject({
         method: 'GET',
@@ -85,6 +86,7 @@ describe('Acceptance | Controller | broken-urls', () => {
               'error-message': notFoundUrl.errorMessage,
               'status-code': notFoundUrl.statusCode,
               url: notFoundUrl.url,
+              frameworks: notFoundUrl.frameworks,
             },
             type: 'broken-urls',
             relationships: {
@@ -106,6 +108,7 @@ describe('Acceptance | Controller | broken-urls', () => {
               'error-message': brokenUrl.errorMessage,
               'status-code': brokenUrl.statusCode,
               url: brokenUrl.url,
+              frameworks: brokenUrl.frameworks,
             },
             type: 'broken-urls',
             relationships: {
@@ -127,6 +130,7 @@ describe('Acceptance | Controller | broken-urls', () => {
               'error-message': notAllowedUrl.errorMessage,
               'status-code': notAllowedUrl.statusCode,
               url: notAllowedUrl.url,
+              frameworks: notAllowedUrl.frameworks,
             },
             type: 'broken-urls',
             relationships: {
