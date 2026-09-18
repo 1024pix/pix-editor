@@ -15,12 +15,14 @@ module('Integration | Component | broken-urls/list', function (hooks) {
       url: 'https://tomate.com',
       statusCode: 404,
       errorMessage: null,
+      frameworks: ['Pix', 'UnAutreRef'],
       tutorialIds: [],
     });
     brokenUrl2 = store.createRecord('broken-url', {
       url: 'https://carotte.com',
       statusCode: 401,
       errorMessage: null,
+      frameworks: ['UnAutreRef'],
       tutorialIds: [],
     });
   });
@@ -44,10 +46,12 @@ module('Integration | Component | broken-urls/list', function (hooks) {
     const screen = await render(<template><BrokenUrlList @brokenUrls={{brokenUrls}} /></template>);
 
     const [, row1, row2] = screen.getAllByRole('row');
-    const [cell1] = within(row1).getAllByRole('cell');
-    const [cell2] = within(row2).getAllByRole('cell');
-    assert.dom(cell1).hasText('https://carotte.com');
-    assert.dom(cell2).hasText('https://tomate.com');
+    const [cell11, , cell13] = within(row1).getAllByRole('cell');
+    const [cell21, , cell23] = within(row2).getAllByRole('cell');
+    assert.dom(cell11).hasText('https://carotte.com');
+    assert.dom(cell21).hasText('https://tomate.com');
+    assert.dom(cell13).hasText('UnAutreRef');
+    assert.dom(cell23).hasText('Pix UnAutreRef');
 
     const orderButton = screen.getByRole('button', { name: "Trier dans l'ordre décroissant des url" });
     await click(orderButton);
