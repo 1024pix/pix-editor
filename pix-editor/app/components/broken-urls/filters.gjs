@@ -41,7 +41,17 @@ export default class BrokenUrlFilters extends Component {
         ids.set(tutorial.id, tutorial.title);
       }
     }
-    return Array.from(ids.entries()).map(([id, title]) => ({ label: title, value: id }));
+    return Array.from(ids.entries(), ([id, title]) => ({ label: title, value: id }));
+  }
+
+  get frameworksOptionList() {
+    const names = new Set();
+    for (const brokenUrl of this.args.brokenUrls) {
+      for (const name of brokenUrl.frameworks) {
+        names.add(name);
+      }
+    }
+    return Array.from(names, (name) => ({ label: name, value: name }));
   }
 
   @action
@@ -67,6 +77,11 @@ export default class BrokenUrlFilters extends Component {
   @action
   triggerStatusCodeFilter(statusCode) {
     return this.args.onApplyFiltersClicked('statusCode', statusCode);
+  }
+
+  @action
+  triggerFrameworkFilter(frameworks) {
+    return this.args.onApplyFiltersClicked('frameworks', frameworks);
   }
 
   <template>
@@ -133,6 +148,18 @@ export default class BrokenUrlFilters extends Component {
           <:default as |option|>{{option.label}}</:default>
         </PixMultiSelect>
       {{/if}}
+      <PixMultiSelect
+        @id="frameworks-filter"
+        @options={{this.frameworksOptionList}}
+        @values={{@frameworkFilterValues}}
+        @onChange={{this.triggerFrameworkFilter}}
+        @screenReaderOnly={{true}}
+        @isSearchable={{true}}
+        @placeholder="Filtrer par référentiel"
+      >
+        <:label>Filtrer par référentiel</:label>
+        <:default as |option|>{{option.label}}</:default>
+      </PixMultiSelect>
     </PixFilterBanner>
   </template>
 }
