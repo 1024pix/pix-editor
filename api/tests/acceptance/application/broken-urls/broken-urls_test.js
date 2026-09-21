@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { databaseBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | Controller | broken-urls', () => {
   describe('GET /broken-urls', () => {
     let brokenUrl,
       challenge,
+      framework,
       editorUser,
       externalUrl1,
       externalUrl2,
@@ -16,27 +17,40 @@ describe('Acceptance | Controller | broken-urls', () => {
 
     beforeEach(async function() {
       editorUser = databaseBuilder.factory.buildUser({ name: 'Madame Editor', access: 'editor' });
-      ({ challenge } = databaseBuilder.factory.buildChallengeInGroup({}));
+      ({ challenge, framework } = databaseBuilder.factory.buildChallengeInGroup({}));
       externalUrl1 = databaseBuilder.factory.buildExternalUrl({ localizedChallengeIds: [challenge.id], url: 'http://localhost:8080/', tutorialIds: [] });
       externalUrl2 = databaseBuilder.factory.buildExternalUrl({ localizedChallengeIds: [challenge.id], url: 'http://test.localhost:8080/', tutorialIds: [] });
       externalUrl3 = databaseBuilder.factory.buildExternalUrl({ localizedChallengeIds: [challenge.id], url: 'http://www.test.org', tutorialIds: [] });
-      notFoundUrl = databaseBuilder.factory.buildBrokenUrl({
+      const savedNotFoundUrl = databaseBuilder.factory.buildBrokenUrl({
         id: '1',
         errorMessage: 'Not Found',
         statusCode: 404,
         url: externalUrl1.url,
       });
-      brokenUrl = databaseBuilder.factory.buildBrokenUrl({
+      const savedBrokenUrl = databaseBuilder.factory.buildBrokenUrl({
         id: '2',
         errorMessage: 'Tout cassé',
         statusCode: 500,
         url: externalUrl2.url,
       });
-      notAllowedUrl = databaseBuilder.factory.buildBrokenUrl({
+      const savedNotAllowedUrl = databaseBuilder.factory.buildBrokenUrl({
         id: '3',
         errorMessage: 'Pas le droit',
         statusCode: 401,
         url: externalUrl3.url,
+      });
+
+      notFoundUrl = domainBuilder.buildBrokenUrl({
+        frameworkNames: [framework.name],
+        ...savedNotFoundUrl,
+      });
+      brokenUrl = domainBuilder.buildBrokenUrl({
+        frameworkNames: [framework.name],
+        ...savedBrokenUrl,
+      });
+      notAllowedUrl = domainBuilder.buildBrokenUrl({
+        frameworkNames: [framework.name],
+        ...savedNotAllowedUrl,
       });
       await databaseBuilder.commit();
       server = await createServer();
@@ -85,6 +99,7 @@ describe('Acceptance | Controller | broken-urls', () => {
               'error-message': notFoundUrl.errorMessage,
               'status-code': notFoundUrl.statusCode,
               url: notFoundUrl.url,
+              frameworks: notFoundUrl.frameworkNames,
             },
             type: 'broken-urls',
             relationships: {
@@ -106,6 +121,7 @@ describe('Acceptance | Controller | broken-urls', () => {
               'error-message': brokenUrl.errorMessage,
               'status-code': brokenUrl.statusCode,
               url: brokenUrl.url,
+              frameworks: brokenUrl.frameworkNames,
             },
             type: 'broken-urls',
             relationships: {
@@ -127,6 +143,7 @@ describe('Acceptance | Controller | broken-urls', () => {
               'error-message': notAllowedUrl.errorMessage,
               'status-code': notAllowedUrl.statusCode,
               url: notAllowedUrl.url,
+              frameworks: notAllowedUrl.frameworkNames,
             },
             type: 'broken-urls',
             relationships: {

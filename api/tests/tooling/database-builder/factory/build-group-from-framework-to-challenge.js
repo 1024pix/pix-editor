@@ -28,7 +28,7 @@ import { buildTranslation } from './build-translation.js';
 export function buildChallengeInGroup({ challenge, localizedChallenge, challengeTranslations, skill, framework, tube }) {
   const randomId = idGenerator.next().value;
 
-  const chalengeDTO = buildChallengeDatasourceObject({
+  const challengeDTO = buildChallengeDatasourceObject({
     id: `challenge${randomId}`,
     competenceId: `competence${randomId}`,
     skillId: `skill${randomId}`,
@@ -36,11 +36,11 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
   });
 
   const localizedChallengeDTO = {
-    id: chalengeDTO.id,
-    challengeId: chalengeDTO.id,
+    id: challengeDTO.id,
+    challengeId: challengeDTO.id,
     locale: 'fr',
-    embedUrl: chalengeDTO.embedUrl,
-    geography: chalengeDTO.geography,
+    embedUrl: challengeDTO.embedUrl,
+    geography: challengeDTO.geography,
     urlsToConsult: ['truc.fr'],
     requireGafamWebsiteAccess: true,
     isIncompatibleIpadCertif: true,
@@ -65,13 +65,13 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
 
   const skillDTO = buildSkillDatasourceObject({
     tubeId: `tube${randomId}`,
-    createdAt: chalengeDTO.createdAt,
+    createdAt: challengeDTO.createdAt,
     ...skill,
-    id: chalengeDTO.skillId,
+    id: challengeDTO.skillId,
   });
 
   const translationDTOs = Object.keys(challengeTranslationsValues).map((key) => ({
-    key: `challenge.${chalengeDTO.id}.${key}`,
+    key: `challenge.${challengeDTO.id}.${key}`,
     locale: localizedChallengeDTO.locale,
     value: challengeTranslationsValues[key],
   }));
@@ -79,11 +79,11 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
   return {
     framework: buildFramework({ id: `framework${randomId}`, name: 'Pix', ...framework }),
     area: buildArea({ id: `area${randomId}`, code: '1', frameworkId: framework?.id ?? `framework${randomId}` }),
-    competence: buildCompetence({ id: chalengeDTO.competenceId, index: '1.1', areaId: `area${randomId}` }),
-    thematic: buildThematic({ id: `thematic${randomId}`, competenceId: chalengeDTO.competenceId }),
+    competence: buildCompetence({ id: challengeDTO.competenceId, index: '1.1', areaId: `area${randomId}` }),
+    thematic: buildThematic({ id: `thematic${randomId}`, competenceId: challengeDTO.competenceId }),
     tube: buildTube({ id: skillDTO.tubeId, name: '@tube', thematicId: `thematic${randomId}`, ...tube }),
     skill: buildSkill({ ...skillDTO, tutorialIds: skill?.tutorialIds ?? [], learningMoreTutorialIds: skill?.learningMoreTutorialIds ?? [] }),
-    challenge: buildChallenge(chalengeDTO),
+    challenge: buildChallenge(challengeDTO),
     localizedChallenge: buildLocalizedChallenge(localizedChallengeDTO),
     translations: translationDTOs.map(buildTranslation),
   };

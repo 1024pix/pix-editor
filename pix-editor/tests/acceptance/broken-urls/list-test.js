@@ -9,7 +9,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let localizedChallenge, skill, skill2, competence;
+  let localizedChallenge, skill, skill2, competence, tutorial;
 
   hooks.beforeEach(function () {
     this.server.create('config', 'default');
@@ -45,6 +45,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       level: 1,
       description: "Visible dans les détails de l'acquis",
     });
+    tutorial = this.server.create('tutorial', { id: 'tutorialId3', title: 'Comment jongler avec des haches' });
     const tube = this.server.create('tube', { id: 'recTube1', name: '@tube', rawSkillIds: [skill.id] });
     const theme = this.server.create('theme', { id: 'recTheme1', rawTubeIds: [tube.id] });
     competence = this.server.create('competence', {
@@ -84,13 +85,12 @@ module('Acceptance | Broken URLs | List', function (hooks) {
         },
       ],
     });
-    const area = this.server.create('area', {
+    this.server.create('area', {
       id: 'recArea1',
       name: '1. Information et données',
       code: '1',
       competenceIds: [competence.id],
     });
-    this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: [area.id] });
 
     this.server.create('broken-url', {
       id: 1,
@@ -98,6 +98,8 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       errorMessage: 'Not found',
       statusCode: 404,
       skillIds: [skill.id],
+      tutorialIds: [tutorial.id],
+      frameworks: ['recFramework1', 'recFramework2'],
     });
     this.server.create('broken-url', {
       id: 2,
@@ -105,6 +107,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       errorMessage: 'Non',
       statusCode: 406,
       localizedChallengeIds: [localizedChallenge.id],
+      frameworks: ['recFramework1'],
     });
     this.server.create('broken-url', {
       id: 3,
@@ -112,6 +115,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       errorMessage: 'Pas là',
       statusCode: 408,
       skillIds: [skill2.id],
+      frameworks: ['recFramework1'],
     });
 
     return authenticateSession();
@@ -141,8 +145,8 @@ module('Acceptance | Broken URLs | List', function (hooks) {
   test('should redirect to skill when clicking skill name', async function (assert) {
     // when
     const screen = await visit('/broken-urls/tutorials');
-    const skillLink = screen.getByRole('link', { name: skill.name });
-    await click(skillLink);
+    const skillLink = screen.getAllByRole('link', { name: skill.name });
+    await click(skillLink[0]);
 
     // then
     assert.strictEqual(currentURL(), `/competence/${competence.id}/skills/${skill.id}?view=production`);
@@ -182,6 +186,43 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       // then
       assert.dom(screen.getByText('http://chocolat-fromage.org')).exists();
       assert.dom(screen.queryByText('http://pipeau-la-grenouille.fr')).doesNotExist();
+    });
+
+    test('should filter list by tutorial', async function (assert) {
+      // when
+      const screen = await visit('/broken-urls/tutorials');
+      await click(screen.getByRole('button', { name: 'Filtrer par tutoriel' }));
+      await screen.findByRole('menu');
+      await click(screen.getByRole('checkbox', { name: tutorial.title }));
+
+      // then
+      assert.dom(screen.getByText('http://pipeau-la-grenouille.fr')).exists();
+      assert.dom(screen.queryByText('http://cerise.com')).doesNotExist();
+    });
+
+    test('should filter list by skill', async function (assert) {
+      // when
+      const screen = await visit('/broken-urls/tutorials');
+      await click(screen.getByRole('button', { name: 'Filtrer par acquis' }));
+      await screen.findByRole('menu');
+      await click(screen.getByRole('checkbox', { name: skill.name }));
+
+      // then
+      assert.dom(screen.getByText('http://pipeau-la-grenouille.fr')).exists();
+      assert.dom(screen.queryByText('http://cerise.com')).doesNotExist();
+    });
+
+    test('should filter list by framework', async function (assert) {
+      // when
+      const screen = await visit('/broken-urls/tutorials');
+      await click(screen.getByRole('button', { name: 'Filtrer par référentiel' }));
+      await screen.findByRole('menu');
+      await click(screen.getByRole('checkbox', { name: 'recFramework2' }));
+
+      // then
+      assert.dom(screen.getByText('http://pipeau-la-grenouille.fr')).exists();
+      assert.dom(screen.queryByText('http://chocolat-fromage.org')).doesNotExist();
+      assert.dom(screen.queryByText('http://cerise.com')).doesNotExist();
     });
   });
 });

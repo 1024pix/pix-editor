@@ -41,11 +41,23 @@ export async function list() {
       knexConn.raw('json_agg(DISTINCT "external_urls-localized_challenges"."localizedChallengeId") as "localizedChallengeIds"'),
       knexConn.raw('json_agg(DISTINCT "skills-tutorials"."skillId") as "skillIds"'),
       knexConn.raw('json_agg(DISTINCT "skills-tutorials"."tutorialId") as "tutorialIds"'),
+      knexConn.raw('json_agg(DISTINCT "frameworks"."name") as "frameworkNames"'),
     )
     .innerJoin('external_urls', 'broken_urls.url', 'external_urls.url')
     .leftJoin('external_urls-localized_challenges', 'external_urls.id', 'external_urls-localized_challenges.externalUrlId')
     .leftJoin('external_urls-tutorials', 'external_urls.id', 'external_urls-tutorials.externalUrlId')
     .leftJoin('skills-tutorials', 'external_urls-tutorials.tutorialId', 'skills-tutorials.tutorialId')
+    .leftJoin('localized_challenges', 'localized_challenges.id', 'external_urls-localized_challenges.localizedChallengeId')
+    .leftJoin('challenges', 'challenges.id', 'localized_challenges.challengeId')
+    .leftJoin('skills', function() {
+      this.on('skills.id', 'skills-tutorials.skillId')
+        .orOn('skills.id', 'challenges.skillId');
+    })
+    .leftJoin('tubes', 'tubes.id', 'skills.tubeId')
+    .leftJoin('thematics', 'thematics.id', 'tubes.thematicId')
+    .leftJoin('competences', 'competences.id', 'thematics.competenceId')
+    .leftJoin('areas', 'areas.id', 'competences.areaId')
+    .leftJoin('frameworks', 'frameworks.id', 'areas.frameworkId')
     .groupBy('broken_urls.id', 'broken_urls.url', 'broken_urls.statusCode', 'broken_urls.errorMessage')
     .orderBy('url');
 
@@ -62,6 +74,7 @@ function toDomainList(brokenUrlList) {
       localizedChallengeIds: dto.localizedChallengeIds.filter(removeNullValuesFromJoin).toSorted(),
       skillIds: dto.skillIds.filter(removeNullValuesFromJoin).toSorted(),
       tutorialIds: dto.tutorialIds.filter(removeNullValuesFromJoin).toSorted(),
+      frameworkNames: dto.frameworkNames.filter(removeNullValuesFromJoin).toSorted(),
     };
 
     return new BrokenUrl(formattedData);

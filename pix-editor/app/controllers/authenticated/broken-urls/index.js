@@ -3,12 +3,13 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class BrokenUrlsIndexController extends Controller {
-  queryParams = ['url', 'statusCode', 'skills', 'localizedChallenges', 'tutorials'];
+  queryParams = ['url', 'statusCode', 'skills', 'localizedChallenges', 'tutorials', 'frameworks'];
   @tracked url = '';
   @tracked statusCode = '';
   @tracked skills = [];
   @tracked localizedChallenges = [];
   @tracked tutorials = [];
+  @tracked frameworks = [];
 
   get filterBrokenUrls() {
     const urlFilter = this.url ?? '';
@@ -16,10 +17,14 @@ export default class BrokenUrlsIndexController extends Controller {
     const skillFilters = this.skills ?? [];
     const localizedChallengeFilters = this.localizedChallenges ?? [];
     const tutorialFilters = this.tutorials ?? [];
+    const frameworkNameFilters = this.frameworks ?? [];
 
     return (brokenUrl) => {
       const hasUrlFilter = brokenUrl.url.includes(urlFilter);
       const hasStatusCodeFilter = brokenUrl.statusCode.toString().includes(statusCodeFilter);
+      const hasFrameworkNameFilter =
+        frameworkNameFilters.length === 0 ||
+        brokenUrl.frameworks.some((frameworkName) => frameworkNameFilters.includes(frameworkName));
 
       const skills = brokenUrl.hasMany('skills').value() ?? [];
       const hasSkillFilter = skillFilters.length === 0 || skills.some((skill) => skillFilters.includes(skill.id));
@@ -33,7 +38,14 @@ export default class BrokenUrlsIndexController extends Controller {
       const hasTutorialFilter =
         tutorialFilters.length === 0 || tutorials.some((tutorial) => tutorialFilters.includes(tutorial.id));
 
-      return hasUrlFilter && hasStatusCodeFilter && hasSkillFilter && hasLocalizedChallengeFilter && hasTutorialFilter;
+      return (
+        hasUrlFilter &&
+        hasStatusCodeFilter &&
+        hasSkillFilter &&
+        hasLocalizedChallengeFilter &&
+        hasTutorialFilter &&
+        hasFrameworkNameFilter
+      );
     };
   }
 
@@ -49,5 +61,6 @@ export default class BrokenUrlsIndexController extends Controller {
     this.skills = [];
     this.localizedChallenges = [];
     this.tutorials = [];
+    this.frameworks = [];
   }
 }
