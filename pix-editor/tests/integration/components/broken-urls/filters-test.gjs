@@ -75,7 +75,7 @@ module('Integration | Component | broken-urls/filters', function (hooks) {
     // then
     assert.dom(screen.getByLabelText('URL à remplir')).exists();
     assert.dom(screen.getByRole('button', { name: "Filtrer par statut d'erreur" })).exists();
-    assert.dom(screen.getByRole('button', { name: "Filtrer par référentiel" })).exists();
+    assert.dom(screen.getByRole('button', { name: 'Filtrer par référentiel' })).exists();
     assert.dom(await screen.queryByLabelText('Filtrer par acquis')).doesNotExist();
     assert.dom(await screen.queryByLabelText('Filtrer par tutoriel')).doesNotExist();
     assert.dom(await screen.queryByLabelText('Filtrer par épreuve')).doesNotExist();
