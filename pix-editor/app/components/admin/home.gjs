@@ -8,6 +8,14 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
+const texts = {
+  mainNavigation: 'Navigation Principale',
+  openMenu: 'Ouvrir le menu',
+  closeMenu: 'Fermer le menu',
+  shrinkNavigation: 'Réduire la largeur',
+  expandNavigation: 'Revenir à la largeur initiale du menu de navigation',
+};
+
 export default class AdminHome extends Component {
   @service loader;
 
@@ -32,7 +40,7 @@ export default class AdminHome extends Component {
     </div>
     <PixAppLayout @variant="admin" class="admin">
       <:navigation>
-        <PixNavigation>
+        <PixNavigation @texts={{texts}}>
           <:brand>
             <LinkTo @route="admin" class="elephant-container">
               <img src="/assets/images/elephant_admin.svg" alt="Pix Editor - Administration" />
