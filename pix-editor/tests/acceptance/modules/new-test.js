@@ -60,7 +60,7 @@ module('Acceptance | Modules | New', function (hooks) {
 
         await fillIn(
           await screen.findByRole('textbox', {
-            name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
+            name: `${t('modules.components.module-form.internal-title-label')} *`,
           }),
           'NEW_MODULE',
         );

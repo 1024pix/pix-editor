@@ -1,84 +1,89 @@
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import Select from 'pixeditor/components/field/select';
+
+const sections = [
+  {
+    label: 'Epreuves',
+    value: 'challenges',
+  },
+  {
+    label: 'Acquis',
+    value: 'skills',
+  },
+  {
+    label: 'Qualité',
+    value: 'quality',
+  },
+];
+const languageOptions = [
+  {
+    label: 'Allemand (Autriche)',
+    value: 'de-AT',
+  },
+  {
+    label: 'Anglais',
+    value: 'en',
+  },
+  {
+    label: 'Anglais (Ouganda)',
+    value: 'en-UG',
+  },
+  {
+    label: 'Anglais (Rwanda)',
+    value: 'en-RW',
+  },
+  {
+    label: 'Anglais (Tanzanie)',
+    value: 'en-TZ',
+  },
+  {
+    label: 'Espagnol',
+    value: 'es',
+  },
+  {
+    label: 'Espagnol (Amérique latine)',
+    value: 'es-419',
+  },
+  {
+    label: 'Francophone',
+    value: 'fr',
+  },
+  {
+    label: 'Franco Français',
+    value: 'fr-fr',
+  },
+  {
+    label: 'Franco Belge',
+    value: 'fr-BE',
+  },
+  {
+    label: 'Italien',
+    value: 'it',
+  },
+  {
+    label: 'Portugais',
+    value: 'pt',
+  },
+  {
+    label: 'Néerlandais',
+    value: 'nl',
+  },
+];
+
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  placeholder: 'Filtre par langue',
+  searchPlaceholder: 'Rechercher une langue',
+  emptySearchMessage: 'Aucune langue correspondante',
+};
 
 export default class CompetenceHeader extends Component {
   @service config;
-
-  sections = [
-    {
-      label: 'Epreuves',
-      value: 'challenges',
-    },
-    {
-      label: 'Acquis',
-      value: 'skills',
-    },
-    {
-      label: 'Qualité',
-      value: 'quality',
-    },
-  ];
-
-  languageOptions = [
-    {
-      label: 'Allemand (Autriche)',
-      value: 'de-AT',
-    },
-    {
-      label: 'Anglais',
-      value: 'en',
-    },
-    {
-      label: 'Anglais (Ouganda)',
-      value: 'en-UG',
-    },
-    {
-      label: 'Anglais (Rwanda)',
-      value: 'en-RW',
-    },
-    {
-      label: 'Anglais (Tanzanie)',
-      value: 'en-TZ',
-    },
-    {
-      label: 'Espagnol',
-      value: 'es',
-    },
-    {
-      label: 'Espagnol (Amérique latine)',
-      value: 'es-419',
-    },
-    {
-      label: 'Francophone',
-      value: 'fr',
-    },
-    {
-      label: 'Franco Français',
-      value: 'fr-fr',
-    },
-    {
-      label: 'Franco Belge',
-      value: 'fr-BE',
-    },
-    {
-      label: 'Italien',
-      value: 'it',
-    },
-    {
-      label: 'Portugais',
-      value: 'pt',
-    },
-    {
-      label: 'Néerlandais',
-      value: 'nl',
-    },
-  ];
-
-  @tracked languageOptionsResult = this.languageOptions;
+  @tracked languageOptionsResult = languageOptions;
 
   get liteClass() {
     return this.config.lite ? ' lite ' : '';
@@ -86,11 +91,11 @@ export default class CompetenceHeader extends Component {
 
   get selectedSection() {
     const section = this.args.section;
-    return this.sections.find((el) => el.value === section);
+    return sections.find((el) => el.value === section);
   }
 
   get selectedLanguageToFilter() {
-    const language = this.languageOptions.find((languagesOption) => languagesOption.value === this.args.languageFilter);
+    const language = languageOptions.find((languagesOption) => languagesOption.value === this.args.languageFilter);
     return language?.value || null;
   }
 
@@ -104,10 +109,10 @@ export default class CompetenceHeader extends Component {
   @action
   updateLanguageOptions(filter) {
     if (!filter.trim()) {
-      this.languageOptionsResult = this.languageOptions;
+      this.languageOptionsResult = languageOptions;
       return;
     }
-    this.languageOptionsResult = this.languageOptions.filter(({ label }) =>
+    this.languageOptionsResult = languageOptions.filter(({ label }) =>
       label.toLowerCase().includes(filter.trim().toLowerCase()),
     );
   }
@@ -123,30 +128,28 @@ export default class CompetenceHeader extends Component {
       </h1>
       <div class="main-title-filters">
         {{#if this.displayLanguageFilter}}
-          <PixSelect
+          <Select
             @className="competence-header__language-filter"
             @onChange={{@selectLanguageToFilter}}
             @options={{this.languageOptionsResult}}
             @value={{this.selectedLanguageToFilter}}
-            @placeholder="Filtre par langue"
             @isSearchable={{true}}
+            @screenReaderOnly={{true}}
             @onSearch={{this.updateLanguageOptions}}
-            @searchPlaceholder="Rechercher une langue"
-            @emptySearchMessage="Aucune langue correspondante"
+            @texts={{selectTranslationList}}
           >
-            <:default as |languageOption|>
-              {{languageOption.label}}
-            </:default>
-          </PixSelect>
+            <:label>{{selectTranslationList.placeholder}}</:label>
+          </Select>
         {{/if}}
-        <PixSelect
+        <Select
           @onChange={{@selectSection}}
-          @options={{this.sections}}
+          @options={{sections}}
           @value={{this.selectedSection.value}}
+          @screenReaderOnly={{true}}
           @hideDefaultOption={{true}}
         >
-          <:default as |section|>{{section.label}}</:default>
-        </PixSelect>
+          <:label>Changer de vue Epreuves/Acquis/Qualité</:label>
+        </Select>
       </div>
     </section>
   </template>

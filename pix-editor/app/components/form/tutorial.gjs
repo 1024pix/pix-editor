@@ -1,7 +1,6 @@
 import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
@@ -9,10 +8,37 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { eq } from 'ember-truth-helpers';
+import Select from 'pixeditor/components/field/select';
 
 function formattedOptionList(list) {
   return list.map((option) => ({ label: option, value: option }));
 }
+
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  tutorialLevel: { placeholder: 'Niveau non renseigné' },
+  tutorialLicence: { placeholder: 'Licence non renseignée' },
+  tutorialSource: {
+    searchLabel: 'Rechercher une source',
+    searchPlaceholder: 'Rechercher une source',
+  },
+};
+
+const formatOptionList = formattedOptionList([
+  'audio',
+  'frise',
+  'image',
+  'jeu',
+  'outil',
+  'page',
+  'pdf',
+  'site',
+  'slide',
+  'son',
+  'vidéo',
+]);
+const levelOptionList = formattedOptionList(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
+const licenseOptionList = formattedOptionList(['CC-BY-SA', '(c)', 'Youtube']);
 
 export default class TutorialForm extends Component {
   @tracked sourceList = [];
@@ -22,12 +48,6 @@ export default class TutorialForm extends Component {
   @service notifications;
   @service store;
 
-  options = {
-    format: ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
-    level: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    license: ['CC-BY-SA', '(c)', 'Youtube'],
-  };
-
   constructor() {
     super(...arguments);
     if (this.args.tutorial.source) {
@@ -35,18 +55,6 @@ export default class TutorialForm extends Component {
     }
     const tags = this.args.tutorial.hasMany('tags').value() ?? [];
     this.tagListOptions = tags.map((tag) => ({ label: tag.get('title'), value: tag.get('id') }));
-  }
-
-  get formattedFormatOptionList() {
-    return formattedOptionList(this.options.format);
-  }
-
-  get formattedLevelOptionList() {
-    return formattedOptionList(this.options.level);
-  }
-
-  get formattedLicenseOptionList() {
-    return formattedOptionList(this.options.license);
   }
 
   get hasSelectedTag() {
@@ -63,10 +71,7 @@ export default class TutorialForm extends Component {
   }
 
   get sourceListOptions() {
-    return this.sourceList.map((item) => ({
-      label: item,
-      value: item,
-    }));
+    return formattedOptionList(this.sourceList);
   }
 
   @action
@@ -178,15 +183,16 @@ export default class TutorialForm extends Component {
           <:label>Titre</:label>
         </PixInput>
       </div>
-      <PixSelect
+      <Select
         @options={{this.tutorialLanguageOptions}}
         @onChange={{this.setTutorialLanguage}}
-        @requiredLabel="Champ obligatoire"
+        @texts={{selectTranslationList.tutorialLanguage}}
         @value={{@tutorial.language}}
         @hideDefaultOption={{true}}
+        @required={{true}}
       >
         <:label>Langue</:label>
-      </PixSelect>
+      </Select>
       <PixInput
         @requiredLabel="Le lien est requis"
         @value={{@tutorial.link}}
@@ -195,37 +201,37 @@ export default class TutorialForm extends Component {
       >
         <:label>Lien</:label>
       </PixInput>
-      <PixSelect
+      <Select
         @options={{this.sourceListOptions}}
         @onChange={{fn (mut @tutorial.source)}}
         @onSearch={{this.getSearchSourceResults}}
         @value={{@tutorial.source}}
         @isSearchable={{true}}
-        @searchLabel="Rechercher une source"
-        @searchPlaceholder="Rechercher une source"
-        @requiredLabel="Champ obligatoire"
+        @texts={{selectTranslationList.tutorialSource}}
         @hideDefaultOption={{true}}
+        @required={{true}}
       >
         <:label>Source</:label>
-      </PixSelect>
-      <PixSelect
-        @options={{this.formattedLicenseOptionList}}
+      </Select>
+      <Select
+        @options={{licenseOptionList}}
         @onChange={{fn (mut @tutorial.license)}}
         @value={{@tutorial.license}}
         @hideDefaultOption={{false}}
-        @placeholder="Licence non renseignée"
+        @texts={{selectTranslationList.tutorialLicence}}
       >
         <:label>Licence</:label>
-      </PixSelect>
-      <PixSelect
-        @options={{this.formattedFormatOptionList}}
+      </Select>
+      <Select
+        @options={{formatOptionList}}
         @onChange={{fn (mut @tutorial.format)}}
         @value={{@tutorial.format}}
-        @requiredLabel="Champ obligatoire"
+        @texts={{selectTranslationList.tutorialFormat}}
         @hideDefaultOption={{true}}
+        @required={{true}}
       >
         <:label>Format</:label>
-      </PixSelect>
+      </Select>
       <PixInput
         @requiredLabel="La durée est requise"
         @value={{@tutorial.duration}}
@@ -234,24 +240,22 @@ export default class TutorialForm extends Component {
       >
         <:label>Durée (hh:mm:ss)</:label>
       </PixInput>
-      <PixSelect
-        @options={{this.formattedLevelOptionList}}
+      <Select
+        @options={{levelOptionList}}
         @onChange={{fn (mut @tutorial.level)}}
         @value={{@tutorial.level}}
         @hideDefaultOption={{false}}
-        @placeholder="Niveau non renseigné"
+        @texts={{selectTranslationList.tutorialLevel}}
       >
         <:label>Niveau</:label>
-      </PixSelect>
+      </Select>
       <div class="tutorial-tags-select">
         <PixMultiSelect
           @isSearchable={{true}}
           @onSearch={{this.getSearchTagsResults}}
-          @placeholder="cloud clavier ..."
-          @searchPlaceholder="Rechercher un tag"
           @onChange={{this.onChangeTags}}
           @values={{this.tutorialTagIds}}
-          @emptyMessage="Aucun tag"
+          @texts={{multiselectTranslationList}}
           @options={{this.tagListOptions}}
         >
           <:label>Rechercher tags</:label>

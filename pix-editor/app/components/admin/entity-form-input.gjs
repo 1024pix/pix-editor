@@ -1,9 +1,9 @@
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixInputPassword from '@1024pix/pix-ui/components/pix-input-password';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import Select from 'pixeditor/components/field/select';
 
 export default class AdminEntityFormInput extends Component {
   get isString() {
@@ -28,6 +28,10 @@ export default class AdminEntityFormInput extends Component {
 
   get requiredLabel() {
     return this.args.optional ? null : 'Champ obligatoire';
+  }
+
+  get isRequired() {
+    return !this.args?.optional;
   }
 
   @action
@@ -82,19 +86,19 @@ export default class AdminEntityFormInput extends Component {
         </:label>
       </PixInput>
     {{else if this.isSelect}}
-      <PixSelect
-        @id="{{@key}}"
+      <Select
+        @id={{@key}}
         @options={{@options}}
         @value={{@value}}
         @onChange={{@onChange}}
-        @requiredLabel={{this.requiredLabel}}
         @hideDefaultOption={{true}}
         @errorMessage={{@error}}
+        @required={{this.isRequired}}
       >
         <:label>
           {{@label}}
         </:label>
-      </PixSelect>
+      </Select>
     {{/if}}
   </template>
 }

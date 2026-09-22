@@ -1,9 +1,14 @@
 import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
 import PixSearchInput from '@1024pix/pix-ui/components/pix-search-input';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import Select from 'pixeditor/components/field/select';
+
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  placeholder: "Filtrer par statut d'erreur",
+};
 
 export default class BrokenUrlFilters extends Component {
   get statusCodeOptionList() {
@@ -100,14 +105,16 @@ export default class BrokenUrlFilters extends Component {
       >
         <:label>URL à remplir</:label>
       </PixSearchInput>
-      <PixSelect
+      <Select
         @id="status-filter"
         @options={{this.statusCodeOptionList}}
         @value={{@statusCodeFilterValue}}
-        @placeholder="Filtrer par statut d'erreur"
+        @texts={{selectTranslationList}}
         @onChange={{this.triggerStatusCodeFilter}}
         @screenReaderOnly={{true}}
-      />
+      >
+        <:label>{{selectTranslationList.placeholder}}</:label>
+      </Select>
       {{#if @showTutorialsFilters}}
         <PixMultiSelect
           @id="tutorials-filter"

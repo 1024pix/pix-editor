@@ -1,5 +1,4 @@
 import PixInput from '@1024pix/pix-ui/components/pix-input';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
@@ -7,6 +6,7 @@ import { guidFor } from '@ember/object/internals';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import Select from 'pixeditor/components/field/select';
 import getMimeType from 'pixeditor/helpers/get-mime-type';
 import Challenge from 'pixeditor/models/challenge';
 
@@ -16,6 +16,11 @@ import Files from '../v2/field/files';
 import Illustration from '../v2/field/illustration';
 import FieldToggleFieldComponent from '../v2/field/toggle-field';
 import LocalizedChallengeViewHeader from './localized-challenge-view-header';
+
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  geography: { placeholder: 'Géographie' },
+};
 
 export default class LocalizedChallenge extends Component {
   textareaId = `textareaId-${guidFor(this)}`;
@@ -450,9 +455,9 @@ export default class LocalizedChallenge extends Component {
             @updateBasename={{this.updateBasename}}
           />
         {{/if}}
-        <PixSelect
+        <Select
           @id="localized-select-geography"
-          @placeholder="Géographie"
+          @texts={{selectTranslationList.geography}}
           @isDisabled={{this.readonly}}
           @onChange={{fn (mut @localizedChallenge.geography)}}
           @value={{this.localizedChallengeGeographyValue}}
@@ -460,7 +465,7 @@ export default class LocalizedChallenge extends Component {
           @hideDefaultOption={{true}}
         >
           <:label>Géographie</:label>
-        </PixSelect>
+        </Select>
       </div>
 
       <PixInput @id="localized-challenge-id" @value={{@localizedChallenge.id}} readonly>

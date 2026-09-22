@@ -1,13 +1,18 @@
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { fn } from '@ember/helper';
 import Component from '@glimmer/component';
 import { not } from 'ember-truth-helpers';
+import Select from 'pixeditor/components/field/select';
 
 import Files from '../field/files';
 import Illustration from '../field/illustration';
 import Input from '../field/input';
 import Textarea from '../field/textarea';
 import FieldToggleFieldComponent from '../field/toggle-field';
+
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  geography: { placeholder: 'Géographie' },
+};
 
 export default class LocalizedChallengeForm extends Component {
   get localizedChallengeGeographyValue() {
@@ -61,9 +66,9 @@ export default class LocalizedChallengeForm extends Component {
           {{@invalidEmbedURL}}
         </p>
       {{/if}}
-      <PixSelect
+      <Select
         @id="localized-select-geography"
-        @placeholder="Géographie"
+        @texts={{selectTranslationList}}
         @isDisabled={{not @edition}}
         @onChange={{fn (mut @localizedChallenge.geography)}}
         @value={{this.localizedChallengeGeographyValue}}
@@ -71,7 +76,7 @@ export default class LocalizedChallengeForm extends Component {
         @hideDefaultOption={{true}}
       >
         <:label>Géographie</:label>
-      </PixSelect>
+      </Select>
       <FieldToggleFieldComponent
         @edition={{@edition}}
         @model={{@localizedChallenge}}

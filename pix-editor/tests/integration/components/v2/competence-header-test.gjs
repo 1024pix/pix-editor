@@ -25,7 +25,7 @@ module('Integration | Component | v2/competence-header', function (hooks) {
 
     assert.dom('h2').hasText('HACHE10 Lancer de hache');
     assert.dom(screen.getByRole('button', { name: 'Choix de la langue' })).exists();
-    assert.dom(screen.getByRole('button', { name: 'Epreuves' })).exists();
+    assert.dom(screen.getByRole('button', { name: 'Changer de vue Epreuves/Acquis' })).exists();
   });
 
   test('should filter locales options', async function (assert) {

@@ -52,7 +52,7 @@ module('Integration | Component | Form | whitelisted-url', function (hooks) {
     assert.ok(onSubmit.calledThrice);
     assert.strictEqual(onSubmit.args[2][0].relatedSkillNames, '@test1,@test2');
 
-    await clickByName("Type de comparaison d'URL");
+    await clickByName("Type de comparaison d'URL *");
     await clickByText('Commence par');
     await click(submitButton);
     assert.strictEqual(onSubmit.callCount, 4);

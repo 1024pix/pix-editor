@@ -1,8 +1,15 @@
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import Select from 'pixeditor/components/field/select';
+
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  emptySearchMessage: 'Pas de résultat',
+  placeholder: 'Acquix ou recordId',
+  searchPlaceholder: '@patate1, recABCD1234',
+};
 
 export default class SidebarSearch extends Component {
   routeModel = null;
@@ -40,22 +47,21 @@ export default class SidebarSearch extends Component {
   }
 
   <template>
-    <PixSelect
+    <Select
       @isSearchable={{true}}
-      @searchPlaceholder="@patate1, recABCD1234"
-      @placeholder="Acquix ou recordId"
       @options={{this.searchResultOptions}}
       @onSearch={{this.getSearchResults}}
       @onChange={{this.transitionTo}}
       @iconName="search"
       @value=""
       @hideDefaultOption={{true}}
+      @screenReaderOnly={{true}}
       class="sidebar-search"
-      @emptySearchMessage="Pas de résultat"
+      @texts={{selectTranslationList}}
     >
       <:label>
-        <span class="sr-only">Rechercher un acquis ou une épreuve...</span>
+        Rechercher un acquis ou une épreuve...
       </:label>
-    </PixSelect>
+    </Select>
   </template>
 }

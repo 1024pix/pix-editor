@@ -2,6 +2,7 @@ import { clickByName, visit } from '@1024pix/ember-testing-library';
 import { currentURL } from '@ember/test-helpers';
 import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { selectOption } from 'pixeditor/tests/select-option-list-box-helper.js';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
 import { module, test } from 'qunit';
@@ -68,10 +69,7 @@ module('Acceptance | Modules | Production', function (hooks) {
     await screen.getByRole('button', { name: 'Aller à la page précédente' }).click();
     assert.dom(await screen.findByText('Page 3 / 4')).exists();
 
-    await screen.getByRole('button', { name: "Nombre d'élément à afficher par page" }).click();
-    assert.dom(await screen.findByRole('option', { name: '50' })).exists();
-
-    await screen.getByRole('option', { name: '50' }).click();
+    await selectOption(screen, "Nombre d'élément à afficher par page", '50');
     assert.dom(await screen.findByText('Page 1 / 1')).exists();
     assert.dom(await screen.findByText('36 éléments')).exists();
     assert.dom(await screen.findByText('MOD_0')).exists();

@@ -26,7 +26,6 @@ export default class Select extends Component {
       @isDisabled={{@isDisabled}}
       @isFullWidth={{@isFullWidth}}
       @isSearchable={{@isSearchable}}
-      @label={{@label}}
       @onChange={{@onChange}}
       @onSearch={{@onSearch}}
       @options={{@options}}
@@ -34,8 +33,9 @@ export default class Select extends Component {
       @plainIcon={{@plainIcon}}
       @screenReaderOnly={{@screenReaderOnly}}
       @size={{@size}}
-      @texts={{@texts}}
+      @texts={{this.texts}}
       @value={{@value}}
+      ...attributes
     >
       <:label>
         {{yield to="label"}}

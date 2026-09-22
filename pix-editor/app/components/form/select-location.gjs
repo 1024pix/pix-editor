@@ -1,10 +1,19 @@
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { and, or } from 'ember-truth-helpers';
+import Select from 'pixeditor/components/field/select';
+
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  competence: { placeholder: 'Sélectionner une compétence' },
+  thematic: { placeholder: 'Sélectionner une thématique', requiredLabel: 'Merci de sélectionner une thématique' },
+  tube: { placeholder: 'Sélectionner un sujet' },
+  skill: { placeholder: 'Sélectionner un acquis' },
+  level: { placeholder: 'Sélectionner un niveau' },
+};
 
 export default class FormSelectLocation extends Component {
   @service currentData;
@@ -257,7 +266,7 @@ export default class FormSelectLocation extends Component {
       name="Sélectionner un emplacement"
       {{on "submit" this.onSubmit}}
     >
-      <PixSelect
+      <Select
         @id="select-framework-location"
         @value={{this.selectedFrameworkId}}
         @options={{this.frameworkOptionList}}
@@ -265,30 +274,29 @@ export default class FormSelectLocation extends Component {
         @hideDefaultOption={{true}}
       >
         <:label>Référentiel</:label>
-      </PixSelect>
-      <PixSelect
+      </Select>
+      <Select
         @id="select-competence-location"
         @value={{this.selectedCompetenceId}}
         @options={{this.competenceOptionList}}
         @onChange={{this.selectCompetence}}
         @hideDefaultOption={{true}}
-        @placeholder="Sélectionner une compétence"
+        @texts={{selectTranslationList.competence}}
       >
         <:label>Compétence</:label>
-      </PixSelect>
+      </Select>
       {{#if (and this.isMovingTube this.selectedCompetenceId)}}
         {{#if this.areThemesLoaded}}
-          <PixSelect
+          <Select
             @id="select-thematic-location"
             @value={{this.selectedThemeId}}
             @options={{this.themeOptionList}}
             @onChange={{this.selectTheme}}
             @hideDefaultOption={{true}}
-            @placeholder="Sélectionner une thématique"
-            @requiredLabel="Merci de sélectionner une thématique"
+            @texts={{selectTranslationList.thematic}}
           >
             <:label>Thématique</:label>
-          </PixSelect>
+          </Select>
         {{else}}
           <p>Chargement des thématiques en cours...</p>
         {{/if}}
@@ -296,16 +304,16 @@ export default class FormSelectLocation extends Component {
       {{#if (or this.isMovingPrototype this.isMovingSkill)}}
         {{#if this.selectedCompetenceId}}
           {{#if this.areTubesLoaded}}
-            <PixSelect
+            <Select
               @id="select-tube-location"
               @value={{this.selectedTubeId}}
               @options={{this.tubeOptionList}}
               @onChange={{this.selectTube}}
               @hideDefaultOption={{true}}
-              @placeholder="Sélectionner un sujet"
+              @texts={{selectTranslationList.tube}}
             >
               <:label>Sujet</:label>
-            </PixSelect>
+            </Select>
           {{else}}
             <p>Chargement des sujets en cours...</p>
           {{/if}}
@@ -313,30 +321,30 @@ export default class FormSelectLocation extends Component {
         {{#if this.selectedTubeId}}
           {{#if this.isMovingPrototype}}
             {{#if this.areSkillsLoaded}}
-              <PixSelect
+              <Select
                 @id="select-skill-location"
                 @value={{this.selectedSkillId}}
                 @options={{this.skillOptionListWithCategory}}
                 @onChange={{this.selectSkill}}
                 @hideDefaultOption={{true}}
-                @placeholder="Sélectionner un acquis"
+                @texts={{selectTranslationList.skill}}
               >
                 <:label>Acquis</:label>
-              </PixSelect>
+              </Select>
             {{else}}
               <p>Chargement des acquis en cours...</p>
             {{/if}}
           {{else}}
-            <PixSelect
+            <Select
               @id="select-level-location"
               @value={{this.selectedLevel}}
               @options={{this.levelOptionList}}
               @onChange={{this.selectLevel}}
               @hideDefaultOption={{true}}
-              @placeholder="Sélectionner un niveau"
+              @texts={{selectTranslationList.level}}
             >
               <:label>Niveau</:label>
-            </PixSelect>
+            </Select>
           {{/if}}
         {{/if}}
       {{/if}}

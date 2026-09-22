@@ -1,5 +1,4 @@
 import PixAccordions from '@1024pix/pix-ui/components/pix-accordions';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
@@ -7,12 +6,18 @@ import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import Select from 'pixeditor/components/field/select';
 
 import PopInNewFrameworkComponent from '../pop-in/new-framework';
 
-export default class SidebarNavigationComponent extends Component {
-  addFrameworkLabel = 'Créer un nouveau référentiel';
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  placeholder: 'Sélectionner un référentiel',
+  searchPlaceholder: 'Rechercher un référentiel',
+  emptySearchMessage: 'Aucun référentiel correspondant',
+};
 
+export default class SidebarNavigationComponent extends Component {
   @service access;
   @service currentData;
   @service loader;
@@ -47,7 +52,7 @@ export default class SidebarNavigationComponent extends Component {
     }));
     if (this.access.isAdmin()) {
       frameworkList.push({
-        label: this.addFrameworkLabel,
+        label: 'Créer un nouveau référentiel',
         value: 'create',
       });
     }
@@ -124,24 +129,22 @@ export default class SidebarNavigationComponent extends Component {
 
   <template>
     {{#if @displayFrameworkList}}
-      <PixSelect
+      <Select
         @id="select-framework"
         @value={{this.selectedFrameworkId}}
         @options={{this.frameworkOptionsResult}}
         @onChange={{this.setFramework}}
-        @placeholder="Sélectionner un référentiel"
         @placement="bottom"
-        class="select-framework"
+        @className="select-framework"
         @hideDefaultOption={{true}}
         @isSearchable={{true}}
         @onSearch={{this.updateFrameworkOptionsResult}}
-        @searchPlaceholder="Rechercher un référentiel"
-        @emptySearchMessage="Aucun référentiel correspondant"
+        @texts={{selectTranslationList}}
       >
         <:label>
           <span class="sr-only">Sélectionner un référentiel</span>
         </:label>
-      </PixSelect>
+      </Select>
     {{/if}}
     <div class="area-accordion">
       {{#each this.areas as |area|}}

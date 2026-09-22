@@ -1,8 +1,8 @@
 import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
 import Component from '@glimmer/component';
+import Select from 'pixeditor/components/field/select';
 import Challenge from 'pixeditor/models/challenge';
 
 import ChallengeViewHeader from './challenge-view-header';
@@ -53,9 +53,9 @@ export default class ChallengeViewProduction extends Component {
       <PixTextarea @value={{@challenge.alternativeInstruction}} readonly rows="5">
         <:label>Alternative textuelle</:label>
       </PixTextarea>
-      <PixSelect @options={{this.challengeTypeOptions}} @value={{@challenge.type}} @isDisabled={{true}}>
+      <Select @options={{this.challengeTypeOptions}} @value={{@challenge.type}} @isDisabled={{true}}>
         <:label>Modalité</:label>
-      </PixSelect>
+      </Select>
 
       {{#if @challenge.isTextBased}}
         <PixInput @value={{@challenge.format}} readonly>
