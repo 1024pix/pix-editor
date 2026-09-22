@@ -24,6 +24,13 @@ const selectTranslationList = {
   },
 };
 
+// TRADUCTIONS PIXMULTISELECT
+const multiselectTranslationList = {
+  placeholder: 'cloud clavier ...',
+  searchPlaceholder: 'Rechercher un tag',
+  emptyMessage: 'Aucun tag',
+};
+
 const formatOptionList = formattedOptionList([
   'audio',
   'frise',

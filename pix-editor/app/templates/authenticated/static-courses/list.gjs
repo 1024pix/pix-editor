@@ -13,6 +13,12 @@ import formatDate from 'ember-intl/helpers/format-date';
 import not from 'ember-truth-helpers/helpers/not';
 import Pagination from 'pixeditor/components/list/pagination';
 
+// TRADUCTIONS PIXMULTISELECT
+const multiselectTranslationList = {
+  placeholder: 'Sélectionnez des tags',
+  emptyMessage: 'Pas de résultats',
+};
+
 <template>
   <header class="page-header">
     <h1 class="page-title">Tests Statiques</h1>
@@ -61,13 +67,12 @@ import Pagination from 'pixeditor/components/list/pagination';
         ><:label>Nom</:label></PixInput>
         <PixMultiSelect
           @id="filter-tags-selector"
-          @placeholder="Sélectionnez des tags"
           @isSearchable="true"
-          @emptyMessage="Pas de résultats"
           @screenReaderOnly={{true}}
           @onChange={{@controller.selectTags}}
           @values={{@controller.tempTagIds}}
           @options={{@controller.tagOptions}}
+          @texts={{multiselectTranslationList}}
         >
           <:label>Tags</:label>
           <:default as |option|>{{option.label}}</:default>

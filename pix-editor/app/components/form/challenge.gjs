@@ -23,15 +23,17 @@ const selectTranslationList = {
   placeholder: 'Niveau non renseigné',
 };
 
-const solutionsFieldId = `solutionsFieldId-${guidFor(this)}`;
-const solutionToDisplayFieldId = `solutionToDisplayFieldId-${guidFor(this)}`;
-const urlToConsultFieldId = `urlToConsultFieldId-${guidFor(this)}`;
-const illustrationAltFieldId = `illustrationAltFieldId-${guidFor(this)}`;
-const embedUrlFieldId = `embedUrlFieldId-${guidFor(this)}`;
-const embedHeightFieldId = `embedHeightFieldId-${guidFor(this)}`;
-const embedTitleFieldId = `embedTitleFieldId-${guidFor(this)}`;
-const geographyFieldId = `geographyFieldId-${guidFor(this)}`;
-const idFieldId = `idFieldId-${guidFor(this)}`;
+// TRADUCTIONS PIXMULTISELECT
+const multiselectTranslationList = {
+  language: {
+    placeholder: 'Choisir une ou plusieurs langues',
+    emptyMessage: 'Aucune langue sélectionnée',
+  },
+  maintenance: {
+    placeholder: 'Choisir un ou plusieurs types de maintenance',
+    emptyMessage: 'Aucun type de maintenance sélectionné',
+  },
+};
 
 const options = {
   types: [
@@ -81,6 +83,16 @@ export default class ChallengeForm extends Component {
   assessmentMaintenanceTagOptions = [];
   translationMaintenanceTagOptions = [];
   locales = this.languageOptions;
+
+  solutionsFieldId = `solutionsFieldId-${guidFor(this)}`;
+  solutionToDisplayFieldId = `solutionToDisplayFieldId-${guidFor(this)}`;
+  urlToConsultFieldId = `urlToConsultFieldId-${guidFor(this)}`;
+  illustrationAltFieldId = `illustrationAltFieldId-${guidFor(this)}`;
+  embedUrlFieldId = `embedUrlFieldId-${guidFor(this)}`;
+  embedHeightFieldId = `embedHeightFieldId-${guidFor(this)}`;
+  embedTitleFieldId = `embedTitleFieldId-${guidFor(this)}`;
+  geographyFieldId = `geographyFieldId-${guidFor(this)}`;
+  idFieldId = `idFieldId-${guidFor(this)}`;
 
   constructor(...args) {
     super(...args);
@@ -344,7 +356,7 @@ export default class ChallengeForm extends Component {
         @edition={{@edition}}
         @helpContent={{this.helpAnswers}}
         data-test-answers-field
-        @id={{solutionsFieldId}}
+        @id={{this.solutionsFieldId}}
       />
       {{#if (and @challenge.isTextBased (not this.isAutoReply))}}
         <div id="toleranceField" data-test-tolerence-fields class="field {{if @edition '' 'disabled'}}">
@@ -381,7 +393,7 @@ export default class ChallengeForm extends Component {
           @value={{@challenge.solutionToDisplay}}
           @edition={{@edition}}
           data-test-solution-to-display-field
-          @id={{solutionToDisplayFieldId}}
+          @id={{this.solutionToDisplayFieldId}}
         />
       </ToggleField>
 
@@ -403,7 +415,7 @@ export default class ChallengeForm extends Component {
           @change={{@setUrlsToConsult}}
           @helpContent={{helpUrlsToConsult}}
           data-test-urls-to-consult-field
-          @id={{urlToConsultFieldId}}
+          @id={{this.urlToConsultFieldId}}
         />
       </ToggleField>
       {{#if @invalidUrlsToConsult}}
@@ -427,7 +439,7 @@ export default class ChallengeForm extends Component {
           @value={{@challenge.illustrationAlt}}
           @title="Texte alternatif"
           @edition={{@edition}}
-          @id={{illustrationAltFieldId}}
+          @id={{this.illustrationAltFieldId}}
         />
       {{/if}}
       <Files
@@ -444,7 +456,7 @@ export default class ChallengeForm extends Component {
         @value={{@challenge.embedURL}}
         @edition={{@edition}}
         @label="URL"
-        @id={{embedUrlFieldId}}
+        @id={{this.embedUrlFieldId}}
         @change={{@checkEmbedURL}}
       />
       {{#if @invalidEmbedURL}}
@@ -453,8 +465,8 @@ export default class ChallengeForm extends Component {
           {{@invalidEmbedURL}}
         </p>
       {{/if}}
-      <Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" @id={{embedHeightFieldId}} />
-      <Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" @id={{embedTitleFieldId}} />
+      <Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" @id={{this.embedHeightFieldId}} />
+      <Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" @id={{this.embedTitleFieldId}} />
       {{#if @challenge.isPrototype}}
         <div class="fields--selectors">
           <div class="field">
@@ -502,12 +514,11 @@ export default class ChallengeForm extends Component {
             <div class="field">
               <PixMultiSelect
                 @isSearchable={{true}}
-                @placeholder="Choisir un ou plusieurs types de maintenance"
                 @onChange={{fn (mut @challenge.assessmentMaintenanceTags)}}
-                @emptyMessage="Aucun type de maintenance sélectionné"
                 @values={{@challenge.assessmentMaintenanceTags}}
                 @options={{this.assessmentMaintenanceTagOptions}}
                 @isDisabled={{not @edition}}
+                @texts={{multiselectTranslationList.maintenance}}
               >
                 <:label>Évaluation</:label>
                 <:default as |option|>{{option.label}}</:default>
@@ -516,12 +527,11 @@ export default class ChallengeForm extends Component {
             <div class="field" data-testid="translationSelect">
               <PixMultiSelect
                 @isSearchable={{true}}
-                @placeholder="Choisir un ou plusieurs types de maintenance"
                 @onChange={{fn (mut @challenge.translationMaintenanceTags)}}
-                @emptyMessage="Aucun type de maintenance sélectionné"
                 @values={{@challenge.translationMaintenanceTags}}
                 @options={{this.translationMaintenanceTagOptions}}
                 @isDisabled={{not @edition}}
+                @texts={{multiselectTranslationList.maintenance}}
               >
                 <:label>Traduction</:label>
                 <:default as |option|>{{option.label}}</:default>
@@ -535,12 +545,11 @@ export default class ChallengeForm extends Component {
         <div class="two fields">
           <div class="field">
             <PixMultiSelect
-              @placeholder="Choisir une ou plusieurs langues"
               @onChange={{this.setLocales}}
-              @emptyMessage="Aucune langue sélectionnée"
               @values={{this.languages}}
               @options={{this.languageOptions}}
               @isDisabled={{not @edition}}
+              @texts={{multiselectTranslationList.language}}
             >
               <:label>Langue(s)</:label>
               <:default as |option|>{{option.label}}</:default>
@@ -548,7 +557,7 @@ export default class ChallengeForm extends Component {
           </div>
           <div class="field">
             <Select
-              @id={{geographyFieldId}}
+              @id={{this.geographyFieldId}}
               @texts={{selectTranslationList}}
               @onChange={{fn (mut @challenge.geography)}}
               @value={{this.challengeGeographyValue}}
@@ -562,7 +571,7 @@ export default class ChallengeForm extends Component {
         </div>
       </div>
       {{#unless @edition}}
-        <Input @id={{idFieldId}} @value={{@challenge.id}} @title="Id" @edition={{false}} />
+        <Input @id={{this.idFieldId}} @value={{@challenge.id}} @title="Id" @edition={{false}} />
       {{/unless}}
     </form>
   </template>

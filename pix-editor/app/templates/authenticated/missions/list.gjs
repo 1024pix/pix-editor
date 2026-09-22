@@ -7,6 +7,13 @@ import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import formatDate from 'ember-intl/helpers/format-date';
 import Pagination from 'pixeditor/components/list/pagination';
+
+// TRADUCTIONS PIXMULTISELECT
+const multiselectTranslationList = {
+  placeholder: 'Aucun',
+  emptyMessage: "Il n'y a pas de statut",
+};
+
 <template>
   <header class="page-header">
     <h1 class="page-title">Missions</h1>
@@ -35,11 +42,10 @@ import Pagination from 'pixeditor/components/list/pagination';
         <PixMultiSelect
           @id="mission-status-multi-select"
           @screenReaderOnly={{true}}
-          @placeholder="Aucun"
           @onChange={{@controller.onChangesStatus}}
           @values={{@controller.getStatusSelected}}
-          @emptyMessage="Il n'y a pas de statut"
           @options={{@controller.statusesOption}}
+          @texts={{multiselectTranslationList}}
         >
           <:label>Statut</:label>
           <:default as |option|>{{option.label}}</:default>

@@ -6,6 +6,12 @@ import ThresholdCalculation from 'pixeditor/components/pop-in/threshold-calculat
 import TubeLevel from 'pixeditor/components/pop-in/tube-level';
 import AreaProfile from 'pixeditor/components/target-profile/area-profile';
 import PdfExport from 'pixeditor/components/target-profile/pdf-export';
+
+// TRADUCTIONS PIXMULTISELECT
+const multiselectTranslationList = {
+  placeholder: 'Aucun référentiel sélectionné',
+};
+
 <template>
   <div class="main-left">
     <div class="main-title">
@@ -84,7 +90,7 @@ import PdfExport from 'pixeditor/components/target-profile/pdf-export';
               @options={{@controller.frameworkOptionList}}
               @values={{@controller.selectedFrameworkIds}}
               @onChange={{@controller.selectFrameworks}}
-              @placeholder="Aucun référentiel sélectionné"
+              @texts={{multiselectTranslationList}}
             >
               <:label>
                 <span class="text-white">Référentiel</span>

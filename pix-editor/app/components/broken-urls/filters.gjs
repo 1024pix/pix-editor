@@ -10,6 +10,13 @@ const selectTranslationList = {
   placeholder: "Filtrer par statut d'erreur",
 };
 
+// TRADUCTIONS PIXMULTISELECT
+const multiselectTranslationList = {
+  challenge: { placeholder: 'Filtrer par épreuve' },
+  skill: { placeholder: 'Filtrer par acquis' },
+  tutorial: { placeholder: 'Filtrer par tutoriel' },
+};
+
 export default class BrokenUrlFilters extends Component {
   get statusCodeOptionList() {
     const statusCodes = new Set(this.args.brokenUrls.map((brokenUrl) => brokenUrl.statusCode.toString()));
@@ -123,7 +130,7 @@ export default class BrokenUrlFilters extends Component {
           @onChange={{this.triggerTutorialFilter}}
           @screenReaderOnly={{true}}
           @isSearchable={{true}}
-          @placeholder="Filtrer par tutoriel"
+          @texts={{multiselectTranslationList.tutorial}}
         >
           <:label>Filtrer par tutoriel</:label>
           <:default as |option|>{{option.label}}</:default>
@@ -135,7 +142,7 @@ export default class BrokenUrlFilters extends Component {
           @onChange={{this.triggerSkillFilter}}
           @screenReaderOnly={{true}}
           @isSearchable={{true}}
-          @placeholder="Filtrer par acquis"
+          @texts={{multiselectTranslationList.skill}}
         >
           <:label>Filtrer par acquis</:label>
           <:default as |option|>{{option.label}}</:default>
@@ -149,7 +156,7 @@ export default class BrokenUrlFilters extends Component {
           @onChange={{this.triggerLocalizedChallengeFilter}}
           @screenReaderOnly={{true}}
           @isSearchable={{true}}
-          @placeholder="Filtrer par épreuve"
+          @texts={{multiselectTranslationList.skill}}
         >
           <:label>Filtrer par épreuve</:label>
           <:default as |option|>{{option.label}}</:default>
