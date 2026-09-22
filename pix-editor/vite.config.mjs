@@ -1,6 +1,7 @@
 import { loadTranslations } from '@ember-intl/vite';
 import { classicEmberSupport, ember, extensions } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
+import vue from '@vitejs/plugin-vue';
 import url from 'postcss-url';
 import { NodePackageImporter } from 'sass-embedded';
 import { defineConfig } from 'vite';
@@ -15,6 +16,7 @@ export default defineConfig({
       extensions,
     }),
     loadTranslations(),
+    vue(),
   ],
   server: {
     port: 4300,
