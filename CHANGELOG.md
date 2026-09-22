@@ -1,5 +1,18 @@
 
 
+## v4.54.0 (22/09/2026)
+
+
+### :rocket: Amélioration
+- [#1652](https://github.com/1024pix/pix-editor/pull/1652) [FEATURE] Affichage du nom des référentiels dans la moulinette des urls (PIX-24215).
+
+### :arrow_up: Montée de version
+- [#1654](https://github.com/1024pix/pix-editor/pull/1654) [BUMP] Update dependency @1024pix/pix-ui to v67.
+- [#1653](https://github.com/1024pix/pix-editor/pull/1653) [BUMP] Update dependency @1024pix/pix-ui to v66.
+- [#1651](https://github.com/1024pix/pix-editor/pull/1651) [BUMP] Update dependency @1024pix/pix-ui to v65.
+- [#1646](https://github.com/1024pix/pix-editor/pull/1646) [BUMP] Update dependency @1024pix/pix-ui to v64.
+- [#1639](https://github.com/1024pix/pix-editor/pull/1639) [BUMP] Update dependency @1024pix/pix-ui to v63.
+
 ## v4.53.0 (17/09/2026)
 
 
