@@ -146,7 +146,7 @@ export async function getWithPagination(page) {
       SELECT 1
       FROM "external_urls-localized_challenges"
       WHERE "external_urls-localized_challenges"."externalUrlId" = "external_urls"."id"
-    )`)
+    ) DESC`)
     .orderBy('url');
 
   const { results: externalUrlDTOs } = await fetchPage(getQuery, page);

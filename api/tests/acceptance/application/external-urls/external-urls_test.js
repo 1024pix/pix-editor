@@ -98,7 +98,7 @@ describe('Acceptance | Controller | external-urls', () => {
         // Then
         expect(response.statusCode).to.equal(200);
         expect(response.headers['content-type']).to.includes('text/html');
-        expect(response.result).to.deep.equal('<!DOCTYPE html><html><body><a href="https://peche.pix.org">123</a><a href="https://saumon.pix.org">456</a></body><style>a{display:block;}</style></html>');
+        expect(response.result).to.deep.equal('<!DOCTYPE html><html><body><a href="https://saumon.pix.org">456</a><a href="https://patate.pix.org">999</a></body><style>a{display:block;}</style></html>');
       });
     });
 
@@ -133,7 +133,7 @@ describe('Acceptance | Controller | external-urls', () => {
         // Then
         expect(response.statusCode).to.equal(200);
         expect(response.headers['content-type']).to.includes('text/html');
-        expect(response.result).to.deep.equal('<!DOCTYPE html><html><body><a href="https://patate.pix.org">999</a><a href="https://peche-pro.pix.org">789</a></body><style>a{display:block;}</style></html>');
+        expect(response.result).to.deep.equal('<!DOCTYPE html><html><body><a href="https://peche-pro.pix.org">789</a><a href="https://peche.pix.org">123</a></body><style>a{display:block;}</style></html>');
       });
     });
   });
