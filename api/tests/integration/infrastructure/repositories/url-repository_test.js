@@ -167,6 +167,7 @@ describe('Integration | Repository | url-repository', () => {
           tutorialId: tutorial.id,
         },
       ]);
+      expect(externalUrls.find((ext) => ext.id === 1), 'autoincrement ids were reset to 1').toBeTruthy();
     });
   });
 });
