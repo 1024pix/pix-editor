@@ -15,11 +15,14 @@
     <link rel="stylesheet" href="/@embroider/virtual/test-support.css" />
 
     <style>
-        /* Prevent "ResizeObserver loop completed with undelivered notifications" error
-          https://github.com/floating-ui/floating-ui/issues/2338
-        */
-        .pix-select__floating-container {
-          width: 200px !important;
+        /* The semantic-ui sidebar pushes `.pusher` with an animated transform
+           (`.ui.visible.wide.left.sidebar ~ .pusher`, transition in _global.scss).
+           While that animation runs, floating-ui's `autoUpdate` keeps repositioning
+           the PixSelect dropdowns, which makes the browser emit
+           "ResizeObserver loop completed with undelivered notifications" and aborts
+           the QUnit run. Tests don't need the animation. */
+        .application .pusher {
+          transition: none !important;
         }
 
         dialog:modal {
