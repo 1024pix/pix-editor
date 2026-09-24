@@ -1,7 +1,8 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
-import { fn } from '@ember/helper';
+import { concat, fn } from '@ember/helper';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
@@ -10,6 +11,7 @@ export default class BrokenUrlList extends Component {
     column: 'url',
     order: 'asc',
   };
+  @tracked tutorialToDelete = null;
 
   columnSortFunctions = {
     url: (a, b) => a.localeCompare(b),
@@ -104,7 +106,15 @@ export default class BrokenUrlList extends Component {
               <:header>Tutoriels</:header>
               <:cell>
                 {{#each brokenUrl.tutorials as |tutorial|}}
-                  {{tutorial.title}}
+                  <div class="broken-urls-list__tutorial">
+                    {{tutorial.title}}
+                    <PixIconButton
+                      @ariaLabel={{concat "Supprimer le tutoriel " tutorial.title}}
+                      @triggerAction={{fn @onDeleteTutorial tutorial brokenUrl.skills}}
+                      @iconName="delete"
+                      @size="small"
+                    />
+                  </div>
                 {{/each}}
               </:cell>
             </PixTableColumn>

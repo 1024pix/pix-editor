@@ -7,6 +7,12 @@
     scrollbar-width: thin;
   }
 
+  &__tutorial {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
   .column{
     overflow: hidden;
     text-overflow: ellipsis;

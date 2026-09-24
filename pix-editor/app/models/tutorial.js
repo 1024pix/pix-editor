@@ -13,6 +13,7 @@ export default class TutorialModel extends Model {
   @attr language;
 
   @hasMany('tag', { async: true, inverse: null }) tags;
+  @hasMany('skill', { async: true, inverse: null }) skills;
 
   get tagsTitle() {
     const tags = this.hasMany('tags').value() || [];
