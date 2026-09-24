@@ -1,83 +1,90 @@
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import Select from 'pixeditor/components/field/select';
 
 import LocaleTag from './locale-tag';
 
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  emptySearchMessage: 'Aucune locale correspondante',
+  searchPlaceholder: 'Rechercher une locale',
+};
+
+const localeOptions = [
+  {
+    label: 'Langue source',
+    value: 'source',
+  },
+  {
+    label: 'Français',
+    value: 'fr',
+  },
+  {
+    label: 'Franco-français',
+    value: 'fr-fr',
+  },
+  {
+    label: 'Franco Belge',
+    value: 'fr-BE',
+  },
+  {
+    label: 'Allemand (Autriche)',
+    value: 'de-AT',
+  },
+  {
+    label: 'Anglais',
+    value: 'en',
+  },
+  {
+    label: 'Anglais (Ouganda)',
+    value: 'en-UG',
+  },
+  {
+    label: 'Anglais (Rwanda)',
+    value: 'en-RW',
+  },
+  {
+    label: 'Anglais (Tanzanie)',
+    value: 'en-TZ',
+  },
+  {
+    label: 'Espagnol',
+    value: 'es',
+  },
+  {
+    label: 'Espagnol (Amérique latine)',
+    value: 'es-419',
+  },
+  {
+    label: 'Italien',
+    value: 'it',
+  },
+  {
+    label: 'Néerlandais',
+    value: 'nl',
+  },
+];
+const sections = [
+  {
+    label: 'Epreuves',
+    value: 'challenges',
+  },
+  {
+    label: 'Acquis',
+    value: 'skills',
+  },
+  {
+    label: 'Qualité',
+    value: 'quality',
+  },
+];
+
 export default class CompetenceHeader extends Component {
   @service router;
-  localeOptions = [
-    {
-      label: 'Langue source',
-      value: 'source',
-    },
-    {
-      label: 'Français',
-      value: 'fr',
-    },
-    {
-      label: 'Franco-français',
-      value: 'fr-fr',
-    },
-    {
-      label: 'Franco Belge',
-      value: 'fr-BE',
-    },
-    {
-      label: 'Allemand (Autriche)',
-      value: 'de-AT',
-    },
-    {
-      label: 'Anglais',
-      value: 'en',
-    },
-    {
-      label: 'Anglais (Ouganda)',
-      value: 'en-UG',
-    },
-    {
-      label: 'Anglais (Rwanda)',
-      value: 'en-RW',
-    },
-    {
-      label: 'Anglais (Tanzanie)',
-      value: 'en-TZ',
-    },
-    {
-      label: 'Espagnol',
-      value: 'es',
-    },
-    {
-      label: 'Espagnol (Amérique latine)',
-      value: 'es-419',
-    },
-    {
-      label: 'Italien',
-      value: 'it',
-    },
-    {
-      label: 'Néerlandais',
-      value: 'nl',
-    },
-  ];
-  sections = [
-    {
-      label: 'Epreuves',
-      value: 'challenges',
-    },
-    {
-      label: 'Acquis',
-      value: 'skills',
-    },
-    {
-      label: 'Qualité',
-      value: 'quality',
-    },
-  ];
-  @tracked localeOptionsResult = this.localeOptions;
+  @tracked localeOptionsResult = localeOptions;
 
   get localeValue() {
     if (!this.args.locale) return 'source';
@@ -85,7 +92,7 @@ export default class CompetenceHeader extends Component {
   }
 
   get localeEntry() {
-    return this.localeOptions.find((localeEntry) => localeEntry.value === this.localeValue);
+    return localeOptions.find((localeEntry) => localeEntry.value === this.localeValue);
   }
 
   get hasLocaleSelected() {
@@ -101,10 +108,10 @@ export default class CompetenceHeader extends Component {
   @action
   updateLocaleOptions(filter) {
     if (!filter.trim()) {
-      this.localeOptionsResult = this.localeOptions;
+      this.localeOptionsResult = localeOptions;
       return;
     }
-    this.localeOptionsResult = this.localeOptions.filter(({ label }) =>
+    this.localeOptionsResult = localeOptions.filter(({ label }) =>
       label.toLowerCase().includes(filter.trim().toLowerCase()),
     );
   }
@@ -136,7 +143,7 @@ export default class CompetenceHeader extends Component {
         >{{@competence.name}}</LinkTo>
       </h2>
       <div class="competence-header__spacer"></div>
-      <PixSelect
+      <Select
         @options={{this.localeOptionsResult}}
         @value={{this.localeValue}}
         @onChange={{this.setLocale}}
@@ -144,17 +151,21 @@ export default class CompetenceHeader extends Component {
         @screenReaderOnly={{true}}
         @isSearchable={{true}}
         @onSearch={{this.updateLocaleOptions}}
-        @searchPlaceholder="Rechercher une locale"
-        @emptySearchMessage="Aucune locale correspondante"
+        @texts={{selectTranslationList.language}}
       >
-        <:label>Choix de la langue</:label>
-      </PixSelect>
-      <PixSelect
-        @options={{this.sections}}
+        <:label>
+          Choix de la langue
+        </:label>
+      </Select>
+      <Select
+        @options={{sections}}
         @value="challenges"
         @onChange={{this.setSection}}
         @hideDefaultOption={{true}}
-      />
+        @screenReaderOnly={{true}}
+      >
+        <:label>Changer de vue Epreuves/Acquis</:label>
+      </Select>
     </div>
   </template>
 }

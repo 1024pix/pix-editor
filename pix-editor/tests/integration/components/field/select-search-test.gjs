@@ -1,4 +1,5 @@
 import { clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
+import { waitFor } from '@ember/test-helpers';
 import SelectSearch from 'pixeditor/components/field/select-search';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -54,6 +55,7 @@ module('Integration | Component | Field | select-search', function (hooks) {
       </template>,
     );
     await fillByLabel('Rechercher un bidule', 'je tape quelque chose...');
+    await waitFor('.results-list');
 
     //  then
     assert.dom(screen.queryByText('Recherche en cours...')).exists();
@@ -75,10 +77,17 @@ module('Integration | Component | Field | select-search', function (hooks) {
           @isLoading={{false}}
           @searchPlaceholder="Exemple: mon placeholder"
           @searchLabel="Rechercher un bidule"
-        />
+        >
+          <:option as |tutorial|>
+            <p class="tutorial-option">
+              <span class="tutorial-option__title">{{tutorial.title}}</span>
+            </p>
+          </:option>
+        </SelectSearch>
       </template>,
     );
     await fillByLabel('Rechercher un bidule', 'PISTACHE');
+    await waitFor('.results-list');
 
     //  then
     assert.dom(screen.queryByText('Pas de résultat')).exists();
@@ -107,6 +116,7 @@ module('Integration | Component | Field | select-search', function (hooks) {
       </template>,
     );
     await fillByLabel('Rechercher un bidule', 'CHOCOLAT');
+    await waitFor('.results-list');
 
     //  then
     assert.dom(screen.queryByText('Pas de résultat')).doesNotExist();
@@ -148,6 +158,7 @@ module('Integration | Component | Field | select-search', function (hooks) {
       </template>,
     );
     await fillByLabel('Rechercher un bidule', 'osef');
+    await waitFor('.results-list');
 
     //  then
     assert.dom(screen.queryByText('Pas de résultat')).doesNotExist();
@@ -177,6 +188,8 @@ module('Integration | Component | Field | select-search', function (hooks) {
       </template>,
     );
     await fillByLabel('Rechercher un bidule', 'CHOCOLAT');
+    await waitFor('.results-list');
+
     await clickByText('NON CHOCOLAT');
 
     //  then

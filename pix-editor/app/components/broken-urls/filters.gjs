@@ -1,9 +1,21 @@
 import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
 import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
 import PixSearchInput from '@1024pix/pix-ui/components/pix-search-input';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import Select from 'pixeditor/components/field/select';
+
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  placeholder: "Filtrer par statut d'erreur",
+};
+
+// TRADUCTIONS PIXMULTISELECT
+const multiselectTranslationList = {
+  challenge: { placeholder: 'Filtrer par épreuve' },
+  skill: { placeholder: 'Filtrer par acquis' },
+  tutorial: { placeholder: 'Filtrer par tutoriel' },
+};
 
 export default class BrokenUrlFilters extends Component {
   get statusCodeOptionList() {
@@ -100,14 +112,16 @@ export default class BrokenUrlFilters extends Component {
       >
         <:label>URL à remplir</:label>
       </PixSearchInput>
-      <PixSelect
+      <Select
         @id="status-filter"
         @options={{this.statusCodeOptionList}}
         @value={{@statusCodeFilterValue}}
-        @placeholder="Filtrer par statut d'erreur"
+        @texts={{selectTranslationList}}
         @onChange={{this.triggerStatusCodeFilter}}
         @screenReaderOnly={{true}}
-      />
+      >
+        <:label>{{selectTranslationList.placeholder}}</:label>
+      </Select>
       {{#if @showTutorialsFilters}}
         <PixMultiSelect
           @id="tutorials-filter"
@@ -116,7 +130,7 @@ export default class BrokenUrlFilters extends Component {
           @onChange={{this.triggerTutorialFilter}}
           @screenReaderOnly={{true}}
           @isSearchable={{true}}
-          @placeholder="Filtrer par tutoriel"
+          @texts={{multiselectTranslationList.tutorial}}
         >
           <:label>Filtrer par tutoriel</:label>
           <:default as |option|>{{option.label}}</:default>
@@ -128,7 +142,7 @@ export default class BrokenUrlFilters extends Component {
           @onChange={{this.triggerSkillFilter}}
           @screenReaderOnly={{true}}
           @isSearchable={{true}}
-          @placeholder="Filtrer par acquis"
+          @texts={{multiselectTranslationList.skill}}
         >
           <:label>Filtrer par acquis</:label>
           <:default as |option|>{{option.label}}</:default>
@@ -142,7 +156,7 @@ export default class BrokenUrlFilters extends Component {
           @onChange={{this.triggerLocalizedChallengeFilter}}
           @screenReaderOnly={{true}}
           @isSearchable={{true}}
-          @placeholder="Filtrer par épreuve"
+          @texts={{multiselectTranslationList.skill}}
         >
           <:label>Filtrer par épreuve</:label>
           <:default as |option|>{{option.label}}</:default>

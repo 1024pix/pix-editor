@@ -1,21 +1,21 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
 import PixModal from '@1024pix/pix-ui/components/pix-modal';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { t } from 'ember-intl';
+import Select from 'pixeditor/components/field/select';
+
+const options = {
+  language: [
+    { value: 'en', label: 'Anglais' },
+    { value: 'fr', label: 'Français' },
+  ],
+};
 
 export default class PopinPDFEntries extends Component {
-  options = {
-    language: [
-      { value: 'en', label: 'Anglais' },
-      { value: 'fr', label: 'Français' },
-    ],
-  };
-
   @tracked title = 'Liste des thèmes et des sujets abordés dans Pix';
   @tracked language = false;
 
@@ -23,7 +23,7 @@ export default class PopinPDFEntries extends Component {
     if (this.language) {
       return this.language;
     }
-    return this.options.language.find((option) => option.value === 'fr')?.value;
+    return options.language.find((option) => option.value === 'fr')?.value;
   }
 
   @action
@@ -63,15 +63,15 @@ export default class PopinPDFEntries extends Component {
             </PixInput>
           </div>
           <div>
-            <PixSelect
+            <Select
               @value={{this.selectedLanguage}}
-              @options={{this.options.language}}
+              @options={{options.language}}
               @onChange={{this.setLanguage}}
               @hideDefaultOption={{true}}
-              class="field"
+              @className="field"
             >
               <:label>{{t "target_profile.pdf_export.field.language"}}</:label>
-            </PixSelect>
+            </Select>
           </div>
         </form>
       </:content>

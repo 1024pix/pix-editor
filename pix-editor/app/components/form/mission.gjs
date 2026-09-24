@@ -1,6 +1,5 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
 import { A } from '@ember/array';
 import { on } from '@ember/modifier';
@@ -10,141 +9,11 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import not from 'ember-truth-helpers/helpers/not';
 import Card from 'pixeditor/components/card';
+import Select from 'pixeditor/components/field/select';
 
 import MissionSummary from '../../models/mission-summary';
 
 export default class MissionForm extends Component {
-  <template>
-    <form {{on "submit" this.onSubmitClicked}} class="new-mission-form">
-      <Card class="new-mission-form__card" @title={{@submitButtonText}}>
-        <PixInput
-          @id="mission-name"
-          @value={{this.name.value}}
-          @errorMessage="{{this.name.errorMessage}}"
-          @requiredLabel="{{this.name.errorMessage}}"
-          @validationStatus={{this.name.state}}
-          {{on "focusout" this.validateName}}
-          {{on "keyup" this.updateName}}
-        >
-          <:label>Nom de la mission</:label>
-        </PixInput>
-        <PixInput @id="mission-card-image-url" @value={{this.cardImageUrl}} {{on "change" this.updateCardImageUrl}}>
-          <:label>URL de l'image de la carte</:label>
-        </PixInput>
-        <PixSelect
-          @options={{this.statusOptions}}
-          @value={{this.selectedStatus}}
-          @hideDefaultOption={{true}}
-          @onChange={{this.changeStatus}}
-          @requiredLabel="{{this.name.errorMessage}}"
-        >
-          <:label>Statut</:label>
-        </PixSelect>
-
-        <PixSelect
-          class="new-mission-form__select"
-          @hideDefaultOption={{true}}
-          @options={{this.competencesOptions}}
-          @onChange={{this.changeCompetence}}
-          @value={{this.selectedCompetenceId.value}}
-          @requiredLabel="champ requis"
-          @errorMessage="{{this.selectedCompetenceId.errorMessage}}"
-          {{on "focusout" this.validateCompetence}}
-        >
-          <:label>Compétence</:label>
-        </PixSelect>
-
-        <PixInput
-          @id="thematic-ids"
-          @value={{this.thematicIds.value}}
-          @errorMessage="{{this.thematicIds.errorMessage}}"
-          @validationStatus={{this.thematicIds.state}}
-          {{on "focusout" this.validateThematicIds}}
-          {{on "keyup" this.updateThematicIds}}
-        >
-          <:label>Liste des thématiques</:label>
-        </PixInput>
-
-        <label class="new-mission-form__label-text-area" for="mission-learning-objectives">Objectifs d'apprentissage</label>
-        <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de début de mission.</p>
-        <PixTextarea
-          @id="mission-learning-objectives"
-          @value={{this.learningObjectives}}
-          {{on "change" this.updateLearningObjectives}}
-        />
-
-        <label class="new-mission-form__label-text-area" for="mission-validated-objectives">Objectifs validés dans la
-          mission</label>
-        <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de fin de mission.<br />Attention,
-          pour le moment, cet élément n'est utilisé que pour de l’affichage dans Pix Junior</p>
-        <PixTextarea
-          @id="mission-validated-objectives"
-          @value={{this.validatedObjectives}}
-          {{on "change" this.updateValidatedObjectives}}
-        />
-
-        <section class="new-mission-form__mission-introduction">
-          <h2 class="mission-introduction__title">Introduction à la mission</h2>
-          <p class="mission-introduction__description">Ce média s’affichera avant de démarrer la mission, avant la
-            première épreuve.
-            <br />
-            Lorsqu'une URL est précisée, elle doit être obligatoirement accompagnée du type de média.
-            <br />
-            Si le média est de type image, un texte alternatif doit être renseigné.</p>
-
-          <label class="new-mission-form__label-text-area" for="mission-introduction-media-url">URL du média
-            d'introduction de la mission</label>
-          <PixInput
-            @id="mission-introduction-media-url"
-            @value={{this.introductionMediaUrl}}
-            {{on "change" this.updateIntroductionMediaUrl}}
-          />
-
-          <PixSelect
-            @options={{this.typeOptions}}
-            @onChange={{this.updateIntroductionMediaType}}
-            @value={{this.introductionMediaType}}
-            @placeholder="-- Sélectionner un type --"
-          >
-            <:label>Type de média</:label>
-          </PixSelect>
-
-          <label class="new-mission-form__label-text-area" for="mission-introduction-media-alt">Texte alternatif pour le
-            média d'introduction</label>
-          <PixInput
-            @id="mission-introduction-media-alt"
-            @value={{this.introductionMediaAlt}}
-            {{on "change" this.updateIntroductionMediaAlt}}
-          />
-        </section>
-
-        <label class="new-mission-form__label-text-area" for="mission-documentation-url">URL de la documentation de la
-          mission</label>
-        <PixInput
-          @id="mission-documentation-url"
-          @value={{this.documentationUrl}}
-          {{on "change" this.updateDocumentationUrl}}
-        />
-
-      </Card>
-
-      <div class="form-error">
-        {{#each this.errorMessages as |errorMessage|}}
-          {{errorMessage}}<br />
-        {{/each}}
-      </div>
-
-      <div class="page-actions">
-        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{@onFormCancelled}}>
-          Annuler
-        </PixButton>
-        <PixButton @type="submit" @isDisabled={{not this.isFormValid}} @isLoading={{this.isSubmitting}}>
-          {{@submitButtonText}}
-        </PixButton>
-      </div>
-    </form>
-  </template>
-
   @service currentData;
   @service store;
 
@@ -331,6 +200,143 @@ export default class MissionForm extends Component {
   updateValidatedObjectives(event) {
     this.validatedObjectives = event.target.value;
   }
+
+  // TRADUCTIONS PIXSELECT
+  selectTranslationList = {
+    mediaType: { placeholder: '-- Sélectionner un type --' },
+    status: { requiredLabel: this.name.errorMessage },
+  };
+
+  <template>
+    <form {{on "submit" this.onSubmitClicked}} class="new-mission-form">
+      <Card class="new-mission-form__card" @title={{@submitButtonText}}>
+        <PixInput
+          @id="mission-name"
+          @value={{this.name.value}}
+          @errorMessage="{{this.name.errorMessage}}"
+          @requiredLabel="{{this.name.errorMessage}}"
+          @validationStatus={{this.name.state}}
+          {{on "focusout" this.validateName}}
+          {{on "keyup" this.updateName}}
+        >
+          <:label>Nom de la mission</:label>
+        </PixInput>
+        <PixInput @id="mission-card-image-url" @value={{this.cardImageUrl}} {{on "change" this.updateCardImageUrl}}>
+          <:label>URL de l'image de la carte</:label>
+        </PixInput>
+        <Select
+          @options={{this.statusOptions}}
+          @value={{this.selectedStatus}}
+          @hideDefaultOption={{true}}
+          @onChange={{this.changeStatus}}
+          @texts={{this.selectTranslationList}}
+        >
+          <:label>Statut</:label>
+        </Select>
+
+        <Select
+          class="new-mission-form__select"
+          @hideDefaultOption={{true}}
+          @options={{this.competencesOptions}}
+          @onChange={{this.changeCompetence}}
+          @value={{this.selectedCompetenceId.value}}
+          @required={{true}}
+          @errorMessage="{{this.selectedCompetenceId.errorMessage}}"
+          {{on "focusout" this.validateCompetence}}
+        >
+          <:label>Compétence</:label>
+        </Select>
+
+        <PixInput
+          @id="thematic-ids"
+          @value={{this.thematicIds.value}}
+          @errorMessage="{{this.thematicIds.errorMessage}}"
+          @validationStatus={{this.thematicIds.state}}
+          {{on "focusout" this.validateThematicIds}}
+          {{on "keyup" this.updateThematicIds}}
+        >
+          <:label>Liste des thématiques</:label>
+        </PixInput>
+
+        <label class="new-mission-form__label-text-area" for="mission-learning-objectives">Objectifs d'apprentissage</label>
+        <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de début de mission.</p>
+        <PixTextarea
+          @id="mission-learning-objectives"
+          @value={{this.learningObjectives}}
+          {{on "change" this.updateLearningObjectives}}
+        />
+
+        <label class="new-mission-form__label-text-area" for="mission-validated-objectives">Objectifs validés dans la
+          mission</label>
+        <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de fin de mission.<br />Attention,
+          pour le moment, cet élément n'est utilisé que pour de l’affichage dans Pix Junior</p>
+        <PixTextarea
+          @id="mission-validated-objectives"
+          @value={{this.validatedObjectives}}
+          {{on "change" this.updateValidatedObjectives}}
+        />
+
+        <section class="new-mission-form__mission-introduction">
+          <h2 class="mission-introduction__title">Introduction à la mission</h2>
+          <p class="mission-introduction__description">Ce média s’affichera avant de démarrer la mission, avant la
+            première épreuve.
+            <br />
+            Lorsqu'une URL est précisée, elle doit être obligatoirement accompagnée du type de média.
+            <br />
+            Si le média est de type image, un texte alternatif doit être renseigné.</p>
+
+          <label class="new-mission-form__label-text-area" for="mission-introduction-media-url">URL du média
+            d'introduction de la mission</label>
+          <PixInput
+            @id="mission-introduction-media-url"
+            @value={{this.introductionMediaUrl}}
+            {{on "change" this.updateIntroductionMediaUrl}}
+          />
+
+          <Select
+            @options={{this.typeOptions}}
+            @onChange={{this.updateIntroductionMediaType}}
+            @texts={{this.selectTranslationList}}
+            @value={{this.introductionMediaType}}
+          >
+            <:label>Type de média</:label>
+          </Select>
+
+          <label class="new-mission-form__label-text-area" for="mission-introduction-media-alt">Texte alternatif pour le
+            média d'introduction</label>
+          <PixInput
+            @id="mission-introduction-media-alt"
+            @value={{this.introductionMediaAlt}}
+            {{on "change" this.updateIntroductionMediaAlt}}
+          />
+        </section>
+
+        <label class="new-mission-form__label-text-area" for="mission-documentation-url">URL de la documentation de la
+          mission</label>
+        <PixInput
+          @id="mission-documentation-url"
+          @value={{this.documentationUrl}}
+          {{on "change" this.updateDocumentationUrl}}
+        />
+
+      </Card>
+
+      <div class="form-error">
+        {{#each this.errorMessages as |errorMessage|}}
+          {{errorMessage}}<br />
+        {{/each}}
+      </div>
+
+      <div class="page-actions">
+        <PixButton @backgroundColor="transparent-light" @isBorderVisible={{true}} @triggerAction={{@onFormCancelled}}>
+          Annuler
+        </PixButton>
+        <PixButton @type="submit" @isDisabled={{not this.isFormValid}} @isLoading={{this.isSubmitting}}>
+          {{@submitButtonText}}
+        </PixButton>
+      </div>
+    </form>
+  </template>
 }
 
 const STATES = {

@@ -1,10 +1,10 @@
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { Textarea } from '@ember/component';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { not } from 'ember-truth-helpers';
+import Select from 'pixeditor/components/field/select';
 
 const statusList = [
   {
@@ -21,6 +21,11 @@ const statusList = [
   },
 ];
 
+// TRADUCTIONS PIXSELECT
+const selectTranslationList = {
+  placeholder: 'Choisir un statut',
+};
+
 export default class NoteForm extends Component {
   @tracked status;
 
@@ -36,6 +41,12 @@ export default class NoteForm extends Component {
     return null;
   }
 
+  get texts() {
+    return {
+      placeholder: 'Choisir un statut',
+    };
+  }
+
   @action
   setStatus(selectedValue) {
     const selectedStatus = statusList.find((status) => status.value === selectedValue);
@@ -47,18 +58,16 @@ export default class NoteForm extends Component {
     <div class="ui content">
       <form class="ui form">
         <div class="field">
-          <PixSelect
-            @placeholder="Choisir un statut"
+          <Select
             @hideDefaultOption={{true}}
             @options={{statusList}}
             @onChange={{this.setStatus}}
             @value={{this.currentStatus}}
             @isDisabled={{not @edition}}
+            @texts={{selectTranslationList}}
           >
-            <:label>
-              Statut
-            </:label>
-          </PixSelect>
+            <:label>Statut</:label>
+          </Select>
         </div>
         <div class="field {{if @edition '' 'disabled'}}">
           <label for="note">Texte</label>

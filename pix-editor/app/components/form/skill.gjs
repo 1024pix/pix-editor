@@ -1,12 +1,11 @@
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { not } from 'ember-truth-helpers';
-
-import Input from '../field/input';
-import Quality from '../field/quality';
-import Textarea from '../field/textarea';
-import Tutorials from '../field/tutorials';
+import Input from 'pixeditor/components/field/input';
+import Quality from 'pixeditor/components/field/quality';
+import Select from 'pixeditor/components/field/select';
+import Textarea from 'pixeditor/components/field/textarea';
+import Tutorials from 'pixeditor/components/field/tutorials';
 
 const descriptionStatusList = [
   {
@@ -75,7 +74,7 @@ export default class SkillForm extends Component {
   <template>
     <form action="" class="ui form">
       <Textarea @title="Description" @value={{@skill.description}} @edition={{@edition}} @id="skill-description" />
-      <PixSelect
+      <Select
         @id="select-description-status"
         @value={{@skill.descriptionStatus}}
         @options={{descriptionStatusList}}
@@ -84,10 +83,10 @@ export default class SkillForm extends Component {
         @hideDefaultOption={{true}}
       >
         <:label>Statut de la description</:label>
-      </PixSelect>
+      </Select>
       <Textarea @title="Indice (fr)" @value={{@skill.clue}} @edition={{@edition}} @id="skill-clue-fr" />
       <Textarea @title="Indice (en)" @value={{@skill.clueEn}} @edition={{@edition}} @id="skill-clue-en" />
-      <PixSelect
+      <Select
         @id="select-clue-status"
         @value={{@skill.clueStatus}}
         @options={{clueStatusList}}
@@ -96,7 +95,7 @@ export default class SkillForm extends Component {
         @hideDefaultOption={{true}}
       >
         <:label>Statut de l'indice</:label>
-      </PixSelect>
+      </Select>
       {{#if @skill.productionPrototype}}
         <Quality @title="Qualité" @challenge={{@skill.productionPrototype}} @edition={{@edition}} />
       {{/if}}
@@ -118,7 +117,7 @@ export default class SkillForm extends Component {
         @addTutorial={{this.addTutorial}}
         @removeTutorial={{this.removeTutorial}}
       />
-      <PixSelect
+      <Select
         @id="select-i18n-option"
         @value={{@skill.i18n}}
         @options={{i18nOptionList}}
@@ -127,7 +126,7 @@ export default class SkillForm extends Component {
         @hideDefaultOption={{true}}
       >
         <:label>Internationalisation</:label>
-      </PixSelect>
+      </Select>
       {{#unless @edition}}
         <Input @value={{@skill.pixId}} @title="Id" @edition={{false}} />
       {{/unless}}

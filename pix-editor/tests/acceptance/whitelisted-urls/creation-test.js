@@ -77,7 +77,7 @@ module('Acceptance | Whitelisted URLs | Creation', function (hooks) {
     await clickByName('Ajouter une nouvelle URL');
 
     // when
-    await clickByName("Type de comparaison d'URL");
+    await clickByName("Type de comparaison d'URL *");
     await clickByText('Commence par');
     await fillByLabel('URL à ne pas analyser', 'https://example.org');
     await fillByLabel('Nom des acquis concernés, séparés par des virgules', '@test1,@test2');

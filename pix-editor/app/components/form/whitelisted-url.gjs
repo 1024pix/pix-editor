@@ -1,6 +1,5 @@
 import PixButton from '@1024pix/pix-ui/components/pix-button';
 import PixInput from '@1024pix/pix-ui/components/pix-input';
-import PixSelect from '@1024pix/pix-ui/components/pix-select';
 import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
 import { A } from '@ember/array';
 import { on } from '@ember/modifier';
@@ -9,84 +8,9 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import Card from 'pixeditor/components/card';
+import Select from 'pixeditor/components/field/select';
 
 export default class WhitelistedUrlForm extends Component {
-  <template>
-    <form {{on "submit" this.onSubmitClicked}} class="form">
-      <Card class="new-whitelisted-url-form-field" @title="1. Détails de l'URL">
-        <div class="new-whitelisted-url-details">
-          <PixSelect
-            @id="whitelisted-url-check-type"
-            @errorMessage={{this.checkType.errorMessage}}
-            @requiredLabel={{this.checkType.errorMessage}}
-            @validationStatus={{this.checkType.state}}
-            @value={{this.checkType.value}}
-            @options={{this.checkTypeOptions}}
-            @hideDefaultOption={{true}}
-            @onChange={{this.updateCheckType}}
-          >
-            <:label>Type de comparaison d'URL</:label>
-          </PixSelect>
-          <PixInput
-            @id="whitelisted-url-link"
-            @errorMessage={{this.url.errorMessage}}
-            @requiredLabel={{this.url.errorMessage}}
-            @validationStatus={{this.url.state}}
-            @value={{this.url.value}}
-            placeholder="https://example.org"
-            {{on "input" this.updateUrl}}
-          >
-            <:label>URL à ne pas analyser</:label>
-          </PixInput>
-        </div>
-      </Card>
-      <Card class="new-whitelisted-url-form-field" @title="2. Informations additionnelles">
-        <PixInput
-          @id="whitelisted-url-related-skill-names"
-          @errorMessage={{this.relatedSkillNames.errorMessage}}
-          @validationStatus={{this.relatedSkillNames.state}}
-          @value={{this.relatedSkillNames.value}}
-          placeholder="@exemple1,@test3, ..."
-          {{on "input" this.updateRelatedSkillNames}}
-        >
-          <:label>Nom des acquis concernés, séparés par des virgules</:label>
-        </PixInput>
-        <PixTextarea
-          @id="whitelisted-url-comment"
-          @maxlength="1024"
-          rows="5"
-          @value={{this.comment.value}}
-          {{on "input" this.updateComment}}
-        >
-          <:label>Commentaire</:label>
-        </PixTextarea>
-      </Card>
-      <div class="form-error">
-        {{#each this.errorMessages as |errorMessage|}}
-          {{errorMessage}}<br />
-        {{/each}}
-      </div>
-      <div class="page-actions">
-        <PixButton
-          @variant="secondary"
-          @backgroundColor="transparent-light"
-          @isBorderVisible={{true}}
-          @triggerAction={{@onFormCancelled}}
-        >
-          {{@cancelButtonText}}
-        </PixButton>
-        <PixButton
-          @backgroundColor="blue"
-          @type="submit"
-          @isDisabled={{this.isFormInvalid}}
-          @isLoading={{this.isSubmitting}}
-        >
-          {{@submitButtonText}}
-        </PixButton>
-      </div>
-    </form>
-  </template>
-
   @service store;
 
   @tracked url = new UrlField();
@@ -184,6 +108,81 @@ export default class WhitelistedUrlForm extends Component {
     this.isFormInvalid =
       !this.url.isValid || !this.relatedSkillNames.isValid || !this.checkType.isValid || !this.comment.isValid;
   }
+
+  <template>
+    <form {{on "submit" this.onSubmitClicked}} class="form">
+      <Card class="new-whitelisted-url-form-field" @title="1. Détails de l'URL">
+        <div class="new-whitelisted-url-details">
+          <Select
+            @id="whitelisted-url-check-type"
+            @errorMessage={{this.checkType.errorMessage}}
+            @required={{true}}
+            @value={{this.checkType.value}}
+            @options={{this.checkTypeOptions}}
+            @hideDefaultOption={{true}}
+            @onChange={{this.updateCheckType}}
+          >
+            <:label>Type de comparaison d'URL</:label>
+          </Select>
+          <PixInput
+            @id="whitelisted-url-link"
+            @errorMessage={{this.url.errorMessage}}
+            @requiredLabel={{this.url.errorMessage}}
+            @validationStatus={{this.url.state}}
+            @value={{this.url.value}}
+            placeholder="https://example.org"
+            {{on "input" this.updateUrl}}
+          >
+            <:label>URL à ne pas analyser</:label>
+          </PixInput>
+        </div>
+      </Card>
+      <Card class="new-whitelisted-url-form-field" @title="2. Informations additionnelles">
+        <PixInput
+          @id="whitelisted-url-related-skill-names"
+          @errorMessage={{this.relatedSkillNames.errorMessage}}
+          @validationStatus={{this.relatedSkillNames.state}}
+          @value={{this.relatedSkillNames.value}}
+          placeholder="@exemple1,@test3, ..."
+          {{on "input" this.updateRelatedSkillNames}}
+        >
+          <:label>Nom des acquis concernés, séparés par des virgules</:label>
+        </PixInput>
+        <PixTextarea
+          @id="whitelisted-url-comment"
+          @maxlength="1024"
+          rows="5"
+          @value={{this.comment.value}}
+          {{on "input" this.updateComment}}
+        >
+          <:label>Commentaire</:label>
+        </PixTextarea>
+      </Card>
+      <div class="form-error">
+        {{#each this.errorMessages as |errorMessage|}}
+          {{errorMessage}}<br />
+        {{/each}}
+      </div>
+      <div class="page-actions">
+        <PixButton
+          @variant="secondary"
+          @backgroundColor="transparent-light"
+          @isBorderVisible={{true}}
+          @triggerAction={{@onFormCancelled}}
+        >
+          {{@cancelButtonText}}
+        </PixButton>
+        <PixButton
+          @backgroundColor="blue"
+          @type="submit"
+          @isDisabled={{this.isFormInvalid}}
+          @isLoading={{this.isSubmitting}}
+        >
+          {{@submitButtonText}}
+        </PixButton>
+      </div>
+    </form>
+  </template>
 }
 
 class FormField {
