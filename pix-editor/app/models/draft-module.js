@@ -15,7 +15,7 @@ export default class DraftModule extends BaseModule {
   }
 
   get displayedValidationErrors() {
-    return (this.validationErrors ?? []).filter((error) => !error.isSchemaError);
+    return this.validationErrors ?? [];
   }
 
   get moduleId() {

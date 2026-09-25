@@ -89,69 +89,17 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
   });
 
   module('errors count', function () {
-    test('it sums the validation and editor errors', async function (assert) {
+    test('it counts the validation errors', async function (assert) {
       // given
-      const validationErrors = [{ message: 'Le slug est mal formatté' }];
-      const editorErrors = [
-        { line: 3, message: 'Unexpected token' },
-        { line: 7, message: 'Missing comma' },
-      ];
+      const validationErrors = [{ message: 'Le slug est mal formatté' }, { message: 'Missing comma' }];
 
       // when
       const screen = await render(
-        <template>
-          <ModuleValidationErrors @validationErrors={{validationErrors}} @editorErrors={{editorErrors}} />
-        </template>,
+        <template><ModuleValidationErrors @validationErrors={{validationErrors}} /></template>,
       );
 
       // then
-      assert.dom(screen.getByText(t('modules.components.validation-errors.title', { count: 3 }))).exists();
-    });
-  });
-
-  module('when there are errors from the JSON editor', function () {
-    test('it displays each of them with their line number', async function (assert) {
-      // given
-      const editorErrors = [
-        { line: 3, message: 'Unexpected token' },
-        { line: 7, message: 'Missing comma' },
-      ];
-
-      // when
-      const screen = await render(<template><ModuleValidationErrors @editorErrors={{editorErrors}} /></template>);
-      const summary = screen.getByRole('group').querySelector('summary');
-      await click(summary);
-
-      // then
-      const items = screen.getAllByRole('listitem');
-      assert.dom(items[0]).containsText(t('modules.components.validation-errors.editor-error-line', { line: 3 }));
-      assert.dom(items[0]).containsText('Unexpected token');
-      assert.dom(items[1]).containsText(t('modules.components.validation-errors.editor-error-line', { line: 7 }));
-      assert.dom(items[1]).containsText('Missing comma');
-    });
-  });
-
-  module('when there are both editor and validation errors', function () {
-    test('it merges them into a single list', async function (assert) {
-      // given
-      const validationErrors = [{ message: "Problème de duplications d'Ids" }];
-      const editorErrors = [{ line: 3, message: 'Unexpected token' }];
-
-      // when
-      const screen = await render(
-        <template>
-          <ModuleValidationErrors @validationErrors={{validationErrors}} @editorErrors={{editorErrors}} />
-        </template>,
-      );
-
-      // then
-      const items = screen.getAllByRole('listitem');
-      assert.strictEqual(items.length, 2);
-      assert.dom(items[0]).hasText("Problème de duplications d'Ids");
-      assert.dom(items[0]).doesNotContainText(t('modules.components.validation-errors.editor-error-line', { line: 3 }));
-      assert
-        .dom(items[1])
-        .hasText(`${t('modules.components.validation-errors.editor-error-line', { line: 3 })} Unexpected token `);
+      assert.dom(screen.getByText(t('modules.components.validation-errors.title', { count: 2 }))).exists();
     });
   });
 });
