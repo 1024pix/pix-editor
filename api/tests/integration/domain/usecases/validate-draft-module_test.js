@@ -282,6 +282,53 @@ describe('Integration | Usecases | Validate draft module', () => {
     ]);
   });
 
+  it('stores the HTML validation errors along with the schema errors', async () => {
+    // given
+    const sections = [
+      {
+        id: 'cfaefec9-e185-43b8-8258-e8beff6dd56b',
+        type: 'blank',
+        grains: [
+          {
+            id: '9de10c46-df0e-41f5-a709-81637f0d5cc3',
+            type: 'lesson',
+            title: 'Grain avec du style',
+            components: [
+              {
+                type: 'element',
+                element: {
+                  id: 'd5e369ec-2a5e-4692-ac46-5be5a49f2acd',
+                  type: 'text',
+                  tag: ' ',
+                  content: '<style>p { color: indianred; }</style><p>Stylé !</p>',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    const draftModuleToInsert = domainBuilder.buildDraftModule({ slug: 'not valid slug', sections });
+    const { id } = databaseBuilder.factory.buildDraftModule(draftModuleToInsert);
+    await databaseBuilder.commit();
+
+    const draftModule = await dependencies.draftModuleRepository.getById({ id });
+
+    // when
+    const result = await validateDraftModule(draftModule, dependencies);
+
+    // then
+    expect(result.hasBeenValidated).to.equal(false);
+    expect(result.validationErrors).to.have.lengthOf(2);
+    expect(result.validationErrors[0]).to.deep.equal({
+      isSchemaError: true,
+      message: '"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/',
+    });
+    expect(result.validationErrors[1].isSchemaError).to.equal(false);
+    expect(result.validationErrors[1].message).to.contain('Chemin : sections[0].grains[0].components[0].element.content');
+    expect(result.validationErrors[1].message).to.contain('Error(no-style-tag)');
+  });
+
   it('marks the draft module as not validated when it introduces duplicate ids among existing modules', async () => {
     // given
     const duplicateIds = [

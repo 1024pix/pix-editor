@@ -58,13 +58,13 @@ describe('Unit | Application | Modules | Validation | zod-issues-to-joi-details'
     expect(await messagesOf(schema, 0)).to.deep.equal(['"value" doit être supérieur ou égal à 1']);
   });
 
-  it('should only report external validations when there is no schema error, like Joi', async function() {
+  it('should report external validations along with schema errors', async function() {
     const schema = z.strictObject({
       id: uuidSchema,
       content: htmlSchema(),
     });
 
-    expect(await messagesOf(schema, { id: 'not-a-uuid', content: '<style>p {}</style>' })).to.deep.equal(['"id" doit être un GUID valide']);
+    expect(await messagesOf(schema, { id: 'not-a-uuid', content: '<style>p {}</style>' })).to.deep.equal(['"id" doit être un GUID valide', 'htmlvalidationerror']);
     expect(await messagesOf(schema, { id: '3f6b0b3e-5b3f-4c1a-9a4e-2f1e8c3d4b5a', content: '<style>p {}</style>' })).to.deep.equal(['htmlvalidationerror']);
   });
 

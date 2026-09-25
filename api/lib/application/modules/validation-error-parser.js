@@ -1,6 +1,6 @@
 export const validationErrorParser = {
   // Set isSchemaError = true for JSON-Schema constraints (type/required/enum/pattern/min-max),
-  // Set isSchemaError = false for errors raised from external validators (HTML validation, grain business rules)
+  // Set isSchemaError = false for errors raised from external validators (HTML validation), not checked by the editor
   toStructuredErrors(error) {
     return error.details.map((errorDetail) => {
       if (errorDetail.type !== 'external') {

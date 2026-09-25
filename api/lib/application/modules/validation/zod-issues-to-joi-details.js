@@ -51,13 +51,11 @@ const MESSAGES = {
 /**
  * Converts Zod issues to Joi-like error details (`{ type, message, path, context }`), with the same
  * French messages as `joi-fr-error-messages.js`, so that stored validation errors stay unchanged.
- * Like Joi, external validations (`type: 'external'`) are only reported when there is no schema error.
+ * Unlike Joi, external validations (HTML validation, `type: 'external'`) are reported along with the schema errors.
  * @param {import('zod').core.$ZodIssue[]} issues - issues of a parse run with `reportInput: true`
  */
 export function zodIssuesToJoiDetails(issues) {
-  const details = issues.flatMap((issue) => toDetails(issue));
-  const schemaDetails = withoutRulesOfInvalidBaseTypes(details.filter(({ type }) => type !== 'external'));
-  return schemaDetails.length > 0 ? schemaDetails : details;
+  return withoutRulesOfInvalidBaseTypes(issues.flatMap((issue) => toDetails(issue)));
 }
 
 // Joi does not run the rules of a value which base type is invalid, is missing or is an empty string
