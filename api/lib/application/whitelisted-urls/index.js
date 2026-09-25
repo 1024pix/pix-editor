@@ -53,7 +53,7 @@ export async function register(server) {
             comment: attributes['comment'] ?? null,
             checkType: attributes['check-type'] ?? null,
           };
-          const existingWhitelistedUrls = await whitelistedUrlRepository.list();
+          const existingWhitelistedUrls = await whitelistedUrlRepository.listActive();
           WhitelistedUrl.canCreate(creationCommand, authenticatedUser, existingWhitelistedUrls);
           const whitelistedUrlToCreate = WhitelistedUrl.create(creationCommand, authenticatedUser);
           const id = await whitelistedUrlRepository.save(whitelistedUrlToCreate);
@@ -82,7 +82,7 @@ export async function register(server) {
           if (!whitelistedUrlToUpdate) {
             throw new NotFoundWhitelistedUrlError(`L'URL d'id ${whitelistedUrlId} n'existe pas`);
           }
-          const existingWhitelistedUrls = await whitelistedUrlRepository.list();
+          const existingWhitelistedUrls = await whitelistedUrlRepository.listActive();
           whitelistedUrlToUpdate.canUpdate(updateCommand, authenticatedUser, existingWhitelistedUrls);
           whitelistedUrlToUpdate.update(updateCommand, authenticatedUser);
           await whitelistedUrlRepository.save(whitelistedUrlToUpdate);

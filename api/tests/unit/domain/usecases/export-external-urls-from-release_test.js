@@ -140,7 +140,7 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
           deletedAt: new Date('2020-01-01'),
         }),
       ];
-      whitelistedUrlRepository = { list: vi.fn().mockResolvedValue(whitelistedUrls) };
+      whitelistedUrlRepository = { listActive: vi.fn().mockResolvedValue(whitelistedUrls) };
       urlRepository = { exportExternalUrls: vi.fn() };
     });
 

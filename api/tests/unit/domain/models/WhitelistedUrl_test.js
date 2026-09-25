@@ -151,11 +151,6 @@ describe('Unit | Domain | WhitelistedUrl', () => {
             url: 'https://www.painperdu.com',
             deletedAt: null,
           }),
-          domainBuilder.buildWhitelistedUrl({
-            id: 456,
-            url: 'https://www.brioche.com',
-            deletedAt: new Date('2020-01-01'),
-          }),
         ];
         const creationCommand1 = {
           url: 'https://www.brioche.com',
@@ -441,11 +436,6 @@ describe('Unit | Domain | WhitelistedUrl', () => {
             id: 456,
             url: 'https://www.painperdu.com',
             deletedAt: null,
-          }),
-          domainBuilder.buildWhitelistedUrl({
-            id: 789,
-            url: 'https://www.brioche.com',
-            deletedAt: new Date('2020-01-01'),
           }),
           whitelistedUrlToUpdate,
         ];

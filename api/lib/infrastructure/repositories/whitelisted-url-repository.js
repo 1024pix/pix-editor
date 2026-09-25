@@ -17,9 +17,9 @@ function buildBaseReadQuery(knexConn) {
   ]);
 }
 
-export async function list() {
+export async function listActive() {
   const knexConn = DomainTransaction.getConnection();
-  const whitelistedUrlDtos = await buildBaseReadQuery(knexConn).orderBy('url');
+  const whitelistedUrlDtos = await buildBaseReadQuery(knexConn).whereNull('deletedAt').orderBy('url');
 
   return toDomainList(whitelistedUrlDtos);
 }

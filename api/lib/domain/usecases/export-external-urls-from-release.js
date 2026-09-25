@@ -11,10 +11,9 @@ export async function exportExternalUrlsFromRelease({
   const { operativeChallenges } = release;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlsFromChallenges = findUrlsFromChallenges(operativeChallenges, localizedChallengesById, release, UrlUtils);
-  const whitelistedUrls = await whitelistedUrlRepository.list();
-  const activeWhitelistedUrls = whitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive);
+  const whitelistedUrls = await whitelistedUrlRepository.listActive();
   const finalUrlList = urlsFromChallenges.filter(
-    ({ url }) => !activeWhitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
+    ({ url }) => !whitelistedUrls.some((whitelistedUrl) => whitelistedUrl.matches(url)),
   );
   const dataToUpload = finalUrlList.map(({ origin, url, locales, status, tube }) => [
     origin,
