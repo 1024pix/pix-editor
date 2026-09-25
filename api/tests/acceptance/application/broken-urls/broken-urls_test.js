@@ -11,7 +11,6 @@ describe('Acceptance | Controller | broken-urls', () => {
       externalUrl1,
       externalUrl2,
       externalUrl3,
-      notAllowedUrl,
       notFoundUrl,
       server;
 
@@ -48,10 +47,20 @@ describe('Acceptance | Controller | broken-urls', () => {
         frameworkNames: [framework.name],
         ...savedBrokenUrl,
       });
-      notAllowedUrl = domainBuilder.buildBrokenUrl({
+      // filtered out by whitelisted url
+      domainBuilder.buildBrokenUrl({
         frameworkNames: [framework.name],
         ...savedNotAllowedUrl,
       });
+
+      databaseBuilder.factory.buildWhitelistedUrl({
+        checkType: 'exact_match',
+        createdBy: editorUser.id,
+        latestUpdatedBy: editorUser.id,
+        relatedSkillNames: '@chocolat3',
+        url: externalUrl3.url,
+      });
+
       await databaseBuilder.commit();
       server = await createServer();
     });
@@ -81,7 +90,7 @@ describe('Acceptance | Controller | broken-urls', () => {
       });
     });
 
-    it('should return the broken url list', async () => {
+    it('should return the broken url list filtered by whitelisted urls', async () => {
       // when
       const response = await server.inject({
         method: 'GET',
@@ -122,28 +131,6 @@ describe('Acceptance | Controller | broken-urls', () => {
               'status-code': brokenUrl.statusCode,
               url: brokenUrl.url,
               frameworks: brokenUrl.frameworkNames,
-            },
-            type: 'broken-urls',
-            relationships: {
-              'localized-challenges': {
-                data: [
-                  {
-                    id: challenge.id,
-                    type: 'localizedChallenges',
-                  },
-                ],
-              },
-              skills: { data: [] },
-              tutorials: { data: [] },
-            },
-          },
-          {
-            id: notAllowedUrl.id,
-            attributes: {
-              'error-message': notAllowedUrl.errorMessage,
-              'status-code': notAllowedUrl.statusCode,
-              url: notAllowedUrl.url,
-              frameworks: notAllowedUrl.frameworkNames,
             },
             type: 'broken-urls',
             relationships: {
