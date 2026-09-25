@@ -17,8 +17,6 @@
   }
 
   .pix-select__dropdown {
-    // Prevents weird layout behaviour :(
-    transform: translate(0, 54px) !important;
     min-width: auto;
   }
 
