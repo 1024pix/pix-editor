@@ -6,9 +6,9 @@ import WhitelistedUrl from 'pixeditor/components/form/whitelisted-url';
   <main class="page-body">
     <section class="page-section">
       <WhitelistedUrl
-        @initialUrl=""
-        @initialComment=""
-        @initialRelatedSkillNames=""
+        @initialUrl={{@controller.url}}
+        @initialComment={{@controller.comment}}
+        @initialRelatedSkillNames={{@controller.skillNames}}
         @initialCheckType=""
         @cancelButtonText="Annuler"
         @onFormCancelled={{@controller.goBackToList}}

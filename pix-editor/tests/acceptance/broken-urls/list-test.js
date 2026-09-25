@@ -9,7 +9,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  let localizedChallenge, skill, skill2, competence, tutorial;
+  let brokenUrl1, localizedChallenge, skill, skill2, competence, tutorial;
 
   hooks.beforeEach(function () {
     this.server.create('config', 'default');
@@ -31,7 +31,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
     });
     skill = this.server.create('skill', {
       id: 'skillId1',
-      name: '@lancerDeCouteau',
+      name: '@lancerDeCouteau2',
       challengeIds: [challenge.id],
       status: 'actif',
       level: 1,
@@ -39,7 +39,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
     });
     skill2 = this.server.create('skill', {
       id: 'skillId2',
-      name: '@jongleAvecDesHaches',
+      name: '@jongleAvecDesHaches3',
       challengeIds: [challenge2.id],
       status: 'actif',
       level: 1,
@@ -101,7 +101,7 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       tutorialIds: [tutorial.id],
       frameworks: ['recFramework1', 'recFramework2'],
     });
-    this.server.create('broken-url', {
+    brokenUrl1 = this.server.create('broken-url', {
       id: 2,
       url: 'http://chocolat-fromage.org',
       errorMessage: 'Non',
@@ -163,6 +163,21 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       currentURL(),
       `/competence/${competence.id}/prototypes/${localizedChallenge.challengeId}/localized/${localizedChallenge.id}?view=production`,
     );
+  });
+
+  test('should redirect to whitelisted url creation form when clicking ignore button', async function (assert) {
+    // when
+    const screen = await visit('/broken-urls/challenges');
+    const ignoreButton = screen.getAllByRole('button', { name: 'Ignorer cette URL' })[0];
+    await click(ignoreButton);
+
+    // then
+    assert.ok(currentURL().startsWith('/whitelisted-urls/new'));
+    assert.dom(screen.getByRole('textbox', { name: 'URL à ne pas analyser' })).hasValue(brokenUrl1.url);
+    assert
+      .dom(screen.getByRole('textbox', { name: 'Nom des acquis concernés, séparés par des virgules' }))
+      .hasValue(skill.name);
+    assert.dom(screen.getByRole('textbox', { name: 'Commentaire' })).hasValue('Faux positif (moulinette)');
   });
 
   module('filters', function () {

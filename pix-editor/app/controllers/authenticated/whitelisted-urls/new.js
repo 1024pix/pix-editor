@@ -1,11 +1,17 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class NewWhitelistedUrlController extends Controller {
   @service store;
   @service router;
   @service notifications;
+
+  queryParams = ['url', 'skillNames', 'comment'];
+  @tracked url = '';
+  @tracked skillNames = '';
+  @tracked comment = '';
 
   @action
   async createWhitelistedUrl(formData) {

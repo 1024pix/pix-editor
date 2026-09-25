@@ -16,5 +16,9 @@ import BrokenUrlTabs from 'pixeditor/components/broken-urls/tabs';
     @showTutorialsFilters={{true}}
     @frameworkFilterValues={{@controller.frameworks}}
   />
-  <BrokenUrlList @brokenUrls={{@controller.filteredBrokenUrls}} @showTutorialsColumns={{true}} />
+  <BrokenUrlList
+    @brokenUrls={{@controller.filteredBrokenUrls}}
+    @showTutorialsColumns={{true}}
+    @onIgnoreUrl={{@controller.onIgnoreUrl}}
+  />
 </template>
