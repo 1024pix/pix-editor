@@ -19,7 +19,7 @@ import { separatorElementSchema } from './element/separator-schema.js';
 import { shortVideoElementSchema } from './element/short-video-schema.js';
 import { textElementSchema } from './element/text-schema.js';
 import { videoElementSchema } from './element/video-schema.js';
-import { describe, exactLength, external, htmlNotAllowedSchema, htmlSchema, string, switchOn, uri, uuidSchema, withRequiredItem } from './utils.js';
+import { describe, exactLength, htmlNotAllowedSchema, htmlSchema, string, switchOn, uri, uuidSchema, withRequiredItem } from './utils.js';
 
 const ALLOWED_ELEMENTS_SCHEMA = [
   { type: 'audio', schema: audioElementSchema },
@@ -52,6 +52,7 @@ const ANSWERABLE_ELEMENT_TYPES = [
 ];
 
 const SINGLE_STEPPER_PER_GRAIN_MESSAGE = "Il ne peut y avoir qu'un stepper par grain";
+const STEPPER_WITH_ANSWERABLE_ELEMENT_MESSAGE = "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)";
 
 const moduleDetailsSchema = z.strictObject({
   image: describe(
@@ -108,41 +109,54 @@ const componentStepperSchema = z.strictObject({
   ).min(2),
 }).meta({ title: 'stepper' });
 
-// Also exposed in the JSON Schema: it is a schema error, reported along with the other schema errors
-const singleStepperPerGrainSchema = z.array(switchOn('type', [componentElementSchema, componentStepperSchema]))
-  .superRefine((components, ctx) => {
-    const steppersInArray = components.filter((component) => component?.type === 'stepper');
-    if (steppersInArray.length > 1) {
-      ctx.addIssue({
-        code: 'custom',
-        params: { joiType: 'array.singleStepper', template: SINGLE_STEPPER_PER_GRAIN_MESSAGE },
-        input: components,
-      });
-    }
-  }, { when: ({ value }) => Array.isArray(value) });
-
-const componentsSchema = external(
-  singleStepperPerGrainSchema,
-  (components) => {
-    const steppersInArray = components.filter(({ type }) => type === 'stepper');
-    const elementsInArray = components.filter(({ type }) => type === 'element');
-    const containsAnswerableElement = elementsInArray.some(({ element }) => ANSWERABLE_ELEMENT_TYPES.includes(element.type));
-    if (steppersInArray.length === 1 && containsAnswerableElement) {
-      return "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)";
-    }
+const STEPPER_JSON_SCHEMA = { type: 'object', properties: { type: { const: 'stepper' } }, required: ['type'] };
+const ANSWERABLE_ELEMENT_JSON_SCHEMA = {
+  type: 'object',
+  properties: {
+    type: { const: 'element' },
+    element: { type: 'object', properties: { type: { enum: ANSWERABLE_ELEMENT_TYPES } }, required: ['type'] },
   },
-).meta({
-  // Exposes the single stepper rule in the JSON Schema, so that the editor checks it too.
-  // Kept in a sub-schema so that its `errorMessage` does not replace the other messages of the array.
-  allOf: [
-    {
-      contains: { type: 'object', properties: { type: { const: 'stepper' } }, required: ['type'] },
-      minContains: 0,
-      maxContains: 1,
-      errorMessage: SINGLE_STEPPER_PER_GRAIN_MESSAGE,
-    },
-  ],
-});
+  required: ['type', 'element'],
+};
+
+// Grain rules are also exposed in the JSON Schema: they are schema errors, reported along with the other schema errors.
+// Each rule is kept in its own sub-schema so that its `errorMessage` does not replace the other messages of the array.
+const componentsSchema = z.array(switchOn('type', [componentElementSchema, componentStepperSchema]))
+  .superRefine((components, ctx) => {
+    const steppersInArray = components.filter(isStepper);
+    if (steppersInArray.length > 1) {
+      addGrainRuleIssue(ctx, components, 'array.singleStepper', SINGLE_STEPPER_PER_GRAIN_MESSAGE);
+    }
+    if (steppersInArray.length > 0 && components.some(isAnswerableElement)) {
+      addGrainRuleIssue(ctx, components, 'array.stepperWithAnswerableElement', STEPPER_WITH_ANSWERABLE_ELEMENT_MESSAGE);
+    }
+  }, { when: ({ value }) => Array.isArray(value) })
+  .meta({
+    allOf: [
+      {
+        contains: STEPPER_JSON_SCHEMA,
+        minContains: 0,
+        maxContains: 1,
+        errorMessage: SINGLE_STEPPER_PER_GRAIN_MESSAGE,
+      },
+      {
+        if: { contains: STEPPER_JSON_SCHEMA },
+        then: { not: { contains: ANSWERABLE_ELEMENT_JSON_SCHEMA }, errorMessage: STEPPER_WITH_ANSWERABLE_ELEMENT_MESSAGE },
+      },
+    ],
+  });
+
+function isStepper(component) {
+  return component?.type === 'stepper';
+}
+
+function isAnswerableElement(component) {
+  return component?.type === 'element' && ANSWERABLE_ELEMENT_TYPES.includes(component.element?.type);
+}
+
+function addGrainRuleIssue(ctx, components, joiType, message) {
+  ctx.addIssue({ code: 'custom', params: { joiType, template: message }, input: components });
+}
 
 const grainSchema = z.strictObject({
   id: uuidSchema,

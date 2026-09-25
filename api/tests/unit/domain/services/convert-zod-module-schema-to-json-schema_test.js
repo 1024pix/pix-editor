@@ -14,7 +14,7 @@ describe('Unit | Domain | Service | convert-zod-module-schema-to-json-schema', f
     await expect(JSON.stringify(jsonSchema, null, 2)).toMatchFileSnapshot('./__snapshots__/module-json-schema.json');
   });
 
-  it('should expose the single stepper per grain rule', function() {
+  it('should expose the grain rules', function() {
     const jsonSchema = convertZodModuleSchemaToJsonSchema(moduleSchema);
 
     const componentsJsonSchema = jsonSchema.properties.sections.items.properties.grains.items.properties.components;
@@ -24,6 +24,32 @@ describe('Unit | Domain | Service | convert-zod-module-schema-to-json-schema', f
         minContains: 0,
         maxContains: 1,
         errorMessage: "Il ne peut y avoir qu'un stepper par grain",
+      },
+      {
+        if: { contains: { type: 'object', properties: { type: { const: 'stepper' } }, required: ['type'] } },
+        then: {
+          not: {
+            contains: {
+              type: 'object',
+              properties: {
+                type: { const: 'element' },
+                element: {
+                  type: 'object', properties: {
+                    type: {
+                      enum: [
+                        'qcu',
+                        'qcm',
+                        'qrocm',
+                      ],
+                    },
+                  }, required: ['type'],
+                },
+              },
+              required: ['type', 'element'],
+            },
+          },
+          errorMessage: "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)",
+        },
       },
     ]);
   });

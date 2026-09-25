@@ -129,15 +129,6 @@ export function unique(schema, isDuplicate = (a, b) => a === b) {
     .meta({ uniqueItems: true });
 }
 
-export function external(schema, check) {
-  return schema.superRefine(async (value, ctx) => {
-    const message = await check(value);
-    if (message) {
-      ctx.addIssue({ code: 'custom', message, params: { joiType: 'external' }, input: value });
-    }
-  });
-}
-
 /**
  * Forwards the issues of `schema` for `value` at `path` into the current refinement context.
  */

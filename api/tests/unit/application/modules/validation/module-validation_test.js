@@ -642,7 +642,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
       }
     });
 
-    it('does not run the stepper with an answerable element rule when the grain has schema errors', async function() {
+    it('reports the stepper with an answerable element rule along with the other schema errors', async function() {
       // given
       const grain = {
         id: 'not-a-uuid',
@@ -670,7 +670,13 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         throw new Error('Validation should have thrown');
       } catch (validationError) {
         // then
-        expect(validationError.details.map(({ type }) => type)).to.deep.equal(['string.guid']);
+        expect(validationError.details.map(({ type, message }) => ({ type, message }))).to.deep.equal([
+          { type: 'string.guid', message: '"id" doit être un GUID valide' },
+          {
+            type: 'array.stepperWithAnswerableElement',
+            message: "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)",
+          },
+        ]);
       }
     });
   });

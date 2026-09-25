@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
-import { external, htmlSchema, string, switchOn, uri, uuidSchema } from '../../../../../lib/application/modules/validation/utils.js';
+import { htmlSchema, string, switchOn, uri, uuidSchema } from '../../../../../lib/application/modules/validation/utils.js';
 import { validateAsync } from '../../../../../lib/application/modules/validation/validate.js';
 
 async function messagesOf(schema, value) {
@@ -61,11 +61,11 @@ describe('Unit | Application | Modules | Validation | zod-issues-to-joi-details'
   it('should only report external validations when there is no schema error, like Joi', async function() {
     const schema = z.strictObject({
       id: uuidSchema,
-      content: external(string(), () => 'Erreur externe'),
+      content: htmlSchema(),
     });
 
-    expect(await messagesOf(schema, { id: 'not-a-uuid', content: 'x' })).to.deep.equal(['"id" doit être un GUID valide']);
-    expect(await messagesOf(schema, { id: '3f6b0b3e-5b3f-4c1a-9a4e-2f1e8c3d4b5a', content: 'x' })).to.deep.equal(['Erreur externe']);
+    expect(await messagesOf(schema, { id: 'not-a-uuid', content: '<style>p {}</style>' })).to.deep.equal(['"id" doit être un GUID valide']);
+    expect(await messagesOf(schema, { id: '3f6b0b3e-5b3f-4c1a-9a4e-2f1e8c3d4b5a', content: '<style>p {}</style>' })).to.deep.equal(['htmlvalidationerror']);
   });
 
   it('should expose the html-validate report of HTML validation errors', async function() {
