@@ -51,6 +51,8 @@ const ANSWERABLE_ELEMENT_TYPES = [
   'qrocm',
 ];
 
+const SINGLE_STEPPER_PER_GRAIN_MESSAGE = "Il ne peut y avoir qu'un stepper par grain";
+
 const moduleDetailsSchema = z.strictObject({
   image: describe(
     uri(),
@@ -112,7 +114,7 @@ const componentsSchema = external(
     (components) => {
       const steppersInArray = components.filter(({ type }) => type === 'stepper');
       if (steppersInArray.length > 1) {
-        return "Il ne peut y avoir qu'un stepper par grain";
+        return SINGLE_STEPPER_PER_GRAIN_MESSAGE;
       }
     },
   ),
@@ -124,7 +126,18 @@ const componentsSchema = external(
       return "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)";
     }
   },
-);
+).meta({
+  // Exposes the single stepper rule in the JSON Schema, so that the editor checks it too.
+  // Kept in a sub-schema so that its `errorMessage` does not replace the other messages of the array.
+  allOf: [
+    {
+      contains: { type: 'object', properties: { type: { const: 'stepper' } }, required: ['type'] },
+      minContains: 0,
+      maxContains: 1,
+      errorMessage: SINGLE_STEPPER_PER_GRAIN_MESSAGE,
+    },
+  ],
+});
 
 const grainSchema = z.strictObject({
   id: uuidSchema,

@@ -14,6 +14,20 @@ describe('Unit | Domain | Service | convert-zod-module-schema-to-json-schema', f
     await expect(JSON.stringify(jsonSchema, null, 2)).toMatchFileSnapshot('./__snapshots__/module-json-schema.json');
   });
 
+  it('should expose the single stepper per grain rule', function() {
+    const jsonSchema = convertZodModuleSchemaToJsonSchema(moduleSchema);
+
+    const componentsJsonSchema = jsonSchema.properties.sections.items.properties.grains.items.properties.components;
+    expect(componentsJsonSchema.allOf).to.deep.equal([
+      {
+        contains: { type: 'object', properties: { type: { const: 'stepper' } }, required: ['type'] },
+        minContains: 0,
+        maxContains: 1,
+        errorMessage: "Il ne peut y avoir qu'un stepper par grain",
+      },
+    ]);
+  });
+
   it('should always set format and options on strings, and move the description to options.infoText', function() {
     const jsonSchema = convertZodModuleSchemaToJsonSchema(z.strictObject({
       plain: string(),

@@ -12291,6 +12291,24 @@
                     "title": "component",
                     "headerTemplate": "component {{i0}}"
                   },
+                  "allOf": [
+                    {
+                      "contains": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "const": "stepper"
+                          }
+                        },
+                        "required": [
+                          "type"
+                        ]
+                      },
+                      "minContains": 0,
+                      "maxContains": 1,
+                      "errorMessage": "Il ne peut y avoir qu'un stepper par grain"
+                    }
+                  ],
                   "options": null
                 }
               },
