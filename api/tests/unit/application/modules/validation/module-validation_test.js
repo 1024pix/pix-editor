@@ -616,6 +616,25 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         );
       }
     });
+
+    it('does not run cross-fields business rules when the grain has schema errors', async function() {
+      // given
+      const grain = {
+        id: 'not-a-uuid',
+        type: 'lesson',
+        title: '',
+        components: [_createStepperComponent(), _createStepperComponent()],
+      };
+
+      // when
+      try {
+        await grainSchema.validateAsync(grain, { abortEarly: false });
+        throw new Error('Joi validation should have thrown');
+      } catch (joiError) {
+        // then
+        expect(joiError.details.map(({ type }) => type)).to.deep.equal(['string.guid']);
+      }
+    });
   });
 
   describe('when element does not have a valid structure', function() {
