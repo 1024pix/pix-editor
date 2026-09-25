@@ -1,4 +1,4 @@
-.select-framework {
+#container-select-framework {
   padding: 0 5px 8px 5px;
   width: 100%;
 
@@ -14,11 +14,6 @@
     &:focus, &:focus-within {
       outline-color: rgba(var(--pix-info-100-inline), 0.5);
     }
-  }
-
-  .pix-select__dropdown {
-    // Prevents weird layout behaviour :(
-    transform: translate(0, 54px) !important;
   }
 
   .pix-select-list-category__option {
