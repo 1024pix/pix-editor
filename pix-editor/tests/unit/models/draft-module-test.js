@@ -5,7 +5,7 @@ module('Unit | Model | draft-module', function (hooks) {
   setupTest(hooks);
 
   module('#displayedValidationErrors', function () {
-    test('it filters out schema-shape errors, already detected live by Monaco Editor', function (assert) {
+    test('it returns all the validation errors', function (assert) {
       // given
       const store = this.owner.lookup('service:store');
       const draftModule = store.createRecord('draft-module', {
@@ -20,6 +20,7 @@ module('Unit | Model | draft-module', function (hooks) {
 
       // then
       assert.deepEqual(displayedValidationErrors, [
+        { message: 'Le slug est mal formatté', isSchemaError: true },
         { message: "Problème de duplications d'Ids", isSchemaError: false },
       ]);
     });
