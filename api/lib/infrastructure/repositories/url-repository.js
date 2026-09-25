@@ -99,8 +99,8 @@ export async function batchResetAndInsert(externalUrls) {
   await knex('external_urls-localized_challenges').truncate();
   await knex('external_urls-tutorials').truncate();
 
-  // raw query needed because the table is referenced by a foreign key constraint and knex does not support the CASCADE keyword
-  await knex.raw('TRUNCATE TABLE external_urls CASCADE');
+  // raw query needed because the table is referenced by a foreign key constraint and knex does not support the CASCADE and RESTART IDENTITY keywords
+  await knex.raw('TRUNCATE TABLE external_urls RESTART IDENTITY CASCADE');
 
   const urlsToInsert = externalUrls.map(({ url }) => ({ url }));
   const insertedExternalUrls = await knex.batchInsert('external_urls', urlsToInsert, 500).returning('*');
@@ -146,7 +146,7 @@ export async function getWithPagination(page) {
       SELECT 1
       FROM "external_urls-localized_challenges"
       WHERE "external_urls-localized_challenges"."externalUrlId" = "external_urls"."id"
-    )`)
+    ) DESC`)
     .orderBy('url');
 
   const { results: externalUrlDTOs } = await fetchPage(getQuery, page);

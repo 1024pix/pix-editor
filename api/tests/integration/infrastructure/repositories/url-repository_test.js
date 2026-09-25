@@ -49,11 +49,74 @@ describe('Integration | Repository | url-repository', () => {
         [
           {
             id: expect.any(Number),
+            url: 'https://ui.pix.org',
+          },
+          {
+            id: expect.any(Number),
+            url: 'http://comment-pix-ui-fonctionne.org',
+          },
+        ],
+      );
+    });
+
+    it('should be ordered by urls from localized challenges first and tutorials last', async () => {
+      // given
+      const { challenge } = databaseBuilder.factory.buildChallengeInGroup({});
+
+      const localized1 = databaseBuilder.factory.buildLocalizedChallenge({ id: 'recLocalized1', challengeId: challenge.id, locale: 'fr-FR1' });
+      databaseBuilder.factory.buildExternalUrl({
+        url: 'https://ui.pix.org',
+        localizedChallengeIds: [localized1.id],
+        tutorialIds: [],
+      });
+
+      const localized2 = databaseBuilder.factory.buildLocalizedChallenge({ id: 'recLocalized2', challengeId: challenge.id, locale: 'fr-FR2' });
+      const tutorial1 = databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto1', url: 'https://ui.pix.fr', tagIds: [] }));
+      databaseBuilder.factory.buildExternalUrl({
+        url: 'https://ui.pix.fr',
+        localizedChallengeIds: [localized2.id],
+        tutorialIds: [tutorial1.id],
+      });
+
+      const localized3 = databaseBuilder.factory.buildLocalizedChallenge({ id: 'recLocalized3', challengeId: challenge.id, locale: 'fr-FR3' });
+      databaseBuilder.factory.buildExternalUrl({
+        url: 'https://orga.pix.fr',
+        tutorialIds: [],
+        localizedChallengeIds: [localized2.id, localized3.id],
+      });
+
+      const tutorial2 = databaseBuilder.factory.buildTutorial(
+        domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto2', url: 'http://comment-pix-ui-fonctionne.org', tagIds: [] }),
+      );
+      databaseBuilder.factory.buildExternalUrl({
+        tutorialIds: [tutorial2.id],
+        localizedChallengeIds: [],
+        url: 'http://comment-pix-ui-fonctionne.org',
+      });
+
+      await databaseBuilder.commit();
+
+      // when
+      const urls = await urlRepository.getWithPagination({ number: 1, size: 100 });
+
+      // then
+      expect(urls).toStrictEqual(
+        [
+          {
+            id: expect.any(Number),
+            url: 'https://orga.pix.fr',
+          },
+          {
+            id: expect.any(Number),
             url: 'https://ui.pix.fr',
           },
           {
             id: expect.any(Number),
             url: 'https://ui.pix.org',
+          },
+          {
+            id: expect.any(Number),
+            url: 'http://comment-pix-ui-fonctionne.org',
           },
         ],
       );
@@ -104,6 +167,7 @@ describe('Integration | Repository | url-repository', () => {
           tutorialId: tutorial.id,
         },
       ]);
+      expect(externalUrls.find((ext) => ext.id === 1), 'autoincrement ids were reset to 1').toBeTruthy();
     });
   });
 });
