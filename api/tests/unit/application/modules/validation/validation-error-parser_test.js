@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { joiErrorParser } from '../../../../../lib/application/modules/joi-error-parser.js';
+import { validationErrorParser } from '../../../../../lib/application/modules/validation-error-parser.js';
 
-describe('Unit | Infrastructure | Datasources | Learning Content | Module Datasource | joi error parser', function() {
+describe('Unit | Infrastructure | Datasources | Learning Content | Module Datasource | validation error parser', function() {
   describe('#toStructuredErrors', function() {
     it('tags schema-shape errors as isSchemaError', function() {
       const error = {
@@ -27,7 +27,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
         ],
       };
 
-      expect(joiErrorParser.toStructuredErrors(error)).to.deep.equal([
+      expect(validationErrorParser.toStructuredErrors(error)).to.deep.equal([
         { message: '"id" must be a valid GUID', isSchemaError: true },
         {
           message: '"grains[0].components[0].element" does not match any of the allowed types',
@@ -52,7 +52,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
         ],
       };
 
-      expect(joiErrorParser.toStructuredErrors(error)).to.deep.equal([{ message: "Il ne peut y avoir qu'un stepper par grain", isSchemaError: false }]);
+      expect(validationErrorParser.toStructuredErrors(error)).to.deep.equal([{ message: "Il ne peut y avoir qu'un stepper par grain", isSchemaError: false }]);
     });
   });
 });

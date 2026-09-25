@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 
-import { convertJoiToJsonSchema } from '../services/convert-joi-rules-to-json-schema.js';
+import { convertZodModuleSchemaToJsonSchema } from '../services/convert-zod-module-schema-to-json-schema.js';
 import { moduleSchema } from '../../application/modules/validation/module-schema.js';
 
 /**
@@ -16,7 +16,7 @@ let jsonSchema;
 let jsonSchemaChecksum;
 
 export function getModuleJsonSchema({ generateChecksum = generateMd5Checksum } = {}) {
-  jsonSchema = jsonSchema ?? JSON.stringify(convertJoiToJsonSchema(moduleSchema));
+  jsonSchema = jsonSchema ?? JSON.stringify(convertZodModuleSchemaToJsonSchema(moduleSchema));
   jsonSchemaChecksum = jsonSchemaChecksum ?? generateChecksum(jsonSchema);
 
   return { jsonSchema, jsonSchemaChecksum };

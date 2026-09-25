@@ -1,13 +1,11 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { htmlNotAllowedSchema, htmlSchema, uuidSchema } from '../utils.js';
+import { htmlNotAllowedSchema, htmlSchema, uri, uuidSchema } from '../utils.js';
 
-const audioElementSchema = Joi.object({
+export const audioElementSchema = z.strictObject({
   id: uuidSchema,
-  type: Joi.string().valid('audio').required(),
-  title: htmlNotAllowedSchema.required(),
-  url: Joi.string().uri().required(),
-  transcription: htmlSchema.required(),
-}).required();
-
-export { audioElementSchema };
+  type: z.enum(['audio']),
+  title: htmlNotAllowedSchema(),
+  url: uri(),
+  transcription: htmlSchema(),
+}).meta({ title: 'audio' });

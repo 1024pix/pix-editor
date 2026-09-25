@@ -1,8 +1,14 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { htmlSchema } from '../utils.js';
+import { htmlSchema, isPlainObject } from '../utils.js';
 
-export const feedbackSchema = Joi.object({
-  state: htmlSchema.allow('').required(),
-  diagnosis: htmlSchema.allow('').required(),
-}).or('state', 'diagnosis', { isPresent: (resolved) => resolved !== undefined && resolved !== '' });
+const isPresent = (value) => value !== undefined && value !== '';
+
+export const feedbackSchema = z.strictObject({
+  state: htmlSchema({ allowEmpty: true }),
+  diagnosis: htmlSchema({ allowEmpty: true }),
+}).superRefine((feedback, ctx) => {
+  if (!isPresent(feedback.state) && !isPresent(feedback.diagnosis)) {
+    ctx.addIssue({ code: 'custom', params: { joiType: 'object.missing', peers: ['state', 'diagnosis'] }, input: feedback });
+  }
+}, { when: ({ value }) => isPlainObject(value) });

@@ -1,16 +1,14 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { htmlNotAllowedSchema, htmlSchema, uuidSchema } from '../utils.js';
+import { htmlNotAllowedSchema, htmlSchema, string, uri, uuidSchema } from '../utils.js';
 
-const embedElementSchema = Joi.object({
+export const embedElementSchema = z.strictObject({
   id: uuidSchema,
-  type: Joi.string().valid('embed').required(),
-  isCompletionRequired: Joi.boolean().required(),
-  title: htmlNotAllowedSchema.required(),
-  url: Joi.string().uri().required(),
-  instruction: htmlSchema.optional(),
-  solution: Joi.string().allow('').optional(),
-  height: Joi.number().min(0).required(),
-}).required();
-
-export { embedElementSchema };
+  type: z.enum(['embed']),
+  isCompletionRequired: z.boolean(),
+  title: htmlNotAllowedSchema(),
+  url: uri(),
+  instruction: htmlSchema().optional(),
+  solution: string({ allowEmpty: true }).optional(),
+  height: z.number().min(0),
+}).meta({ title: 'embed' });

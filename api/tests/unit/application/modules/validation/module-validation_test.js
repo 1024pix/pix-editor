@@ -27,8 +27,14 @@ import {
   grainSchema,
   moduleSchema,
 } from '../../../../../lib/application/modules/validation/module-schema.js';
+import { validateAsync } from '../../../../../lib/application/modules/validation/validate.js';
+import { buildFullModule } from './full-module-fixture.js';
 
 describe('Unit | Application | Modules | Validation | Module validation', function() {
+  it('should validate a module using every element type', async function() {
+    await expect(validateAsync(moduleSchema, buildFullModule())).resolves.toBeDefined();
+  });
+
   describe('when element has a valid structure', function() {
     describe('when element is a custom element', function() {
       it('should validate sample custom message-conversation structure', async function() {
@@ -89,9 +95,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
             },
           };
 
-          await customElementSchema.validateAsync(sample, { abortEarly: false });
-        } catch (joiError) {
-          expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+          await validateAsync(customElementSchema, sample);
+        } catch (validationError) {
+          expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
         }
       });
     });
@@ -107,9 +113,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           height: 400,
         };
 
-        await customDraftElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(customDraftElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -126,9 +132,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           ],
         };
 
-        await downloadElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(downloadElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -146,9 +152,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           height: 600,
         };
 
-        await embedElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(embedElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -186,9 +192,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           ],
         };
 
-        await flashcardsElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(flashcardsElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -202,9 +208,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           alternativeText: '',
         };
 
-        await imageElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(imageElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -249,9 +255,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           feedback: { diagnosis: '<p>Continuez comme ça !</p>' },
         };
 
-        await qabElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(qabElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -279,9 +285,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           hasShortProposals: false,
         };
 
-        await qcmElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(qcmElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -299,9 +305,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           hasShortProposals: false,
         };
 
-        await qcmDeclarativeElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(qcmDeclarativeElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -320,9 +326,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           hasShortProposals: false,
         };
 
-        await qcuElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(qcuElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -341,9 +347,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           hasShortProposals: false,
         };
 
-        await qcuDiscoveryElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(qcuDiscoveryElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -409,9 +415,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           },
         };
 
-        await qrocmElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(qrocmElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -422,9 +428,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           type: 'separator',
         };
 
-        await separatorElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(separatorElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -437,9 +443,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           content: "<p>Ceci est un texte qui accepte de l'HTML.</p>",
         };
 
-        await textElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(textElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -462,9 +468,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
               content: "<p>Ceci est un texte qui accepte de l'HTML.</p>",
             };
 
-            await textElementSchema.validateAsync(sample, { abortEarly: false });
-          } catch (joiError) {
-            expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+            await validateAsync(textElementSchema, sample);
+          } catch (validationError) {
+            expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
           }
         }
       });
@@ -481,9 +487,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           transcription: '<p>Vidéo manquante</p>',
         };
 
-        await videoElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(videoElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -497,9 +503,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           transcription: 'Je clique sur le bouton droit de la souris.',
         };
 
-        await shortVideoElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(shortVideoElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -513,9 +519,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           transcription: '<p>Audio manquant</p>',
         };
 
-        await audioElementSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(audioElementSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
 
@@ -548,9 +554,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           ],
         };
 
-        await componentStepperSchema.validateAsync(sample, { abortEarly: false });
-      } catch (joiError) {
-        expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+        await validateAsync(componentStepperSchema, sample);
+      } catch (validationError) {
+        expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
       }
     });
   });
@@ -575,11 +581,11 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
       // when
       try {
-        await grainSchema.validateAsync(grain, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
+        await validateAsync(grainSchema, grain);
+        throw new Error('Validation should have thrown');
+      } catch (validationError) {
         // then
-        expect(joiError.message).to.equal("Il ne peut y avoir qu'un stepper par grain");
+        expect(validationError.message).to.equal("Il ne peut y avoir qu'un stepper par grain");
       }
     });
 
@@ -607,11 +613,11 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
       // when
       try {
-        await grainSchema.validateAsync(grain, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
+        await validateAsync(grainSchema, grain);
+        throw new Error('Validation should have thrown');
+      } catch (validationError) {
         // then
-        expect(joiError.message).to.equal(
+        expect(validationError.message).to.equal(
           "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)",
         );
       }
@@ -628,11 +634,11 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
       // when
       try {
-        await grainSchema.validateAsync(grain, { abortEarly: false });
-        throw new Error('Joi validation should have thrown');
-      } catch (joiError) {
+        await validateAsync(grainSchema, grain);
+        throw new Error('Validation should have thrown');
+      } catch (validationError) {
         // then
-        expect(joiError.details.map(({ type }) => type)).to.deep.equal(['string.guid']);
+        expect(validationError.details.map(({ type }) => type)).to.deep.equal(['string.guid']);
       }
     });
   });
@@ -650,10 +656,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         };
 
         try {
-          await imageElementSchema.validateAsync(invalidImage, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(
+          await validateAsync(imageElementSchema, invalidImage);
+          throw new Error('Validation should have thrown');
+        } catch (validationError) {
+          expect(validationError.message).to.deep.equal(
             '"alt" failed custom validation because HTML is not allowed in this field',
           );
         }
@@ -670,10 +676,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         };
 
         try {
-          await audioElementSchema.validateAsync(invalidAudio, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(
+          await validateAsync(audioElementSchema, invalidAudio);
+          throw new Error('Validation should have thrown');
+        } catch (validationError) {
+          expect(validationError.message).to.deep.equal(
             '"title" failed custom validation because HTML is not allowed in this field',
           );
         }
@@ -691,10 +697,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         };
 
         try {
-          await videoElementSchema.validateAsync(invalidVideo, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(
+          await validateAsync(videoElementSchema, invalidVideo);
+          throw new Error('Validation should have thrown');
+        } catch (validationError) {
+          expect(validationError.message).to.deep.equal(
             '"title" failed custom validation because HTML is not allowed in this field',
           );
         }
@@ -711,10 +717,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         };
 
         try {
-          await shortVideoElementSchema.validateAsync(invalidShortVideo, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(
+          await validateAsync(shortVideoElementSchema, invalidShortVideo);
+          throw new Error('Validation should have thrown');
+        } catch (validationError) {
+          expect(validationError.message).to.deep.equal(
             '"title" failed custom validation because HTML is not allowed in this field',
           );
         }
@@ -741,10 +747,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         ];
 
         try {
-          await blockInputSchema.validateAsync(invalidQrocmBlockInput, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(expectedErrorMessages.join('. '));
+          await validateAsync(blockInputSchema, invalidQrocmBlockInput);
+          throw new Error('Validation should have thrown');
+        } catch (validationError) {
+          expect(validationError.message).to.deep.equal(expectedErrorMessages.join('. '));
         }
       });
 
@@ -774,10 +780,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         ];
 
         try {
-          await blockSelectSchema.validateAsync(invalidQrocmBlockSelect, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(expectedErrorMessages.join('. '));
+          await validateAsync(blockSelectSchema, invalidQrocmBlockSelect);
+          throw new Error('Validation should have thrown');
+        } catch (validationError) {
+          expect(validationError.message).to.deep.equal(expectedErrorMessages.join('. '));
         }
       });
 
@@ -791,10 +797,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         };
 
         try {
-          await textElementSchema.validateAsync(invalidTextElement, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          const message = joiError.details[0].context.value.results[0].messages[0].message;
+          await validateAsync(textElementSchema, invalidTextElement);
+          throw new Error('Validation should have thrown');
+        } catch (validationError) {
+          const message = validationError.details[0].context.value.results[0].messages[0].message;
           expect(message).to.deep.equal('Use external stylesheet with <link> instead of <style> tag');
         }
       });
@@ -846,10 +852,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         };
 
         try {
-          await moduleSchema.validateAsync(invalidModule, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(
+          await validateAsync(moduleSchema, invalidModule);
+          throw new Error('Validation should have thrown');
+        } catch (validationError) {
+          expect(validationError.message).to.deep.equal(
             '"title" failed custom validation because HTML is not allowed in this field',
           );
         }
@@ -865,10 +871,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         };
 
         try {
-          await grainSchema.validateAsync(invalidGrain, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.message).to.deep.equal(
+          await validateAsync(grainSchema, invalidGrain);
+          throw new Error('Validation should have thrown');
+        } catch (validationError) {
+          expect(validationError.message).to.deep.equal(
             '"title" failed custom validation because HTML is not allowed in this field',
           );
         }
@@ -960,7 +966,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           },
         };
 
-        await expect(() => qrocmElementSchema.validateAsync(sample, { abortEarly: false })).rejects.toThrow();
+        await expect(() => validateAsync(qrocmElementSchema, sample)).rejects.toThrow();
       });
     });
 
@@ -995,10 +1001,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           });
 
           try {
-            await moduleSchema.validateAsync(moduleWithTooLongShortAnswer, { abortEarly: false });
-            throw new Error('Joi validation should have thrown');
-          } catch (joiError) {
-            expect(joiError.message).to.deep.equal(
+            await validateAsync(moduleSchema, moduleWithTooLongShortAnswer);
+            throw new Error('Validation should have thrown');
+          } catch (validationError) {
+            expect(validationError.message).to.deep.equal(
               '"sections[0].grains[0].components[0].element.proposals[1].content" doit avoir une longueur inférieure ou égale à 20 caractères. "sections[0].grains" ne contient pas 1 valeur(s) requise(s)',
             );
           }
@@ -1033,10 +1039,10 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           });
 
           try {
-            await moduleSchema.validateAsync(moduleWithShortAnswerContainingHTML, { abortEarly: false });
-            throw new Error('Joi validation should have thrown');
-          } catch (joiError) {
-            expect(joiError.message).to.deep.equal(
+            await validateAsync(moduleSchema, moduleWithShortAnswerContainingHTML);
+            throw new Error('Validation should have thrown');
+          } catch (validationError) {
+            expect(validationError.message).to.deep.equal(
               '"sections[0].grains[0].components[0].element.proposals[1].content" failed custom validation because HTML is not allowed in this field. "sections[0].grains" ne contient pas 1 valeur(s) requise(s)',
             );
           }
@@ -1073,9 +1079,9 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           });
 
           try {
-            await moduleSchema.validateAsync(moduleWithValidLongAnswer, { abortEarly: false });
-          } catch (joiError) {
-            expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+            await validateAsync(moduleSchema, moduleWithValidLongAnswer);
+          } catch (validationError) {
+            expect(validationError, JSON.stringify(validationError?.details)).to.equal(undefined);
           }
         });
       });

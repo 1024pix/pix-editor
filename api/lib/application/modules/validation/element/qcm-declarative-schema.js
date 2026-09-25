@@ -1,28 +1,21 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
 import { htmlSchema, proposalIdSchema, uuidSchema } from '../utils.js';
 import { feedbackNeutralSchema } from './feedback-neutral-schema.js';
-import { proposalContentSchema, shortProposalContentSchema } from './proposal-content-schema.js';
+import { withShortProposals } from './proposal-content-schema.js';
 
-const qcmDeclarativeElementSchema = Joi.alternatives().conditional(Joi.object({ hasShortProposals: true }).unknown(), {
-  then: _getQcmDeclarativeSchemaWithProposalContentSchema(shortProposalContentSchema),
-  otherwise: _getQcmDeclarativeSchemaWithProposalContentSchema(proposalContentSchema),
-});
-
-export { qcmDeclarativeElementSchema };
-
-function _getQcmDeclarativeSchemaWithProposalContentSchema(proposalContentSchema) {
-  return Joi.object({
+export const qcmDeclarativeElementSchema = withShortProposals('qcm-declarative', (proposalContentSchema) =>
+  z.strictObject({
     id: uuidSchema,
-    type: Joi.string().valid('qcm-declarative').required(),
-    instruction: htmlSchema.required(),
-    hasShortProposals: Joi.boolean().optional().default(false).required(),
-    proposals: Joi.array()
-      .items({
-        id: proposalIdSchema.required(),
-        content: proposalContentSchema.required(),
-      })
-      .required(),
-    feedback: feedbackNeutralSchema.required(),
-  });
-}
+    type: z.enum(['qcm-declarative']),
+    instruction: htmlSchema(),
+    hasShortProposals: z.boolean(),
+    proposals: z.array(
+      z.strictObject({
+        id: proposalIdSchema(),
+        content: proposalContentSchema,
+      }),
+    ),
+    feedback: feedbackNeutralSchema,
+  }),
+);

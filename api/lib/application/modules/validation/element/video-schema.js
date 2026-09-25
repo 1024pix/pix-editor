@@ -1,15 +1,13 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { htmlNotAllowedSchema, htmlSchema, uuidSchema } from '../utils.js';
+import { htmlNotAllowedSchema, htmlSchema, uri, uuidSchema } from '../utils.js';
 
-const videoElementSchema = Joi.object({
+export const videoElementSchema = z.strictObject({
   id: uuidSchema,
-  type: Joi.string().valid('video').required(),
-  title: htmlNotAllowedSchema.required(),
-  url: Joi.string().uri().required(),
-  poster: Joi.string().uri(),
-  subtitles: Joi.string().uri().allow('').required(),
-  transcription: htmlSchema.allow(''),
-}).required();
-
-export { videoElementSchema };
+  type: z.enum(['video']),
+  title: htmlNotAllowedSchema(),
+  url: uri(),
+  poster: uri().optional(),
+  subtitles: uri({ allowEmpty: true }),
+  transcription: htmlSchema({ allowEmpty: true }).optional(),
+}).meta({ title: 'video' });

@@ -1,30 +1,30 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { htmlNotAllowedSchema, htmlSchema, uuidSchema } from '../utils.js';
+import { htmlNotAllowedSchema, htmlSchema, uri, uuidSchema } from '../utils.js';
 
-const image = Joi.object({ url: Joi.string().uri().allow('').required() });
+const image = z.strictObject({ url: uri({ allowEmpty: true }) });
 
-const rectoSide = Joi.object({
-  image,
-  text: htmlNotAllowedSchema.required(),
+const rectoSide = z.strictObject({
+  image: image.optional(),
+  text: htmlNotAllowedSchema(),
 });
 
-const versoSide = Joi.object({
-  image,
-  text: htmlSchema.required(),
+const versoSide = z.strictObject({
+  image: image.optional(),
+  text: htmlSchema(),
 });
 
-const flashcardsElementSchema = Joi.object({
+export const flashcardsElementSchema = z.strictObject({
   id: uuidSchema,
-  type: Joi.string().valid('flashcards').required(),
-  instruction: htmlSchema.optional(),
-  title: htmlNotAllowedSchema.required(),
-  introImage: image,
-  cards: Joi.array().items({
-    id: uuidSchema,
-    recto: rectoSide,
-    verso: versoSide,
-  }),
-}).required();
-
-export { flashcardsElementSchema };
+  type: z.enum(['flashcards']),
+  instruction: htmlSchema().optional(),
+  title: htmlNotAllowedSchema(),
+  introImage: image.optional(),
+  cards: z.array(
+    z.strictObject({
+      id: uuidSchema,
+      recto: rectoSide.optional(),
+      verso: versoSide.optional(),
+    }),
+  ).optional(),
+}).meta({ title: 'flashcards' });

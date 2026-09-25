@@ -1,14 +1,12 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { htmlNotAllowedSchema, htmlSchema, uuidSchema } from '../utils.js';
+import { htmlNotAllowedSchema, htmlSchema, uri, uuidSchema } from '../utils.js';
 
-const customDraftElementSchema = Joi.object({
+export const customDraftElementSchema = z.strictObject({
   id: uuidSchema,
-  type: Joi.string().valid('custom-draft').required(),
-  title: htmlNotAllowedSchema.required(),
-  url: Joi.string().uri().required(),
-  instruction: htmlSchema.allow('').required(),
-  height: Joi.number().integer().min(0).max(550).required(),
-}).required();
-
-export { customDraftElementSchema };
+  type: z.enum(['custom-draft']),
+  title: htmlNotAllowedSchema(),
+  url: uri(),
+  instruction: htmlSchema({ allowEmpty: true }),
+  height: z.int().min(0).max(550),
+}).meta({ title: 'custom-draft' });

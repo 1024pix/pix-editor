@@ -1,10 +1,8 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
 import { uuidSchema } from '../utils.js';
 
-const separatorElementSchema = Joi.object({
+export const separatorElementSchema = z.strictObject({
   id: uuidSchema,
-  type: Joi.string().valid('separator').required(),
-}).required();
-
-export { separatorElementSchema };
+  type: z.enum(['separator']),
+}).meta({ title: 'separator' });

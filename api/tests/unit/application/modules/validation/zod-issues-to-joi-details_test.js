@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
-import { external, htmlSchema, string, switchOn, uri, uuidSchema } from '../../../../../../lib/application/modules/validation/zod/utils.js';
-import { validateAsync } from '../../../../../../lib/application/modules/validation/zod/validate.js';
+import { external, htmlSchema, string, switchOn, uri, uuidSchema } from '../../../../../lib/application/modules/validation/utils.js';
+import { validateAsync } from '../../../../../lib/application/modules/validation/validate.js';
 
 async function messagesOf(schema, value) {
   try {
@@ -13,7 +13,7 @@ async function messagesOf(schema, value) {
   }
 }
 
-describe('Unit | Application | Modules | Validation | Zod | zod-issues-to-joi-details', function() {
+describe('Unit | Application | Modules | Validation | zod-issues-to-joi-details', function() {
   it('should label errors with the Joi path format', async function() {
     const schema = z.strictObject({ a: z.strictObject({ b: z.array(z.strictObject({ c: string() })) }) });
 

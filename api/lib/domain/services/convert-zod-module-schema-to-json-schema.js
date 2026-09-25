@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { conditionalRegistry, renderAsRegistry, requiredKeysRegistry } from '../../application/modules/validation/zod/utils.js';
+import { conditionalRegistry, renderAsRegistry, requiredKeysRegistry } from '../../application/modules/validation/utils.js';
 
 /**
  * Converts a module Zod schema to the JSON Schema consumed by Modulix Editor.

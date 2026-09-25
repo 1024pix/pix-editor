@@ -1,31 +1,31 @@
 import { schema as componentsSchema } from '@1024pix/epreuves-components/schema';
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { htmlSchema, uuidSchema } from '../utils.js';
+import { describe, htmlSchema, string, switchOn, uuidSchema } from '../utils.js';
+import { isRequired, joiPropsToZod } from './joi-props-to-zod.js';
 
 const commonProps = {
   id: uuidSchema,
-  type: Joi.string().valid('custom').required(),
-  title: Joi.string().allow('').required().description("Titre de l'élément interactif ou dynamique. Champ facultatif"),
-  instruction: htmlSchema
-    .allow('')
-    .required()
-    .description("Consigne pédagogique de l'élément interactif ou dynamique. Champ facultatif"),
-  functionalInstruction: htmlSchema
-    .allow('')
-    .required()
-    .description("Consigne fonctionnelle de l'élément interactif ou dynamique. Champ facultatif"),
+  type: z.enum(['custom']),
+  title: describe(string({ allowEmpty: true }), "Titre de l'élément interactif ou dynamique. Champ facultatif"),
+  instruction: describe(
+    htmlSchema({ allowEmpty: true }),
+    "Consigne pédagogique de l'élément interactif ou dynamique. Champ facultatif",
+  ),
+  functionalInstruction: describe(
+    htmlSchema({ allowEmpty: true }),
+    "Consigne fonctionnelle de l'élément interactif ou dynamique. Champ facultatif",
+  ),
 };
 
-export const customElementSchema = Joi.alternatives().conditional('.tagName', {
-  switch: Object.entries(componentsSchema).map(([tagName, schema]) => ({
-    is: tagName,
-    then: Joi.object({
+export const customElementSchema = switchOn(
+  'tagName',
+  Object.entries(componentsSchema).map(([tagName, joiPropsSchema]) => {
+    const propsSchema = joiPropsToZod(joiPropsSchema);
+    return z.strictObject({
       ...commonProps,
-      tagName: Joi.string().valid(tagName).required(),
-      props: schema,
-    })
-      .meta({ title: tagName })
-      .required(),
-  })),
-});
+      tagName: z.enum([tagName]),
+      props: isRequired(joiPropsSchema) ? propsSchema : propsSchema.optional(),
+    }).meta({ title: tagName });
+  }),
+).meta({ title: 'custom' });

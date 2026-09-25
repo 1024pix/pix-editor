@@ -1,12 +1,10 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { htmlSchema, uuidSchema } from '../utils.js';
+import { htmlSchema, string, uuidSchema } from '../utils.js';
 
-const expandElementSchema = Joi.object({
+export const expandElementSchema = z.strictObject({
   id: uuidSchema,
-  type: Joi.string().valid('expand').required(),
-  title: Joi.string().required(),
-  content: htmlSchema.required(),
-}).required();
-
-export { expandElementSchema };
+  type: z.enum(['expand']),
+  title: string(),
+  content: htmlSchema(),
+}).meta({ title: 'expand' });

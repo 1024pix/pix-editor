@@ -1,16 +1,14 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { uuidSchema } from '../utils.js';
+import { string, uri, uuidSchema } from '../utils.js';
 
-const downloadElementSchema = Joi.object({
+export const downloadElementSchema = z.strictObject({
   id: uuidSchema,
-  type: Joi.string().valid('download').required(),
-  files: Joi.array()
-    .items({
-      url: Joi.string().uri({ scheme: 'https' }).required(),
-      format: Joi.string().required(),
-    })
-    .required(),
-}).required();
-
-export { downloadElementSchema };
+  type: z.enum(['download']),
+  files: z.array(
+    z.strictObject({
+      url: uri({ scheme: 'https' }),
+      format: string(),
+    }),
+  ),
+}).meta({ title: 'download' });

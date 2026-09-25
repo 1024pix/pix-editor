@@ -1,5 +1,5 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
 import { htmlSchema } from '../utils.js';
 
-export const feedbackNeutralSchema = Joi.object({ diagnosis: htmlSchema.required() });
+export const feedbackNeutralSchema = z.strictObject({ diagnosis: htmlSchema() });

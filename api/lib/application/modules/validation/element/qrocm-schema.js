@@ -1,123 +1,100 @@
-import Joi from 'joi';
+import { z } from 'zod';
 
-import { htmlNotAllowedSchema, htmlSchema, proposalIdSchema, uuidSchema } from '../utils.js';
+import { alternatives, describe, htmlNotAllowedSchema, htmlSchema, proposalIdSchema, string, switchOn, unique, uuidSchema } from '../utils.js';
 import { feedbackSchema } from './feedback-schema.js';
 
-const blockInputSchema = Joi.object({
-  input: htmlNotAllowedSchema.required().description('Identifiant unique obligatoire (non visible dans le module)'),
-  type: Joi.string()
-    .valid('input')
-    .required()
-    .description("Le type input permet d'afficher un champ éditable par l'utilisateur."),
-  inputType: Joi.string()
-    .valid('text', 'number')
-    .required()
-    .description(
-      "Le type number affiche un champ qui n'accepte que les chiffres. Le type text affiche un champ textuel classique.",
+export const blockInputSchema = z.strictObject({
+  input: describe(htmlNotAllowedSchema(), 'Identifiant unique obligatoire (non visible dans le module)'),
+  type: describe(z.enum(['input']), "Le type input permet d'afficher un champ éditable par l'utilisateur."),
+  inputType: describe(
+    z.enum(['text', 'number']),
+    "Le type number affiche un champ qui n'accepte que les chiffres. Le type text affiche un champ textuel classique.",
+  ),
+  size: describe(
+    z.number().positive(),
+    'Largeur du champ. Indiquez une valeur correspondant au nombre de caractères attendu.',
+  ),
+  display: describe(
+    z.enum(['inline', 'block']),
+    "Type d'affichage du champ. En inline, le champ apparaîtra sur la même ligne que les autres propositions. En block, il se mettra à la ligne suivante.",
+  ),
+  placeholder: describe(
+    htmlNotAllowedSchema({ allowEmpty: true }),
+    "Texte de substitution qui s'affiche dans le champ avant qu'il soit édité.",
+  ),
+  ariaLabel: describe(
+    htmlNotAllowedSchema(),
+    "Description du champ nécessaire à l’accessibilité (non visible dans le module, lu par les lecteurs d'écran).",
+  ),
+  tolerances: describe(
+    unique(z.array(z.enum([
+      't1',
+      't2',
+      't3',
+    ]))),
+    "Les tolérances permettent de valider une réponse malgré les erreurs. (T1 - Espaces, casse & accents, T2 - Ponctuation et T3 - Distance d'édition).",
+  ),
+  solutions: describe(
+    z.array(
+      alternatives([describe(string().min(1), 'Contenu (type texte) de la solution.'), describe(z.number().min(1), 'Contenu (type nombre) de la solution.')]),
     ),
-  size: Joi.number()
-    .positive()
-    .required()
-    .description('Largeur du champ. Indiquez une valeur correspondant au nombre de caractères attendu.'),
-  display: Joi.string()
-    .valid('inline', 'block')
-    .required()
-    .description(
-      "Type d'affichage du champ. En inline, le champ apparaîtra sur la même ligne que les autres propositions. En block, il se mettra à la ligne suivante.",
-    ),
-  placeholder: htmlNotAllowedSchema
-    .allow('')
-    .required()
-    .description("Texte de substitution qui s'affiche dans le champ avant qu'il soit édité."),
-  ariaLabel: htmlNotAllowedSchema
-    .required()
-    .description(
-      "Description du champ nécessaire à l’accessibilité (non visible dans le module, lu par les lecteurs d'écran).",
-    ),
-  tolerances: Joi.array()
-    .unique()
-    .items(Joi.string().valid('t1', 't2', 't3'))
-    .required()
-    .description(
-      "Les tolérances permettent de valider une réponse malgré les erreurs. (T1 - Espaces, casse & accents, T2 - Ponctuation et T3 - Distance d'édition).",
-    ),
-  solutions: Joi.array()
-    .items(
-      Joi.alternatives(
-        Joi.string().min(1).required().description('Contenu (type texte) de la solution.'),
-        Joi.number().min(1).required().description('Contenu (type nombre) de la solution.'),
-      ),
-    )
-    .required()
-    .description('Solution(s) du champ.'),
-}).required();
+    'Solution(s) du champ.',
+  ),
+}).meta({ title: 'input' });
 
-const blockSelectSchema = Joi.object({
-  type: Joi.string()
-    .valid('select')
-    .required()
-    .description("Le type select permet d'afficher un sélecteur avec plusieurs options."),
-  input: htmlNotAllowedSchema.required().description('Identifiant unique obligatoire (non visible dans le module)'),
-  display: Joi.string()
-    .valid('inline', 'block')
-    .required()
-    .description(
-      "Type d'affichage du champ. En inline, le champ apparaîtra sur la même ligne que les autres propositions. En block, il se mettra à la ligne suivante.",
-    ),
-  placeholder: htmlNotAllowedSchema
-    .allow('')
-    .default('- Sélectionner -')
-    .required()
-    .description("Texte de substitution qui s'affiche dans le champ lorsqu’aucune option n'est sélectionnée."),
-  ariaLabel: htmlNotAllowedSchema
-    .required()
-    .description(
-      "Description du champ nécessaire à l’accessibilité (non visible dans le module, lu par les lecteurs d'écran).",
-    ),
-  tolerances: Joi.array().empty().required().description('Les tolérances ne concernent que les QROCm de type input.'),
-  options: Joi.array()
-    .items(
-      Joi.object({
-        id: proposalIdSchema.description("Identifiant de l'option. Caractères autorisés : tout chiffre (0 à 9)."),
-        content: htmlNotAllowedSchema.required().description("Contenu de l'option."),
+export const blockSelectSchema = z.strictObject({
+  type: describe(z.enum(['select']), "Le type select permet d'afficher un sélecteur avec plusieurs options."),
+  input: describe(htmlNotAllowedSchema(), 'Identifiant unique obligatoire (non visible dans le module)'),
+  display: describe(
+    z.enum(['inline', 'block']),
+    "Type d'affichage du champ. En inline, le champ apparaîtra sur la même ligne que les autres propositions. En block, il se mettra à la ligne suivante.",
+  ),
+  placeholder: describe(
+    htmlNotAllowedSchema({ allowEmpty: true }).meta({ default: '- Sélectionner -' }),
+    "Texte de substitution qui s'affiche dans le champ lorsqu’aucune option n'est sélectionnée.",
+  ),
+  ariaLabel: describe(
+    htmlNotAllowedSchema(),
+    "Description du champ nécessaire à l’accessibilité (non visible dans le module, lu par les lecteurs d'écran).",
+  ),
+  tolerances: describe(z.array(z.any()), 'Les tolérances ne concernent que les QROCm de type input.'),
+  options: describe(
+    z.array(
+      z.strictObject({
+        id: describe(proposalIdSchema(), "Identifiant de l'option. Caractères autorisés : tout chiffre (0 à 9).").optional(),
+        content: describe(htmlNotAllowedSchema(), "Contenu de l'option."),
       }),
-    )
-    .required()
-    .description('Options du champ.'),
-  solutions: Joi.array()
-    .items(proposalIdSchema.description("Coller ici l'dentifiant (id) de l'option"))
-    .required()
-    .description('Solution(s) du champ.'),
-}).required();
+    ),
+    'Options du champ.',
+  ),
+  solutions: describe(
+    z.array(describe(proposalIdSchema(), "Coller ici l'dentifiant (id) de l'option")),
+    'Solution(s) du champ.',
+  ),
+}).meta({ title: 'select' });
 
-const blockTextSchema = Joi.object({
-  type: Joi.string().valid('text').required(),
-  content: htmlSchema,
-}).required();
+const blockTextSchema = z.strictObject({
+  type: z.enum(['text']),
+  content: htmlSchema().optional(),
+}).meta({ title: 'text' });
 
-const qrocmElementSchema = Joi.object({
+export const qrocmElementSchema = z.strictObject({
   id: uuidSchema,
-  type: Joi.string().valid('qrocm').required(),
-  instruction: htmlSchema.required().description('Consigne du QROCm'),
-  proposals: Joi.array()
-    .items(
-      Joi.alternatives().conditional('.type', {
-        switch: [
-          { is: 'text', then: blockTextSchema },
-          { is: 'input', then: blockInputSchema },
-          { is: 'select', then: blockSelectSchema },
-        ],
-      }),
-    )
-    .unique((a, b) => a.input && b.input && a.input === b.input)
-    .required()
-    .description(
-      'Propositions qui vont s’afficher les unes à la suite des autres dans le module (dans l’ordre de contribution)',
+  type: z.enum(['qrocm']),
+  instruction: describe(htmlSchema(), 'Consigne du QROCm'),
+  proposals: describe(
+    unique(
+      z.array(switchOn('type', [
+        blockTextSchema,
+        blockInputSchema,
+        blockSelectSchema,
+      ])),
+      (a, b) => a.input && b.input && a.input === b.input,
     ),
-  feedbacks: Joi.object({
-    valid: feedbackSchema,
-    invalid: feedbackSchema,
-  }).required(),
-});
-
-export { blockInputSchema, blockSelectSchema, qrocmElementSchema };
+    'Propositions qui vont s’afficher les unes à la suite des autres dans le module (dans l’ordre de contribution)',
+  ),
+  feedbacks: z.strictObject({
+    valid: feedbackSchema.optional(),
+    invalid: feedbackSchema.optional(),
+  }),
+}).meta({ title: 'qrocm' });

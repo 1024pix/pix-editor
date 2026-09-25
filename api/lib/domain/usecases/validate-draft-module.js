@@ -1,7 +1,8 @@
 import { draftModuleRepository, moduleRepository } from '../../infrastructure/repositories/index.js';
 
 import { moduleSchema } from '../../application/modules/validation/module-schema.js';
-import { joiErrorParser } from '../../application/modules/joi-error-parser.js';
+import { validateAsync } from '../../application/modules/validation/validate.js';
+import { validationErrorParser } from '../../application/modules/validation-error-parser.js';
 import { ModulesValidation } from '../models/ModulesValidation.js';
 
 export async function validateDraftModule(draftModule, dependencies = { moduleRepository, draftModuleRepository }) {
@@ -12,9 +13,9 @@ export async function validateDraftModule(draftModule, dependencies = { moduleRe
   const modules = await dependencies.moduleRepository.list();
 
   try {
-    await moduleSchema.validateAsync(draftModuleJSON, { abortEarly: false });
-  } catch (joiError) {
-    validationErrors.push(...joiErrorParser.toStructuredErrors(joiError));
+    await validateAsync(moduleSchema, draftModuleJSON);
+  } catch (validationError) {
+    validationErrors.push(...validationErrorParser.toStructuredErrors(validationError));
     hasBeenValidated = false;
   }
 
