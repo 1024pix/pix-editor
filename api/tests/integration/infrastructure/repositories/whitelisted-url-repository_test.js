@@ -4,8 +4,8 @@ import * as whitelistedUrlRepository from '../../../../lib/infrastructure/reposi
 import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | whitelisted-url-repository', () => {
-  describe('#list', () => {
-    it('should retrieve all whitelisted urls ordered by url', async () => {
+  describe('#listActive', () => {
+    it('should retrieve all active whitelisted urls ordered by url', async () => {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
       const adminUser2 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 2', access: 'admin', trigram: 'MA2' });
@@ -51,7 +51,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const whitelistedUrls = await whitelistedUrlRepository.list();
+      const whitelistedUrls = await whitelistedUrlRepository.listActive();
 
       // then
       expect(whitelistedUrls).toStrictEqual([
@@ -81,25 +81,28 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
           comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
           checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
         }),
-        domainBuilder.buildWhitelistedUrl({
-          id: 789,
-          createdBy: adminUser1.id,
-          latestUpdatedBy: adminUser1.id,
-          deletedBy: adminUser1.id,
-          createdAt: new Date('2020-01-01'),
-          updatedAt: new Date('2022-02-02'),
-          deletedAt: new Date('2023-01-01'),
-          url: 'https://www.les-fruits-c-super-bon',
-          relatedSkillNames: '@ours8',
-          comment: null,
-          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
-        }),
       ]);
     });
 
-    it('should return an empty array when no whitelisted url in database', async () => {
+    it('should return an empty array when no active whitelisted url in database', async () => {
+      // given
+      const adminUser = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin', trigram: 'MA1' });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 789,
+        createdBy: adminUser.id,
+        latestUpdatedBy: adminUser.id,
+        deletedBy: adminUser.id,
+        createdAt: new Date('2020-01-01'),
+        updatedAt: new Date('2022-02-02'),
+        deletedAt: new Date('2023-01-01'),
+        url: 'https://www.les-fruits-c-super-bon',
+        relatedSkillNames: '@ours8',
+        comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+      });
+
       // when
-      const whitelistedUrls = await whitelistedUrlRepository.list();
+      const whitelistedUrls = await whitelistedUrlRepository.listActive();
 
       // then
       expect(whitelistedUrls).toStrictEqual([]);

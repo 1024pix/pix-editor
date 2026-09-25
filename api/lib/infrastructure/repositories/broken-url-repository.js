@@ -64,6 +64,9 @@ export async function list() {
   return toDomainList(brokenUrlList);
 }
 
+/**
+ * @param {Array<object>} brokenUrlList
+ */
 function toDomainList(brokenUrlList) {
   return brokenUrlList.map((dto) => {
     const formattedData = {

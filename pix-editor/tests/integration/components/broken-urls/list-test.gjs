@@ -2,6 +2,7 @@ import { render, within } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
 import BrokenUrlList from 'pixeditor/components/broken-urls/list';
 import { module, test } from 'qunit';
+import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
@@ -62,5 +63,22 @@ module('Integration | Component | broken-urls/list', function (hooks) {
     const [cell4] = within(row4).getAllByRole('cell');
     assert.dom(cell3).hasText('https://tomate.com');
     assert.dom(cell4).hasText('https://carotte.com');
+  });
+
+  test('it should call @onIgnoreUrl with brokenUrl on button click', async function (assert) {
+    // given
+    const brokenUrls = [brokenUrl1];
+    const onIgnoreUrl = sinon.stub();
+
+    // when
+    const screen = await render(
+      <template><BrokenUrlList @brokenUrls={{brokenUrls}} @onIgnoreUrl={{onIgnoreUrl}} /></template>,
+    );
+
+    const ignoreButton = screen.getByRole('button', { name: 'Ignorer cette URL' });
+    await click(ignoreButton);
+
+    // then
+    assert.ok(onIgnoreUrl.calledWith(brokenUrl1));
   });
 });

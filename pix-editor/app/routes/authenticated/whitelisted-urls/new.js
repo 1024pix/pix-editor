@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 
@@ -15,5 +16,13 @@ export default class WhitelistedUrlNewRoute extends Route {
   async model() {
     const whitelistedUrls = await this.store.findAll('whitelisted-url', { reload: true });
     return { whitelistedUrls };
+  }
+
+  @action
+  willTransition() {
+    const controller = this.controllerFor('authenticated.whitelisted-urls.new');
+    controller.url = '';
+    controller.comment = '';
+    controller.skillNames = '';
   }
 }

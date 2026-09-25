@@ -43,8 +43,7 @@ export class WhitelistedUrl {
     return this.deletedAt === null;
   }
 
-  static canCreate(creationCommand, user, existingWhitelistedUrls) {
-    const activeExistingWhitelistedUrls = existingWhitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive);
+  static canCreate(creationCommand, user, activeWhitelistedUrls) {
     if (!user.isEditor)
       throw new CommandWhitelistedUrlForbiddenError(
         "L'utilisateur n'a pas les droits pour ajouter une URL à ne pas analyser",
@@ -69,7 +68,7 @@ export class WhitelistedUrl {
         message: `Type de check invalide. Valeurs parmi : ${Object.values(WhitelistedUrl.CHECK_TYPES).join(', ')}`,
         attribute: 'checkType',
       });
-    if (!isUrlUnique(creationCommand.url, activeExistingWhitelistedUrls))
+    if (!isUrlUnique(creationCommand.url, activeWhitelistedUrls))
       throw new CommandWhitelistedUrlConflictError('URL déjà dans la liste');
   }
 
@@ -104,9 +103,9 @@ export class WhitelistedUrl {
     this.deletedAt = operationDate;
   }
 
-  canUpdate(updateCommand, user, existingWhitelistedUrls) {
-    const activeOtherExistingWhitelistedUrls = existingWhitelistedUrls.filter(
-      (whitelistedUrl) => whitelistedUrl.isActive && whitelistedUrl.id !== this.id,
+  canUpdate(updateCommand, user, activeWhitelistedUrls) {
+    const activeOtherExistingWhitelistedUrls = activeWhitelistedUrls.filter(
+      (whitelistedUrl) => whitelistedUrl.id !== this.id,
     );
     if (!user.isEditor)
       throw new CommandWhitelistedUrlForbiddenError("L'utilisateur n'a pas les droits pour mettre à jour cette URL");

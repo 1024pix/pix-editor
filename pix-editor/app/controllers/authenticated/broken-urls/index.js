@@ -1,8 +1,11 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class BrokenUrlsIndexController extends Controller {
+  @service router;
+
   queryParams = ['url', 'statusCode', 'skills', 'localizedChallenges', 'tutorials', 'frameworks'];
   @tracked url = '';
   @tracked statusCode = '';
@@ -62,5 +65,46 @@ export default class BrokenUrlsIndexController extends Controller {
     this.localizedChallenges = [];
     this.tutorials = [];
     this.frameworks = [];
+  }
+
+  @action
+  async onIgnoreUrl(brokenUrl) {
+    const skills = await this.loadEverySkillLinkedToBrokenUrl(brokenUrl);
+    const skillNames = skills.map((skill) => skill.name).join(', ');
+
+    await this.router.transitionTo('authenticated.whitelisted-urls.new', {
+      queryParams: {
+        skillNames,
+        url: brokenUrl.url,
+        comment: 'Faux positif (moulinette)',
+        from: this.router.currentRouteName,
+      },
+    });
+  }
+
+  async loadEverySkillLinkedToBrokenUrl(brokenUrl) {
+    await brokenUrl.localizedChallenges;
+    const localizedChallenges = brokenUrl.hasMany('localizedChallenges').value() ?? [];
+    await Promise.all(localizedChallenges.map((localizedChallenge) => localizedChallenge.challenge));
+
+    const challenges = localizedChallenges.map((localizedChallenge) =>
+      localizedChallenge.belongsTo('challenge').value(),
+    );
+    await Promise.all([...challenges.map((challenge) => challenge.skill), brokenUrl.skills]);
+
+    const skills = [
+      ...challenges.map((challenge) => challenge.belongsTo('skill').value()),
+      ...brokenUrl.hasMany('skills').value(),
+    ];
+
+    const skillIds = new Set();
+    const deduplicatedSkills = [];
+    for (const skill of skills) {
+      if (skillIds.has(skill.id)) continue;
+      skillIds.add(skill.id);
+      deduplicatedSkills.push(skill);
+    }
+
+    return deduplicatedSkills;
   }
 }

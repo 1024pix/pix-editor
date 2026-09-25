@@ -20,11 +20,10 @@ export async function saveUrlsFromRelease({
 }) {
   const release = await releaseRepository.getLatestRelease();
   const localizedChallenges = await localizedChallengeRepository.list();
-  const whitelistedUrls = await whitelistedUrlRepository.list();
-  const activeWhitelistedUrls = whitelistedUrls.filter((whitelistedUrl) => whitelistedUrl.isActive);
+  const whitelistedUrls = await whitelistedUrlRepository.listActive();
 
-  const urlsFromChallenges = getChallengeUrls(release, localizedChallenges, activeWhitelistedUrls, domainNamesToExclude, UrlUtils);
-  const urlsFromTutorials = getTutorialUrls(release, activeWhitelistedUrls, domainNamesToExclude, UrlUtils);
+  const urlsFromChallenges = getChallengeUrls(release, localizedChallenges, whitelistedUrls, domainNamesToExclude, UrlUtils);
+  const urlsFromTutorials = getTutorialUrls(release, whitelistedUrls, domainNamesToExclude, UrlUtils);
 
   const externalUrls = mergeChallengeAndTutorialUrls(urlsFromChallenges, urlsFromTutorials);
 

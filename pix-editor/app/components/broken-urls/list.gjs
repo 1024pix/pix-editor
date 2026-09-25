@@ -1,4 +1,5 @@
 import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
 import PixTable from '@1024pix/pix-ui/components/pix-table';
 import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
 import { fn } from '@ember/helper';
@@ -140,6 +141,18 @@ export default class BrokenUrlList extends Component {
               </:cell>
             </PixTableColumn>
           {{/if}}
+          <PixTableColumn @context={{context}} class="column column--small" style="z-index: 999;">
+            <:header>Actions</:header>
+            <:cell>
+              <PixIconButton
+                @triggerAction={{fn @onIgnoreUrl brokenUrl}}
+                @iconName="volumeOff"
+                @ariaLabel="Ignorer cette URL"
+                aria-describedby="copy-whitelisted-url-link-tooltip"
+                title="Ignorer cette URL"
+              />
+            </:cell>
+          </PixTableColumn>
         </:columns>
       </PixTable>
     </section>
