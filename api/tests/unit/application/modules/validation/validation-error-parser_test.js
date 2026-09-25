@@ -40,7 +40,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
       const error = {
         details: [
           {
-            message: "Il ne peut y avoir qu'un stepper par grain",
+            message: "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)",
             path: [
               'grains',
               0,
@@ -52,7 +52,7 @@ describe('Unit | Infrastructure | Datasources | Learning Content | Module Dataso
         ],
       };
 
-      expect(validationErrorParser.toStructuredErrors(error)).to.deep.equal([{ message: "Il ne peut y avoir qu'un stepper par grain", isSchemaError: false }]);
+      expect(validationErrorParser.toStructuredErrors(error)).to.deep.equal([{ message: "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)", isSchemaError: false }]);
     });
   });
 });

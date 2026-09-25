@@ -234,6 +234,54 @@ describe('Integration | Usecases | Validate draft module', () => {
     ]);
   });
 
+  it('stores the single stepper per grain error along with the other schema errors', async () => {
+    // given
+    const buildStepper = (ids) => ({
+      type: 'stepper',
+      instruction: '',
+      steps: ids.map((elementId) => ({ elements: [{ id: elementId, type: 'text', tag: ' ', content: '<p>Étape</p>' }] })),
+    });
+    const sections = [
+      {
+        id: 'cfaefec9-e185-43b8-8258-e8beff6dd56b',
+        type: 'blank',
+        grains: [
+          {
+            id: '9de10c46-df0e-41f5-a709-81637f0d5cc3',
+            type: 'lesson',
+            title: 'Grain avec deux steppers',
+            components: [buildStepper(['d95aff0f-e120-4bd6-9566-7d72a11f4f40', 'd5e369ec-2a5e-4692-ac46-5be5a49f2acd']), buildStepper(['fd90e4e1-5836-448c-91b4-8577e42efd09', 'd199f893-42e4-40f9-b6db-70b7e6bb69b1'])],
+          },
+        ],
+      },
+    ];
+    const draftModuleToInsert = domainBuilder.buildDraftModule({ slug: 'not valid slug', sections });
+    const { id } = databaseBuilder.factory.buildDraftModule(draftModuleToInsert);
+    await databaseBuilder.commit();
+
+    const draftModule = await dependencies.draftModuleRepository.getById({ id });
+
+    // when
+    const result = await validateDraftModule(draftModule, dependencies);
+
+    // then
+    expect(result.hasBeenValidated).to.equal(false);
+    expect(result.validationErrors).to.deep.equal([
+      {
+        isSchemaError: true,
+        message: '"slug" avec la valeur "not valid slug" ne respecte pas le format requis : /^[a-z0-9-]+$/',
+      },
+      {
+        isSchemaError: true,
+        message: "Il ne peut y avoir qu'un stepper par grain",
+      },
+      {
+        isSchemaError: true,
+        message: '"sections[0].grains" ne contient pas 1 valeur(s) requise(s)',
+      },
+    ]);
+  });
+
   it('marks the draft module as not validated when it introduces duplicate ids among existing modules', async () => {
     // given
     const duplicateIds = [

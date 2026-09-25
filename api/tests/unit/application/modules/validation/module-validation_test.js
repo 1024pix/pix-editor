@@ -623,13 +623,45 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
       }
     });
 
-    it('does not run cross-fields business rules when the grain has schema errors', async function() {
+    it('reports the single stepper rule along with the other schema errors', async function() {
       // given
       const grain = {
         id: 'not-a-uuid',
         type: 'lesson',
         title: '',
         components: [_createStepperComponent(), _createStepperComponent()],
+      };
+
+      // when
+      try {
+        await validateAsync(grainSchema, grain);
+        throw new Error('Validation should have thrown');
+      } catch (validationError) {
+        // then
+        expect(validationError.details.map(({ type, message }) => ({ type, message }))).to.deep.equal([{ type: 'string.guid', message: '"id" doit être un GUID valide' }, { type: 'array.singleStepper', message: "Il ne peut y avoir qu'un stepper par grain" }]);
+      }
+    });
+
+    it('does not run the stepper with an answerable element rule when the grain has schema errors', async function() {
+      // given
+      const grain = {
+        id: 'not-a-uuid',
+        type: 'lesson',
+        title: '',
+        components: [
+          _createStepperComponent(),
+          {
+            type: 'element',
+            element: {
+              id: randomUUID(),
+              type: 'qcu',
+              instruction: '<p>Une question ?</p>',
+              proposals: [{ id: '1', content: 'Réponse', feedback: { state: 'Correct !', diagnosis: '<p>Ok</p>' } }],
+              solution: '1',
+              hasShortProposals: false,
+            },
+          },
+        ],
       };
 
       // when

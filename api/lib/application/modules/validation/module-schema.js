@@ -108,16 +108,21 @@ const componentStepperSchema = z.strictObject({
   ).min(2),
 }).meta({ title: 'stepper' });
 
+// Also exposed in the JSON Schema: it is a schema error, reported along with the other schema errors
+const singleStepperPerGrainSchema = z.array(switchOn('type', [componentElementSchema, componentStepperSchema]))
+  .superRefine((components, ctx) => {
+    const steppersInArray = components.filter((component) => component?.type === 'stepper');
+    if (steppersInArray.length > 1) {
+      ctx.addIssue({
+        code: 'custom',
+        params: { joiType: 'array.singleStepper', template: SINGLE_STEPPER_PER_GRAIN_MESSAGE },
+        input: components,
+      });
+    }
+  }, { when: ({ value }) => Array.isArray(value) });
+
 const componentsSchema = external(
-  external(
-    z.array(switchOn('type', [componentElementSchema, componentStepperSchema])),
-    (components) => {
-      const steppersInArray = components.filter(({ type }) => type === 'stepper');
-      if (steppersInArray.length > 1) {
-        return SINGLE_STEPPER_PER_GRAIN_MESSAGE;
-      }
-    },
-  ),
+  singleStepperPerGrainSchema,
   (components) => {
     const steppersInArray = components.filter(({ type }) => type === 'stepper');
     const elementsInArray = components.filter(({ type }) => type === 'element');
