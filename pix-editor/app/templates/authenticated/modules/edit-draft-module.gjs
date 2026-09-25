@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModulixEditorButton from 'pixeditor/components/modules/modulix-editor-button';
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
@@ -14,13 +13,6 @@ export default class NewModule extends Component {
   @service notifications;
   @service router;
   @service store;
-
-  @tracked editorErrors = [];
-
-  @action
-  onEditorErrorsChange(editorErrors) {
-    this.editorErrors = editorErrors;
-  }
 
   @action
   async saveModule({ internalTitle, title, isBeta, slug, visibility, details, sections, glossary }) {
@@ -72,8 +64,7 @@ export default class NewModule extends Component {
   }
 
   get hasValidationErrors() {
-    const hasDraftValidationErrors = !this.args.model.draftModule.hasBeenValidated && this.validationErrors?.length > 0;
-    return hasDraftValidationErrors || this.editorErrors.length > 0;
+    return !this.args.model.draftModule.hasBeenValidated && this.validationErrors?.length > 0;
   }
 
   get validationErrors() {
@@ -113,18 +104,10 @@ export default class NewModule extends Component {
     <main class="page-body">
       <section class="page-section module-form">
         {{#if this.hasValidationErrors}}
-          <ModuleValidationErrors
-            @validationErrors={{this.validationErrors}}
-            @editorErrors={{this.editorErrors}}
-            @isEditPage={{true}}
-          />
+          <ModuleValidationErrors @validationErrors={{this.validationErrors}} @isEditPage={{true}} />
         {{/if}}
 
-        <ModuleForm
-          @module={{@model.draftModule}}
-          @saveModule={{this.saveModule}}
-          @onEditorErrorsChange={{this.onEditorErrorsChange}}
-        />
+        <ModuleForm @module={{@model.draftModule}} @saveModule={{this.saveModule}} />
       </section>
     </main>
   </template>
