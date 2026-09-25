@@ -90,4 +90,18 @@ module('Acceptance | Whitelisted URLs | Creation', function (hooks) {
     assert.dom(screen.getByText('@test1 et 1 autre acquis')).exists();
     assert.strictEqual(screen.getAllByText('Commence par').length, 2);
   });
+
+  test('should reset form when leaving creation page', async function (assert) {
+    // given
+    const screen = await visit('/whitelisted-urls/new');
+
+    // when
+    await fillByLabel('URL à ne pas analyser', 'https://example.org');
+    await clickByName('Annuler');
+    await clickByName('Ajouter une nouvelle URL');
+
+    // then
+    assert.strictEqual(currentURL(), '/whitelisted-urls/new');
+    assert.dom(screen.getByRole('textbox', { name: 'URL à ne pas analyser' })).hasNoValue();
+  });
 });
