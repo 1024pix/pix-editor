@@ -104,4 +104,15 @@ module('Acceptance | Whitelisted URLs | Creation', function (hooks) {
     assert.strictEqual(currentURL(), '/whitelisted-urls/new');
     assert.dom(screen.getByRole('textbox', { name: 'URL à ne pas analyser' })).hasNoValue();
   });
+
+  test('should redirect to given from query param route when leaving creation page', async function (assert) {
+    // given
+    await visit('/whitelisted-urls/new?from=authenticated.static-courses');
+
+    // when
+    await clickByName('Annuler');
+
+    // then
+    assert.strictEqual(currentURL(), '/static-courses');
+  });
 });

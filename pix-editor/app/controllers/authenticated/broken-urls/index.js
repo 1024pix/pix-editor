@@ -73,7 +73,12 @@ export default class BrokenUrlsIndexController extends Controller {
     const skillNames = skills.map((skill) => skill.name).join(', ');
 
     await this.router.transitionTo('authenticated.whitelisted-urls.new', {
-      queryParams: { skillNames, url: brokenUrl.url, comment: 'Faux positif (moulinette)' },
+      queryParams: {
+        skillNames,
+        url: brokenUrl.url,
+        comment: 'Faux positif (moulinette)',
+        from: this.router.currentRouteName,
+      },
     });
   }
 

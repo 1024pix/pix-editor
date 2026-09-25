@@ -8,10 +8,11 @@ export default class NewWhitelistedUrlController extends Controller {
   @service router;
   @service notifications;
 
-  queryParams = ['url', 'skillNames', 'comment'];
+  queryParams = ['url', 'skillNames', 'comment', 'from'];
   @tracked url = '';
   @tracked skillNames = '';
   @tracked comment = '';
+  @tracked from;
 
   @action
   async createWhitelistedUrl(formData) {
@@ -19,7 +20,8 @@ export default class NewWhitelistedUrlController extends Controller {
     try {
       await whitelistedUrl.save();
       this.notifications.sendSuccess('URL ajoutée avec succès.');
-      this.router.transitionTo('authenticated.whitelisted-urls.list');
+      this.store.unloadAll('broken-url');
+      await this.goBackToList();
     } catch (err) {
       whitelistedUrl.deleteRecord();
       this.notifications.sendError("Une erreur est survenue lors de l'ajout de l'URL");
@@ -30,7 +32,12 @@ export default class NewWhitelistedUrlController extends Controller {
   }
 
   @action
-  async goBackToList() {
-    this.router.transitionTo('authenticated.whitelisted-urls.list');
+  goBackToList() {
+    if (this.from) {
+      this.router.transitionTo(this.from);
+      this.from = null;
+    } else {
+      this.router.transitionTo('authenticated.whitelisted-urls.list');
+    }
   }
 }
