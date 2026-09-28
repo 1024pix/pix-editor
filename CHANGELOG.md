@@ -1,5 +1,11 @@
 
 
+## v4.55.1 (28/09/2026)
+
+
+### :bug: Correction
+- [#1661](https://github.com/1024pix/pix-editor/pull/1661) [BUGFIX] Retirer temporairement les erreurs venant de Monaco Editor (PIX-24403).
+
 ## v4.55.0 (28/09/2026)
 
 
