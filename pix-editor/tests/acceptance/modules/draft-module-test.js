@@ -119,12 +119,16 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
     });
 
     module('when a module has errors', function () {
-      test('it should display errors', async function (assert) {
+      test('it should display all the validation errors', async function (assert) {
         // given
         const moduleWithErrors = this.server.create('draft-module', {
           id: crypto.randomUUID(),
           internalTitle: 'MODULE_DRAFT',
-          validationErrors: [{ message: 'oups !', isSchemaError: false }],
+          validationErrors: [
+            { message: '"ariaLabel" ne doit pas être vide', isSchemaError: true },
+            { message: "Problème de duplications d'Ids", isSchemaError: false },
+          ],
+          hasBeenValidated: false,
         });
 
         // when
@@ -133,8 +137,9 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // then
-        assert.dom(screen.getByText(t('modules.components.validation-errors.title', { count: 1 }))).exists();
-        assert.dom(screen.getByText(t('modules.components.validation-errors.information')));
+        assert.dom(screen.getByText(t('modules.components.validation-errors.title', { count: 2 }))).exists();
+        assert.dom(screen.getByText("Problème de duplications d'Ids")).exists();
+        assert.dom(screen.getByText('"ariaLabel" ne doit pas être vide')).exists();
       });
 
       test('it should not display publish button', async function (assert) {

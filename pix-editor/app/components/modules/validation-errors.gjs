@@ -12,9 +12,7 @@ export default class ModuleValidationErrors extends Component {
   @tracked isOpen = false;
 
   get errors() {
-    const editorErrors = (this.args.editorErrors ?? []).map((error) => ({ line: error.line, message: error.message }));
-    const validationErrors = (this.args.validationErrors ?? []).map((error) => ({ message: error.message }));
-    return [...validationErrors, ...editorErrors];
+    return (this.args.validationErrors ?? []).map((error) => ({ message: error.message }));
   }
 
   get totalErrorsCount() {
