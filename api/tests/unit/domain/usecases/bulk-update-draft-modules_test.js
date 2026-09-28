@@ -16,7 +16,6 @@ describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
 
       const draftModules = [draftModule1, draftModule2];
       const draftModuleRepository = { save: vi.fn().mockImplementation(async (draftModule) => draftModule) };
-      const moduleRepository = { getById: vi.fn().mockResolvedValue(undefined) };
       const draftModuleVersionRepository = { create: vi.fn() };
       const updatePixApiReleaseCache = { onDraftModuleCreatedOrUpdated: vi.fn() };
 
@@ -24,7 +23,6 @@ describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
       await bulkUpdateDraftModules(draftModules, {
         draftModuleRepository,
         draftModuleVersionRepository,
-        moduleRepository,
         updatePixApiReleaseCache,
       });
 
@@ -50,7 +48,6 @@ describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
 
       const draftModules = [draftModule1];
       const draftModuleRepository = { save: vi.fn().mockImplementation(async (draftModule) => draftModule) };
-      const moduleRepository = { getById: vi.fn().mockResolvedValueOnce({ id: 2, version: '2.0' }) };
       const draftModuleVersionRepository = { create: vi.fn() };
       const updatePixApiReleaseCache = { onDraftModuleCreatedOrUpdated: vi.fn() };
 
@@ -58,14 +55,12 @@ describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
       await bulkUpdateDraftModules(draftModules, {
         draftModuleRepository,
         draftModuleVersionRepository,
-        moduleRepository,
         updatePixApiReleaseCache,
       });
 
       // then
       expect(draftModuleRepository.save).toHaveBeenCalledTimes(1);
       expect(draftModuleVersionRepository.create).toHaveBeenCalledTimes(1);
-      expect(moduleRepository.getById).toHaveBeenCalledTimes(1);
       expect(draftModule1.version).toEqual('2.1');
       expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(draftModule1);
     });
