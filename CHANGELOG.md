@@ -1,5 +1,21 @@
 
 
+## v4.55.0 (28/09/2026)
+
+
+### :building_construction: Tech
+- [#1660](https://github.com/1024pix/pix-editor/pull/1660) [TECH] Prioriser les URL provenant d'épreuves dans la moulinette des URL cassées (PIX-24379).
+- [#1663](https://github.com/1024pix/pix-editor/pull/1663) [TECH] Suppression du package déprécié @glimmer/tracking inclus dans emberSource (PIX-UPDATE).
+- [#1658](https://github.com/1024pix/pix-editor/pull/1658) [TECH] Mise à jour du package @1024pix/epreuves-components .
+- [#1648](https://github.com/1024pix/pix-editor/pull/1648) [TECH] Ajouter deux usecases permettant la mise à jour en masse des modules (PIX-24202).
+
+### :bug: Correction
+- [#1664](https://github.com/1024pix/pix-editor/pull/1664) [BUGFIX] Correction de l'affichage du champ de recherche de la sidebar (PIX-24411).
+
+### :arrow_up: Montée de version
+- [#1655](https://github.com/1024pix/pix-editor/pull/1655) [BUMP] Update dependency @1024pix/pix-ui to v68.
+- [#1656](https://github.com/1024pix/pix-editor/pull/1656) [BUMP] Update dependency @ember-intl/vite to v2.
+
 ## v4.54.0 (22/09/2026)
 
 
