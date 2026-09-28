@@ -1,3 +1,4 @@
+import { moduleRepository, moduleVersionRepository } from '../../infrastructure/repositories/index.js';
 import { DomainTransaction } from '../DomainTransaction.js';
 import { ModuleVersion } from '../models/index.js';
 
