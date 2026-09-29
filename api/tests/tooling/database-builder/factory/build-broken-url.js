@@ -5,6 +5,7 @@ export function buildBrokenUrl({
   statusCode = 400,
   errorMessage = null,
   url = 'http://ui.pix.fr',
+  ignored = false,
 } = {}) {
   return databaseBuffer.pushInsertable({
     tableName: 'broken_urls',
@@ -13,6 +14,7 @@ export function buildBrokenUrl({
       statusCode,
       errorMessage,
       url,
+      ignored,
     },
   });
 }

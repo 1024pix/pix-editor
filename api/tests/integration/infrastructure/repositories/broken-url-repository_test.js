@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import { saveNewlyBrokenUrlList, removeRepairedUrlList, deleteUnmentionedBrokenUrls, list } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
-import { BrokenUrl } from '../../../../lib/domain/readmodels/index.js';
+import { saveNewlyBrokenUrlList, removeRepairedUrlList, deleteUnmentionedBrokenUrls, list, update } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
+import { BrokenUrl as BrokenUrlRead } from '../../../../lib/domain/readmodels/index.js';
 
 describe('Integration | Repository | broken-url-repository', () => {
   describe('#saveNewlyBrokenUrlList', () => {
@@ -203,7 +203,7 @@ describe('Integration | Repository | broken-url-repository', () => {
       const brokenUrlList = await list();
 
       // then
-      expect(brokenUrlList[0]).toBeInstanceOf(BrokenUrl);
+      expect(brokenUrlList[0]).toBeInstanceOf(BrokenUrlRead);
 
       expect(brokenUrlList).toEqual([
         {
@@ -236,6 +236,28 @@ describe('Integration | Repository | broken-url-repository', () => {
 
       // then
       expect(brokenUrls).toEqual([]);
+    });
+  });
+
+  describe('#update', () => {
+    it('should update a broken url', async () => {
+      // given
+      const savedBrokenUrl = databaseBuilder.factory.buildBrokenUrl({
+        errorMessage: 'Pas le droit',
+        statusCode: 401,
+        url: 'http://www.test.org',
+        ignored: false,
+      });
+
+      await databaseBuilder.commit();
+
+      const updatedBrokenUrl = domainBuilder.buildBrokenUrl({ ...savedBrokenUrl, ignored: true });
+
+      // when
+      const brokenUrl = await update(updatedBrokenUrl.id, updatedBrokenUrl.ignored);
+
+      // then
+      expect(brokenUrl).toStrictEqual(updatedBrokenUrl);
     });
   });
 });

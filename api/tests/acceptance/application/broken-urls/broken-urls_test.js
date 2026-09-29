@@ -40,15 +40,15 @@ describe('Acceptance | Controller | broken-urls', () => {
         url: externalUrl3.url,
       });
 
-      notFoundUrl = domainBuilder.buildBrokenUrl({
+      notFoundUrl = domainBuilder.buildBrokenUrlRead({
         frameworkNames: [framework.name],
         ...savedNotFoundUrl,
       });
-      brokenUrl = domainBuilder.buildBrokenUrl({
+      brokenUrl = domainBuilder.buildBrokenUrlRead({
         frameworkNames: [framework.name],
         ...savedBrokenUrl,
       });
-      notAllowedUrl = domainBuilder.buildBrokenUrl({
+      notAllowedUrl = domainBuilder.buildBrokenUrlRead({
         frameworkNames: [framework.name],
         ...savedNotAllowedUrl,
       });

@@ -1,6 +1,7 @@
-import { BrokenUrl } from '../../../../lib/domain/readmodels/index.js';
+import { BrokenUrl as BrokenUrlRead } from '../../../../lib/domain/readmodels/index.js';
+import { BrokenUrl } from '../../../../lib/domain/models/index.js';
 
-export function buildBrokenUrl({
+export function buildBrokenUrlRead({
   id = 1,
   errorMessage = 'Not Found',
   statusCode = 404,
@@ -10,7 +11,7 @@ export function buildBrokenUrl({
   skillIds = [],
   tutorialIds = [],
 } = {}) {
-  return new BrokenUrl({
+  return new BrokenUrlRead({
     id,
     errorMessage,
     statusCode,
@@ -19,5 +20,21 @@ export function buildBrokenUrl({
     localizedChallengeIds,
     skillIds,
     tutorialIds,
+  });
+}
+
+export function buildBrokenUrl({
+  id = 1,
+  errorMessage = 'Not Found',
+  statusCode = 404,
+  url = 'http://localhost:8080/',
+  ignored = false,
+} = {}) {
+  return new BrokenUrl({
+    id,
+    errorMessage,
+    statusCode,
+    url,
+    ignored,
   });
 }

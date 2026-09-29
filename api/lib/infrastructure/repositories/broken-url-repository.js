@@ -1,5 +1,6 @@
 import { DomainTransaction } from '../../domain/DomainTransaction.js';
-import { BrokenUrl } from '../../domain/readmodels/index.js';
+import { BrokenUrl } from '../../domain/models/index.js';
+import { BrokenUrl as BrokenUrlRead } from '../../domain/readmodels/index.js';
 
 /**
  * @typedef {import('../../domain/models/CrawledUrl.js').CrawledUrl} CrawledUrl
@@ -65,18 +66,17 @@ export async function list() {
 }
 
 /**
- * @param {number} brokenUrlId
- * @param {{ suppressed: boolean }} fieldsToUpdate
+ * @param {BrokenUrl} brokenUrl
  */
-export async function update(brokenUrlId, fieldsToUpdate) {
+export async function update(brokenUrlId, ignored) {
   const knex = DomainTransaction.getConnection();
 
   const updatedBrokenUrl = await knex('broken_urls')
-    .update(fieldsToUpdate)
+    .update({ ignored: ignored })
     .where('id', brokenUrlId)
     .returning('*');
 
-  return !!updatedBrokenUrl;
+  return new BrokenUrl(updatedBrokenUrl[0]);
 }
 
 function toDomainList(brokenUrlList) {
@@ -92,7 +92,7 @@ function toDomainList(brokenUrlList) {
       frameworkNames: dto.frameworkNames.filter(removeNullValuesFromJoin).toSorted(),
     };
 
-    return new BrokenUrl(formattedData);
+    return new BrokenUrlRead(formattedData);
   });
 }
 
