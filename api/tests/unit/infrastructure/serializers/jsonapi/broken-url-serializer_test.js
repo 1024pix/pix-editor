@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/broken-url-serializer.js';
+import { serialize, deserialize } from '../../../../../lib/infrastructure/serializers/jsonapi/broken-url-serializer.js';
 import { domainBuilder } from '../../../../test-helper.js';
 
 describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
@@ -94,6 +94,38 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
 
       // Then
       expect(jsonData).to.deep.equal(expectedSerializedBrokenUrl);
+    });
+  });
+
+  describe('#deserialize', () => {
+    it('should deserialize from a json-api object', async () => {
+      // given
+      const payload = {
+        data: {
+          type: 'broken-url',
+          attributes: {
+            'error-message': 'message d\'erreur',
+            'status-code': 403,
+            url: 'https://superurl.com',
+            frameworks: ['frameworkName'],
+            ignored: true,
+          },
+        },
+      };
+
+      // when
+      const deserializedTag = await deserialize(payload);
+
+      // then
+      expect(deserializedTag).toStrictEqual(
+        {
+          errorMessage: 'message d\'erreur',
+          statusCode: 403,
+          url: 'https://superurl.com',
+          frameworks: ['frameworkName'],
+          ignored: true,
+        },
+      );
     });
   });
 });

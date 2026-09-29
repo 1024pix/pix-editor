@@ -64,6 +64,21 @@ export async function list() {
   return toDomainList(brokenUrlList);
 }
 
+/**
+ * @param {number} brokenUrlId
+ * @param {{ suppressed: boolean }} fieldsToUpdate
+ */
+export async function update(brokenUrlId, fieldsToUpdate) {
+  const knex = DomainTransaction.getConnection();
+
+  const updatedBrokenUrl = await knex('broken_urls')
+    .update(fieldsToUpdate)
+    .where('id', brokenUrlId)
+    .returning('*');
+
+  return !!updatedBrokenUrl;
+}
+
 function toDomainList(brokenUrlList) {
   return brokenUrlList.map((dto) => {
     const formattedData = {

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
+import { databaseBuilder, domainBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | Controller | broken-urls', () => {
@@ -161,6 +161,79 @@ describe('Acceptance | Controller | broken-urls', () => {
           },
         ],
       });
+    });
+  });
+
+  describe('PATCH /broken-urls/{brokenUrlId}', () => {
+    it('should return a 403 status code when user is not editor', async () => {
+      // given
+      const notEditorUser = databaseBuilder.factory.buildReadonlyUser();
+      await databaseBuilder.commit();
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/broken-urls/123',
+        headers: generateAuthorizationHeader(notEditorUser),
+        payload: { data: { attributes: { ignored: true } } },
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(403);
+      expect(response.result).to.deep.equal({
+        errors: [
+          {
+            code: 403,
+            detail: 'Missing or insufficient permissions.',
+            title: 'Forbidden access',
+          },
+        ],
+      });
+    });
+
+    it('should update the broken url with status code 200', async () => {
+      // given
+      const editorUser = databaseBuilder.factory.buildEditorUser();
+      const existingBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ id: 123 });
+
+      await databaseBuilder.commit();
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: `/api/broken-urls/${existingBrokenUrl.id}`,
+        headers: generateAuthorizationHeader(editorUser),
+        payload: { data: { attributes: { ignored: true } } },
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+      const updatedBrokenUrl = await knex('broken_urls').where('id', existingBrokenUrl.id).first();
+      expect(updatedBrokenUrl.ignored).toStrictEqual(true);
+    });
+
+    it('should update the broken url with status code 200', async () => {
+      // given
+      const editorUser = databaseBuilder.factory.buildEditorUser();
+      const existingBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ id: 123 });
+
+      await databaseBuilder.commit();
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: `/api/broken-urls/${existingBrokenUrl.id}`,
+        headers: generateAuthorizationHeader(editorUser),
+        payload: { data: { attributes: { ignored: false } } },
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+      const updatedBrokenUrl = await knex('broken_urls').where('id', existingBrokenUrl.id).first();
+      expect(updatedBrokenUrl.ignored).toStrictEqual(false);
     });
   });
 });
