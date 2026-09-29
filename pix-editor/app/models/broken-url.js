@@ -5,6 +5,7 @@ export default class BrokenUrlModel extends Model {
   @attr statusCode;
   @attr frameworks;
   @attr url;
+  @attr ignored;
 
   @hasMany('skill', { async: true, inverse: null }) skills;
   @hasMany('tutorial', { async: true, inverse: null }) tutorials;

@@ -10,6 +10,7 @@ export default class BrokenUrlsIndexController extends Controller {
   @tracked localizedChallenges = [];
   @tracked tutorials = [];
   @tracked frameworks = [];
+  @tracked ignored = false;
 
   get filterBrokenUrls() {
     const urlFilter = this.url ?? '';
@@ -18,6 +19,7 @@ export default class BrokenUrlsIndexController extends Controller {
     const localizedChallengeFilters = this.localizedChallenges ?? [];
     const tutorialFilters = this.tutorials ?? [];
     const frameworkNameFilters = this.frameworks ?? [];
+    const ignored = this.ignored ?? false;
 
     return (brokenUrl) => {
       const hasUrlFilter = brokenUrl.url.includes(urlFilter);
@@ -29,6 +31,7 @@ export default class BrokenUrlsIndexController extends Controller {
       const skills = brokenUrl.hasMany('skills').value() ?? [];
       const hasSkillFilter = skillFilters.length === 0 || skills.some((skill) => skillFilters.includes(skill.id));
 
+      const hasIgnoredBoolean = brokenUrl.ignored === ignored;
       const localizedChallenges = brokenUrl.hasMany('localizedChallenges').value() ?? [];
       const hasLocalizedChallengeFilter =
         localizedChallengeFilters.length === 0 ||
@@ -44,7 +47,8 @@ export default class BrokenUrlsIndexController extends Controller {
         hasSkillFilter &&
         hasLocalizedChallengeFilter &&
         hasTutorialFilter &&
-        hasFrameworkNameFilter
+        hasFrameworkNameFilter &&
+        hasIgnoredBoolean
       );
     };
   }

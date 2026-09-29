@@ -138,6 +138,14 @@ export default class BrokenUrlList extends Component {
               </:cell>
             </PixTableColumn>
           {{/if}}
+          <PixTableColumn @context={{context}} class="column--small">
+            <:header>À cacher</:header>
+            <:cell>
+              <div class="broken-urls-list__links">
+                  {{ brokenUrl.ignored }}
+              </div>
+            </:cell>
+          </PixTableColumn>
         </:columns>
       </PixTable>
     </section>
