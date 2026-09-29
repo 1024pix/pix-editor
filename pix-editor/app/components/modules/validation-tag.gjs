@@ -1,4 +1,4 @@
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
+import { PixTag } from '@1024pix/nebulix-ember';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 

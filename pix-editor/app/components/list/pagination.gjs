@@ -1,4 +1,4 @@
-import PixPagination from '@1024pix/pix-ui/components/pix-pagination';
+import { PixPagination } from '@1024pix/nebulix-ember';
 import Component from '@glimmer/component';
 
 function elementCount(total) {

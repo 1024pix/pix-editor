@@ -1,6 +1,4 @@
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
+import { PixButtonLink, PixIcon, PixTag } from '@1024pix/nebulix-ember';
 import MarkdownToHtml from 'ember-cli-showdown/components/markdown-to-html';
 import formatDate from 'ember-intl/helpers/format-date';
 import not from 'ember-truth-helpers/helpers/not';

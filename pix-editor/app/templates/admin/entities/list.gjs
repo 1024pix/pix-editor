@@ -1,5 +1,4 @@
-import PixButton from '@1024pix/pix-ui/components/pix-button';
-import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import { PixButton, PixModal } from '@1024pix/nebulix-ember';
 import AdminEntityList from 'pixeditor/components/admin/entity-list';
 import Pagination from 'pixeditor/components/list/pagination';
 

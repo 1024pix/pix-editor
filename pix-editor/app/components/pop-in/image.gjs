@@ -1,4 +1,4 @@
-import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import { PixModal } from '@1024pix/nebulix-ember';
 <template>
   <PixModal
     @title="Illustration"

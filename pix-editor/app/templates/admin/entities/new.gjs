@@ -1,4 +1,4 @@
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
+import { PixButtonLink } from '@1024pix/nebulix-ember';
 import NewAdminEntityForm from 'pixeditor/components/admin/new-entity-form';
 
 <template>

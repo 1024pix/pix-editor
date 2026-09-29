@@ -1,4 +1,4 @@
-import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
+import { PixMultiSelect } from '@1024pix/nebulix-ember';
 import { Input } from '@ember/component';
 import { on } from '@ember/modifier';
 import SingleEntry from 'pixeditor/components/pop-in/single-entry';

@@ -1,6 +1,4 @@
-import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
-import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import PixSearchInput from '@1024pix/pix-ui/components/pix-search-input';
+import { PixFilterBanner, PixMultiSelect, PixSearchInput } from '@1024pix/nebulix-ember';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import Select from 'pixeditor/components/field/select';

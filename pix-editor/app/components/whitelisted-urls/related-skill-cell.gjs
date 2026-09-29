@@ -1,4 +1,4 @@
-import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import { PixTooltip } from '@1024pix/nebulix-ember';
 import { guidFor } from '@ember/object/internals';
 import Component from '@glimmer/component';
 

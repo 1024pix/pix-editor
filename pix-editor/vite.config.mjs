@@ -1,7 +1,7 @@
 import { loadTranslations } from '@ember-intl/vite';
 import { classicEmberSupport, ember, extensions } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
-import sassEmbedded from 'sass-embedded';
+import sassEmbedded, { NodePackageImporter } from 'sass-embedded';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -30,6 +30,7 @@ export default defineConfig({
         api: 'modern',
         implementation: sassEmbedded,
         loadPaths: ['node_modules/@1024pix/nebulix-ember/dist/styles'],
+        importers: [new NodePackageImporter()],
       },
     },
   },

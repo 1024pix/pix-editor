@@ -1,8 +1,4 @@
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
+import { PixButtonLink, PixFilterBanner, PixIcon, PixMultiSelect, PixTag } from '@1024pix/nebulix-ember';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import formatDate from 'ember-intl/helpers/format-date';

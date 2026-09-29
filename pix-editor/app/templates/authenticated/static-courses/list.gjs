@@ -1,12 +1,14 @@
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import PixFilterBanner from '@1024pix/pix-ui/components/pix-filter-banner';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
-import PixInput from '@1024pix/pix-ui/components/pix-input';
-import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
-import PixSegmentedControl from '@1024pix/pix-ui/components/pix-segmented-control';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import {
+  PixButtonLink,
+  PixFilterBanner,
+  PixIcon,
+  PixIconButton,
+  PixInput,
+  PixMultiSelect,
+  PixSegmentedControl,
+  PixTag,
+  PixTooltip,
+} from '@1024pix/nebulix-ember';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import formatDate from 'ember-intl/helpers/format-date';
