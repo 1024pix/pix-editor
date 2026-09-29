@@ -62,12 +62,12 @@ module('Integration | Component | challenge-view | challenge-view', function (ho
     );
 
     // then
-    assert.dom(screen.getByLabelText('Consigne')).hasText('instructions');
-    assert.dom(screen.getByLabelText('Alternative textuelle')).hasText('alternativeInstruction');
+    assert.dom(screen.getByLabelText('Consigne')).hasValue('instructions');
+    assert.dom(screen.getByLabelText('Alternative textuelle')).hasValue('alternativeInstruction');
     assert.dom(screen.getByLabelText('Modalité')).hasText('QROC');
     assert.dom(screen.getByLabelText('Format')).hasValue('format');
-    assert.dom(screen.getByLabelText('Propositions')).hasText('suggestion');
-    assert.dom(screen.getByLabelText('Réponses')).hasText('answers');
+    assert.dom(screen.getByLabelText('Propositions')).hasValue('suggestion');
+    assert.dom(screen.getByLabelText('Réponses')).hasValue('answers');
     assert.dom(screen.getByLabelText('T1 (espaces/casse/accents)')).isNotChecked();
     assert.dom(screen.getByLabelText('T2 (ponctuation)')).isChecked();
     assert.dom(screen.getByLabelText("T3 (distance d'édition)")).isNotChecked();
