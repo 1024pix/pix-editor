@@ -1,5 +1,4 @@
-import PixButton from '@1024pix/pix-ui/components/pix-button';
-import PixModal from '@1024pix/pix-ui/components/pix-modal';
+import { PixButton, PixModal } from '@1024pix/nebulix-ember';
 <template>
   <PixModal @title="Déconnexion" @onCloseButtonClick={{@onDeny}} @showModal={{@showModal}} @variant="orga">
     <:content>

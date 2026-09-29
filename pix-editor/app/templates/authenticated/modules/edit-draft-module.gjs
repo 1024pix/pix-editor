@@ -1,4 +1,4 @@
-import PixBreadcrumb from '@1024pix/pix-ui/components/pix-breadcrumb';
+import { PixBreadcrumb } from '@1024pix/nebulix-ember';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/template';

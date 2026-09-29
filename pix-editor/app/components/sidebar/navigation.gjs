@@ -1,4 +1,4 @@
-import PixAccordions from '@1024pix/pix-ui/components/pix-accordions';
+import { PixAccordions } from '@1024pix/nebulix-ember';
 import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';

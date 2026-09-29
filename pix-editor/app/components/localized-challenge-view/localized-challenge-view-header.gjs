@@ -1,8 +1,4 @@
-import PixButton from '@1024pix/pix-ui/components/pix-button';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
-import PixTag from '@1024pix/pix-ui/components/pix-tag';
-import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import { PixButton, PixIcon, PixIconButton, PixTag, PixTooltip } from '@1024pix/nebulix-ember';
 import { concat } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';

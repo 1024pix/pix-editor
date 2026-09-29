@@ -1,4 +1,4 @@
-import PixLabel from '@1024pix/pix-ui/components/pix-label';
+import { PixLabel } from '@1024pix/nebulix-ember';
 import { htmlSafe } from '@ember/template';
 import t from 'ember-intl/helpers/t';
 

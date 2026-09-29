@@ -1,6 +1,4 @@
-import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
-import PixInput from '@1024pix/pix-ui/components/pix-input';
-import PixMultiSelect from '@1024pix/pix-ui/components/pix-multi-select';
+import { PixIconButton, PixInput, PixMultiSelect } from '@1024pix/nebulix-ember';
 import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';

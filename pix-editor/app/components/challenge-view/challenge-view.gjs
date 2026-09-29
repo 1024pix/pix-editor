@@ -1,6 +1,4 @@
-import PixCheckbox from '@1024pix/pix-ui/components/pix-checkbox';
-import PixInput from '@1024pix/pix-ui/components/pix-input';
-import PixTextarea from '@1024pix/pix-ui/components/pix-textarea';
+import { PixCheckbox, PixInput, PixTextarea } from '@1024pix/nebulix-ember';
 import Component from '@glimmer/component';
 import Select from 'pixeditor/components/field/select';
 import Challenge from 'pixeditor/models/challenge';

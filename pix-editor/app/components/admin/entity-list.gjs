@@ -1,7 +1,4 @@
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
-import PixTable from '@1024pix/pix-ui/components/pix-table';
-import PixTableColumn from '@1024pix/pix-ui/components/pix-table-column';
+import { PixButtonLink, PixIconButton, PixTable, PixTableColumn } from '@1024pix/nebulix-ember';
 import { fn } from '@ember/helper';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';

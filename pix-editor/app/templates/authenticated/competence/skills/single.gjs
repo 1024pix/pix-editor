@@ -1,4 +1,4 @@
-import PixIconButton from '@1024pix/pix-ui/components/pix-icon-button';
+import { PixIconButton } from '@1024pix/nebulix-ember';
 import { array, concat } from '@ember/helper';
 import { on } from '@ember/modifier';
 import { LinkTo } from '@ember/routing';

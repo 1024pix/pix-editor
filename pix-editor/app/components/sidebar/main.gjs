@@ -1,5 +1,4 @@
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import PixSegmentedControl from '@1024pix/pix-ui/components/pix-segmented-control';
+import { PixIcon, PixSegmentedControl } from '@1024pix/nebulix-ember';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';

@@ -1,6 +1,4 @@
-import PixButtonLink from '@1024pix/pix-ui/components/pix-button-link';
-import PixIcon from '@1024pix/pix-ui/components/pix-icon';
-import PixTooltip from '@1024pix/pix-ui/components/pix-tooltip';
+import { PixButtonLink, PixIcon, PixTooltip } from '@1024pix/nebulix-ember';
 import not from 'ember-truth-helpers/helpers/not';
 import List from 'pixeditor/components/whitelisted-urls/list';
 <template>
