@@ -1,8 +1,7 @@
 import { loadTranslations } from '@ember-intl/vite';
 import { classicEmberSupport, ember, extensions } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
-import url from 'postcss-url';
-import { NodePackageImporter } from 'sass-embedded';
+import sassEmbedded from 'sass-embedded';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -28,34 +27,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        importers: [
-          new NodePackageImporter(),
-          {
-            findFileUrl(url) {
-              if (url.startsWith('pix-design-token')) {
-                return new URL(`file://${process.cwd()}/node_modules/@1024pix/pix-ui/addon/styles/${url}`);
-              }
-              return null;
-            },
-          },
-        ],
+        api: 'modern',
+        implementation: sassEmbedded,
+        loadPaths: ['node_modules/@1024pix/nebulix-ember/dist/styles'],
       },
-    },
-    postcss: {
-      plugins: [
-        url({
-          url: (asset) => {
-            if (asset.url.startsWith('../@1024pix/')) {
-              // Pix UI static files are referenced by url starting with "../"
-              // but vite is bunlding those files in root asset folder
-              // so we need to remove the "../" prefix
-              // ../@1024pix/pix-ui/fonts/Nunito/Nunito-Bold.woff2
-              return asset.url.replace('..', '');
-            }
-            return undefined;
-          },
-        }),
-      ],
     },
   },
 });
