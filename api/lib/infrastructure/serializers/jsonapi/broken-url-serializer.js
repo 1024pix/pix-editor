@@ -11,6 +11,7 @@ const serializer = new Serializer('broken-urls', {
     'skills',
     'tutorials',
     'frameworks',
+    'ignored',
   ],
   transform({ localizedChallengeIds, skillIds, tutorialIds, frameworkNames, ...brokenUrl }) {
     return {

@@ -10,6 +10,7 @@ export function buildBrokenUrlRead({
   localizedChallengeIds = ['recChallenge1'],
   skillIds = [],
   tutorialIds = [],
+  ignored = false,
 } = {}) {
   return new BrokenUrlRead({
     id,
@@ -20,6 +21,7 @@ export function buildBrokenUrlRead({
     localizedChallengeIds,
     skillIds,
     tutorialIds,
+    ignored,
   });
 }
 

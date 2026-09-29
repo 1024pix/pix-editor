@@ -31,7 +31,7 @@ export async function register(server) {
           const { brokenUrlId } = request.params;
           const { ignored } = await brokenUrlSerializer.deserialize(request.payload);
 
-          const hasUpdated = await brokenUrlRepository.update(brokenUrl);
+          const hasUpdated = await brokenUrlRepository.update(brokenUrlId, ignored);
           if (!hasUpdated) {
             logger.info({ brokenUrlId, ignored }, 'Could not update broken url');
             return h.response().code(400);

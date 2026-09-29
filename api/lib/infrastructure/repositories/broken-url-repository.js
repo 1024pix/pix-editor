@@ -90,6 +90,7 @@ function toDomainList(brokenUrlList) {
       skillIds: dto.skillIds.filter(removeNullValuesFromJoin).toSorted(),
       tutorialIds: dto.tutorialIds.filter(removeNullValuesFromJoin).toSorted(),
       frameworkNames: dto.frameworkNames.filter(removeNullValuesFromJoin).toSorted(),
+      ignored: dto.ignored,
     };
 
     return new BrokenUrlRead(formattedData);

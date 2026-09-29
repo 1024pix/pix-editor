@@ -16,6 +16,7 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
             'status-code': brokenUrl.statusCode,
             url: brokenUrl.url,
             frameworks: ['frameworkName'],
+            ignored: brokenUrl.ignored,
           },
           relationships: {
             'localized-challenges': {
@@ -62,6 +63,7 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
             'status-code': brokenUrl.statusCode,
             url: brokenUrl.url,
             frameworks: ['frameworkName'],
+            ignored: brokenUrl.ignored,
           },
           relationships: {
             'localized-challenges': { data: [] },

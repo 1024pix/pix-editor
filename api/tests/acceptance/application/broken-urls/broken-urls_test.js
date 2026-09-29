@@ -26,18 +26,21 @@ describe('Acceptance | Controller | broken-urls', () => {
         errorMessage: 'Not Found',
         statusCode: 404,
         url: externalUrl1.url,
+        ignored: false,
       });
       const savedBrokenUrl = databaseBuilder.factory.buildBrokenUrl({
         id: '2',
         errorMessage: 'Tout cassé',
         statusCode: 500,
         url: externalUrl2.url,
+        ignored: false,
       });
       const savedNotAllowedUrl = databaseBuilder.factory.buildBrokenUrl({
         id: '3',
         errorMessage: 'Pas le droit',
         statusCode: 401,
         url: externalUrl3.url,
+        ignored: true,
       });
 
       notFoundUrl = domainBuilder.buildBrokenUrlRead({
@@ -100,6 +103,7 @@ describe('Acceptance | Controller | broken-urls', () => {
               'status-code': notFoundUrl.statusCode,
               url: notFoundUrl.url,
               frameworks: notFoundUrl.frameworkNames,
+              ignored: notFoundUrl.ignored,
             },
             type: 'broken-urls',
             relationships: {
@@ -122,6 +126,7 @@ describe('Acceptance | Controller | broken-urls', () => {
               'status-code': brokenUrl.statusCode,
               url: brokenUrl.url,
               frameworks: brokenUrl.frameworkNames,
+              ignored: brokenUrl.ignored,
             },
             type: 'broken-urls',
             relationships: {
@@ -144,6 +149,7 @@ describe('Acceptance | Controller | broken-urls', () => {
               'status-code': notAllowedUrl.statusCode,
               url: notAllowedUrl.url,
               frameworks: notAllowedUrl.frameworkNames,
+              ignored: notAllowedUrl.ignored,
             },
             type: 'broken-urls',
             relationships: {
