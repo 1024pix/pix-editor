@@ -2,16 +2,19 @@ import { draftModuleRepository } from '../../infrastructure/repositories/index.j
 import { DomainTransaction } from '../DomainTransaction.js';
 import { createDraftModule } from './create-draft-module.js';
 import { updateDraftModule } from './update-draft-module.js';
+import { validateDraftModule } from './validate-draft-module.js';
 
-export async function bulkUpdateDraftModules({ draftModules, updatedModuleIds }, dependencies = { draftModuleRepository, createDraftModule, updateDraftModule }) {
+export async function bulkUpdateDraftModules({ draftModules, updatedModuleIds }, dependencies = { draftModuleRepository, createDraftModule, updateDraftModule, validateDraftModule }) {
   return DomainTransaction.execute(async () => {
     for (const draftModule of draftModules) {
+      let savedDraftModule;
       if (updatedModuleIds.includes(draftModule.moduleId)) {
         await dependencies.draftModuleRepository.remove({ id: draftModule.id });
-        await dependencies.createDraftModule(draftModule);
+        savedDraftModule = await dependencies.createDraftModule(draftModule);
       } else {
-        await dependencies.updateDraftModule(draftModule);
+        savedDraftModule = await dependencies.updateDraftModule(draftModule);
       }
+      await dependencies.validateDraftModule(savedDraftModule);
     }
   });
 }
