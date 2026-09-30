@@ -1,5 +1,6 @@
-import { PixButtonLink, PixTable, PixTableColumn } from '@1024pix/nebulix-ember';
+import { PixButtonLink, PixTable, PixTableColumn, PixToggle } from '@1024pix/nebulix-ember';
 import { fn } from '@ember/helper';
+import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
@@ -139,10 +140,14 @@ export default class BrokenUrlList extends Component {
             </PixTableColumn>
           {{/if}}
           <PixTableColumn @context={{context}} class="column--small">
-            <:header>À cacher</:header>
+            <:header>À ignorer</:header>
             <:cell>
-              <div class="broken-urls-list__links">
-                  {{ brokenUrl.ignored }}
+              <div class="broken-urls-list__toggle">
+                <PixToggle
+                  @checked={{brokenUrl.ignored}}
+                  title="Vu et s'en tape"
+                  {{on "change" (fn @ignoreBrokenUrl brokenUrl)}}
+                />
               </div>
             </:cell>
           </PixTableColumn>

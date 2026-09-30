@@ -1,4 +1,5 @@
-import { PixFilterBanner, PixMultiSelect, PixSearchInput } from '@1024pix/nebulix-ember';
+import { PixFilterBanner, PixMultiSelect, PixSearchInput, PixToggle } from '@1024pix/nebulix-ember';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import Select from 'pixeditor/components/field/select';
@@ -94,6 +95,11 @@ export default class BrokenUrlFilters extends Component {
     return this.args.onApplyFiltersClicked('frameworks', frameworks);
   }
 
+  @action
+  triggerIgnoredFilter() {
+    return this.args.onApplyFiltersClicked('ignored', !this.args.ignoredFilterValue);
+  }
+
   <template>
     <PixFilterBanner
       @clearFiltersLabel="Réinitialiser les filtres"
@@ -172,6 +178,9 @@ export default class BrokenUrlFilters extends Component {
         <:label>Filtrer par référentiel</:label>
         <:default as |option|>{{option.label}}</:default>
       </PixMultiSelect>
+      <PixToggle @checked={{@ignoredFilterValue}} {{on "change" this.triggerIgnoredFilter}}>
+        Afficher les URL ignorées
+      </PixToggle>
     </PixFilterBanner>
   </template>
 }

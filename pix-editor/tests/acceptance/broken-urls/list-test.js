@@ -1,5 +1,5 @@
-import { fillByLabel, visit } from '@1024pix/ember-testing-library';
-import { click, currentURL } from '@ember/test-helpers';
+import { fillByLabel, visit, within } from '@1024pix/ember-testing-library';
+import { click, currentURL, waitUntil } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -116,6 +116,16 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       statusCode: 408,
       skillIds: [skill2.id],
       frameworks: ['recFramework1'],
+      ignored: false,
+    });
+    this.server.create('broken-url', {
+      id: 4,
+      url: 'http://banane-ignoree.fr',
+      errorMessage: 'Not found',
+      statusCode: 404,
+      skillIds: [skill.id],
+      frameworks: ['recFramework1'],
+      ignored: true,
     });
 
     return authenticateSession();
@@ -223,6 +233,56 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       assert.dom(screen.getByText('http://pipeau-la-grenouille.fr')).exists();
       assert.dom(screen.queryByText('http://chocolat-fromage.org')).doesNotExist();
       assert.dom(screen.queryByText('http://cerise.com')).doesNotExist();
+    });
+
+    test('should not display ignored broken urls by default', async function (assert) {
+      // when
+      const screen = await visit('/broken-urls/tutorials');
+
+      // then
+      assert.dom(screen.getByText('http://cerise.com')).exists();
+      assert.dom(screen.queryByText('http://banane-ignoree.fr')).doesNotExist();
+    });
+
+    test('should display ignored broken urls when toggling ignored filter', async function (assert) {
+      // when
+      const screen = await visit('/broken-urls/tutorials');
+      await click(screen.getByLabelText('Afficher les URL ignorées'));
+
+      // then
+      assert.dom(screen.getByText('http://banane-ignoree.fr')).exists();
+      assert.dom(screen.getByText('http://cerise.com')).exists();
+    });
+  });
+
+  module('ignore', function () {
+    test('should hide broken url and save it when marking it as ignored', async function (assert) {
+      // given
+      const screen = await visit('/broken-urls/tutorials');
+      const row = screen.getByText('http://cerise.com').closest('tr');
+
+      // when
+      await click(within(row).getByTitle("Vu et s'en tape"));
+      await waitUntil(() => !screen.queryByText('http://cerise.com'));
+
+      // then
+      assert.dom(screen.queryByText('http://cerise.com')).doesNotExist();
+      assert.true(this.server.schema.brokenUrls.find(3).ignored);
+    });
+
+    test('should unignore broken url when unchecking its toggle', async function (assert) {
+      // given
+      const screen = await visit('/broken-urls/tutorials');
+      await click(screen.getByLabelText('Afficher les URL ignorées'));
+      const row = screen.getByText('http://banane-ignoree.fr').closest('tr');
+
+      // when
+      await click(within(row).getByTitle("Vu et s'en tape"));
+      await waitUntil(() => this.server.schema.brokenUrls.find(4).ignored === false);
+
+      // then
+      assert.false(this.server.schema.brokenUrls.find(4).ignored);
+      assert.dom(screen.getByText('http://banane-ignoree.fr')).exists();
     });
   });
 });

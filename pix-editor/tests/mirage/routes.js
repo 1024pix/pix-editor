@@ -635,6 +635,7 @@ export default function routes() {
   this.get('/search', (schema) => schema.searchResults.all());
 
   this.get('/broken-urls');
+  this.patch('/broken-urls/:id');
 }
 
 /* eslint-enable ember/no-get */
