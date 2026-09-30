@@ -66,7 +66,7 @@
     "fetch-cookie": "^3.2.0",
     "file-saver": "^2.0.5",
     "html-validate": "^11.5.6",
-    "joi": "^18.1.1",
+    "joi": "^18.2.6",
     "js-crypto-random": "^1.0.4",
     "json-stream-es": "^1.2.1",
     "jsonapi-serializer": "^3.6.9",
