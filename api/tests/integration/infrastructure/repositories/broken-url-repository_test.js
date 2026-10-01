@@ -49,9 +49,14 @@ describe('Integration | Repository | broken-url-repository', () => {
 
       await saveNewlyBrokenUrlList([oldBrokenUrl3, newlyBrokenUrl4]);
 
-      const updatedUrlList = await knex('broken_urls').select('url', 'errorMessage', 'statusCode');
+      const updatedUrlList = await knex('broken_urls').select('url', 'errorMessage', 'statusCode').orderBy('url');
 
       expect(updatedUrlList).toEqual([
+        {
+          errorMessage: newlyBrokenUrl4.errorMessage,
+          statusCode: newlyBrokenUrl4.statusCode,
+          url: newlyBrokenUrl4.url,
+        },
         {
           errorMessage: newlyBrokenUrl1.errorMessage,
           statusCode: newlyBrokenUrl1.statusCode,
@@ -62,12 +67,97 @@ describe('Integration | Repository | broken-url-repository', () => {
           statusCode: newlyBrokenUrl2.statusCode,
           url: newlyBrokenUrl2.url,
         },
+      ]);
+    });
+
+    it('should update an already present and not ignored broken URL', async () => {
+      // given
+      const oldBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/broken-link', statusCode: 400, errorMessage: null, ignored: false });
+      await databaseBuilder.commit();
+
+      const crawledUrl = { url: oldBrokenUrl.url, statusCode: 500, errorMessage: 'Erreur serveur' };
+
+      // when
+      await saveNewlyBrokenUrlList([crawledUrl]);
+
+      // then
+      const updatedUrlList = await knex('broken_urls').select('id', 'url', 'errorMessage', 'statusCode', 'ignored');
+      expect(updatedUrlList).toEqual([
         {
-          errorMessage: newlyBrokenUrl4.errorMessage,
-          statusCode: newlyBrokenUrl4.statusCode,
-          url: newlyBrokenUrl4.url,
+          id: oldBrokenUrl.id,
+          url: oldBrokenUrl.url,
+          statusCode: 500,
+          errorMessage: 'Erreur serveur',
+          ignored: false,
         },
       ]);
+    });
+
+    it('should not update an ignored broken URL when its status code has not changed', async () => {
+      // given
+      const ignoredBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/ignored-link', statusCode: 404, errorMessage: 'Not Found', ignored: true });
+      await databaseBuilder.commit();
+
+      const crawledUrl = { url: ignoredBrokenUrl.url, statusCode: 404, errorMessage: 'URL pas trouvée' };
+      const newlyBrokenUrl = { url: 'https://example.com/new-broken-link', statusCode: 400, errorMessage: null };
+
+      // when
+      await saveNewlyBrokenUrlList([crawledUrl, newlyBrokenUrl]);
+
+      // then
+      const updatedUrlList = await knex('broken_urls').select('id', 'url', 'errorMessage', 'statusCode', 'ignored').orderBy('url');
+      expect(updatedUrlList).toEqual([
+        {
+          id: ignoredBrokenUrl.id,
+          url: ignoredBrokenUrl.url,
+          statusCode: 404,
+          errorMessage: 'Not Found',
+          ignored: true,
+        },
+        {
+          id: expect.any(Number),
+          url: newlyBrokenUrl.url,
+          statusCode: 400,
+          errorMessage: null,
+          ignored: false,
+        },
+      ]);
+    });
+
+    it('should update an ignored broken URL and stop ignoring it when its status code has changed', async () => {
+      // given
+      const ignoredBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/ignored-link', statusCode: 404, errorMessage: 'Not Found', ignored: true });
+      await databaseBuilder.commit();
+
+      const crawledUrl = { url: ignoredBrokenUrl.url, statusCode: 500, errorMessage: 'Erreur serveur' };
+
+      // when
+      await saveNewlyBrokenUrlList([crawledUrl]);
+
+      // then
+      const updatedUrlList = await knex('broken_urls').select('id', 'url', 'errorMessage', 'statusCode', 'ignored');
+      expect(updatedUrlList).toEqual([
+        {
+          id: ignoredBrokenUrl.id,
+          url: ignoredBrokenUrl.url,
+          statusCode: 500,
+          errorMessage: 'Erreur serveur',
+          ignored: false,
+        },
+      ]);
+    });
+
+    it('should not fail when all given broken URLs are ignored', async () => {
+      // given
+      const ignoredBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/ignored-link', statusCode: 404, ignored: true });
+      await databaseBuilder.commit();
+
+      // when
+      await saveNewlyBrokenUrlList([{ url: ignoredBrokenUrl.url, statusCode: 404 }]);
+
+      // then
+      const updatedUrlList = await knex('broken_urls').select('url', 'statusCode', 'ignored');
+      expect(updatedUrlList).toEqual([{ url: ignoredBrokenUrl.url, statusCode: 404, ignored: true }]);
     });
   });
 

@@ -3,18 +3,26 @@ import { BrokenUrl } from '../../domain/models/index.js';
 import { BrokenUrl as BrokenUrlRead } from '../../domain/readmodels/index.js';
 
 /**
- * @typedef {import('../../domain/models/CrawledUrl.js').CrawledUrl} CrawledUrl
+ * @typedef {import('../../domain/models/BrokenUrl.js').BrokenUrl} BrokenUrl
  */
 
 /**
- * @param {CrawledUrl[]} brokenUrlList
+ * @param {BrokenUrl[]} brokenUrlList
  */
 export async function saveNewlyBrokenUrlList(brokenUrlList) {
   const knex = DomainTransaction.getConnection();
 
+  if (brokenUrlList.length === 0) return;
+
   await knex('broken_urls').insert(brokenUrlList)
     .onConflict('url')
-    .ignore();
+    .merge([
+      'statusCode',
+      'errorMessage',
+      'ignored',
+    ])
+    .where('broken_urls.ignored', false)
+    .orWhereRaw('"broken_urls"."statusCode" <> excluded."statusCode"');
 }
 
 /**
