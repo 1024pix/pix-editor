@@ -95,7 +95,7 @@
     "lodash": "^4.17.21",
     "mime": "^4.1.0",
     "miragejs": "^0.1.48",
-    "monaco-editor": "^0.56.0",
+    "monaco-editor": "^0.57.0",
     "morgan": "^1.12.1",
     "npm-run-all2": "^9.0.0",
     "p-queue": "^9.1.0",
