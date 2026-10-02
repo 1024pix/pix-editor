@@ -74,9 +74,10 @@ export async function list() {
 }
 
 /**
- * @param {BrokenUrl} brokenUrl
+ * @param {number} brokenUrlId
+ * @param {boolean} ignored
  */
-export async function update(brokenUrlId, ignored) {
+export async function updateIgnoredById(brokenUrlId, ignored) {
   const knex = DomainTransaction.getConnection();
 
   const updatedBrokenUrl = await knex('broken_urls')

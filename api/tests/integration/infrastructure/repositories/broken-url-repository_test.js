@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import { saveNewlyBrokenUrlList, removeRepairedUrlList, deleteUnmentionedBrokenUrls, list, update } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
+import { saveNewlyBrokenUrlList, removeRepairedUrlList, deleteUnmentionedBrokenUrls, list, updateIgnoredById } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
 import { BrokenUrl as BrokenUrlRead } from '../../../../lib/domain/readmodels/index.js';
 
 describe('Integration | Repository | broken-url-repository', () => {
@@ -329,8 +329,8 @@ describe('Integration | Repository | broken-url-repository', () => {
     });
   });
 
-  describe('#update', () => {
-    it('should update a broken url', async () => {
+  describe('#updateIgnoredById', () => {
+    it('should update the ignored property of a broken url', async () => {
       // given
       const savedBrokenUrl = databaseBuilder.factory.buildBrokenUrl({
         errorMessage: 'Pas le droit',
@@ -344,7 +344,7 @@ describe('Integration | Repository | broken-url-repository', () => {
       const updatedBrokenUrl = domainBuilder.buildBrokenUrl({ ...savedBrokenUrl, ignored: true });
 
       // when
-      const brokenUrl = await update(updatedBrokenUrl.id, updatedBrokenUrl.ignored);
+      const brokenUrl = await updateIgnoredById(updatedBrokenUrl.id, updatedBrokenUrl.ignored);
 
       // then
       expect(brokenUrl).toStrictEqual(updatedBrokenUrl);
