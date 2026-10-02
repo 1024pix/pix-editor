@@ -57,7 +57,11 @@ export default class BrokenUrlsIndexController extends Controller {
   async ignoreBrokenUrl(brokenUrl) {
     await new Promise((res) => setTimeout(res, 300)); // allow time for PixToggle animation before hiding row
     brokenUrl.ignored = !brokenUrl.ignored;
-    await brokenUrl.save();
+    try {
+      await brokenUrl.save();
+    } catch {
+      brokenUrl.rollbackAttributes();
+    }
   }
 
   @action

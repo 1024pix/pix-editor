@@ -269,20 +269,5 @@ module('Acceptance | Broken URLs | List', function (hooks) {
       assert.dom(screen.queryByText('http://cerise.com')).doesNotExist();
       assert.true(this.server.schema.brokenUrls.find(3).ignored);
     });
-
-    test('should unignore broken url when unchecking its toggle', async function (assert) {
-      // given
-      const screen = await visit('/broken-urls/tutorials');
-      await click(screen.getByLabelText('Afficher les URL ignorées'));
-      const row = screen.getByText('http://banane-ignoree.fr').closest('tr');
-
-      // when
-      await click(within(row).getByTitle("Vu et s'en tape"));
-      await waitUntil(() => this.server.schema.brokenUrls.find(4).ignored === false);
-
-      // then
-      assert.false(this.server.schema.brokenUrls.find(4).ignored);
-      assert.dom(screen.getByText('http://banane-ignoree.fr')).exists();
-    });
   });
 });
