@@ -3,21 +3,23 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class BrokenUrlsIndexController extends Controller {
-  queryParams = ['url', 'statusCode', 'skills', 'localizedChallenges', 'tutorials', 'frameworks'];
+  queryParams = ['url', 'statusCode', 'skills', 'localizedChallenges', 'tutorials', 'frameworks', 'ignored'];
   @tracked url = '';
   @tracked statusCode = '';
   @tracked skills = [];
   @tracked localizedChallenges = [];
   @tracked tutorials = [];
   @tracked frameworks = [];
+  @tracked ignored = false;
 
-  get filterBrokenUrls() {
+  get brokenUrlsFilterFunction() {
     const urlFilter = this.url ?? '';
     const statusCodeFilter = this.statusCode ?? '';
     const skillFilters = this.skills ?? [];
     const localizedChallengeFilters = this.localizedChallenges ?? [];
     const tutorialFilters = this.tutorials ?? [];
     const frameworkNameFilters = this.frameworks ?? [];
+    const ignoredFilter = this.ignored ?? false;
 
     return (brokenUrl) => {
       const hasUrlFilter = brokenUrl.url.includes(urlFilter);
@@ -29,6 +31,7 @@ export default class BrokenUrlsIndexController extends Controller {
       const skills = brokenUrl.hasMany('skills').value() ?? [];
       const hasSkillFilter = skillFilters.length === 0 || skills.some((skill) => skillFilters.includes(skill.id));
 
+      const isIgnored = ignoredFilter || !brokenUrl.ignored;
       const localizedChallenges = brokenUrl.hasMany('localizedChallenges').value() ?? [];
       const hasLocalizedChallengeFilter =
         localizedChallengeFilters.length === 0 ||
@@ -44,9 +47,21 @@ export default class BrokenUrlsIndexController extends Controller {
         hasSkillFilter &&
         hasLocalizedChallengeFilter &&
         hasTutorialFilter &&
-        hasFrameworkNameFilter
+        hasFrameworkNameFilter &&
+        isIgnored
       );
     };
+  }
+
+  @action
+  async ignoreBrokenUrl(brokenUrl) {
+    await new Promise((res) => setTimeout(res, 300)); // allow time for PixToggle animation before hiding row
+    brokenUrl.ignored = !brokenUrl.ignored;
+    try {
+      await brokenUrl.save();
+    } catch {
+      brokenUrl.rollbackAttributes();
+    }
   }
 
   @action

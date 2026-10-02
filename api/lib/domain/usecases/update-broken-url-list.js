@@ -1,4 +1,5 @@
 import * as brokenUrlRepository from '../../infrastructure/repositories/broken-url-repository.js';
+import { BrokenUrl } from '../models/index.js';
 
 /**
  * @typedef {import('../models/CrawledUrl.js').CrawledUrl} CrawledUrl
@@ -13,7 +14,7 @@ export async function updateBrokenUrlList(crawledUrlList) {
     await brokenUrlRepository.removeRepairedUrlList(repairedUrlList);
   }
 
-  const brokenUrlList = crawledUrlList.filter((url) => url.isBroken);
+  const brokenUrlList = crawledUrlList.filter((url) => url.isBroken).map((brokenUrl) => new BrokenUrl(brokenUrl));
   if (brokenUrlList.length > 0) {
     await brokenUrlRepository.saveNewlyBrokenUrlList(brokenUrlList);
   }

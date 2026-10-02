@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/broken-url-serializer.js';
+import { serialize, deserialize } from '../../../../../lib/infrastructure/serializers/jsonapi/broken-url-serializer.js';
 import { domainBuilder } from '../../../../test-helper.js';
 
 describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a given broken url with challengeIds', async () => {
       // given
-      const brokenUrl = domainBuilder.buildBrokenUrl({ localizedChallengeIds: ['recChallenge1', 'recChallenge2'], skillIds: [], tutorialIds: ['tutorialId1'], frameworkNames: ['frameworkName'] });
+      const brokenUrl = domainBuilder.buildBrokenUrlRead({ localizedChallengeIds: ['recChallenge1', 'recChallenge2'], skillIds: [], tutorialIds: ['tutorialId1'], frameworkNames: ['frameworkName'] });
       const expectedSerializedBrokenUrl = {
         data: {
           type: 'broken-urls',
@@ -16,6 +16,7 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
             'status-code': brokenUrl.statusCode,
             url: brokenUrl.url,
             frameworks: ['frameworkName'],
+            ignored: brokenUrl.ignored,
           },
           relationships: {
             'localized-challenges': {
@@ -52,7 +53,7 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
 
     it('should serialize a given broken url with tutorialIds', async () => {
       // given
-      const brokenUrl = domainBuilder.buildBrokenUrl({ skillIds: ['recTuto1', 'recTuto2'], localizedChallengeIds: [], tutorialIds: ['tutorialId2'], frameworkNames: ['frameworkName'] });
+      const brokenUrl = domainBuilder.buildBrokenUrlRead({ skillIds: ['recTuto1', 'recTuto2'], localizedChallengeIds: [], tutorialIds: ['tutorialId2'], frameworkNames: ['frameworkName'] });
       const expectedSerializedBrokenUrl = {
         data: {
           type: 'broken-urls',
@@ -62,6 +63,7 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
             'status-code': brokenUrl.statusCode,
             url: brokenUrl.url,
             frameworks: ['frameworkName'],
+            ignored: brokenUrl.ignored,
           },
           relationships: {
             'localized-challenges': { data: [] },
@@ -94,6 +96,38 @@ describe('Unit | Serializer | JSONAPI | broken-url-serializer', () => {
 
       // Then
       expect(jsonData).to.deep.equal(expectedSerializedBrokenUrl);
+    });
+  });
+
+  describe('#deserialize', () => {
+    it('should deserialize from a json-api object', async () => {
+      // given
+      const payload = {
+        data: {
+          type: 'broken-url',
+          attributes: {
+            'error-message': 'message d\'erreur',
+            'status-code': 403,
+            url: 'https://superurl.com',
+            frameworks: ['frameworkName'],
+            ignored: true,
+          },
+        },
+      };
+
+      // when
+      const deserializedTag = await deserialize(payload);
+
+      // then
+      expect(deserializedTag).toStrictEqual(
+        {
+          errorMessage: 'message d\'erreur',
+          statusCode: 403,
+          url: 'https://superurl.com',
+          frameworks: ['frameworkName'],
+          ignored: true,
+        },
+      );
     });
   });
 });

@@ -1,6 +1,6 @@
-import JsonapiSerializer from 'jsonapi-serializer';
+import Jsonapi from 'jsonapi-serializer';
 
-const { Serializer } = JsonapiSerializer;
+const { Serializer, Deserializer } = Jsonapi;
 
 const serializer = new Serializer('broken-urls', {
   attributes: [
@@ -11,6 +11,7 @@ const serializer = new Serializer('broken-urls', {
     'skills',
     'tutorials',
     'frameworks',
+    'ignored',
   ],
   transform({ localizedChallengeIds, skillIds, tutorialIds, frameworkNames, ...brokenUrl }) {
     return {
@@ -28,4 +29,10 @@ const serializer = new Serializer('broken-urls', {
 
 export function serialize(brokenUrl) {
   return serializer.serialize(brokenUrl);
+}
+
+const deserializer = new Deserializer({ keyForAttribute: 'camelCase' });
+
+export function deserialize(brokenUrl) {
+  return deserializer.deserialize(brokenUrl);
 }
