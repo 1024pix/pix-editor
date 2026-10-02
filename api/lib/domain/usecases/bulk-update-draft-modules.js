@@ -1,27 +1,20 @@
+import { draftModuleRepository } from '../../infrastructure/repositories/index.js';
 import { DomainTransaction } from '../DomainTransaction.js';
-import { DraftModuleVersion, ModuleVersion } from '../models/index.js';
-import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
+import { createDraftModule } from './create-draft-module.js';
+import { updateDraftModule } from './update-draft-module.js';
+import { validateDraftModule } from './validate-draft-module.js';
 
-export async function bulkUpdateDraftModules(draftModules, dependencies = { draftModuleRepository, draftModuleVersionRepository, moduleRepository, updatePixApiReleaseCache }) {
+export async function bulkUpdateDraftModules({ draftModules, updatedModuleIds }, dependencies = { draftModuleRepository, createDraftModule, updateDraftModule, validateDraftModule }) {
   return DomainTransaction.execute(async () => {
     for (const draftModule of draftModules) {
-      const module = await dependencies.moduleRepository.getById({ id: draftModule.moduleId });
-
-      if (module) {
-        draftModule.version = ModuleVersion.incrementMajorVersion(draftModule.version);
+      let savedDraftModule;
+      if (updatedModuleIds.includes(draftModule.moduleId)) {
+        await dependencies.draftModuleRepository.remove({ id: draftModule.id });
+        savedDraftModule = await dependencies.createDraftModule(draftModule);
+      } else {
+        savedDraftModule = await dependencies.updateDraftModule(draftModule);
       }
-      draftModule.version = DraftModuleVersion.incrementMinorVersion(draftModule.version);
-
-      const savedDraftModule = await dependencies.draftModuleRepository.save(draftModule);
-
-      await dependencies.draftModuleVersionRepository.create(new DraftModuleVersion({
-        draftModuleId: savedDraftModule.id,
-        version: savedDraftModule.version,
-        structuredDiff: {},
-      }));
-
-      await dependencies.updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated(savedDraftModule);
+      await dependencies.validateDraftModule(savedDraftModule);
     }
   });
 }
-
