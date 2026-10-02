@@ -14,6 +14,7 @@ const multiselectTranslationList = {
   challenge: { placeholder: 'Filtrer par épreuve' },
   skill: { placeholder: 'Filtrer par acquis' },
   tutorial: { placeholder: 'Filtrer par tutoriel' },
+  framework: { placeholder: 'Filtrer par référentiel' },
 };
 
 export default class BrokenUrlFilters extends Component {
@@ -173,7 +174,7 @@ export default class BrokenUrlFilters extends Component {
         @onChange={{this.triggerFrameworkFilter}}
         @screenReaderOnly={{true}}
         @isSearchable={{true}}
-        @placeholder="Filtrer par référentiel"
+        @texts={{multiselectTranslationList.framework}}
       >
         <:label>Filtrer par référentiel</:label>
         <:default as |option|>{{option.label}}</:default>
