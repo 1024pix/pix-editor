@@ -1,5 +1,25 @@
 
 
+## v4.56.0 (05/10/2026)
+
+
+### :rocket: Amélioration
+- [#1671](https://github.com/1024pix/pix-editor/pull/1671) [FEATURE] Permettre d'ignorer des URL cassées (PIX-24381).
+- [#1666](https://github.com/1024pix/pix-editor/pull/1666) [FEATURE] Déplacer le script de duplication d'un module entier dans Pix Editor (PIX-24427).
+
+### :building_construction: Tech
+- [#1669](https://github.com/1024pix/pix-editor/pull/1669) [TECH] Migre vers nebulix.
+
+### :arrow_up: Montée de version
+- [#1675](https://github.com/1024pix/pix-editor/pull/1675) [BUMP] Update dependency monaco-editor to ^0.57.0.
+- [#1668](https://github.com/1024pix/pix-editor/pull/1668) [BUMP] Update dependency @googleapis/sheets to v18.
+- [#1674](https://github.com/1024pix/pix-editor/pull/1674) [BUMP] Update 1024pix/pix-actions digest to b4d1020.
+- [#1672](https://github.com/1024pix/pix-editor/pull/1672) [BUMP] Update dependency joi to ^18.2.6 (api) [SECURITY].
+- [#1659](https://github.com/1024pix/pix-editor/pull/1659) [BUMP] Update dependency @googleapis/sheets to v17.
+- [#1673](https://github.com/1024pix/pix-editor/pull/1673) [BUMP] @1024pix/ember-testing-library@4.0.1.
+- [#1670](https://github.com/1024pix/pix-editor/pull/1670) [BUMP] Update dependency morgan to ^1.12.1 (pix-editor) [SECURITY] - autoclosed.
+- [#1657](https://github.com/1024pix/pix-editor/pull/1657) [BUMP] Update dependency @googleapis/sheets to v14.
+
 ## v4.55.1 (28/09/2026)
 
 

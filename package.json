@@ -1,6 +1,6 @@
 {
   "name": "pix-lcms",
-  "version": "4.55.1",
+  "version": "4.56.0",
   "description": "Pix Learning Content Management System",
   "main": "index.js",
   "directories": {
