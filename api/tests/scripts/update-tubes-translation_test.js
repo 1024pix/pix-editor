@@ -151,23 +151,15 @@ describe('Script | UpdateTubesTranslationScript', () => {
       // given
       const tubeId1 = 'tibeId1';
       const tubeId2 = 'tibeId2';
-      const { thematic } = databaseBuilder.factory.buildChallengeInGroup({ tube: { id: tubeId1, name: '@tube_un' }, skill: { tubeId: tubeId1 } });
+      const { thematic } = databaseBuilder.factory.buildChallengeInGroup({
+        tube: { id: tubeId1, name: '@tube_un', practicalTitle: 'mon vieux titre', practicalDescription: 'ma vieille description' },
+        skill: { tubeId: tubeId1 },
+      });
       databaseBuilder.factory.buildTube({ id: tubeId2, name: '@tube_un', thematicId: thematic.id });
-
-      databaseBuilder.factory.buildTranslation({
-        key: `tube.${tubeId1}.practicalDescription`,
-        locale: 'fr',
-        value: 'ma vielle description',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: `tube.${tubeId1}.practicalTitle`,
-        locale: 'fr',
-        value: 'mon vieux titre',
-      });
       databaseBuilder.factory.buildTranslation({
         key: `tube.${tubeId2}.practicalDescription`,
         locale: 'fr',
-        value: 'ma vielle description 2',
+        value: 'ma vieille description 2',
       });
       databaseBuilder.factory.buildTranslation({
         key: `tube.${tubeId2}.practicalTitle`,
@@ -193,13 +185,13 @@ describe('Script | UpdateTubesTranslationScript', () => {
       expect(frTitleTranslation1).equal('mon vieux titre');
 
       const { value: frDescriptionTranslation1 } = await knex('translations').select('value').where({ key: `tube.${tubeId1}.practicalDescription`, locale: 'fr' }).first();
-      expect(frDescriptionTranslation1).equal('ma vielle description');
+      expect(frDescriptionTranslation1).equal('ma vieille description');
 
       const { value: frTitleTranslation2 } = await knex('translations').select('value').where({ key: `tube.${tubeId2}.practicalTitle`, locale: 'fr' }).first();
       expect(frTitleTranslation2).equal('mon vieux titre 2');
 
       const { value: frDescriptionTranslation2 } = await knex('translations').select('value').where({ key: `tube.${tubeId2}.practicalDescription`, locale: 'fr' }).first();
-      expect(frDescriptionTranslation2).equal('ma vielle description 2');
+      expect(frDescriptionTranslation2).equal('ma vieille description 2');
 
       expect(logger.error).toHaveBeenCalledWith('Found 2 tube(s) with name @tube_un', { tubeIds: [tubeId1, tubeId2] });
     });

@@ -13,6 +13,8 @@ import { buildTranslation } from './build-translation.js';
 /**
  * @typedef {import('../../../../lib/infrastructure/translations/challenge.js').fields} TranslatedChallengeFieldList
  * @typedef {TranslatedChallengeFieldList[number]} TranslatedChallengeField
+ * @typedef {import('../../../../lib/infrastructure/translations/tube.js').fields} TranslatedTubeFieldList
+ * @typedef {TranslatedTubeFieldList[number]} TranslatedTubeField
  */
 
 /**
@@ -22,7 +24,7 @@ import { buildTranslation } from './build-translation.js';
  *   challengeTranslations?: Partial<Record<TranslatedChallengeField, string>>
  *   skill?: Omit<Parameters<typeof buildSkillDatasourceObject>[0], 'id'>
  *   framework?: Parameters<typeof buildFramework>[0]
- *   tube?: Parameters<typeof buildTube>[0]
+ *   tube?: Parameters<typeof buildTube>[0] & Partial<Record<TranslatedTubeField, number>>
  * }} groupToBuild
  */
 export function buildChallengeInGroup({ challenge, localizedChallenge, challengeTranslations, skill, framework, tube }) {
@@ -52,6 +54,23 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
     ...localizedChallenge,
   };
 
+  const skillDTO = buildSkillDatasourceObject({
+    tubeId: `tube${randomId}`,
+    createdAt: challengeDTO.createdAt,
+    ...skill,
+    id: challengeDTO.skillId,
+  });
+
+  const tubeDTO = { id: skillDTO.tubeId, name: '@tube', thematicId: `thematic${randomId}`, ...tube };
+
+  const thematicDTO = { id: tubeDTO.thematicId, competenceId: challengeDTO.competenceId };
+
+  const competenceDTO = { id: thematicDTO.competenceId, index: '1.1', areaId: `area${randomId}` };
+
+  const areaDTO = { id: competenceDTO.areaId, code: '1', frameworkId: framework?.id ?? `framework${randomId}` };
+
+  const frameworkDTO = { id: areaDTO.frameworkId, name: 'Pix', ...framework };
+
   const challengeTranslationsValues = {
     instruction: 'Le cœur des boys',
     alternativeInstruction: ' j\'ai blessé',
@@ -62,30 +81,67 @@ export function buildChallengeInGroup({ challenge, localizedChallenge, challenge
     proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
     ...challengeTranslations,
   };
-
-  const skillDTO = buildSkillDatasourceObject({
-    tubeId: `tube${randomId}`,
-    createdAt: challengeDTO.createdAt,
-    ...skill,
-    id: challengeDTO.skillId,
-  });
-
-  const translationDTOs = Object.keys(challengeTranslationsValues).map((key) => ({
+  const challengeTranslationDTOs = Object.keys(challengeTranslationsValues).map((key) => ({
     key: `challenge.${challengeDTO.id}.${key}`,
     locale: localizedChallengeDTO.locale,
     value: challengeTranslationsValues[key],
   }));
 
+  const skillTranslationValues = { hint: 'il faut bien répondre à la question sinon tu auras faux' };
+  const skillTranslationDTOs = Object.keys(skillTranslationValues).map((key) => ({
+    key: `skill.${skillDTO.id}.${key}`,
+    locale: 'fr',
+    value: skillTranslationValues[key],
+  }));
+
+  const tubeTranslationValues = {
+    practicalTitle: tube?.practicalTitle ?? 'Tube pratique',
+    practicalDescription: tube?.practicalDescription ?? 'Le tube de l\'été',
+  };
+  const tubeTranslationDTOs = Object.keys(tubeTranslationValues).map((key) => ({
+    key: `tube.${tubeDTO.id}.${key}`,
+    locale: 'fr',
+    value: tubeTranslationValues[key],
+  }));
+
+  const thematicTranslationValues = { name: 'Tema la thématique' };
+  const thematicTranslationDTOs = Object.keys(thematicTranslationValues).map((key) => ({
+    key: `thematic.${thematicDTO.id}.${key}`,
+    locale: 'fr',
+    value: thematicTranslationValues[key],
+  }));
+
+  const competenceTranslationValues = { name: 'La pêche', description: 'Comment attraper des poissons et les relacher OU les manger' };
+  const competenceTranslationDTOs = Object.keys(competenceTranslationValues).map((key) => ({
+    key: `competence.${competenceDTO.id}.${key}`,
+    locale: 'fr',
+    value: competenceTranslationValues[key],
+  }));
+
+  const areaTranslationValues = { title: 'Domaine domaniale' };
+  const areaTranslationDTOs = Object.keys(areaTranslationValues).map((key) => ({
+    key: `area.${areaDTO.id}.${key}`,
+    locale: 'fr',
+    value: areaTranslationValues[key],
+  }));
+
   return {
-    framework: buildFramework({ id: `framework${randomId}`, name: 'Pix', ...framework }),
-    area: buildArea({ id: `area${randomId}`, code: '1', frameworkId: framework?.id ?? `framework${randomId}` }),
-    competence: buildCompetence({ id: challengeDTO.competenceId, index: '1.1', areaId: `area${randomId}` }),
-    thematic: buildThematic({ id: `thematic${randomId}`, competenceId: challengeDTO.competenceId }),
-    tube: buildTube({ id: skillDTO.tubeId, name: '@tube', thematicId: `thematic${randomId}`, ...tube }),
+    framework: buildFramework(frameworkDTO),
+    area: buildArea(areaDTO),
+    competence: buildCompetence(competenceDTO),
+    thematic: buildThematic(thematicDTO),
+    tube: buildTube(tubeDTO),
     skill: buildSkill({ ...skillDTO, tutorialIds: skill?.tutorialIds ?? [], learningMoreTutorialIds: skill?.learningMoreTutorialIds ?? [] }),
     challenge: buildChallenge(challengeDTO),
     localizedChallenge: buildLocalizedChallenge(localizedChallengeDTO),
-    translations: translationDTOs.map(buildTranslation),
+    translations: [
+      ...challengeTranslationDTOs,
+      ...skillTranslationDTOs,
+      ...tubeTranslationDTOs,
+      ...thematicTranslationDTOs,
+      ...competenceTranslationDTOs,
+      ...areaTranslationDTOs,
+    ].map(buildTranslation),
   };
 }
 
