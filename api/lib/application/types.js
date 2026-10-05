@@ -115,3 +115,7 @@ export function tutorialsRelationship() {
 export function whitelistedUrlId() {
   return schemaPositiveInteger32bits;
 }
+
+export function brokenUrlId() {
+  return schemaPositiveInteger32bits;
+}

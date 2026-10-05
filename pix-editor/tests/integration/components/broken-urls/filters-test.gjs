@@ -191,4 +191,42 @@ module('Integration | Component | broken-urls/filters', function (hooks) {
     // then
     assert.ok(onApplyFiltersClicked.calledOnceWith('tutorials', ['tutorialId1']));
   });
+
+  test('it should enable display of ignored broken urls', async function (assert) {
+    // given
+    const screen = await render(
+      <template>
+        <BrokenUrlFilters
+          @brokenUrls={{brokenUrls}}
+          @onApplyFiltersClicked={{onApplyFiltersClicked}}
+          @ignoredFilterValue={{false}}
+        />
+      </template>,
+    );
+
+    // when
+    await click(screen.getByLabelText('Afficher les URL ignorées'));
+
+    // then
+    assert.ok(onApplyFiltersClicked.calledOnceWith('ignored', true));
+  });
+
+  test('it should disable display of ignored broken urls', async function (assert) {
+    // given
+    const screen = await render(
+      <template>
+        <BrokenUrlFilters
+          @brokenUrls={{brokenUrls}}
+          @onApplyFiltersClicked={{onApplyFiltersClicked}}
+          @ignoredFilterValue={{true}}
+        />
+      </template>,
+    );
+
+    // when
+    await click(screen.getByLabelText('Afficher les URL ignorées'));
+
+    // then
+    assert.ok(onApplyFiltersClicked.calledOnceWith('ignored', false));
+  });
 });

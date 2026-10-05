@@ -1,4 +1,5 @@
-import { PixFilterBanner, PixMultiSelect, PixSearchInput } from '@1024pix/nebulix-ember';
+import { PixFilterBanner, PixMultiSelect, PixSearchInput, PixToggle } from '@1024pix/nebulix-ember';
+import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import Select from 'pixeditor/components/field/select';
@@ -13,6 +14,7 @@ const multiselectTranslationList = {
   challenge: { placeholder: 'Filtrer par épreuve' },
   skill: { placeholder: 'Filtrer par acquis' },
   tutorial: { placeholder: 'Filtrer par tutoriel' },
+  framework: { placeholder: 'Filtrer par référentiel' },
 };
 
 export default class BrokenUrlFilters extends Component {
@@ -94,6 +96,11 @@ export default class BrokenUrlFilters extends Component {
     return this.args.onApplyFiltersClicked('frameworks', frameworks);
   }
 
+  @action
+  triggerIgnoredFilter() {
+    return this.args.onApplyFiltersClicked('ignored', !this.args.ignoredFilterValue);
+  }
+
   <template>
     <PixFilterBanner
       @clearFiltersLabel="Réinitialiser les filtres"
@@ -167,11 +174,14 @@ export default class BrokenUrlFilters extends Component {
         @onChange={{this.triggerFrameworkFilter}}
         @screenReaderOnly={{true}}
         @isSearchable={{true}}
-        @placeholder="Filtrer par référentiel"
+        @texts={{multiselectTranslationList.framework}}
       >
         <:label>Filtrer par référentiel</:label>
         <:default as |option|>{{option.label}}</:default>
       </PixMultiSelect>
+      <PixToggle @checked={{@ignoredFilterValue}} {{on "change" this.triggerIgnoredFilter}}>
+        Afficher les URL ignorées
+      </PixToggle>
     </PixFilterBanner>
   </template>
 }

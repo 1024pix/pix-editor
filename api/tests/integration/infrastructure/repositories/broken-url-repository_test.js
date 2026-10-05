@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
-import { saveNewlyBrokenUrlList, removeRepairedUrlList, deleteUnmentionedBrokenUrls, list } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
-import { BrokenUrl } from '../../../../lib/domain/readmodels/index.js';
+import { saveNewlyBrokenUrlList, removeRepairedUrlList, deleteUnmentionedBrokenUrls, list, updateIgnoredById } from '../../../../lib/infrastructure/repositories/broken-url-repository.js';
+import { BrokenUrl as BrokenUrlRead } from '../../../../lib/domain/readmodels/index.js';
 
 describe('Integration | Repository | broken-url-repository', () => {
   describe('#saveNewlyBrokenUrlList', () => {
@@ -49,9 +49,14 @@ describe('Integration | Repository | broken-url-repository', () => {
 
       await saveNewlyBrokenUrlList([oldBrokenUrl3, newlyBrokenUrl4]);
 
-      const updatedUrlList = await knex('broken_urls').select('url', 'errorMessage', 'statusCode');
+      const updatedUrlList = await knex('broken_urls').select('url', 'errorMessage', 'statusCode').orderBy('url');
 
       expect(updatedUrlList).toEqual([
+        {
+          errorMessage: newlyBrokenUrl4.errorMessage,
+          statusCode: newlyBrokenUrl4.statusCode,
+          url: newlyBrokenUrl4.url,
+        },
         {
           errorMessage: newlyBrokenUrl1.errorMessage,
           statusCode: newlyBrokenUrl1.statusCode,
@@ -62,12 +67,97 @@ describe('Integration | Repository | broken-url-repository', () => {
           statusCode: newlyBrokenUrl2.statusCode,
           url: newlyBrokenUrl2.url,
         },
+      ]);
+    });
+
+    it('should update an already present and not ignored broken URL', async () => {
+      // given
+      const oldBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/broken-link', statusCode: 400, errorMessage: null, ignored: false });
+      await databaseBuilder.commit();
+
+      const crawledUrl = { url: oldBrokenUrl.url, statusCode: 500, errorMessage: 'Erreur serveur' };
+
+      // when
+      await saveNewlyBrokenUrlList([crawledUrl]);
+
+      // then
+      const updatedUrlList = await knex('broken_urls').select('id', 'url', 'errorMessage', 'statusCode', 'ignored');
+      expect(updatedUrlList).toEqual([
         {
-          errorMessage: newlyBrokenUrl4.errorMessage,
-          statusCode: newlyBrokenUrl4.statusCode,
-          url: newlyBrokenUrl4.url,
+          id: oldBrokenUrl.id,
+          url: oldBrokenUrl.url,
+          statusCode: 500,
+          errorMessage: 'Erreur serveur',
+          ignored: false,
         },
       ]);
+    });
+
+    it('should not update an ignored broken URL when its status code has not changed', async () => {
+      // given
+      const ignoredBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/ignored-link', statusCode: 404, errorMessage: 'Not Found', ignored: true });
+      await databaseBuilder.commit();
+
+      const crawledUrl = { url: ignoredBrokenUrl.url, statusCode: 404, errorMessage: 'URL pas trouvée' };
+      const newlyBrokenUrl = { url: 'https://example.com/new-broken-link', statusCode: 400, errorMessage: null };
+
+      // when
+      await saveNewlyBrokenUrlList([crawledUrl, newlyBrokenUrl]);
+
+      // then
+      const updatedUrlList = await knex('broken_urls').select('id', 'url', 'errorMessage', 'statusCode', 'ignored').orderBy('url');
+      expect(updatedUrlList).toEqual([
+        {
+          id: ignoredBrokenUrl.id,
+          url: ignoredBrokenUrl.url,
+          statusCode: 404,
+          errorMessage: 'Not Found',
+          ignored: true,
+        },
+        {
+          id: expect.any(Number),
+          url: newlyBrokenUrl.url,
+          statusCode: 400,
+          errorMessage: null,
+          ignored: false,
+        },
+      ]);
+    });
+
+    it('should update an ignored broken URL and stop ignoring it when its status code has changed', async () => {
+      // given
+      const ignoredBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/ignored-link', statusCode: 404, errorMessage: 'Not Found', ignored: true });
+      await databaseBuilder.commit();
+
+      const crawledUrl = { url: ignoredBrokenUrl.url, statusCode: 500, errorMessage: 'Erreur serveur' };
+
+      // when
+      await saveNewlyBrokenUrlList([crawledUrl]);
+
+      // then
+      const updatedUrlList = await knex('broken_urls').select('id', 'url', 'errorMessage', 'statusCode', 'ignored');
+      expect(updatedUrlList).toEqual([
+        {
+          id: ignoredBrokenUrl.id,
+          url: ignoredBrokenUrl.url,
+          statusCode: 500,
+          errorMessage: 'Erreur serveur',
+          ignored: false,
+        },
+      ]);
+    });
+
+    it('should not fail when all given broken URLs are ignored', async () => {
+      // given
+      const ignoredBrokenUrl = databaseBuilder.factory.buildBrokenUrl({ url: 'https://example.com/ignored-link', statusCode: 404, ignored: true });
+      await databaseBuilder.commit();
+
+      // when
+      await saveNewlyBrokenUrlList([{ url: ignoredBrokenUrl.url, statusCode: 404 }]);
+
+      // then
+      const updatedUrlList = await knex('broken_urls').select('url', 'statusCode', 'ignored');
+      expect(updatedUrlList).toEqual([{ url: ignoredBrokenUrl.url, statusCode: 404, ignored: true }]);
     });
   });
 
@@ -203,7 +293,7 @@ describe('Integration | Repository | broken-url-repository', () => {
       const brokenUrlList = await list();
 
       // then
-      expect(brokenUrlList[0]).toBeInstanceOf(BrokenUrl);
+      expect(brokenUrlList[0]).toBeInstanceOf(BrokenUrlRead);
 
       expect(brokenUrlList).toEqual([
         {
@@ -236,6 +326,28 @@ describe('Integration | Repository | broken-url-repository', () => {
 
       // then
       expect(brokenUrls).toEqual([]);
+    });
+  });
+
+  describe('#updateIgnoredById', () => {
+    it('should update the ignored property of a broken url', async () => {
+      // given
+      const savedBrokenUrl = databaseBuilder.factory.buildBrokenUrl({
+        errorMessage: 'Pas le droit',
+        statusCode: 401,
+        url: 'http://www.test.org',
+        ignored: false,
+      });
+
+      await databaseBuilder.commit();
+
+      const updatedBrokenUrl = domainBuilder.buildBrokenUrl({ ...savedBrokenUrl, ignored: true });
+
+      // when
+      const brokenUrl = await updateIgnoredById(updatedBrokenUrl.id, updatedBrokenUrl.ignored);
+
+      // then
+      expect(brokenUrl).toStrictEqual(updatedBrokenUrl);
     });
   });
 });

@@ -1,19 +1,28 @@
 import { DomainTransaction } from '../../domain/DomainTransaction.js';
-import { BrokenUrl } from '../../domain/readmodels/index.js';
+import { BrokenUrl } from '../../domain/models/index.js';
+import { BrokenUrl as BrokenUrlRead } from '../../domain/readmodels/index.js';
 
 /**
- * @typedef {import('../../domain/models/CrawledUrl.js').CrawledUrl} CrawledUrl
+ * @typedef {import('../../domain/models/BrokenUrl.js').BrokenUrl} BrokenUrl
  */
 
 /**
- * @param {CrawledUrl[]} brokenUrlList
+ * @param {BrokenUrl[]} brokenUrlList
  */
 export async function saveNewlyBrokenUrlList(brokenUrlList) {
   const knex = DomainTransaction.getConnection();
 
+  if (brokenUrlList.length === 0) return;
+
   await knex('broken_urls').insert(brokenUrlList)
     .onConflict('url')
-    .ignore();
+    .merge([
+      'statusCode',
+      'errorMessage',
+      'ignored',
+    ])
+    .where('broken_urls.ignored', false)
+    .orWhereRaw('"broken_urls"."statusCode" <> excluded."statusCode"');
 }
 
 /**
@@ -64,6 +73,21 @@ export async function list() {
   return toDomainList(brokenUrlList);
 }
 
+/**
+ * @param {number} brokenUrlId
+ * @param {boolean} ignored
+ */
+export async function updateIgnoredById(brokenUrlId, ignored) {
+  const knex = DomainTransaction.getConnection();
+
+  const updatedBrokenUrl = await knex('broken_urls')
+    .update({ ignored: ignored })
+    .where('id', brokenUrlId)
+    .returning('*');
+
+  return new BrokenUrl(updatedBrokenUrl[0]);
+}
+
 function toDomainList(brokenUrlList) {
   return brokenUrlList.map((dto) => {
     const formattedData = {
@@ -75,9 +99,10 @@ function toDomainList(brokenUrlList) {
       skillIds: dto.skillIds.filter(removeNullValuesFromJoin).toSorted(),
       tutorialIds: dto.tutorialIds.filter(removeNullValuesFromJoin).toSorted(),
       frameworkNames: dto.frameworkNames.filter(removeNullValuesFromJoin).toSorted(),
+      ignored: dto.ignored,
     };
 
-    return new BrokenUrl(formattedData);
+    return new BrokenUrlRead(formattedData);
   });
 }
 
