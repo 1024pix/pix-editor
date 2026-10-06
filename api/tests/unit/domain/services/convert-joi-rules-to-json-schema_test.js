@@ -16,6 +16,12 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
       expect(jsonSchema).to.deep.equal({ type: 'boolean' });
     });
+
+    it('should convert Joi.boolean.default to JSON Schema with default', function() {
+      const joiSchema = Joi.boolean().default(false);
+      const jsonSchema = convertJoiToJsonSchema(joiSchema);
+      expect(jsonSchema).to.deep.equal({ type: 'boolean', default: false });
+    });
   });
 
   describe('string', function() {
@@ -191,6 +197,12 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
       expect(jsonSchema).to.deep.equal({ type: 'number', options: { infoText: 'cool gang' } });
     });
+
+    it('should convert Joi.number.default to JSON Schema with default', function() {
+      const joiSchema = Joi.number().default(10);
+      const jsonSchema = convertJoiToJsonSchema(joiSchema);
+      expect(jsonSchema).to.deep.equal({ type: 'number', default: 10, options: null });
+    });
   });
 
   describe('array', function() {
@@ -253,6 +265,12 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
         expect(jsonSchema).to.deep.equal({ type: 'array', options: { infoText: 'cool gang' } });
       });
     });
+
+    it('should convert Joi.array.default to JSON Schema with default', function() {
+      const joiSchema = Joi.array().default([]);
+      const jsonSchema = convertJoiToJsonSchema(joiSchema);
+      expect(jsonSchema).to.deep.equal({ type: 'array', default: [], options: null });
+    });
   });
 
   describe('object', function() {
@@ -268,6 +286,12 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
       expect(joiSchema.validate({ additional: 'property' }).error).not.to.be.undefined;
       expect(jsonSchema).to.deep.equal({ type: 'object', additionalProperties: false });
+    });
+
+    it('should convert Joi.object.default to JSON Schema with default', function() {
+      const joiSchema = Joi.object({}).default({});
+      const jsonSchema = convertJoiToJsonSchema(joiSchema);
+      expect(jsonSchema).to.deep.equal({ type: 'object', default: {}, additionalProperties: false });
     });
 
     it('should convert Joi.object.keys.unknown to JSON Schema with additionalProperties', function() {

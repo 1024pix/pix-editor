@@ -15,7 +15,7 @@ export function convertJoiToJsonSchema(joiSchema) {
 function convertFromType(joiDescribedSchema, key = '') {
   switch (joiDescribedSchema.type) {
     case 'boolean':
-      return convertBoolean();
+      return convertBoolean(joiDescribedSchema);
     case 'string':
       return convertString(joiDescribedSchema);
     case 'number':
@@ -31,8 +31,14 @@ function convertFromType(joiDescribedSchema, key = '') {
   }
 }
 
-function convertBoolean() {
-  return { type: 'boolean' };
+function convertBoolean(joiBooleanDescribedSchema) {
+  const jsonSchema = { type: 'boolean' };
+
+  if (hasFlag(joiBooleanDescribedSchema.flags, 'default')) {
+    jsonSchema.default = joiBooleanDescribedSchema.flags['default'];
+  }
+
+  return jsonSchema;
 }
 
 function convertString(joiStringDescribedSchema) {
@@ -136,6 +142,10 @@ function convertNumber(joiNumberDescribedSchema) {
     jsonSchema.options = { infoText: joiNumberDescribedSchema.flags['description'] };
   }
 
+  if (hasFlag(joiNumberDescribedSchema.flags, 'default')) {
+    jsonSchema.default = joiNumberDescribedSchema.flags['default'];
+  }
+
   const integerRule = findRule(rules, 'integer');
   if (integerRule !== undefined) {
     jsonSchema.type = 'integer';
@@ -169,6 +179,10 @@ function convertArray(joiArrayDescribedSchema, key = '') {
 
   if (hasFlag(joiArrayDescribedSchema.flags, 'description')) {
     jsonSchema.options = { infoText: joiArrayDescribedSchema.flags['description'] };
+  }
+
+  if (hasFlag(joiArrayDescribedSchema.flags, 'default')) {
+    jsonSchema.default = joiArrayDescribedSchema.flags['default'];
   }
 
   const minRule = findRule(rules, 'min');
@@ -209,6 +223,10 @@ function convertArray(joiArrayDescribedSchema, key = '') {
 
 function convertObject(joiObjectDescribedSchema) {
   const jsonSchema = { type: 'object' };
+
+  if (hasFlag(joiObjectDescribedSchema.flags, 'default')) {
+    jsonSchema.default = joiObjectDescribedSchema.flags['default'];
+  }
 
   if (joiObjectDescribedSchema.keys) {
     const properties = {};
