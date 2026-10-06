@@ -78,6 +78,12 @@ function convertString(joiStringDescribedSchema) {
     jsonSchema.maxLength = maxRule.args.limit;
   }
 
+  const lengthRule = findRule(rules, 'length');
+  if (lengthRule !== undefined) {
+    jsonSchema.minLength = lengthRule.args.limit;
+    jsonSchema.maxLength = lengthRule.args.limit;
+  }
+
   const patternRule = findRule(rules, 'pattern');
   if (patternRule) {
     if (!patternRule.args.options?.invert) {

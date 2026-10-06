@@ -43,6 +43,12 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       expect(jsonSchema).to.deep.equal({ type: 'string', format: null, maxLength: 32, options: null });
     });
 
+    it('should convert Joi.string.length to JSON Schema with minLength and maxLength', function() {
+      const joiSchema = Joi.string().length(8);
+      const jsonSchema = convertJoiToJsonSchema(joiSchema);
+      expect(jsonSchema).to.deep.equal({ type: 'string', format: null, minLength: 8, maxLength: 8, options: null });
+    });
+
     it('should convert Joi.string.email to JSON Schema with format email', function() {
       const joiSchema = Joi.string().email();
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
