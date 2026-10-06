@@ -48,11 +48,13 @@ export async function listForReplication() {
     'shortId',
     'slug',
     'title',
+    'internalTitle',
     'isBeta',
     'visibility',
     'level',
     'duration',
     'objectives',
+    'version',
   ).from('modules').orderBy('slug', 'asc');
   return modules.map(toDomainForReplication);
 }

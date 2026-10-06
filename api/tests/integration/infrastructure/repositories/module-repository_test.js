@@ -102,20 +102,21 @@ describe('Module Repository', () => {
   describe('listForReplication', () => {
     it('lists all modules for replication', async () => {
       // given
-      const firstModule = domainBuilder.buildModule({ slug: 'a' });
-      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'secondar', slug: 'b' });
+      const firstModule = domainBuilder.buildModule({ slug: 'a', version: '1.0', internalTitle: 'primo' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', slug: 'b', version: '2.0', internalTitle: 'secondar' });
 
       databaseBuilder.factory.buildModule(firstModule);
       databaseBuilder.factory.buildModule(secondModule);
       await databaseBuilder.commit();
 
-      const expectedModules = [firstModule, secondModule].map(({ details, ...module }) => new ModuleForReplication({ ...module, ...details }));
+      const expectedData = [firstModule, secondModule]
+        .map(({ details, ...module }) => (new ModuleForReplication({ ...module, ...details })));
 
       // when
-      const modules = await listForReplication();
+      const modulesForReplication = await listForReplication();
 
       // then
-      expect(modules).toStrictEqual(expectedModules);
+      expect(modulesForReplication).toStrictEqual(expectedData);
     });
   });
 
