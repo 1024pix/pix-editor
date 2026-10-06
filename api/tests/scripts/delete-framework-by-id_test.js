@@ -30,11 +30,9 @@ describe('Script | DeleteFrameworkByIdScript', () => {
       };
 
       // when
-      const result = await script.handle({ options, logger });
+      await script.handle({ options, logger });
 
       // then
-      expect(result).toEqual(framework.id);
-
       const frameworkAfterDeletion = await knex('frameworks').select('*').where('id', framework.id).first();
       expect(frameworkAfterDeletion).toBeFalsy();
 

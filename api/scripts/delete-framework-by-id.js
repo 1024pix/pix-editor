@@ -36,48 +36,64 @@ export class DeleteFrameworkByIdScript extends Script {
   async handle({ options, logger }) {
     logger.info({ dryRun: options.dryRun, frameworkId: options.frameworkId }, 'Script options');
 
-    const frameworks = await frameworkRepository.list();
-    const framework = frameworks.find((framework) => framework.id === options.frameworkId);
-    if (!framework) {
-      return logger.error(`Framework with id '${options.frameworkId}' does not exist.`);
-    }
+    return DomainTransaction.execute(async () => {
+      const knex = DomainTransaction.getConnection();
 
-    const knex = DomainTransaction.getConnection();
+      try {
+        const frameworks = await frameworkRepository.list();
+        const framework = frameworks.find((framework) => framework.id === options.frameworkId);
+        if (!framework) {
+          logger.error(`Framework with id '${options.frameworkId}' does not exist.`);
+          return await knex.rollback();
+        }
 
-    const areaIds = (await areaRepository.listByFrameworkId(options.frameworkId))
-      .map((area) => area.id);
-    const competenceIds = (await competenceRepository.list())
-      .filter((competence) => areaIds.includes(competence.areaId))
-      .map((competence) => competence.id);
-    const thematicIds = (await thematicRepository.list())
-      .filter((thematic) => competenceIds.includes(thematic.competenceId))
-      .map((thematic) => thematic.id);
-    const tubeIds = (await tubeRepository.list())
-      .filter((tube) => thematicIds.includes(tube.thematicId))
-      .map((tube) => tube.id);
-    const skillIds = (await skillRepository.list())
-      .filter((skill) => tubeIds.includes(skill.tubeId))
-      .map((skill) => skill.id);
-    const challengeIds = (await challengeRepository.list())
-      .filter((challenge) => skillIds.includes(challenge.skillId))
-      .map((challenge) => challenge.id);
-    const localizedChallengeIds = (await localizedChallengeRepository.listByChallengeIds({ challengeIds }))
-      .map((localizedChallenge) => localizedChallenge.id);
+        const areaIds = (await areaRepository.listByFrameworkId(options.frameworkId))
+          .map((area) => area.id);
+        const competenceIds = (await competenceRepository.list())
+          .filter((competence) => areaIds.includes(competence.areaId))
+          .map((competence) => competence.id);
+        const thematicIds = (await thematicRepository.list())
+          .filter((thematic) => competenceIds.includes(thematic.competenceId))
+          .map((thematic) => thematic.id);
+        const tubeIds = (await tubeRepository.list())
+          .filter((tube) => thematicIds.includes(tube.thematicId))
+          .map((tube) => tube.id);
+        const skillIds = (await skillRepository.list())
+          .filter((skill) => tubeIds.includes(skill.tubeId))
+          .map((skill) => skill.id);
+        const challengeIds = (await challengeRepository.list())
+          .filter((challenge) => skillIds.includes(challenge.skillId))
+          .map((challenge) => challenge.id);
+        const localizedChallengeIds = (await localizedChallengeRepository.listByChallengeIds({ challengeIds }))
+          .map((localizedChallenge) => localizedChallenge.id);
 
-    const entityIds = [
-      ...areaIds,
-      ...competenceIds,
-      ...thematicIds,
-      ...tubeIds,
-      ...skillIds,
-      ...challengeIds,
-      ...localizedChallengeIds,
-    ];
+        const entityIds = [
+          ...areaIds,
+          ...competenceIds,
+          ...thematicIds,
+          ...tubeIds,
+          ...skillIds,
+          ...challengeIds,
+          ...localizedChallengeIds,
+        ];
 
-    await knex('translations').whereIn('entityId', entityIds).del();
-    await knex('frameworks').where('id', options.frameworkId).del();
+        await knex('translations').whereIn('entityId', entityIds).del();
+        await knex('frameworks').where('id', options.frameworkId).del();
 
-    return options.frameworkId;
+        if (options.dryRun) {
+          logger.info('Dry run is enabled, stopping before deleting framework(s)');
+          await knex.rollback();
+          return;
+        }
+        await knex.commit();
+        logger.info('Successfully updated framework(s)');
+
+        return options.frameworkId;
+      } catch (error) {
+        logger.error('unhandled error found', { error });
+        await knex.rollback();
+      }
+    }, { isolationLevel: 'serializable' });
   }
 }
 
