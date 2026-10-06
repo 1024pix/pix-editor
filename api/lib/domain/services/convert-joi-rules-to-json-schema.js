@@ -279,7 +279,10 @@ function convertAlternatives(joiAlternativesDescribedSchema) {
   const oneOf = joiAlternativesDescribedSchema.matches.flatMap((match) => {
     if (match.ref !== undefined) {
       if (match.switch !== undefined) {
-        return match.switch.map(getAlternativeSwitchCaseJsonSchema);
+        return match.switch.flatMap((switchCase) => {
+          const childJsonSchema = getAlternativeSwitchCaseJsonSchema(switchCase);
+          return childJsonSchema.oneOf !== undefined ? childJsonSchema.oneOf : [childJsonSchema];
+        });
       } else {
         logger.warn({ match }, 'Unsupported conditional schema is/then/otherwise');
       }
@@ -301,6 +304,10 @@ function getCustomErrorMessage(rules) {
 
 function getAlternativeSwitchCaseJsonSchema(switchCase) {
   const childJsonSchema = convertFromType(switchCase.then);
+
+  if (childJsonSchema.oneOf !== undefined) {
+    return childJsonSchema;
+  }
 
   const optionalTitle
     = getOptionalTitleBasedOnTitleMetadata(switchCase)

@@ -597,6 +597,69 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
         });
       });
 
+      it('should flatten a switch case whose "then" is itself an alternatives schema', function() {
+        const nestedAlternatives = Joi.alternatives().conditional('.type', {
+          switch: [
+            {
+              is: 'handball',
+              then: Joi.object({ type: Joi.string().valid('handball').required() }),
+            },
+            {
+              is: 'volleyball',
+              then: Joi.object({ type: Joi.string().valid('volleyball').required() }),
+            },
+          ],
+        });
+
+        const joiSchema = Joi.alternatives().conditional('.type', {
+          switch: [
+            {
+              is: 'text',
+              then: Joi.object({ type: Joi.string().valid('text').required() }),
+            },
+            {
+              is: 'custom',
+              then: nestedAlternatives,
+            },
+          ],
+        });
+
+        const jsonSchema = convertJoiToJsonSchema(joiSchema);
+
+        expect(joiSchema.validate({ type: 'text' }).error).to.be.undefined;
+        expect(jsonSchema).to.deep.equal({
+          oneOf: [
+            {
+              type: 'object',
+              title: 'text',
+              additionalProperties: false,
+              properties: {
+                type: { type: 'string', format: null, options: null, enum: ['text'] },
+              },
+              required: ['type'],
+            },
+            {
+              type: 'object',
+              title: 'handball',
+              additionalProperties: false,
+              properties: {
+                type: { type: 'string', format: null, options: null, enum: ['handball'] },
+              },
+              required: ['type'],
+            },
+            {
+              type: 'object',
+              title: 'volleyball',
+              additionalProperties: false,
+              properties: {
+                type: { type: 'string', format: null, options: null, enum: ['volleyball'] },
+              },
+              required: ['type'],
+            },
+          ],
+        });
+      });
+
       describe('if then otherwise statement', function() {
         it('should convert a schema with a multi-key is condition to json schema with all conditional properties', function() {
           // given
