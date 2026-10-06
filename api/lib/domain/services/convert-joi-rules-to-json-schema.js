@@ -78,6 +78,11 @@ function convertString(joiStringDescribedSchema) {
     jsonSchema.maxLength = maxRule.args.limit;
   }
 
+  const allowsEmptyString = joiStringDescribedSchema.allow?.includes('');
+  if (!allowsEmptyString && jsonSchema.minLength === undefined) {
+    jsonSchema.minLength = 1;
+  }
+
   const patternRule = findRule(rules, 'pattern');
   if (patternRule) {
     if (!patternRule.args.options?.invert) {
@@ -99,7 +104,6 @@ function convertString(joiStringDescribedSchema) {
 
   const processedSchema = handleNonStandardStringProperties(joiStringDescribedSchema, jsonSchema);
 
-  const allowsEmptyString = joiStringDescribedSchema.allow?.includes('');
   if (processedSchema.format === 'uri' && allowsEmptyString) {
     const schemaWithoutFormat = { ...processedSchema };
     Reflect.deleteProperty(schemaWithoutFormat, 'format');
