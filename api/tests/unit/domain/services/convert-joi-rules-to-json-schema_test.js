@@ -598,6 +598,61 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       });
 
       describe('if then otherwise statement', function() {
+        it('should convert a schema with a multi-key is condition to json schema with all conditional properties', function() {
+          // given
+          const joiSchema = Joi.alternatives().conditional(Joi.object({ isNumber: true, mode: 'strict' }).unknown(), {
+            then: Joi.object({
+              type: Joi.string().valid('qcu').required(),
+              value: Joi.number(),
+            }),
+            otherwise: Joi.object({
+              type: Joi.string().valid('qcu').required(),
+              value: Joi.string(),
+            }),
+          });
+
+          const expectedJsonSchema = {
+            additionalProperties: false,
+            if: { properties: { isNumber: { const: true }, mode: { const: 'strict' } } },
+            properties: {
+              type: {
+                enum: ['qcu'],
+                format: null,
+                type: 'string',
+                options: null,
+              },
+              value: {
+                format: null,
+                type: 'string',
+                options: null,
+              },
+            },
+            required: ['type'],
+            then: {
+              properties: {
+                type: {
+                  enum: ['qcu'],
+                  format: null,
+                  type: 'string',
+                  options: null,
+                },
+                value: {
+                  type: 'number',
+                  options: null,
+                },
+              },
+            },
+            title: 'qcu',
+            type: 'object',
+          };
+
+          // when
+          const jsonSchema = convertJoiToJsonSchema(joiSchema);
+
+          // expect
+          expect(jsonSchema).to.deep.equal(expectedJsonSchema);
+        });
+
         it('should convert simple schema to json schema', function() {
           // given
           const joiSchema = Joi.alternatives().conditional(Joi.object({ isNumber: true }).unknown(), {

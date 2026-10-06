@@ -257,8 +257,9 @@ function convertObject(joiObjectDescribedSchema) {
 function generateIfThenOtherwiseSchema(match) {
   const baseSchema = convertFromType(match.otherwise);
 
-  const conditionalKeyName = Object.keys(match.is.keys)[0];
-  const schemaProperties = { [conditionalKeyName]: { const: match.is.keys[conditionalKeyName].allow[0].override } };
+  const schemaProperties = Object.fromEntries(
+    Object.entries(match.is.keys).map(([keyName, describedKey]) => [keyName, { const: describedKey.allow[1] }]),
+  );
 
   return {
     ...baseSchema,
