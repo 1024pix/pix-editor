@@ -102,6 +102,17 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
         expect(jsonSchema).to.deep.equal({ type: 'string', format: null, pattern: '^[0-9]+$', options: null });
       });
 
+      it('should convert Joi.string.regex(w, s) to JSON Schema with converted pattern', function() {
+        const joiSchema = Joi.string().regex(/^\w+\s\d+$/);
+        const jsonSchema = convertJoiToJsonSchema(joiSchema);
+        expect(jsonSchema).to.deep.equal({
+          type: 'string',
+          format: null,
+          pattern: '^[A-Za-z0-9_]+[ \\t\\n\\r\\f\\v][0-9]+$',
+          options: null,
+        });
+      });
+
       it('should convert Joi.string.regex(*) to JSON Schema with given pattern', function() {
         const joiSchema = Joi.string().regex(/^[a-z0-9-]+$/);
         const jsonSchema = convertJoiToJsonSchema(joiSchema);

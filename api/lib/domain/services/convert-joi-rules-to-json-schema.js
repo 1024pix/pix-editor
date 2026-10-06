@@ -295,7 +295,11 @@ function convertAlternatives(joiAlternativesDescribedSchema) {
 }
 
 function convertRegex(regex) {
-  return regex.slice(1, -1).replace(/\\d/g, '[0-9]');
+  return regex
+    .slice(1, -1)
+    .replace(/\\d/g, '[0-9]')
+    .replace(/\\w/g, '[A-Za-z0-9_]')
+    .replace(/\\s/g, '[ \\t\\n\\r\\f\\v]');
 }
 
 function getCustomErrorMessage(rules) {
