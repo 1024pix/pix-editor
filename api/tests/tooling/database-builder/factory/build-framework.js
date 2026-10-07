@@ -8,7 +8,7 @@ import { databaseBuffer } from '../database-buffer.js';
  *   updatedAt?: string | number | Date
  * }} frameworkToBuild
  */
-export function buildFramework({ id, name, createdAt, updatedAt } = {}) {
+export function buildFramework({ id, name, createdAt = new Date(), updatedAt = new Date() } = {}) {
   return databaseBuffer.pushInsertable({
     tableName: 'frameworks',
     autoId: false,

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, knex } from '../../../test-helper.js';
 
-describe('Unit | Tooling | database Builder | buildGroup', function() {
+describe('Integration | Tooling | database Builder | buildGroup', function() {
   it('should build a challenge in group', async () => {
     // given
     const challenge = { id: 'challenge1' };
@@ -112,11 +112,11 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       createdAt: undefined,
       updatedAt: undefined,
     });
-    expect(result.framework).deep.equal({
+    expect(result.framework).toStrictEqual({
       id: result.framework.id,
       name: 'Pix',
-      createdAt: undefined,
-      updatedAt: undefined,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
     });
     expect(result.translations).deep.equal([
       {
