@@ -43,11 +43,11 @@ export class DeleteFrameworkByIdScript extends Script {
         const frameworks = await frameworkRepository.list();
         const framework = frameworks.find((framework) => framework.id === options.frameworkId);
         if (!framework) {
-          logger.error(`Framework with id '${options.frameworkId}' does not exist.`);
+          logger.error({ frameworkId: options.frameworkId }, `Framework with id '${options.frameworkId}' does not exist.`);
           return await knex.rollback();
         }
 
-        const areaIds = (await areaRepository.listByFrameworkId(options.frameworkId))
+        const areaIds = (await areaRepository.listByFrameworkId(framework.id))
           .map((area) => area.id);
         const competenceIds = (await competenceRepository.list())
           .filter((competence) => areaIds.includes(competence.areaId))
@@ -77,20 +77,46 @@ export class DeleteFrameworkByIdScript extends Script {
           ...localizedChallengeIds,
         ];
 
-        await knex('translations').whereIn('entityId', entityIds).del();
-        await knex('frameworks').where('id', options.frameworkId).del();
+        logger.info(
+          {
+            frameworkId: framework.id,
+            areaIds,
+            competenceIds,
+            thematicIds,
+            tubeIds,
+            skillIds,
+            challengeIds,
+            localizedChallengeIds,
+            deletedEntitiesCount: entityIds.length,
+          },
+          `About to delete framework '${framework.name}'`,
+        );
+
+        const deletedTranslations = await knex('translations').whereIn('entityId', entityIds).del('key');
+        logger.info(
+          {
+            frameworkId: framework.id,
+            deletedTranslationsCount: deletedTranslations.length,
+          },
+          `Deleted translations from framework '${framework.name}'`,
+        );
+
+        await knex('frameworks').where('id', framework.id).del();
 
         if (options.dryRun) {
-          logger.info('Dry run is enabled, stopping before deleting framework(s)');
+          logger.info(
+            { frameworkId: framework.id },
+            `Dry run is enabled, stopping before deleting framework '${framework.name}'`,
+          );
           await knex.rollback();
           return;
         }
         await knex.commit();
-        logger.info('Successfully updated framework(s)');
+        logger.info({ frameworkId: framework.id }, `Successfully deleted framework '${framework.name}'`);
 
         return options.frameworkId;
       } catch (error) {
-        logger.error('unhandled error found', { error });
+        logger.error({ error, frameworkId: options.frameworkId }, 'unhandled error found');
         await knex.rollback();
       }
     }, { isolationLevel: 'serializable' });
