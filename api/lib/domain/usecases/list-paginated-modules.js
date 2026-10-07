@@ -1,8 +1,8 @@
 import { moduleRepository } from '../../infrastructure/repositories/index.js';
 
-export async function listPaginatedModules({ page, sort }, dependencies = { moduleRepository }) {
-  const modules = await dependencies.moduleRepository.list({ page, sort });
-  const rowCount = await dependencies.moduleRepository.count();
+export async function listPaginatedModules({ page, sort, filter }, dependencies = { moduleRepository }) {
+  const modules = await dependencies.moduleRepository.list({ page, sort, filter });
+  const rowCount = await dependencies.moduleRepository.count({ filter });
   const meta = {
     page: page.number,
     pageSize: page.size,

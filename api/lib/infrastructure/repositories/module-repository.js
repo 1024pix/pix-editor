@@ -3,9 +3,11 @@ import { Module, ModuleForConsultation } from '../../domain/models/index.js';
 import { ModuleForReplication } from '../../domain/models/replication/index.js';
 import { NotFoundError } from '../errors.js';
 
-export async function count() {
+export async function count({ filter } = {}) {
   const knexConn = DomainTransaction.getConnection();
-  const { count } = await knexConn('modules').count().first();
+  const { count } = await knexConn('modules')
+    .whereILike('internalTitle', `%${filter?.internalTitle ?? ''}%`)
+    .count().first();
   return count;
 }
 
@@ -23,7 +25,7 @@ export async function save({ details, sections, glossary, ...module }) {
   return toDomain(savedModule);
 }
 
-export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
+export async function list({ page, sort = [['internalTitle', 'asc']], filter } = {}) {
   const knexConn = DomainTransaction.getConnection();
   const query = knexConn.select().from('modules');
   sort.forEach(([column, order]) => {
@@ -33,6 +35,9 @@ export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
       query.orderBy(column, order);
     }
   });
+  if (filter) {
+    query.whereILike('internalTitle', `%${filter.internalTitle}%`);
+  }
   if (page) {
     const offset = (page.number - 1) * page.size;
     query.offset(offset).limit(page.size);
