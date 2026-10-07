@@ -1,5 +1,19 @@
 
 
+## v4.57.0 (07/10/2026)
+
+
+### :rocket: Amélioration
+- [#1677](https://github.com/1024pix/pix-editor/pull/1677) [FEATURE] Ajouter le titre interne et la version pour la réplication des modules dans pix-edtior (PIX-24457).
+
+### :building_construction: Tech
+- [#1681](https://github.com/1024pix/pix-editor/pull/1681) [TECH] Corriger les usecases bulkUpdateModules et bulkUpdateDraftModules (PIX-24588).
+- [#1682](https://github.com/1024pix/pix-editor/pull/1682) [TECH]Améliorer la validation des chaînes de caractères dans le JSON schéma des modules (PIX-24609).
+
+### :arrow_up: Montée de version
+- [#1676](https://github.com/1024pix/pix-editor/pull/1676) [BUMP] Update dependency @joi/date to v3.
+- [#1641](https://github.com/1024pix/pix-editor/pull/1641) [BUMP] Update Node.js to v24.21.0.
+
 ## v4.56.0 (05/10/2026)
 
 
