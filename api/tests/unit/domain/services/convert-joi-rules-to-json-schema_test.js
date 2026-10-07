@@ -19,8 +19,14 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
   });
 
   describe('string', function() {
-    it('should convert Joi.string to JSON Schema', function() {
+    it('should convert Joi.string to JSON Schema with a default minLength of 1', function() {
       const joiSchema = Joi.string();
+      const jsonSchema = convertJoiToJsonSchema(joiSchema);
+      expect(jsonSchema).to.deep.equal({ type: 'string', format: null, minLength: 1, options: null });
+    });
+
+    it('should not set a default minLength when Joi.string allows the empty string', function() {
+      const joiSchema = Joi.string().allow('');
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
       expect(jsonSchema).to.deep.equal({ type: 'string', format: null, options: null });
     });
@@ -28,7 +34,13 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
     it('should convert Joi.string.default to JSON Schema with default', function() {
       const joiSchema = Joi.string().default('courgette');
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
-      expect(jsonSchema).to.deep.equal({ type: 'string', format: null, default: 'courgette', options: null });
+      expect(jsonSchema).to.deep.equal({
+        type: 'string',
+        format: null,
+        default: 'courgette',
+        minLength: 1,
+        options: null,
+      });
     });
 
     it('should convert Joi.string.min to JSON Schema with minLength', function() {
@@ -40,25 +52,25 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
     it('should convert Joi.string.max to JSON Schema with maxLength', function() {
       const joiSchema = Joi.string().max(32);
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
-      expect(jsonSchema).to.deep.equal({ type: 'string', format: null, maxLength: 32, options: null });
+      expect(jsonSchema).to.deep.equal({ type: 'string', format: null, maxLength: 32, minLength: 1, options: null });
     });
 
     it('should convert Joi.string.email to JSON Schema with format email', function() {
       const joiSchema = Joi.string().email();
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
-      expect(jsonSchema).to.deep.equal({ type: 'string', format: 'email', options: null });
+      expect(jsonSchema).to.deep.equal({ type: 'string', format: 'email', minLength: 1, options: null });
     });
 
     it('should convert Joi.string.isoDate to JSON Schema with format date', function() {
       const joiSchema = Joi.string().isoDate();
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
-      expect(jsonSchema).to.deep.equal({ type: 'string', format: 'date', options: null });
+      expect(jsonSchema).to.deep.equal({ type: 'string', format: 'date', minLength: 1, options: null });
     });
 
     it('should convert Joi.string.uri to JSON Schema with format uri', function() {
       const joiSchema = Joi.string().uri();
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
-      expect(jsonSchema).to.deep.equal({ type: 'string', format: 'uri', options: null });
+      expect(jsonSchema).to.deep.equal({ type: 'string', format: 'uri', minLength: 1, options: null });
     });
 
     it("should convert Joi.string.uri.allow('') to JSON Schema with anyOf allowing URI or empty string", function() {
@@ -74,32 +86,49 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
     it('should convert Joi.string.guid to JSON Schema with format uuid', function() {
       const joiSchema = Joi.string().guid({ version: 'uuidv4' });
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
-      expect(jsonSchema).to.deep.equal({ type: 'string', format: 'uuid', options: null });
+      expect(jsonSchema).to.deep.equal({ type: 'string', format: 'uuid', minLength: 1, options: null });
     });
 
     it('should convert Joi.string.description to JSON Schema with options infoText', function() {
       const joiSchema = Joi.string().description('cool gang');
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
-      expect(jsonSchema).to.deep.equal({ type: 'string', options: { infoText: 'cool gang' }, format: null });
+      expect(jsonSchema).to.deep.equal({
+        type: 'string',
+        options: { infoText: 'cool gang' },
+        format: null,
+        minLength: 1,
+      });
     });
 
     describe('regex', function() {
       it('should convert Joi.string.regex(d) to JSON Schema with converted pattern', function() {
         const joiSchema = Joi.string().regex(/^\d+$/);
         const jsonSchema = convertJoiToJsonSchema(joiSchema);
-        expect(jsonSchema).to.deep.equal({ type: 'string', format: null, pattern: '^[0-9]+$', options: null });
+        expect(jsonSchema).to.deep.equal({
+          type: 'string',
+          format: null,
+          pattern: '^[0-9]+$',
+          minLength: 1,
+          options: null,
+        });
       });
 
       it('should convert Joi.string.regex(*) to JSON Schema with given pattern', function() {
         const joiSchema = Joi.string().regex(/^[a-z0-9-]+$/);
         const jsonSchema = convertJoiToJsonSchema(joiSchema);
-        expect(jsonSchema).to.deep.equal({ type: 'string', format: null, pattern: '^[a-z0-9-]+$', options: null });
+        expect(jsonSchema).to.deep.equal({
+          type: 'string',
+          format: null,
+          pattern: '^[a-z0-9-]+$',
+          minLength: 1,
+          options: null,
+        });
       });
 
       it('should convert Joi.string.regex(*, invert) to JSON Schema with no pattern', function() {
         const joiSchema = Joi.string().regex(/<.*?>/, { invert: true });
         const jsonSchema = convertJoiToJsonSchema(joiSchema);
-        expect(jsonSchema).to.deep.equal({ type: 'string', format: null, options: null });
+        expect(jsonSchema).to.deep.equal({ type: 'string', format: null, minLength: 1, options: null });
       });
 
       it('should convert Joi.string.regex.message to JSON Schema with errorMessage', function() {
@@ -110,6 +139,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
           pattern: 'abc',
           format: null,
           errorMessage: '{{:#label}} failed custom validation',
+          minLength: 1,
           options: null,
         });
       });
@@ -125,7 +155,13 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       it('should convert Joi.string.allow(*) to JSON Schema with enum', function() {
         const joiSchema = Joi.string().allow('Hello');
         const jsonSchema = convertJoiToJsonSchema(joiSchema);
-        expect(jsonSchema).to.deep.equal({ type: 'string', format: null, enum: ['Hello'], options: null });
+        expect(jsonSchema).to.deep.equal({
+          type: 'string',
+          format: null,
+          enum: ['Hello'],
+          minLength: 1,
+          options: null,
+        });
       });
     });
 
@@ -137,7 +173,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
 
           const jsonSchema = convertJoiToJsonSchema(joiSchema);
 
-          expect(jsonSchema).to.deep.equal({ type: 'string', format: 'jodit', options: null });
+          expect(jsonSchema).to.deep.equal({ type: 'string', format: 'jodit', minLength: 1, options: null });
         });
       });
     });
@@ -212,7 +248,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
         const jsonSchema = convertJoiToJsonSchema(joiSchema);
         expect(jsonSchema).to.deep.equal({
           type: 'array',
-          items: { type: 'string', format: null, options: null },
+          items: { type: 'string', format: null, minLength: 1, options: null },
           options: null,
         });
       });
@@ -274,7 +310,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       expect(jsonSchema).to.deep.equal({
         type: 'object',
         properties: {
-          name: { type: 'string', format: null, options: null },
+          name: { type: 'string', format: null, minLength: 1, options: null },
           age: { type: 'number', options: null },
         },
         additionalProperties: false,
@@ -290,7 +326,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       expect(jsonSchema).to.deep.equal({
         type: 'object',
         properties: {
-          name: { type: 'string', format: null, options: null },
+          name: { type: 'string', format: null, minLength: 1, options: null },
           age: { type: 'number', options: null },
         },
         required: ['name'],
@@ -312,8 +348,8 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
           address: {
             type: 'object',
             properties: {
-              street: { type: 'string', format: null, options: null },
-              city: { type: 'string', format: null, options: null },
+              street: { type: 'string', format: null, minLength: 1, options: null },
+              city: { type: 'string', format: null, minLength: 1, options: null },
             },
             additionalProperties: false,
           },
@@ -336,6 +372,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
               headerTemplate: 'proposal {{i0}}',
               type: 'string',
               format: null,
+              minLength: 1,
               options: null,
             },
           },
@@ -353,7 +390,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
 
       expect(joiSchema.validate('string').error).to.be.undefined;
       expect(joiSchema.validate(123).error).to.be.undefined;
-      expect(jsonSchema).to.deep.equal({ oneOf: [{ type: 'string', format: null, options: null }, { type: 'number', options: null }] });
+      expect(jsonSchema).to.deep.equal({ oneOf: [{ type: 'string', format: null, minLength: 1, options: null }, { type: 'number', options: null }] });
     });
 
     describe('Joi.alternatives.conditional', function() {
@@ -390,11 +427,13 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
                   enum: ['handball'],
                   type: 'string',
                   format: null,
+                  minLength: 1,
                   options: null,
                 },
                 value: {
                   type: 'string',
                   format: null,
+                  minLength: 1,
                   options: null,
                 },
               },
@@ -409,6 +448,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
                   enum: ['volleyball'],
                   type: 'string',
                   format: null,
+                  minLength: 1,
                   options: null,
                 },
                 value: {
@@ -458,11 +498,13 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
                   enum: ['handball'],
                   type: 'string',
                   format: null,
+                  minLength: 1,
                   options: null,
                 },
                 value: {
                   type: 'string',
                   format: null,
+                  minLength: 1,
                   options: null,
                 },
               },
@@ -477,6 +519,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
                   enum: ['volleyball'],
                   type: 'string',
                   format: null,
+                  minLength: 1,
                   options: null,
                 },
                 value: {
@@ -526,6 +569,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
                       enum: ['a'],
                       type: 'string',
                       format: null,
+                      minLength: 1,
                       options: null,
                     },
                   },
@@ -540,6 +584,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
                       enum: ['b'],
                       type: 'string',
                       format: null,
+                      minLength: 1,
                       options: null,
                     },
                   },
@@ -553,6 +598,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
               enum: ['handball', 'volleyball'],
               type: 'string',
               format: null,
+              minLength: 1,
               options: null,
             },
           },
@@ -582,11 +628,13 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
               type: {
                 enum: ['qcu'],
                 format: null,
+                minLength: 1,
                 type: 'string',
                 options: null,
               },
               value: {
                 format: null,
+                minLength: 1,
                 type: 'string',
                 options: null,
               },
@@ -597,6 +645,7 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
                 type: {
                   enum: ['qcu'],
                   format: null,
+                  minLength: 1,
                   type: 'string',
                   options: null,
                 },
