@@ -67,6 +67,11 @@ export class DeleteFrameworkByIdScript extends Script {
         const localizedChallengeIds = (await localizedChallengeRepository.listByChallengeIds({ challengeIds }))
           .map((localizedChallenge) => localizedChallenge.id);
 
+        const staticCourseIds = (await knex.select('*').from('static_courses'))
+          .map((staticCourse) => ({ ...staticCourse, challengeIds: staticCourse.challengeIds.split(',') }))
+          .filter((staticCourse) => staticCourse.challengeIds.some((challengeId) => localizedChallengeIds.includes(challengeId)))
+          .map((staticCourse) => staticCourse.id);
+
         const entityIds = [
           ...areaIds,
           ...competenceIds,
@@ -75,6 +80,7 @@ export class DeleteFrameworkByIdScript extends Script {
           ...skillIds,
           ...challengeIds,
           ...localizedChallengeIds,
+          ...staticCourseIds,
         ];
 
         logger.info(
@@ -87,6 +93,7 @@ export class DeleteFrameworkByIdScript extends Script {
             skillIds,
             challengeIds,
             localizedChallengeIds,
+            staticCourseIds,
             deletedEntitiesCount: entityIds.length,
           },
           `About to delete framework '${framework.name}'`,
@@ -99,6 +106,16 @@ export class DeleteFrameworkByIdScript extends Script {
             deletedTranslationsCount: deletedTranslations.length,
           },
           `Deleted translations from framework '${framework.name}'`,
+        );
+
+        await knex('static_courses_tags_link').whereIn('staticCourseId', staticCourseIds).del();
+        const deletedStaticCourses = await knex('static_courses').whereIn('id', staticCourseIds).del('*');
+        logger.info(
+          {
+            frameworkId: framework.id,
+            deletedStaticCoursesCount: deletedStaticCourses.length,
+          },
+          `Deleted static courses using challenges from framework '${framework.name}'`,
         );
 
         await knex('frameworks').where('id', framework.id).del();
