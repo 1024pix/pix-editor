@@ -1,8 +1,8 @@
 import { draftModuleRepository } from '../../infrastructure/repositories/index.js';
 
-export async function listPaginatedDraftModules({ page, sort }, dependencies = { draftModuleRepository }) {
-  const draftModules = await dependencies.draftModuleRepository.list({ page, sort });
-  const rowCount = await dependencies.draftModuleRepository.count();
+export async function listPaginatedDraftModules({ page, sort, filter }, dependencies = { draftModuleRepository }) {
+  const draftModules = await dependencies.draftModuleRepository.list({ page, sort, filter });
+  const rowCount = await dependencies.draftModuleRepository.count({ filter });
   const meta = {
     page: page.number,
     pageSize: page.size,

@@ -381,6 +381,45 @@ describe('Acceptance | Route | draft-modules', () => {
         });
       });
     });
+
+    describe('when using filter.internalTitle query param', () => {
+      it('responds with status 200 and modules data', async () => {
+        // given
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/draft-modules?filter[internalTitle]=MOD_a',
+          headers: generateAuthorizationHeader(editorUser),
+        });
+
+        // then
+        expect(response.statusCode).toBe(200);
+
+        expect(response.result).toEqual({
+          data: [
+            {
+              type: 'draft-modules',
+              id: draftModules[0].id,
+              attributes: {
+                'internal-title': draftModules[0].internalTitle,
+                details: draftModules[0].details,
+                'preview-url': `${config.pixApp.recette.baseUrlFr}/modules/preview/${draftModules[0].shortId}/${draftModules[0].slug}`,
+                'has-been-validated': draftModules[0].hasBeenValidated,
+              },
+              relationships: { module: { data: null } },
+            },
+          ],
+          meta: {
+            page: 1,
+            pageSize: 10,
+            rowCount: 1,
+            pageCount: 1,
+          },
+        });
+      });
+    });
   });
 
   describe('GET /draft-modules/:id', () => {

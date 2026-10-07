@@ -148,6 +148,25 @@ describe('Integration | Repository | draft-module-repository', () => {
       // then
       expect(result).toBe(2);
     });
+
+    it('returns number of draft-modules matching filter', async () => {
+      // given
+      const firstDraftModule = domainBuilder.buildDraftModule({ shortId: 'first', internalTitle: 'Premier module IA', slug: 'c', title: 'IA génératives', visibility: 'public' });
+      const secondDraftModule = domainBuilder.buildDraftModule({ shortId: 'secondar', internalTitle: 'Second module IA', slug: 'b', title: 'IA dans l’environnement', visibility: 'public' });
+      const thirdDraftModule = domainBuilder.buildDraftModule({ shortId: 'terzio', internalTitle: 'Premier module cyber', slug: 'a', title: 'Attention au phishing', visibility: 'public' });
+      const filter = { internalTitle: 'Ia' };
+
+      databaseBuilder.factory.buildDraftModule(firstDraftModule);
+      databaseBuilder.factory.buildDraftModule(secondDraftModule);
+      databaseBuilder.factory.buildDraftModule(thirdDraftModule);
+      await databaseBuilder.commit();
+
+      // when
+      const result = await draftModuleRepository.count({ filter });
+
+      // then
+      expect(result).toBe(2);
+    });
   });
 
   describe('getById', () => {

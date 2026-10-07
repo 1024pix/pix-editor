@@ -9,6 +9,7 @@ describe('Unit | Domain | Use Cases | list-paginated-draft-modules', () => {
       number: 2,
     };
     const sort = Symbol('sort');
+    const filter = Symbol('filter');
     const expectedPaginationMetadata = {
       page: 2,
       pageSize: 10,
@@ -22,11 +23,11 @@ describe('Unit | Domain | Use Cases | list-paginated-draft-modules', () => {
     };
 
     // when
-    const result = await listPaginatedDraftModules({ page, sort }, { draftModuleRepository });
+    const result = await listPaginatedDraftModules({ page, sort, filter }, { draftModuleRepository });
 
     // then
-    expect(draftModuleRepository.list).toHaveBeenCalledExactlyOnceWith({ page, sort });
-    expect(draftModuleRepository.count).toHaveBeenCalledExactlyOnceWith();
+    expect(draftModuleRepository.list).toHaveBeenCalledExactlyOnceWith({ page, sort, filter });
+    expect(draftModuleRepository.count).toHaveBeenCalledExactlyOnceWith({ filter });
     expect(result).toStrictEqual({
       draftModules: expectedData,
       meta: expectedPaginationMetadata,

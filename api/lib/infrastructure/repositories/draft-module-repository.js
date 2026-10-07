@@ -22,7 +22,7 @@ export async function updateValidationStatus({ id, hasBeenValidated, validationE
   await knexConn('draft-modules').update({ hasBeenValidated, validationErrors: JSON.stringify(validationErrors), updatedAt: new Date() }).where({ id });
 }
 
-export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
+export async function list({ page, sort = [['internalTitle', 'asc']], filter } = {}) {
   const knexConn = DomainTransaction.getConnection();
   const query = knexConn.select().from('draft-modules');
   sort.forEach(([column, order]) => {
@@ -32,6 +32,9 @@ export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
       query.orderBy(column, order);
     }
   });
+  if (filter) {
+    query.whereILike('internalTitle', `%${filter.internalTitle}%`);
+  }
   if (page) {
     const offset = (page.number - 1) * page.size;
     query.offset(offset).limit(page.size);
@@ -40,9 +43,11 @@ export async function list({ page, sort = [['internalTitle', 'asc']] } = {}) {
   return draftModules.map(toDomain);
 }
 
-export async function count() {
+export async function count({ filter } = {}) {
   const knexConn = DomainTransaction.getConnection();
-  const { count } = await knexConn('draft-modules').count().first();
+  const { count } = await knexConn('draft-modules')
+    .whereILike('internalTitle', `%${filter?.internalTitle ?? ''}%`)
+    .count().first();
   return count;
 }
 
