@@ -1,34 +1,43 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { bulkUpdateModules } from '../../../../lib/domain/usecases/index.js';
+import { ModuleVersion } from '../../../../lib/domain/models/index.js';
+import { domainBuilder } from '../../../test-helper.js';
 
 describe('Unit | Domain | Use Cases | bulk-update-modules', () => {
-  beforeEach(() => {
-  });
-
-  it('saves modules, increments modules major versions and saves them', async () => {
+  it('increments major version of modules, saves them and creates their module versions', async () => {
     // given
-    const module1 = {
-      id: 1,
-      version: '1.0',
-    };
-    const module2 = {
-      id: 2,
-      version: '2.0',
-    };
-    const modules = [module1, module2];
-    const moduleRepository = { save: vi.fn().mockImplementation(async (module) => module) };
+    const module1 = domainBuilder.buildModule({ id: 'module-1', shortId: 'module01', version: '1.0', createdAt: new Date('2026-01-01'), updatedAt: new Date('2026-01-01') });
+    const module2 = domainBuilder.buildModule({ id: 'module-2', shortId: 'module02', version: '2.0', createdAt: new Date('2026-01-01'), updatedAt: new Date('2026-01-01') });
+    const moduleRepository = { save: vi.fn(async (module) => module) };
     const moduleVersionRepository = { create: vi.fn() };
 
     // when
-    await bulkUpdateModules(modules, {
-      moduleRepository,
-      moduleVersionRepository,
-    });
+    await bulkUpdateModules([module1, module2], { moduleRepository, moduleVersionRepository });
 
     // then
     expect(moduleRepository.save).toHaveBeenCalledTimes(2);
+    const expectedModule1 = domainBuilder.buildModule(
+      {
+        id: 'module-1',
+        shortId: 'module01',
+        version: '2.0',
+        createdAt: new Date('2026-01-01'),
+        updatedAt: new Date('2026-01-01'),
+      },
+    );
+    const expectedModule2 = domainBuilder.buildModule(
+      {
+        id: 'module-2',
+        shortId: 'module02',
+        version: '3.0',
+        createdAt: new Date('2026-01-01'),
+        updatedAt: new Date('2026-01-01'),
+      },
+    );
+    expect(moduleRepository.save).toHaveBeenNthCalledWith(1, expectedModule1);
+    expect(moduleRepository.save).toHaveBeenNthCalledWith(2, expectedModule2);
     expect(moduleVersionRepository.create).toHaveBeenCalledTimes(2);
-    expect(module1.version).toEqual('2.0');
-    expect(module2.version).toEqual('3.0');
+    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(1, ModuleVersion.fromModule(expectedModule1));
+    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(2, ModuleVersion.fromModule(expectedModule2));
   });
 });
