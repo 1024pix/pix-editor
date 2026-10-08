@@ -1,7 +1,6 @@
 import { visit, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, currentURL, fillIn } from '@ember/test-helpers';
-import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
@@ -54,19 +53,12 @@ module('Acceptance | Modules | New', function (hooks) {
         const screen = await visit('/');
 
         await click(await screen.findByRole('link', { name: 'Modules' }));
-        await click(
-          await screen.findByRole('link', { name: t('modules.components.create-module-button.create-module') }),
-        );
+        await click(await screen.findByRole('link', { name: 'Créer un module' }));
+
+        await fillIn(await screen.findByRole('textbox', { name: 'Titre interne *' }), 'NEW_MODULE');
 
         await fillIn(
-          await screen.findByRole('textbox', {
-            name: `${t('modules.components.module-form.internal-title-label')} *`,
-          }),
-          'NEW_MODULE',
-        );
-
-        await fillIn(
-          await screen.findByLabelText(t('modules.components.module-form.content-label')),
+          await screen.findByLabelText('Contenu (JSON)'),
           JSON.stringify({
             title: 'Nouveau module',
             isBeta: true,
@@ -84,10 +76,10 @@ module('Acceptance | Modules | New', function (hooks) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // when
-        await click(screen.getByRole('button', { name: t('modules.components.module-form.save') }));
+        await click(screen.getByRole('button', { name: 'Enregistrer' }));
 
         // then
-        const expectedMessage = `${t('modules.new.draft-error')}<br><br>${t('modules.new.draft-error-detail')} internal-title ne doit pas être vide.`;
+        const expectedMessage = `Une erreur est survenue lors de l’enregistrement du draft.<br><br>Détail de l’erreur : internal-title ne doit pas être vide.`;
         assert.ok(pixToastSendError.calledOnce);
         assert.strictEqual(pixToastSendError.args[0][0].toString(), expectedMessage);
       });
@@ -99,15 +91,13 @@ module('Acceptance | Modules | New', function (hooks) {
         const screen = await visit('/');
 
         await click(await screen.findByRole('link', { name: 'Modules' }));
-        await click(
-          await screen.findByRole('link', { name: t('modules.components.create-module-button.create-module') }),
-        );
+        await click(await screen.findByRole('link', { name: 'Créer un module' }));
 
         // then
         const breadcrumb = screen.getByRole('navigation');
 
-        assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.all-modules.label') })).exists();
-        assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.new-module.label'))).exists();
+        assert.dom(within(breadcrumb).getByRole('link', { name: 'Liste des modules' })).exists();
+        assert.dom(within(breadcrumb).getByText('Création du brouillon')).exists();
 
         // WORKAROUND: let some time for Monaco
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -118,23 +108,21 @@ module('Acceptance | Modules | New', function (hooks) {
         const screen = await visit('/');
 
         await click(await screen.findByRole('link', { name: 'Modules' }));
-        await click(
-          await screen.findByRole('link', { name: t('modules.components.create-module-button.create-module') }),
-        );
+        await click(await screen.findByRole('link', { name: 'Créer un module' }));
 
         // then
-        assert.dom(await screen.findByRole('heading', { name: t('modules.new.module-title') })).exists();
+        assert.dom(await screen.findByRole('heading', { name: 'Création d’un module' })).exists();
         assert.strictEqual(currentURL(), '/modules/workbench/new');
 
         await fillIn(
           await screen.findByRole('textbox', {
-            name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
+            name: new RegExp(`^Titre interne`),
           }),
           'NEW_MODULE',
         );
 
         await fillIn(
-          await screen.findByLabelText(t('modules.components.module-form.content-label')),
+          await screen.findByLabelText('Contenu (JSON)'),
           JSON.stringify({
             title: 'Nouveau module',
             isBeta: true,
@@ -163,12 +151,12 @@ module('Acceptance | Modules | New', function (hooks) {
         // WORKAROUND: let some time for Monaco
         await new Promise((resolve) => setTimeout(resolve, 100));
 
-        await screen.getByRole('button', { name: t('modules.components.module-form.save') }).click();
+        await screen.getByRole('button', { name: 'Enregistrer' }).click();
 
-        assert.dom(await screen.findByRole('heading', { name: t('modules.workbench.title') })).exists();
+        assert.dom(await screen.findByRole('heading', { name: 'Modules' })).exists();
         assert.strictEqual(currentURL(), '/modules/workbench');
         assert.dom(screen.getByText('NEW_MODULE')).exists();
-        assert.dom(await screen.findByText(t('modules.new.module-success', { title: 'NEW_MODULE' }))).exists();
+        assert.dom(await screen.findByText('Le module "NEW_MODULE" a été enregistré.')).exists();
       });
     });
 
@@ -187,11 +175,9 @@ module('Acceptance | Modules | New', function (hooks) {
 
         // then
         const breadcrumb = screen.getByRole('navigation');
-        assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.production.label') })).exists();
-        assert
-          .dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.production-module.label') }))
-          .exists();
-        assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.new-module.label'))).exists();
+        assert.dom(within(breadcrumb).getByRole('link', { name: 'Liste des modules en production' })).exists();
+        assert.dom(within(breadcrumb).getByRole('link', { name: 'Détail du module' })).exists();
+        assert.dom(within(breadcrumb).getByText('Création du brouillon')).exists();
 
         // WORKAROUND: let some time for Monaco
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -207,7 +193,7 @@ module('Acceptance | Modules | New', function (hooks) {
 
         await fillIn(
           await screen.findByRole('textbox', {
-            name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
+            name: new RegExp(`^${'Titre interne'}`),
           }),
           'MOD_666',
         );
@@ -215,11 +201,11 @@ module('Acceptance | Modules | New', function (hooks) {
         // WORKAROUND: let some time for Monaco
         await new Promise((resolve) => setTimeout(resolve, 100));
 
-        await screen.getByRole('button', { name: t('modules.components.module-form.save') }).click();
+        await screen.getByRole('button', { name: 'Enregistrer' }).click();
         assert.dom(await screen.findByRole('heading', { name: 'MOD_666' })).exists();
         assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
         assert.dom(await screen.findByRole('heading', { name: 'MOD_666' })).exists();
-        assert.dom(await screen.findByText(t('modules.new.draft-success', { title: 'MOD_666' }))).exists();
+        assert.dom(await screen.findByText('Le draft "MOD_666" a été enregistré.')).exists();
       });
     });
   });

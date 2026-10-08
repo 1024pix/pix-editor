@@ -1,6 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
 import { click } from '@ember/test-helpers';
-import { t } from 'ember-intl/test-support';
 import ModuleValidationErrors from 'pixeditor/components/modules/validation-errors';
 import { module, test } from 'qunit';
 
@@ -34,8 +33,8 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
         );
 
         // then
-        assert.dom(screen.getByText(t('modules.components.validation-errors.expand', { count: 2 }))).exists();
-        assert.dom(screen.queryByText(t('modules.components.validation-errors.collapse'))).doesNotExist();
+        assert.dom(screen.getByText('Voir les erreurs')).exists();
+        assert.dom(screen.queryByText('Tout replier')).doesNotExist();
       });
     });
 
@@ -51,8 +50,8 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
       await click(summary);
 
       // then
-      assert.dom(screen.getByText(t('modules.components.validation-errors.collapse'))).exists();
-      assert.dom(screen.queryByText(t('modules.components.validation-errors.expand', { count: 2 }))).doesNotExist();
+      assert.dom(screen.getByText('Tout replier')).exists();
+      assert.dom(screen.queryByText('Voir les erreurs')).doesNotExist();
     });
   });
 
@@ -67,8 +66,14 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
       );
 
       // then
-      assert.dom(screen.getByText(t('modules.components.validation-errors.information-edit-page'))).exists();
-      assert.dom(screen.queryByText(t('modules.components.validation-errors.information'))).doesNotExist();
+      assert
+        .dom(
+          screen.getByText(
+            "Il est possible d'enregistrer le brouillon même si des erreurs subsistent. Vous pourrez les traiter plus tard.",
+          ),
+        )
+        .exists();
+      assert.dom(screen.queryByText('La publication est impossible tant que des erreurs subsistent.')).doesNotExist();
     });
   });
 
@@ -83,8 +88,14 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
       );
 
       // then
-      assert.dom(screen.getByText(t('modules.components.validation-errors.information'))).exists();
-      assert.dom(screen.queryByText(t('modules.components.validation-errors.information-edit-page'))).doesNotExist();
+      assert.dom(screen.getByText('La publication est impossible tant que des erreurs subsistent.')).exists();
+      assert
+        .dom(
+          screen.queryByText(
+            "Il est possible d'enregistrer le brouillon même si des erreurs subsistent. Vous pourrez les traiter plus tard.",
+          ),
+        )
+        .doesNotExist();
     });
   });
 
@@ -99,7 +110,7 @@ module('Integration | Component | modules/validation-errors', function (hooks) {
       );
 
       // then
-      assert.dom(screen.getByText(t('modules.components.validation-errors.title', { count: 2 }))).exists();
+      assert.dom(screen.getByText('2 erreurs de validation')).exists();
     });
   });
 });

@@ -1,6 +1,5 @@
 import { visit, within } from '@1024pix/ember-testing-library';
 import { click, currentURL } from '@ember/test-helpers';
-import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -25,12 +24,12 @@ module('Acceptance | Modules | Production Module', function (hooks) {
   test('displays a breadcrumb', async function (assert) {
     // when
     const screen = await visit('/modules/production');
-    await click(await screen.getByRole('link', { name: t('modules.components.modules-list.detail') }));
+    await click(await screen.getByRole('link', { name: 'Voir le détail' }));
 
     // then
     const breadcrumb = screen.getByRole('navigation');
-    assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.production.label') })).exists();
-    assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.production-module.label'))).exists();
+    assert.dom(within(breadcrumb).getByRole('link', { name: 'Liste des modules en production' })).exists();
+    assert.dom(within(breadcrumb).getByText('Détail du module')).exists();
 
     // WORKAROUND: let some time for monaco-editor to settle
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -41,12 +40,12 @@ module('Acceptance | Modules | Production Module', function (hooks) {
       // when
       const screen = await visit('/');
       await click(await screen.getByRole('link', { name: 'Modules' }));
-      await click(await screen.getByRole('link', { name: t('modules.components.modules-tabs.production') }));
-      await click(await screen.getByRole('link', { name: t('modules.components.modules-list.detail') }));
+      await click(await screen.getByRole('link', { name: 'En production' }));
+      await click(await screen.getByRole('link', { name: 'Voir le détail' }));
       // then
       assert.strictEqual(currentURL(), `/modules/production/${id}`);
       assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
-      assert.dom(screen.getByText(`● ${t('modules.production-module.information-tag')}`)).exists();
+      assert.dom(screen.getByText('● en production')).exists();
 
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -58,7 +57,7 @@ module('Acceptance | Modules | Production Module', function (hooks) {
       // when
       const screen = await visit('/');
       await click(await screen.getByRole('link', { name: 'Modules' }));
-      await click(await screen.getByRole('link', { name: t('modules.components.modules-list.production-detail') }));
+      await click(await screen.getByRole('link', { name: 'Voir le détail du module en prod' }));
 
       // then
       assert.strictEqual(currentURL(), `/modules/production/${id}`);

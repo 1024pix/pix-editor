@@ -1,5 +1,4 @@
 import { render } from '@1024pix/ember-testing-library';
-import { t } from 'ember-intl/test-support';
 import ModuleValidationTag from 'pixeditor/components/modules/validation-tag';
 import { module, test } from 'qunit';
 
@@ -24,7 +23,7 @@ module('Integration | Component | modules/validation-tag', function (hooks) {
       );
 
       // then
-      assert.dom(screen.getByText(t('modules.draft-module.validation-failure'))).exists();
+      assert.dom(screen.getByText('Validation en échec')).exists();
     });
   });
 
@@ -44,7 +43,7 @@ module('Integration | Component | modules/validation-tag', function (hooks) {
       );
 
       // then
-      assert.dom(screen.getByText(t('modules.draft-module.validation-success'))).exists();
+      assert.dom(screen.getByText('Validation en succès')).exists();
     });
   });
 });
