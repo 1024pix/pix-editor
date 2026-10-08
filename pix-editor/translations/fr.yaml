@@ -1,3 +1,35 @@
+common:
+  cancel: Annuler
+  confirm-log:
+    save: Enregistrer les modifications
+    content: Êtes vous sûr de vouloir enregistrer ?
+    label: Message d'enregistrement
+  modify:
+    cancel: Modification annulée
+  pop_in:
+    close: Fermer la boite de dialogue
+  validate: Valider
+  validate-quality: Valider qualité
+challenge:
+  alternative:
+    archive: Déclinaison n°{number} archivée
+    obsolete: Déclinaison n°{number} périmée
+  new:
+    version: 'Nouvelle version : {version}'
+  move:
+    error: Le changement d'acquis de l'épreuve a échoué
+    error-no-skill: Aucun acquis sélectionné
+    message: Changement d'acquis de l'épreuve
+    success-prototype-message: Changement d'acquis effectué pour le prototype
+    success-alternative-message: Changement d'acquis effectué pour la déclinaison n°{number}
+  obsolete:
+    confirm:
+      title: Rendre obsolète
+      message: Êtes-vous sûr de vouloir de rendre obsolète l'épreuve ?
+    cancel: Obsolescence abandonnée
+    changelog: Obsolescence de l'épreuve
+    error: Erreur lors de l'obsolescence de l'épreuve
+    success: Épreuve périmée
 competence:
   prototypes:
     archive: Archiver
@@ -5,98 +37,77 @@ competence:
   skills:
     archive: Archiver
     obsolete: Rendre obsolète
-challenge:
-  move:
-    message: Changement d'acquis de l'épreuve
-    success-prototype-message: Changement d'acquis effectué pour le prototype
-    success-alternative-message: Changement d'acquis effectué pour la déclinaison n°{number}
-    error-no-skill: Aucun acquis sélectionné
-    error: Le changement d'acquis de l'épreuve a échoué
-  obsolete:
-    confirm:
-      title: Rendre obsolète
-      message: Êtes-vous sûr de vouloir de rendre obsolète l'épreuve ?
-    changelog: Obsolescence de l'épreuve
-    success: Épreuve périmée
-    error: Erreur lors de l'obsolescence de l'épreuve
-    cancel: Obsolescence abandonnée
-  alternative:
-    archive: Déclinaison n°{number} archivée
-    obsolete: Déclinaison n°{number} périmée
-  new:
-    version: 'Nouvelle version : {version}'
-skill:
-  changelog:
-    update-message: Mise à jour de l'acquis
-    update-status: Acquis mis à jour
-    update-error: Erreur lors de la mise à jour de l'acquis
-    archive: Archivage de l'acquis
-    obsolete: Obsolescence de l'acquis
-  archive:
-    skill_with_live_challenges: Vous ne pouvez pas archiver un acquis avec des épreuves publiées
-    confirm:
-      title: Archivage
-      message: Êtes-vous sûr de vouloir archiver l'acquis ?
-    loader_start: Archivage de l'acquis
-    success: Acquis archivé
-    error: Erreur lors de l'archivage de l'acquis
-    cancel: Archivage abandonné
-    challenge:
-      changelog: Archivage de l'épreuve suite à l'archivage de l'acquis {skillName}
-      prototype: Prototype archivé
-      alternative: Déclinaison n°{number} archivée
-  obsolete:
-    skill_with_live_challenges: Vous ne pouvez pas rendre obsolète un acquis avec des épreuves publiées
-    confirm:
-      title: Suppression
-      message: Êtes-vous sûr de vouloir rendre obsolète l'acquis ?
-    loader_start: Obsolescence de l'acquis
-    success: Acquis périmé
-    error: Erreur lors de l'obsolescence de l'acquis
-    cancel: Obsolescence abandonnée
-    challenge:
-      changelog: Obscolescence de l'épreuve suite à l'obsolescence de l'acquis {skillName}
-      prototype: Prototype périmé
-      alternative: Déclinaison n°{number} périmée
-target_profile:
-  pdf_export:
-    title: Export PDF
-    field:
-      title: Titre
-      language: Langue
-prototype:
-  changelog:
-    update-message: Mise à jour du prototype
-    update-status: Épreuve mise à jour
-    update-error: Erreur lors de la mise à jour
 modules:
-  modulix-editor-button:
-    label: Ouvrir dans Modulix Editor
   breadcrumb:
     all-modules:
       label: Liste des modules
-    workbench:
-      label: Liste des brouillons
-    production:
-      label: Liste des modules en production
     draft-module:
       label: Détail du brouillon
-    production-module:
-      label: Détail du module
     edit-draft-module:
       label: Édition du brouillon
     new-module:
       label: Création du brouillon
-  new:
-    module-title: Création d’un module
-    draft-success: Le draft "{title}" a été enregistré.
-    module-success: Le module "{title}" a été enregistré.
-    draft-error: Une erreur est survenue lors de l’enregistrement du draft.
-    draft-error-detail: 'Détail de l’erreur :'
-  workbench:
-    title: Modules
-  production:
-    title: Modules
+    production:
+      label: Liste des modules en production
+    production-module:
+      label: Détail du module
+    workbench:
+      label: Liste des brouillons
+  components:
+    create-module-button:
+      create-draft: Créer un brouillon
+      create-module: Créer un module
+    module-form:
+      cancel: Annuler
+      content-label: Contenu (JSON)
+      ids-warning-middle: et
+      ids-warning-prefix: Les champs
+      ids-warning-suffix: ne peuvent pas être modifiés.
+      internal-title-label: Titre interne
+      required-field: Champ obligatoire
+      save: Enregistrer
+    modules-list:
+      actions: Actions
+      detail: Voir le détail
+      caption: Liste des modules
+      internal-title: Titre interne
+      level: Niveau
+      production-detail: Voir le détail du module en prod
+      status: Statut
+    module-notification:
+      draft-information: Ce module possède une version disponible en production.
+      draft-redirection: Voir le détail du module en prod
+      production-information: Ce module possède une version en cours de modification.
+      production-redirection: Voir le détail des modifications
+    modules-tabs:
+      production: En production
+      navigation: Navigation
+      workbench: Atelier
+    play-module-button:
+      play-draft: Jouer le brouillon
+      play-module: Jouer le module
+      preview: Prévisualiser
+    publish-module-button:
+      aria-label: Publier le brouillon "{title}"
+      confirmation-dialog:
+        title: Confirmation de publication
+        confirm: Confirmer la publication
+        message: Cette action transformera le brouillon en module de production.
+        question: Voulez-vous vraiment publier ce brouillon {title} ?
+      error: Erreur lors de la publication du module.
+      publish: Publier
+      success: Le module "{title}" a été publié.
+      validation-error: Le brouillon ne peut pas être publié car il contient des erreurs de validation.
+    validation-errors:
+      title: '{count, plural, one {1 erreur} other {# erreurs}} de validation'
+      collapse: Tout replier
+      editor-error-line: 'Ligne {line}'
+      expand: '{count, plural, one {Voir l’erreur} other {Voir les erreurs}}'
+      information: La publication est impossible tant que des erreurs subsistent.
+      information-edit-page: Il est possible d'enregistrer le brouillon même si des erreurs subsistent. Vous pourrez les traiter plus tard.
+    validation-success:
+      title: Aucune erreur de validation.
+      subtitle: Il est désormais possible de publier ce brouillon.
   draft-module:
     information-tag: brouillon
     edit: Modifier
@@ -105,72 +116,61 @@ modules:
     validation-failure: Validation en échec
     diff:
       label: Modifications
+  modulix-editor-button:
+    label: Ouvrir dans Modulix Editor
+  new:
+    draft-error: Une erreur est survenue lors de l’enregistrement du draft.
+    draft-error-detail: 'Détail de l’erreur :'
+    draft-success: Le draft "{title}" a été enregistré.
+    module-success: Le module "{title}" a été enregistré.
+    module-title: Création d’un module
+  production:
+    title: Modules
   production-module:
     information-tag: en production
-  components:
-    publish-module-button:
-      success: Le module "{title}" a été publié.
-      error: Erreur lors de la publication du module.
-      validation-error: Le brouillon ne peut pas être publié car il contient des erreurs de validation.
-      aria-label: Publier le brouillon "{title}"
-      confirmation-dialog:
-        confirm: Confirmer la publication
-        title: Confirmation de publication
-        question: Voulez-vous vraiment publier ce brouillon {title} ?
-        message: Cette action transformera le brouillon en module de production.
-      publish: Publier
-    modules-tabs:
-      navigation: Navigation
-      workbench: Atelier
-      production: En production
-    play-module-button:
-      preview: Prévisualiser
-      play-draft: Jouer le brouillon
-      play-module: Jouer le module
-    module-notification:
-      draft-information: Ce module possède une version disponible en production.
-      draft-redirection: Voir le détail du module en prod
-      production-information: Ce module possède une version en cours de modification.
-      production-redirection: Voir le détail des modifications
-    modules-list:
-      caption: Liste des modules
-      status: Statut
-      internal-title: Titre interne
-      level: Niveau
-      actions: Actions
-      detail: Voir le détail
-      production-detail: Voir le détail du module en prod
-    validation-errors:
-      title: '{count, plural, one {1 erreur} other {# erreurs}} de validation'
-      information: La publication est impossible tant que des erreurs subsistent.
-      information-edit-page: Il est possible d'enregistrer le brouillon même si des erreurs subsistent. Vous pourrez les traiter plus tard.
-      expand: '{count, plural, one {Voir l’erreur} other {Voir les erreurs}}'
-      collapse: Tout replier
-      editor-error-line: 'Ligne {line}'
-    validation-success:
-      title: Aucune erreur de validation.
-      subtitle: Il est désormais possible de publier ce brouillon.
-    create-module-button:
-      create-draft: Créer un brouillon
-      create-module: Créer un module
-    module-form:
-      required-field: Champ obligatoire
-      internal-title-label: Titre interne
-      content-label: Contenu (JSON)
-      ids-warning-prefix: Les champs
-      ids-warning-middle: et
-      ids-warning-suffix: ne peuvent pas être modifiés.
-      save: Enregistrer
-      cancel: Annuler
-common:
-  validate: Valider
-  validate-quality: Valider qualité
-  cancel: Annuler
-  pop_in:
-    close: Fermer la boite de dialogue
-  confirm-log:
-    save: Enregistrer les modifications
-    content: Êtes vous sûr de vouloir enregistrer ?
-    label: Message d'enregistrement
-  modify:
-    cancel: Modification annulée
+  workbench:
+    title: Modules
+prototype:
+  changelog:
+    update-message: Mise à jour du prototype
+    update-status: Épreuve mise à jour
+    update-error: Erreur lors de la mise à jour
+skill:
+  archive:
+    cancel: Archivage abandonné
+    confirm:
+      title: Archivage
+      message: Êtes-vous sûr de vouloir archiver l'acquis ?
+    error: Erreur lors de l'archivage de l'acquis
+    loader_start: Archivage de l'acquis
+    skill_with_live_challenges: Vous ne pouvez pas archiver un acquis avec des épreuves publiées
+    success: Acquis archivé
+    challenge:
+      changelog: Archivage de l'épreuve suite à l'archivage de l'acquis {skillName}
+      prototype: Prototype archivé
+      alternative: Déclinaison n°{number} archivée
+  changelog:
+    archive: Archivage de l'acquis
+    obsolete: Obsolescence de l'acquis
+    update-error: Erreur lors de la mise à jour de l'acquis
+    update-message: Mise à jour de l'acquis
+    update-status: Acquis mis à jour
+  obsolete:
+    cancel: Obsolescence abandonnée
+    confirm:
+      title: Suppression
+      message: Êtes-vous sûr de vouloir rendre obsolète l'acquis ?
+    error: Erreur lors de l'obsolescence de l'acquis
+    loader_start: Obsolescence de l'acquis
+    skill_with_live_challenges: Vous ne pouvez pas rendre obsolète un acquis avec des épreuves publiées
+    success: Acquis périmé
+    challenge:
+      alternative: Déclinaison n°{number} périmée
+      changelog: Obscolescence de l'épreuve suite à l'obsolescence de l'acquis {skillName}
+      prototype: Prototype périmé
+target_profile:
+  pdf_export:
+    title: Export PDF
+    field:
+      title: Titre
+      language: Langue
