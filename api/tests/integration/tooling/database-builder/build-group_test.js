@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, knex } from '../../../test-helper.js';
 
-describe('Unit | Tooling | database Builder | buildGroup', function() {
+describe('Integration | Tooling | database Builder | buildGroup', function() {
   it('should build a challenge in group', async () => {
     // given
     const challenge = { id: 'challenge1' };
@@ -112,11 +112,11 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
       createdAt: undefined,
       updatedAt: undefined,
     });
-    expect(result.framework).deep.equal({
+    expect(result.framework).toStrictEqual({
       id: result.framework.id,
       name: 'Pix',
-      createdAt: undefined,
-      updatedAt: undefined,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
     });
     expect(result.translations).deep.equal([
       {
@@ -167,6 +167,55 @@ describe('Unit | Tooling | database Builder | buildGroup', function() {
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
         model: 'challenge',
         entityId: 'challenge1',
+      },
+      {
+        entityId: 'skill00001',
+        key: 'skill.skill00001.hint',
+        locale: 'fr',
+        model: 'skill',
+        value: 'il faut bien répondre à la question sinon tu auras faux',
+      },
+      {
+        entityId: 'tube00001',
+        key: 'tube.tube00001.practicalTitle',
+        locale: 'fr',
+        model: 'tube',
+        value: 'Tube pratique',
+      },
+      {
+        entityId: 'tube00001',
+        key: 'tube.tube00001.practicalDescription',
+        locale: 'fr',
+        model: 'tube',
+        value: "Le tube de l'été",
+      },
+      {
+        entityId: 'thematic00001',
+        key: 'thematic.thematic00001.name',
+        locale: 'fr',
+        model: 'thematic',
+        value: 'Tema la thématique',
+      },
+      {
+        entityId: 'competence00001',
+        key: 'competence.competence00001.name',
+        locale: 'fr',
+        model: 'competence',
+        value: 'La pêche',
+      },
+      {
+        entityId: 'competence00001',
+        key: 'competence.competence00001.description',
+        locale: 'fr',
+        model: 'competence',
+        value: 'Comment attraper des poissons et les relacher OU les manger',
+      },
+      {
+        entityId: 'area00001',
+        key: 'area.area00001.title',
+        locale: 'fr',
+        model: 'area',
+        value: 'Domaine domaniale',
       },
     ]);
   });

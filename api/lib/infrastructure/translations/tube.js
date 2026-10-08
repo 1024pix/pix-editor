@@ -4,11 +4,11 @@ export const prefix = 'tube.';
 
 const locales = [{ locale: 'fr' }, { locale: 'en' }];
 
-const fields = [{ field: 'practicalTitle' }, { field: 'practicalDescription' }];
+export const fields = /** @type {const} */ (['practicalTitle', 'practicalDescription']);
 
 const tubeTranslationUtils = buildTranslationsUtils({
   locales,
-  fields,
+  fields: fields.map((field) => ({ field })),
   prefix,
 });
 
