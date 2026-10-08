@@ -1,6 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
 import { click, settled } from '@ember/test-helpers';
-import { t } from 'ember-intl/test-support';
 import ModulixEditorButton from 'pixeditor/components/modules/modulix-editor-button';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -26,7 +25,7 @@ module('Integration | Components | modules/modulix-editor-button', function (hoo
     const screen = await render(<template><ModulixEditorButton /></template>);
 
     // then
-    assert.dom(screen.getByRole('button', { name: t('modules.modulix-editor-button.label') })).exists();
+    assert.dom(screen.getByRole('button', { name: 'Ouvrir dans Modulix Editor' })).exists();
   });
 
   module('when button is clicked', function () {
@@ -45,7 +44,7 @@ module('Integration | Components | modules/modulix-editor-button', function (hoo
         });
 
         const screen = await render(<template><ModulixEditorButton @moduleContent={{draftModule}} /></template>);
-        await click(screen.getByRole('button', { name: t('modules.modulix-editor-button.label') }));
+        await click(screen.getByRole('button', { name: 'Ouvrir dans Modulix Editor' }));
 
         // when
         window.dispatchEvent(
@@ -69,7 +68,7 @@ module('Integration | Components | modules/modulix-editor-button', function (hoo
         openStub.returns({ postMessage: postMessageStub });
 
         const screen = await render(<template><ModulixEditorButton /></template>);
-        await click(screen.getByRole('button', { name: t('modules.modulix-editor-button.label') }));
+        await click(screen.getByRole('button', { name: 'Ouvrir dans Modulix Editor' }));
 
         // when
         window.dispatchEvent(

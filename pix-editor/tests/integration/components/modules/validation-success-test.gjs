@@ -1,5 +1,4 @@
 import { render } from '@1024pix/ember-testing-library';
-import { t } from 'ember-intl/test-support';
 import ModuleValidationSuccess from 'pixeditor/components/modules/validation-success';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -21,12 +20,12 @@ module('Integration | Component | modules/validation-success', function (hooks) 
       const screen = await render(<template><ModuleValidationSuccess @draftModule={{draftModule}} /></template>);
 
       // then
-      assert.dom(screen.getByText(t('modules.components.validation-success.title'))).exists();
-      assert.dom(screen.getByText(t('modules.components.validation-success.subtitle'))).exists();
+      assert.dom(screen.getByText('Aucune erreur de validation.')).exists();
+      assert.dom(screen.getByText('Il est désormais possible de publier ce brouillon.')).exists();
       assert
         .dom(
           screen.getByRole('button', {
-            name: t('modules.components.publish-module-button.aria-label', { title: draftModule.internalTitle }),
+            name: `Publier le brouillon "${draftModule.internalTitle}"`,
           }),
         )
         .exists();
@@ -45,12 +44,12 @@ module('Integration | Component | modules/validation-success', function (hooks) 
       const screen = await render(<template><ModuleValidationSuccess @draftModule={{draftModule}} /></template>);
 
       // then
-      assert.dom(screen.getByText(t('modules.components.validation-success.title'))).exists();
-      assert.dom(screen.getByText(t('modules.components.validation-success.subtitle'))).exists();
+      assert.dom(screen.getByText('Aucune erreur de validation.')).exists();
+      assert.dom(screen.getByText('Il est désormais possible de publier ce brouillon.')).exists();
       assert
         .dom(
           screen.queryByRole('button', {
-            name: t('modules.components.publish-module-button.aria-label', { title: draftModule.internalTitle }),
+            name: `Publier le brouillon "${draftModule.internalTitle}"`,
           }),
         )
         .doesNotExist();

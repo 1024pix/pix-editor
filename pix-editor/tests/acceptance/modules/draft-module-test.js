@@ -1,6 +1,5 @@
 import { clickByName, visit, within } from '@1024pix/ember-testing-library';
 import { click, currentURL } from '@ember/test-helpers';
-import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
 import { setupMirage } from 'pixeditor/tests/test-support/setup-mirage';
@@ -29,12 +28,12 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       // when
       const screen = await visit('/');
       await clickByName('Modules');
-      await clickByName(t('modules.components.modules-list.detail'));
+      await clickByName('Voir le détail');
 
       // then
       const breadcrumb = screen.getByRole('navigation');
-      assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.workbench.label') })).exists();
-      assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.draft-module.label'))).exists();
+      assert.dom(within(breadcrumb).getByRole('link', { name: 'Liste des brouillons' })).exists();
+      assert.dom(within(breadcrumb).getByText('Détail du brouillon')).exists();
 
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -44,13 +43,13 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       // when
       const screen = await visit('/');
       await clickByName('Modules');
-      await clickByName(t('modules.components.modules-list.detail'));
+      await clickByName('Voir le détail');
 
       // then
       assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
       assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
-      assert.dom(screen.getByText(`● ${t('modules.draft-module.information-tag')}`)).exists();
-      assert.dom(screen.getByText(t('modules.draft-module.last-modified-at', { modifiedDate: '14/08/2026' }))).exists();
+      assert.dom(screen.getByText('● brouillon')).exists();
+      assert.dom(screen.getByText('Dernière modification le 14/08/2026')).exists();
 
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -62,7 +61,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         const screen = await visit(`/modules/workbench/${id}`);
         // WORKAROUND: let some time for monaco-editor to settle
         await new Promise((resolve) => setTimeout(resolve, 100));
-        await clickByName(t('modules.draft-module.edit'));
+        await clickByName('Modifier');
 
         // then
         assert.strictEqual(currentURL(), `/modules/workbench/${id}/edit`);
@@ -71,7 +70,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // when
-        await clickByName(t('modules.components.module-form.save'));
+        await clickByName('Enregistrer');
 
         // then
         assert.strictEqual(currentURL(), `/modules/workbench/${id}`);
@@ -89,28 +88,22 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
 
         await click(
           screen.getByRole('button', {
-            name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
+            name: 'Publier le brouillon "MON_BEAU_MODULE"',
           }),
         );
         const dialog = await screen.findByRole('dialog', {
-          name: t('modules.components.publish-module-button.confirmation-dialog.title'),
+          name: 'Confirmation de publication',
         });
 
         // when
         await click(
           within(dialog).getByRole('button', {
-            name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
+            name: 'Confirmer la publication',
           }),
         );
 
         // then
-        assert
-          .dom(
-            await screen.findByText(
-              t('modules.components.publish-module-button.success', { title: 'MON_BEAU_MODULE' }),
-            ),
-          )
-          .exists();
+        assert.dom(await screen.findByText('Le module "MON_BEAU_MODULE" a été publié.')).exists();
         assert.strictEqual(currentURL(), `/modules/production/${id}`);
 
         // WORKAROUND: let some time for monaco-editor to settle
@@ -137,7 +130,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // then
-        assert.dom(screen.getByText(t('modules.components.validation-errors.title', { count: 2 }))).exists();
+        assert.dom(screen.getByText('2 erreurs de validation')).exists();
         assert.dom(screen.getByText("Problème de duplications d'Ids")).exists();
         assert.dom(screen.getByText('"ariaLabel" ne doit pas être vide')).exists();
       });
@@ -157,9 +150,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // then
-        assert
-          .dom(screen.queryByRole('button', { name: t('modules.components.publish-module-button.publish') }))
-          .doesNotExist();
+        assert.dom(screen.queryByRole('button', { name: 'Publier' })).doesNotExist();
       });
     });
 
@@ -174,7 +165,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         assert
           .dom(
             screen.queryByRole('button', {
-              name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')}`,
+              name: '1 erreur de validation La publication est impossible tant que des erreurs subsistent.',
             }),
           )
           .doesNotExist();
@@ -188,13 +179,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // then
-        assert
-          .dom(
-            screen.getByRole('button', {
-              name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
-            }),
-          )
-          .exists();
+        assert.dom(screen.getByRole('button', { name: 'Publier le brouillon "MON_BEAU_MODULE"' })).exists();
       });
     });
   });
@@ -216,15 +201,9 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
       const screen = await visit(`/modules/workbench/${id}`);
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
-      // then
 
-      assert
-        .dom(
-          screen.queryByRole('link', {
-            name: t('modules.draft-module.edit'),
-          }),
-        )
-        .doesNotExist();
+      // then
+      assert.dom(screen.queryByRole('link', { name: 'Modifier' })).doesNotExist();
     });
 
     module('when a module has no errors', function () {
@@ -246,13 +225,7 @@ module('Acceptance | Modules | Draft Module', function (hooks) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // then
-        assert
-          .dom(
-            screen.queryByRole('button', {
-              name: t('modules.components.publish-module-button.aria-label', { title: 'MON_BEAU_MODULE' }),
-            }),
-          )
-          .doesNotExist();
+        assert.dom(screen.queryByRole('button', { name: 'Publier le brouillon "MON_BEAU_MODULE"' })).doesNotExist();
       });
     });
   });
