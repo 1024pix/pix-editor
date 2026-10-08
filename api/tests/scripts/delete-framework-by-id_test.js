@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { databaseBuilder, knex } from '../test-helper.js';
+import { databaseBuilder, domainBuilder, knex } from '../test-helper.js';
 import { DeleteFrameworkByIdScript } from '../../scripts/delete-framework-by-id.js';
 import { translationRepository } from '../../lib/infrastructure/repositories/index.js';
 
@@ -23,6 +23,14 @@ describe('Script | DeleteFrameworkByIdScript', () => {
       const { framework: otherFramework, area: otherArea, competence: otherCompetence, thematic: otherThematic, tube: otherTube, skill: otherSkill, challenge: otherChallenge, localizedChallenge: otherLocalizedChallenge } = databaseBuilder.factory.buildChallengeInGroup({});
       const staticCourseToDelete = databaseBuilder.factory.buildStaticCourse({ challengeIds: `${challenge.id},randomChallengeId` });
       const staticCourseToKeep = databaseBuilder.factory.buildStaticCourse({ challengeIds: `${otherLocalizedChallenge.id},randomChallengeId` });
+      const attachment = databaseBuilder.factory.buildAttachment(domainBuilder.buildAttachmentDatasourceObject({
+        challengeId: challenge.id,
+        localizedChallengeId: localizedChallenge.id,
+        type: 'illustration',
+        url: 'url/to/attachment',
+        mimeType: 'image/jpeg',
+        filename: 'nom_fichier',
+      }));
 
       await databaseBuilder.commit();
 
@@ -79,6 +87,10 @@ describe('Script | DeleteFrameworkByIdScript', () => {
       expect(staticCourseAfterDeletion).toBeFalsy();
       const allStaticCourseIds = await knex('static_courses').select('id').pluck('id');
       expect(allStaticCourseIds).toStrictEqual([staticCourseToKeep.id]);
+
+      const attachmentAfterDeletion = await knex('attachments').select('*').where('id', attachment.id).first();
+      expect(attachmentAfterDeletion.challengeId).toBeNull();
+      expect(attachmentAfterDeletion.localizedChallengeId).toBeNull();
 
       const translationEntityIdsAfterDeletions = new Set((await translationRepository.list()).map((translation) => translation.entityId))
         .values()
