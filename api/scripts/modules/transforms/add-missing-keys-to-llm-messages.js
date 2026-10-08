@@ -7,7 +7,7 @@ export function addMissingKeysToLlmMessages({ sections }) {
 
   messagesWithMissingKeys.forEach(addMissingKeys);
 
-  return { sections: transformedSections, numberOfTransformedMessages: messagesWithMissingKeys.length };
+  return { sections: transformedSections, numberOfEditedObjects: messagesWithMissingKeys.length };
 }
 
 function getElements(sections) {

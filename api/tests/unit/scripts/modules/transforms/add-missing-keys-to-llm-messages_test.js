@@ -20,10 +20,10 @@ describe('Unit | Scripts | Modules | Transforms | add-missing-keys-to-llm-messag
     ]);
 
     // when
-    const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(module);
+    const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
 
     // then
-    expect(numberOfTransformedMessages).toBe(1);
+    expect(numberOfEditedObjects).toBe(1);
     expect(sections[0].grains[0].components[0].element.props.messages).toStrictEqual([
       {
         direction: 'outbound',
@@ -51,10 +51,10 @@ describe('Unit | Scripts | Modules | Transforms | add-missing-keys-to-llm-messag
     ]);
 
     // when
-    const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(module);
+    const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
 
     // then
-    expect(numberOfTransformedMessages).toBe(1);
+    expect(numberOfEditedObjects).toBe(1);
     expect(sections[0].grains[0].components[0].element.props.messages).toStrictEqual([
       {
         direction: 'outbound',
@@ -82,10 +82,10 @@ describe('Unit | Scripts | Modules | Transforms | add-missing-keys-to-llm-messag
     ]);
 
     // when
-    const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(module);
+    const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
 
     // then
-    expect(numberOfTransformedMessages).toBe(1);
+    expect(numberOfEditedObjects).toBe(1);
     expect(sections[0].grains[0].components[0].element.props.messages).toStrictEqual([
       {
         direction: 'inbound',
@@ -120,10 +120,10 @@ describe('Unit | Scripts | Modules | Transforms | add-missing-keys-to-llm-messag
     ]);
 
     // when
-    const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(module);
+    const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
 
     // then
-    expect(numberOfTransformedMessages).toBe(0);
+    expect(numberOfEditedObjects).toBe(0);
     expect(sections[0].grains[0].components[0].element.props.messages).toStrictEqual([
       {
         direction: 'outbound',
@@ -168,10 +168,10 @@ describe('Unit | Scripts | Modules | Transforms | add-missing-keys-to-llm-messag
     ]);
 
     // when
-    const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(module);
+    const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
 
     // then
-    expect(numberOfTransformedMessages).toBe(2);
+    expect(numberOfEditedObjects).toBe(2);
     expect(sections[0].grains[0].components[0].element.props.messages).toStrictEqual([
       {
         direction: 'outbound',
@@ -225,10 +225,10 @@ describe('Unit | Scripts | Modules | Transforms | add-missing-keys-to-llm-messag
     ]);
 
     // when
-    const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(module);
+    const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
 
     // then
-    expect(numberOfTransformedMessages).toBe(2);
+    expect(numberOfEditedObjects).toBe(2);
     expect(sections[0].grains[0].components[0]).toStrictEqual(buildStepperComponent([
       [
         buildTextElement({ id: 'element-1' }),
@@ -300,10 +300,10 @@ describe('Unit | Scripts | Modules | Transforms | add-missing-keys-to-llm-messag
     ]);
 
     // when
-    const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(module);
+    const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
 
     // then
-    expect(numberOfTransformedMessages).toBe(4);
+    expect(numberOfEditedObjects).toBe(4);
     expect(sections).toStrictEqual([
       buildSection([
         buildGrain([
@@ -374,10 +374,10 @@ describe('Unit | Scripts | Modules | Transforms | add-missing-keys-to-llm-messag
     ]);
 
     // when
-    const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(module);
+    const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
 
     // then
-    expect(numberOfTransformedMessages).toBe(0);
+    expect(numberOfEditedObjects).toBe(0);
     expect(sections[0].grains[0].components).toStrictEqual([
       buildElementComponent({
         id: 'element-1',

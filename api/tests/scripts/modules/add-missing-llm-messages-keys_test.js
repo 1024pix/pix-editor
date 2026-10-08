@@ -155,22 +155,22 @@ describe('Acceptance | Script | AddMissingLlmMessagesKeys', () => {
           id: module.id,
           internalTitle: 'module-to-fix',
           version: '1.0',
-          numberOfTransformedMessages: 1,
+          numberOfEditedObjects: 1,
         },
         'Module to update',
       ],
-      ['1 module(s) to update, 1 message(s) to complete'],
+      ['1 module(s) to update, 1 object(s) to complete'],
       [
         {
           id: draftOfModule.id,
           internalTitle: 'module-to-fix',
           version: '1.1',
-          numberOfTransformedMessages: 1,
+          numberOfEditedObjects: 1,
           willBeRecreated: true,
         },
         'Draft module to update',
       ],
-      ['1 draft module(s) to update (1 recreated because their module is updated), 1 message(s) to complete'],
+      ['1 draft module(s) to update (1 recreated because their module is updated), 1 object(s) to complete'],
       ['Dry run: nothing saved. Re-run with --dryRun=false to apply changes.'],
     ]);
 

@@ -56,46 +56,46 @@ export class AddMissingLlmMessagesKeys extends Script {
 function getModulesToUpdate(modules) {
   return modules
     .map((module) => {
-      const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(module);
-      return { module: new Module({ ...module, sections }), numberOfTransformedMessages };
+      const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
+      return { module: new Module({ ...module, sections }), numberOfEditedObjects };
     })
-    .filter(({ numberOfTransformedMessages }) => numberOfTransformedMessages > 0);
+    .filter(({ numberOfEditedObjects }) => numberOfEditedObjects > 0);
 }
 
 function getDraftModulesToUpdate(draftModules, updatedModuleIds) {
   return draftModules
     .map((draftModule) => {
-      const { sections, numberOfTransformedMessages } = addMissingKeysToLlmMessages(draftModule);
+      const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(draftModule);
       const isDraftOfUpdatedModule = updatedModuleIds.includes(draftModule.moduleId);
       return {
         draftModule: new DraftModule({ ...draftModule, sections }),
-        numberOfTransformedMessages,
+        numberOfEditedObjects,
         isDraftOfUpdatedModule,
       };
     })
     .filter(({
-      numberOfTransformedMessages,
+      numberOfEditedObjects,
       isDraftOfUpdatedModule,
-    }) => numberOfTransformedMessages > 0 || isDraftOfUpdatedModule);
+    }) => numberOfEditedObjects > 0 || isDraftOfUpdatedModule);
 }
 
 function logModulesToUpdate(modulesToUpdate, logger) {
-  for (const { module, numberOfTransformedMessages } of modulesToUpdate) {
-    logger.info({ ...toLogSummary(module), numberOfTransformedMessages }, 'Module to update');
+  for (const { module, numberOfEditedObjects } of modulesToUpdate) {
+    logger.info({ ...toLogSummary(module), numberOfEditedObjects }, 'Module to update');
   }
-  logger.info(`${modulesToUpdate.length} module(s) to update, ${countTransformedMessages(modulesToUpdate)} message(s) to complete`);
+  logger.info(`${modulesToUpdate.length} module(s) to update, ${countEditedObjects(modulesToUpdate)} object(s) to complete`);
 }
 
 function logDraftModulesToUpdate(draftModulesToUpdate, logger) {
-  for (const { draftModule, numberOfTransformedMessages, isDraftOfUpdatedModule } of draftModulesToUpdate) {
+  for (const { draftModule, numberOfEditedObjects, isDraftOfUpdatedModule } of draftModulesToUpdate) {
     logger.info({
       ...toLogSummary(draftModule),
-      numberOfTransformedMessages,
+      numberOfEditedObjects,
       willBeRecreated: isDraftOfUpdatedModule,
     }, 'Draft module to update');
   }
   const numberOfDraftModulesToRecreate = draftModulesToUpdate.filter(({ isDraftOfUpdatedModule }) => isDraftOfUpdatedModule).length;
-  logger.info(`${draftModulesToUpdate.length} draft module(s) to update (${numberOfDraftModulesToRecreate} recreated because their module is updated), ${countTransformedMessages(draftModulesToUpdate)} message(s) to complete`);
+  logger.info(`${draftModulesToUpdate.length} draft module(s) to update (${numberOfDraftModulesToRecreate} recreated because their module is updated), ${countEditedObjects(draftModulesToUpdate)} object(s) to complete`);
 }
 
 function logSavedModules({ savedModules, savedDraftModules }, logger) {
@@ -108,8 +108,8 @@ function logSavedModules({ savedModules, savedDraftModules }, logger) {
   logger.info(`${savedModules.length} module(s) and ${savedDraftModules.length} draft module(s) updated`);
 }
 
-function countTransformedMessages(modulesToUpdate) {
-  return modulesToUpdate.reduce((total, { numberOfTransformedMessages }) => total + numberOfTransformedMessages, 0);
+function countEditedObjects(modulesToUpdate) {
+  return modulesToUpdate.reduce((total, { numberOfEditedObjects }) => total + numberOfEditedObjects, 0);
 }
 
 function toLogSummary({ id, internalTitle, version }) {
