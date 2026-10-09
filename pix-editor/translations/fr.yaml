@@ -132,6 +132,10 @@ modules:
       draft-redirection: Voir le détail du module en prod
       production-information: Ce module possède une version en cours de modification.
       production-redirection: Voir le détail des modifications
+    modules-filters:
+      title: Filtre
+      clear: Réinitialiser le filtre
+      internal-title-label: Titre interne
     modules-list:
       caption: Liste des modules
       status: Statut
