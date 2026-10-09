@@ -463,7 +463,9 @@ export default function routes() {
   this.get('/modules', function (schema, request) {
     const pagination = _getPaginationFromQueryParams(request.queryParams);
 
-    const allModules = schema.modules.all();
+    const internalTitleFilter = request.queryParams['filter[internalTitle]'];
+
+    const allModules = _filterByInternalTitle(schema.modules.all(), internalTitleFilter);
 
     const start = (pagination.page - 1) * pagination.pageSize;
     const end = start + pagination.pageSize;

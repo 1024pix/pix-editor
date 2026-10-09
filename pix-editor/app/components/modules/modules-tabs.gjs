@@ -8,7 +8,7 @@ import t from 'ember-intl/helpers/t';
     <LinkTo @route="authenticated.modules.workbench" @query={{hash internalTitle=@internalTitle}}>
       {{t "modules.components.modules-tabs.workbench"}}
     </LinkTo>
-    <LinkTo @route="authenticated.modules.production">
+    <LinkTo @route="authenticated.modules.production" @query={{hash internalTitle=@internalTitle}}>
       {{t "modules.components.modules-tabs.production"}}
     </LinkTo>
   </PixTabs>
