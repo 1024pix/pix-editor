@@ -1,5 +1,16 @@
 
 
+## v4.58.0 (09/10/2026)
+
+
+### :rocket: Amélioration
+- [#1678](https://github.com/1024pix/pix-editor/pull/1678) [FEATURE] Supprimer des référentiels sur Pix Editor (PIX-23656).
+
+### :arrow_up: Montée de version
+- [#1686](https://github.com/1024pix/pix-editor/pull/1686) [BUMP] Lock file maintenance.
+- [#1680](https://github.com/1024pix/pix-editor/pull/1680) [BUMP] Update dependency ember-cli to v7.
+- [#1679](https://github.com/1024pix/pix-editor/pull/1679) [BUMP] Update dependency dotenv to v18.
+
 ## v4.57.0 (07/10/2026)
 
 
