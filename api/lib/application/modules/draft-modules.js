@@ -19,11 +19,12 @@ export function register(server) {
             'page[size]': Joi.number().min(1).max(100).optional(),
             'page[number]': Joi.number().min(1).optional(),
             sort: Joi.string().optional(),
+            'filter[internalTitle]': Joi.string().empty('').allow(null).optional(),
           }),
         },
         handler: async (request) => {
-          const { page, sort } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [['visibility', 'desc'], ['internalTitle', 'asc']] });
-          const { draftModules, meta } = await listPaginatedDraftModules({ page, sort });
+          const { page, sort, filter } = extractParameters(request.query, { page: { size: 10, number: 1 }, sort: [['visibility', 'desc'], ['internalTitle', 'asc']], filter: { internalTitle: '' } });
+          const { draftModules, meta } = await listPaginatedDraftModules({ page, sort, filter });
           return draftModuleSerializer.serialize(draftModules, {
             attributes: [
               'internalTitle',

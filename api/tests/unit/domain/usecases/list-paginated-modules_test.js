@@ -9,6 +9,7 @@ describe('Unit | Domain | Use Cases | list-paginated-modules', () => {
       number: 2,
     };
     const sort = Symbol('sort');
+    const filter = Symbol('filter');
     const expectedPaginationMetadata = {
       page: 2,
       pageSize: 10,
@@ -22,11 +23,11 @@ describe('Unit | Domain | Use Cases | list-paginated-modules', () => {
     };
 
     // when
-    const result = await listPaginatedModules({ page, sort }, { moduleRepository });
+    const result = await listPaginatedModules({ page, sort, filter }, { moduleRepository });
 
     // then
-    expect(moduleRepository.list).toHaveBeenCalledExactlyOnceWith({ page, sort });
-    expect(moduleRepository.count).toHaveBeenCalledExactlyOnceWith();
+    expect(moduleRepository.list).toHaveBeenCalledExactlyOnceWith({ page, sort, filter });
+    expect(moduleRepository.count).toHaveBeenCalledExactlyOnceWith({ filter });
     expect(result).toStrictEqual({
       modules: expectedData,
       meta: expectedPaginationMetadata,

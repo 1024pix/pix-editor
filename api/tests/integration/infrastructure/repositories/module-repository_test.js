@@ -4,7 +4,7 @@ import { list, listForReplication, save, count, getById } from '../../../../lib/
 import { ModuleForReplication } from '../../../../lib/domain/models/replication/index.js';
 import { NotFoundError } from '../../../../lib/infrastructure/errors.js';
 
-describe('Module Repository', () => {
+describe('Integration | Module Repository', () => {
   describe('save', () => {
     it('saves a module', async () => {
       // given
@@ -97,6 +97,26 @@ describe('Module Repository', () => {
       // then
       expect(modules).toStrictEqual([firstModule, thirdModule]);
     });
+
+    it('lists modules with filter parameters', async () => {
+      // given
+      const firstModule = domainBuilder.buildModule({ shortId: 'first', internalTitle: 'Premier module IA', slug: 'c', title: 'IA génératives', visibility: 'public' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'Second module IA', slug: 'b', title: 'IA dans l‘environnement', visibility: 'public' });
+      const thirdModule = domainBuilder.buildModule({ shortId: 'terzio', internalTitle: 'Premier module cyber', slug: 'a', title: 'Attention au phishing', visibility: 'public' });
+      const filter = { internalTitle: 'IA' };
+
+      databaseBuilder.factory.buildModule(firstModule);
+      databaseBuilder.factory.buildModule(secondModule);
+      databaseBuilder.factory.buildModule(thirdModule);
+
+      await databaseBuilder.commit();
+
+      // when
+      const modules = await list({ filter });
+
+      // then
+      expect(modules).toStrictEqual([firstModule, secondModule]);
+    });
   });
 
   describe('listForReplication', () => {
@@ -129,6 +149,25 @@ describe('Module Repository', () => {
 
       // when
       const result = await count();
+
+      // then
+      expect(result).toBe(2);
+    });
+
+    it('returns number of modules matching filter', async () => {
+      // given
+      const firstModule = domainBuilder.buildModule({ shortId: 'first', internalTitle: 'Premier module IA', slug: 'c', title: 'IA génératives', visibility: 'public' });
+      const secondModule = domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'Second module IA', slug: 'b', title: 'IA dans l’environnement', visibility: 'public' });
+      const thirdModule = domainBuilder.buildModule({ shortId: 'terzio', internalTitle: 'Premier module cyber', slug: 'a', title: 'Attention au phishing', visibility: 'public' });
+      const filter = { internalTitle: 'iA' };
+
+      databaseBuilder.factory.buildModule(firstModule);
+      databaseBuilder.factory.buildModule(secondModule);
+      databaseBuilder.factory.buildModule(thirdModule);
+      await databaseBuilder.commit();
+
+      // when
+      const result = await count({ filter });
 
       // then
       expect(result).toBe(2);
