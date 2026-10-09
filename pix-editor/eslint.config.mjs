@@ -1,5 +1,4 @@
 import pixRecommendedConfig from '@1024pix/eslint-plugin/config';
-import babelParser from '@babel/eslint-parser';
 import emberRecommendedConfig from 'eslint-plugin-ember/configs/recommended';
 import emberGjsRecommendedConfig from 'eslint-plugin-ember/configs/recommended-gjs';
 import { parser as emberParser } from 'eslint-plugin-ember/recommended';
@@ -44,20 +43,9 @@ export default [
     languageOptions: {
       globals: { ...globals.browser },
 
-      parser: babelParser,
-      ecmaVersion: 2018,
+      parser: emberParser,
+      ecmaVersion: 'latest',
       sourceType: 'module',
-
-      parserOptions: {
-        ecmaVersion: 2018,
-        sourceType: 'module',
-        requireConfigFile: false,
-        babelOptions: {
-          configFile: false,
-          babelrc: false,
-          plugins: [['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }]],
-        },
-      },
     },
 
     rules: {
