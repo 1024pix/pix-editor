@@ -1,6 +1,5 @@
 import { render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { t } from 'ember-intl/test-support';
 import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -51,11 +50,9 @@ module('Integration | Components | modules/create-module-button', function (hook
       const screen = await render(<template><CreateModuleButton @module={{module}} /></template>);
 
       // then
+      assert.dom(screen.getByRole('link', { name: 'Créer un brouillon' })).exists();
       assert
-        .dom(screen.getByRole('link', { name: t('modules.components.create-module-button.create-draft') }))
-        .exists();
-      assert
-        .dom(screen.getByRole('link', { name: t('modules.components.create-module-button.create-draft') }))
+        .dom(screen.getByRole('link', { name: 'Créer un brouillon' }))
         .hasAttribute('href', /\/modules\/workbench\/new\?moduleId=moduleId$/);
     });
 
@@ -96,11 +93,9 @@ module('Integration | Components | modules/create-module-button', function (hook
       const screen = await render(<template><CreateModuleButton @module={{module}} /></template>);
 
       // then
+      assert.dom(screen.getByRole('link', { name: 'Créer un module' })).exists();
       assert
-        .dom(screen.getByRole('link', { name: t('modules.components.create-module-button.create-module') }))
-        .exists();
-      assert
-        .dom(screen.getByRole('link', { name: t('modules.components.create-module-button.create-module') }))
+        .dom(screen.getByRole('link', { name: 'Créer un module' }))
         .hasAttribute('href', /\/modules\/workbench\/new$/);
     });
   });

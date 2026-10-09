@@ -1,7 +1,6 @@
 import { visit, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, currentURL } from '@ember/test-helpers';
-import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
@@ -36,9 +35,9 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
 
       // then
       const breadcrumb = screen.getByRole('navigation');
-      assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.workbench.label') })).exists();
-      assert.dom(within(breadcrumb).getByRole('link', { name: t('modules.breadcrumb.draft-module.label') })).exists();
-      assert.dom(within(breadcrumb).getByText(t('modules.breadcrumb.edit-draft-module.label'))).exists();
+      assert.dom(within(breadcrumb).getByRole('link', { name: 'Liste des brouillons' })).exists();
+      assert.dom(within(breadcrumb).getByRole('link', { name: 'Détail du brouillon' })).exists();
+      assert.dom(within(breadcrumb).getByText('Édition du brouillon')).exists();
     });
 
     module('when a module has errors', function () {
@@ -60,7 +59,7 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // then
-        assert.dom(await screen.findByText(t('modules.components.validation-errors.title', { count: 2 }))).exists();
+        assert.dom(await screen.findByText('2 erreurs de validation')).exists();
         assert.dom(screen.getByText("Problème de duplications d'Ids")).exists();
         assert.dom(screen.getByText('"ariaLabel" ne doit pas être vide')).exists();
       });
@@ -110,10 +109,10 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         // when
-        await click(await screen.findByRole('button', { name: t('modules.components.module-form.save') }));
+        await click(await screen.findByRole('button', { name: 'Enregistrer' }));
 
         // then
-        const expectedMessage = `${t('modules.new.draft-error')}<br><br>${t('modules.new.draft-error-detail')} internal-title ne doit pas être vide, title est requis.`;
+        const expectedMessage = `Une erreur est survenue lors de l’enregistrement du draft.<br><br>Détail de l’erreur : internal-title ne doit pas être vide, title est requis.`;
         assert.ok(pixToastSendError.calledOnce);
         assert.strictEqual(pixToastSendError.args[0][0].toString(), expectedMessage);
       });
@@ -136,7 +135,7 @@ module('Acceptance | Modules | Edit Draft Module', function (hooks) {
         assert
           .dom(
             screen.queryByRole('button', {
-              name: `${t('modules.components.validation-errors.title', { count: 1 })} ${t('modules.components.validation-errors.information')}`,
+              name: '1 erreur de validation La publication est impossible tant que des erreurs subsistent.',
             }),
           )
           .doesNotExist();
