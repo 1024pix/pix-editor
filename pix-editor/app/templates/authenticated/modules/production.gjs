@@ -1,6 +1,7 @@
 import t from 'ember-intl/helpers/t';
 import Pagination from 'pixeditor/components/list/pagination';
 import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
+import ModulesFilters from 'pixeditor/components/modules/filters';
 import ModuleList from 'pixeditor/components/modules/modules-list';
 import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
 
@@ -16,7 +17,12 @@ import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
   </header>
   <main class="page-body">
     <section class="page-section modules-list">
-      <ModulesTabs />
+      <ModulesFilters
+        @internalTitle={{@controller.internalTitle}}
+        @onInternalTitleFilterChange={{@controller.updateInternalTitleFilter}}
+        @onClearFilters={{@controller.clearFilters}}
+      />
+      <ModulesTabs @internalTitle={{@controller.internalTitle}} />
       <ModuleList @modules={{@model.modules}} @goToDetailPage={{this.goToDetailPage}} />
       <Pagination @pagination={{@model.modules.meta}} />
     </section>

@@ -5,6 +5,7 @@ export default class WorkbenchModulesRoute extends Route {
   queryParams = {
     pageNumber: { refreshModel: true },
     pageSize: { refreshModel: true },
+    internalTitle: { refreshModel: true },
   };
 
   @service store;
@@ -16,6 +17,9 @@ export default class WorkbenchModulesRoute extends Route {
         page: {
           number: params.pageNumber,
           size: params.pageSize,
+        },
+        filter: {
+          internalTitle: params.internalTitle,
         },
       },
       { reload: true },

@@ -1,5 +1,5 @@
 import { clickByName, visit } from '@1024pix/ember-testing-library';
-import { currentURL } from '@ember/test-helpers';
+import { click, currentURL, fillIn } from '@ember/test-helpers';
 import { t } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { selectOption } from 'pixeditor/tests/select-option-list-box-helper.js';
@@ -16,6 +16,7 @@ module('Acceptance | Modules | Production', function (hooks) {
     this.server.create('user', { trigram: 'ABC' });
 
     this.server.createList('module', 36);
+    this.server.createList('draft-module', 36);
 
     return authenticateSession();
   });
@@ -74,5 +75,49 @@ module('Acceptance | Modules | Production', function (hooks) {
     assert.dom(await screen.findByText('36 éléments')).exists();
     assert.dom(await screen.findByText('MOD_0')).exists();
     assert.dom(await screen.findByText('MOD_35')).exists();
+  });
+
+  test('filters modules by internal title', async function (assert) {
+    // given
+    const screen = await visit('/modules/production');
+
+    // when
+    await fillIn(screen.getByRole('textbox', { name: 'Titre interne' }), 'MOD_12');
+
+    // then
+    assert.dom(await screen.findByText('MOD_12')).exists();
+    assert.dom(screen.getByText('1 élément')).exists();
+    assert.dom(screen.queryByText('MOD_0')).doesNotExist();
+    assert.strictEqual(currentURL(), '/modules/production?internalTitle=MOD_12');
+  });
+
+  module('when clearing filters', function () {
+    test('resets the internal title filter', async function (assert) {
+      // given
+      const screen = await visit('/modules/production?internalTitle=MOD_12');
+
+      // when
+      await click(screen.getByRole('button', { name: 'Réinitialiser le filtre' }));
+
+      // then
+      assert.dom(await screen.findByText('MOD_0')).exists();
+      assert.strictEqual(currentURL(), '/modules/production');
+    });
+  });
+
+  module('when switching to the workbench tab', function () {
+    test('keeps the internal title filter', async function (assert) {
+      // given
+      const screen = await visit('/modules/production');
+      await fillIn(screen.getByRole('textbox', { name: 'Titre interne' }), 'MOD_3');
+
+      // when
+      await click(await screen.getByRole('link', { name: 'Atelier' }));
+
+      // then
+      assert.dom(await screen.findByText('MOD_3')).exists();
+      assert.dom(screen.queryByText('MOD_0')).doesNotExist();
+      assert.strictEqual(currentURL(), '/modules/workbench?internalTitle=MOD_3');
+    });
   });
 });
