@@ -1,25 +1,29 @@
-import { draftModuleRepository, draftModuleVersionRepository } from '../../infrastructure/repositories/index.js';
+import { draftModuleRepository } from '../../infrastructure/repositories/index.js';
 import { DomainTransaction } from '../DomainTransaction.js';
-import { DraftModuleVersion, ModuleVersion } from '../models/index.js';
-import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
+import { createDraftModule } from './create-draft-module.js';
+import { updateDraftModule } from './update-draft-module.js';
+import { validateDraftModule } from './validate-draft-module.js';
 
-export async function bulkUpdateDraftModules(draftModules, dependencies = { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache }) {
+export async function bulkUpdateDraftModules({ draftModules, updatedModuleIds }, dependencies = { draftModuleRepository, createDraftModule, updateDraftModule, validateDraftModule }) {
   return DomainTransaction.execute(async () => {
+    const validatedDraftModules = [];
+
     for (const draftModule of draftModules) {
-      if (draftModule.moduleId) {
-        draftModule.version = ModuleVersion.incrementMajorVersion(draftModule.version);
-      }
-      draftModule.version = DraftModuleVersion.incrementMinorVersion(draftModule.version);
+      const isDraftOfUpdatedModule = updatedModuleIds.includes(draftModule.moduleId);
+      const savedDraftModule = isDraftOfUpdatedModule
+        ? await recreateDraftModule(draftModule, dependencies)
+        : await dependencies.updateDraftModule(draftModule);
 
-      const savedDraftModule = await dependencies.draftModuleRepository.save(draftModule);
-
-      await dependencies.draftModuleVersionRepository.create(new DraftModuleVersion({
-        draftModuleId: savedDraftModule.id,
-        version: savedDraftModule.version,
-        structuredDiff: {},
-      }));
-
-      await dependencies.updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated(savedDraftModule);
+      validatedDraftModules.push(await dependencies.validateDraftModule(savedDraftModule));
     }
+
+    return validatedDraftModules;
   });
+}
+
+// Recreating the draft makes its version start from the new major version of its module (e.g. 2.1 instead of 1.4).
+// Removing the draft also removes its history of draft module versions.
+async function recreateDraftModule(draftModule, dependencies) {
+  await dependencies.draftModuleRepository.remove({ id: draftModule.id });
+  return dependencies.createDraftModule(draftModule);
 }

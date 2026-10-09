@@ -2,67 +2,93 @@ import { describe, expect, it, vi } from 'vitest';
 import { bulkUpdateDraftModules } from '../../../../lib/domain/usecases/index.js';
 
 describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
-  describe('For creation drafts', () => {
-    it('updates existing draft-module, increments minor version and saves it', async () => {
-      // given
-      const draftModule1 = {
-        id: 1,
-        version: '0.1',
-      };
-      const draftModule2 = {
-        id: 2,
-        version: '0.6',
-      };
+  it('removes drafts whose module has been updated, creates them again and returns them validated', async () => {
+    // given
+    const draftModule = {
+      id: 1,
+      moduleId: 1,
+      version: '1.3',
+    };
+    const createdDraftModule = Symbol('createdDraftModule');
+    const draftModuleRepository = { remove: vi.fn() };
+    const createDraftModuleUsecase = vi.fn().mockResolvedValue(createdDraftModule);
+    const updateDraftModuleUsecase = vi.fn();
+    const validatedDraftModule = Symbol('validatedDraftModule');
+    const validateDraftModuleUsecase = vi.fn().mockResolvedValue(validatedDraftModule);
 
-      const draftModules = [draftModule1, draftModule2];
-      const draftModuleRepository = { save: vi.fn().mockImplementation(async (draftModule) => draftModule) };
-      const draftModuleVersionRepository = { create: vi.fn() };
-      const updatePixApiReleaseCache = { onDraftModuleCreatedOrUpdated: vi.fn() };
-
-      // when
-      await bulkUpdateDraftModules(draftModules, {
-        draftModuleRepository,
-        draftModuleVersionRepository,
-        updatePixApiReleaseCache,
-      });
-
-      // then
-      expect(draftModuleRepository.save).toHaveBeenCalledTimes(2);
-      expect(draftModuleVersionRepository.create).toHaveBeenCalledTimes(2);
-      expect(draftModule1.version).toEqual('0.2');
-      expect(draftModule2.version).toEqual('0.7');
-      expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledTimes(2);
-      expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenNthCalledWith(1, draftModule1);
-      expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenNthCalledWith(2, draftModule2);
+    // when
+    const result = await bulkUpdateDraftModules({ draftModules: [draftModule], updatedModuleIds: [1] }, {
+      draftModuleRepository,
+      createDraftModule: createDraftModuleUsecase,
+      updateDraftModule: updateDraftModuleUsecase,
+      validateDraftModule: validateDraftModuleUsecase,
     });
+
+    // then
+    expect(result).toStrictEqual([validatedDraftModule]);
+    expect(draftModuleRepository.remove).toHaveBeenCalledExactlyOnceWith({ id: 1 });
+    expect(createDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(draftModule);
+    expect(validateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(createdDraftModule);
+    expect(updateDraftModuleUsecase).not.toHaveBeenCalled();
   });
 
-  describe('For drafts of existing modules', () => {
-    it('updates existing draft-module, increments major version of the draft module, sets minor to 1 and saves it', async () => {
-      // given
-      const draftModule1 = {
-        id: 1,
-        moduleId: 2,
-        version: '1.1',
-      };
+  it('updates drafts whose module has not been updated and returns them validated', async () => {
+    // given
+    const draftModule = {
+      id: 1,
+      moduleId: 1,
+      version: '1.3',
+    };
+    const updatedDraftModule = Symbol('updatedDraftModule');
+    const draftModuleRepository = { remove: vi.fn() };
+    const createDraftModuleUsecase = vi.fn();
+    const updateDraftModuleUsecase = vi.fn().mockResolvedValue(updatedDraftModule);
+    const validatedDraftModule = Symbol('validatedDraftModule');
+    const validateDraftModuleUsecase = vi.fn().mockResolvedValue(validatedDraftModule);
 
-      const draftModules = [draftModule1];
-      const draftModuleRepository = { save: vi.fn().mockImplementation(async (draftModule) => draftModule) };
-      const draftModuleVersionRepository = { create: vi.fn() };
-      const updatePixApiReleaseCache = { onDraftModuleCreatedOrUpdated: vi.fn() };
-
-      // when
-      await bulkUpdateDraftModules(draftModules, {
-        draftModuleRepository,
-        draftModuleVersionRepository,
-        updatePixApiReleaseCache,
-      });
-
-      // then
-      expect(draftModuleRepository.save).toHaveBeenCalledTimes(1);
-      expect(draftModuleVersionRepository.create).toHaveBeenCalledTimes(1);
-      expect(draftModule1.version).toEqual('2.1');
-      expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(draftModule1);
+    // when
+    const result = await bulkUpdateDraftModules({ draftModules: [draftModule], updatedModuleIds: [2] }, {
+      draftModuleRepository,
+      createDraftModule: createDraftModuleUsecase,
+      updateDraftModule: updateDraftModuleUsecase,
+      validateDraftModule: validateDraftModuleUsecase,
     });
+
+    // then
+    expect(result).toStrictEqual([validatedDraftModule]);
+    expect(updateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(draftModule);
+    expect(validateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(updatedDraftModule);
+    expect(draftModuleRepository.remove).not.toHaveBeenCalled();
+    expect(createDraftModuleUsecase).not.toHaveBeenCalled();
+  });
+
+  it('updates creation drafts and returns them validated', async () => {
+    // given
+    const creationDraftModule = {
+      id: 1,
+      moduleId: null,
+      version: '0.3',
+    };
+    const updatedDraftModule = Symbol('updatedDraftModule');
+    const draftModuleRepository = { remove: vi.fn() };
+    const createDraftModuleUsecase = vi.fn();
+    const updateDraftModuleUsecase = vi.fn().mockResolvedValue(updatedDraftModule);
+    const validatedDraftModule = Symbol('validatedDraftModule');
+    const validateDraftModuleUsecase = vi.fn().mockResolvedValue(validatedDraftModule);
+
+    // when
+    const result = await bulkUpdateDraftModules({ draftModules: [creationDraftModule], updatedModuleIds: [2] }, {
+      draftModuleRepository,
+      createDraftModule: createDraftModuleUsecase,
+      updateDraftModule: updateDraftModuleUsecase,
+      validateDraftModule: validateDraftModuleUsecase,
+    });
+
+    // then
+    expect(result).toStrictEqual([validatedDraftModule]);
+    expect(updateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(creationDraftModule);
+    expect(validateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(updatedDraftModule);
+    expect(draftModuleRepository.remove).not.toHaveBeenCalled();
+    expect(createDraftModuleUsecase).not.toHaveBeenCalled();
   });
 });
