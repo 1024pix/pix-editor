@@ -65,6 +65,7 @@
     "ember-concurrency": "5.3.0",
     "ember-data": "5.9.1",
     "ember-eslint-parser": "0.14.6",
+    "ember-exam": "10.2.0",
     "ember-file-upload": "10.1.0",
     "ember-intl": "9.1.0",
     "ember-lifeline": "7.1.0",
