@@ -23,8 +23,9 @@
     "preinstall": "git config core.hooksPath .githooks || true",
     "lint:js:fix": "npm run lint:js -- --fix",
     "start": "vite",
-    "test": "npm-run-all lint test:*",
-    "test:ember": "vite build --mode development && ember test --path dist"
+    "test:ember": "ember exam --path dist --config-file ./testem.js",
+    "test:ci": "vite build --mode test && ember exam --path dist --config-file ./testem.js --split=$CIRCLE_NODE_TOTAL --partition=$((1 + CIRCLE_NODE_INDEX))",
+    "test": "npm-run-all lint test:ci"
   },
   "devDependencies": {
     "@1024pix/ember-testing-library": "4.0.1",

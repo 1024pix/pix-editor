@@ -58,10 +58,11 @@ jobs:
   pix-editor-test:
     executor: node-browsers-docker
     working_directory: ~/pix-editor/pix-editor
+    parallelism: 3
     steps:
+      - browser-tools/install_firefox
       - attach_workspace:
           at: ~/pix-editor
-      - browser-tools/install_firefox
       - run: cat package*.json > cachekey
       - restore_cache:
           keys:
@@ -76,7 +77,7 @@ jobs:
           command: npm run lint
       - run:
           name: Test
-          command: npm test
+          command: npm run test:ci
       - store_test_results:
           path: ./test-results
       - store_artifacts:
