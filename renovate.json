@@ -1,15 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>1024pix/renovate-config"
-  ],
-  "packageRules": [
-    {
-      "additionalBranchPrefix": "",
-      "commitMessageSuffix": "",
-      "matchPackageNames": [
-        "/^@playwright/test$/"
-      ]
-    }
+    "local>1024pix/renovate-config:default",
+    "local>1024pix/renovate-config:js-app"
   ]
 }
