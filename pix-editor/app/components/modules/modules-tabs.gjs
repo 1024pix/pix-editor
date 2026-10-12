@@ -1,13 +1,22 @@
 import { PixTabs } from '@1024pix/nebulix-ember';
+import { hash } from '@ember/helper';
 import { LinkTo } from '@ember/routing';
 import t from 'ember-intl/helpers/t';
 
 <template>
   <PixTabs @ariaLabel={{t "modules.components.modules-tabs.navigation"}}>
-    <LinkTo @route="authenticated.modules.workbench">
+    <LinkTo
+      @route="authenticated.modules.workbench"
+      @query={{hash internalTitle=@internalTitle}}
+      @current-when="authenticated.modules.workbench"
+    >
       {{t "modules.components.modules-tabs.workbench"}}
     </LinkTo>
-    <LinkTo @route="authenticated.modules.production">
+    <LinkTo
+      @route="authenticated.modules.production"
+      @query={{hash internalTitle=@internalTitle}}
+      @current-when="authenticated.modules.production"
+    >
       {{t "modules.components.modules-tabs.production"}}
     </LinkTo>
   </PixTabs>
