@@ -1,5 +1,21 @@
 
 
+## v4.59.0 (12/10/2026)
+
+
+### :rocket: Amélioration
+- [#1689](https://github.com/1024pix/pix-editor/pull/1689) [FEATURE] Filtrer les modules et les brouillons via le titre interne (PIX-24292).
+- [#1685](https://github.com/1024pix/pix-editor/pull/1685) [FEATURE] API - Filtrer dans la liste des modules par titre interne (PIX-24216).
+
+### :building_construction: Tech
+- [#1691](https://github.com/1024pix/pix-editor/pull/1691) [TECH] Update renovate configuration.
+- [#1667](https://github.com/1024pix/pix-editor/pull/1667) [TECH] Créer un script de modification en masse des modules et draft modules (PIX-24350).
+
+### :arrow_up: Montée de version
+- [#1684](https://github.com/1024pix/pix-editor/pull/1684) [BUMP] Update dependency ember-intl to v9.
+- [#1690](https://github.com/1024pix/pix-editor/pull/1690) [BUMP] Update dependency eslint-plugin-mocha to v12.
+- [#1688](https://github.com/1024pix/pix-editor/pull/1688) [BUMP] Update dependency eslint to v10.
+
 ## v4.58.0 (09/10/2026)
 
 
