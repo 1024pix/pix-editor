@@ -1,7 +1,6 @@
 import { render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click, fillIn } from '@ember/test-helpers';
-import { t } from 'ember-intl/test-support';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -35,17 +34,17 @@ module('Integration | Component | modules/module-form', function (hooks) {
     const screen = await render(<template><ModuleForm @saveModule={{saveModule}} /></template>);
 
     // then
-    const saveButton = screen.getByRole('button', { name: t('modules.components.module-form.save') });
+    const saveButton = screen.getByRole('button', { name: 'Enregistrer' });
     assert.dom(saveButton).hasAttribute('aria-disabled');
 
     const internalTitle = screen.getByRole('textbox', {
-      name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
+      name: new RegExp(`^${'Titre interne'}`),
     });
     await fillIn(internalTitle, 'PALOURDE_MAGIQUE');
 
     assert.dom(saveButton).hasAttribute('aria-disabled');
 
-    const monacoEditor = await screen.findByLabelText(t('modules.components.module-form.content-label'));
+    const monacoEditor = await screen.findByLabelText('Contenu (JSON)');
     assert.dom(monacoEditor).exists();
 
     await fillIn(monacoEditor, JSON.stringify({ slug: 'limaçoooooooooooooooooooon' }));
@@ -81,13 +80,13 @@ module('Integration | Component | modules/module-form', function (hooks) {
       assert
         .dom(
           screen.getByRole('textbox', {
-            name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
+            name: new RegExp(`^${'Titre interne'}`),
           }),
         )
         .hasValue(module.internalTitle);
 
       assert
-        .dom(await screen.findByLabelText(t('modules.components.module-form.content-label')))
+        .dom(await screen.findByLabelText('Contenu (JSON)'))
         .hasValue(JSON.stringify(moduleWoInternalTitle, null, 2));
     });
   });
@@ -113,14 +112,12 @@ module('Integration | Component | modules/module-form', function (hooks) {
       assert
         .dom(
           await screen.queryByRole('textbox', {
-            name: new RegExp(`^${t('modules.components.module-form.internal-title-label')}`),
+            name: new RegExp(`^${'Titre interne'}`),
           }),
         )
         .doesNotExist();
-      assert.dom(await screen.queryByRole('button', { name: t('modules.components.module-form.save') })).doesNotExist();
-      assert
-        .dom(await screen.queryByRole('button', { name: t('modules.components.module-form.cancel') }))
-        .doesNotExist();
+      assert.dom(await screen.queryByRole('button', { name: 'Enregistrer' })).doesNotExist();
+      assert.dom(await screen.queryByRole('button', { name: 'Annuler' })).doesNotExist();
     });
   });
 });

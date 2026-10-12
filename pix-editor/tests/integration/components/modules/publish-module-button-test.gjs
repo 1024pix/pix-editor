@@ -2,7 +2,6 @@ import { render, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
 import { click } from '@ember/test-helpers';
 import { waitFor } from '@testing-library/dom';
-import { t } from 'ember-intl/test-support';
 import PublishModuleButton from 'pixeditor/components/modules/publish-module-button';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
@@ -42,20 +41,12 @@ module('Integration | Component | modules/publish-module-button', function (hook
 
       // when
       const screen = await render(<template><PublishModuleButton @draftModule={{draftModule}} /></template>);
-      await click(
-        screen.getByRole('button', {
-          name: t('modules.components.publish-module-button.aria-label', { title: 'Mon module' }),
-        }),
-      );
+      await click(screen.getByRole('button', { name: 'Publier le brouillon "Mon module"' }));
 
-      const dialog = await screen.findByRole('dialog', {
-        name: t('modules.components.publish-module-button.confirmation-dialog.title'),
-      });
+      const dialog = await screen.findByRole('dialog', { name: 'Confirmation de publication' });
 
       // then
-      assert
-        .dom(within(dialog).getByText(t('modules.components.publish-module-button.confirmation-dialog.message')))
-        .exists();
+      assert.dom(within(dialog).getByText('Cette action transformera le brouillon en module de production.')).exists();
     });
   });
 
@@ -69,30 +60,18 @@ module('Integration | Component | modules/publish-module-button', function (hook
     const screen = await render(<template><PublishModuleButton @draftModule={{draftModule}} /></template>);
 
     // when
-    await click(
-      screen.getByRole('button', {
-        name: t('modules.components.publish-module-button.aria-label', { title: 'Mon module' }),
-      }),
-    );
+    await click(screen.getByRole('button', { name: 'Publier le brouillon "Mon module"' }));
 
-    const dialog = await screen.findByRole('dialog', {
-      name: t('modules.components.publish-module-button.confirmation-dialog.title'),
-    });
+    const dialog = await screen.findByRole('dialog', { name: 'Confirmation de publication' });
 
-    await click(
-      within(dialog).getByRole('button', {
-        name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
-      }),
-    );
+    await click(within(dialog).getByRole('button', { name: 'Confirmer la publication' }));
 
     await waitFor(() => {
       if (screen.queryByRole('dialog')) throw new Error('Dialog should not be visible');
     });
 
     // then
-    assert.ok(
-      sendSuccessStub.calledWith(t('modules.components.publish-module-button.success', { title: 'Mon module' })),
-    );
+    assert.ok(sendSuccessStub.calledWith('Le module "Mon module" a été publié.'));
     assert.ok(replaceWithStub.calledWith('authenticated.modules.production-module', 'moduleId'));
     assert.ok(loaderStopStub.calledOnce);
   });
@@ -109,25 +88,21 @@ module('Integration | Component | modules/publish-module-button', function (hook
       // when
       await click(
         screen.getByRole('button', {
-          name: t('modules.components.publish-module-button.aria-label', { title: 'Mon module' }),
+          name: 'Publier le brouillon "Mon module"',
         }),
       );
 
-      const dialog = await screen.findByRole('dialog', {
-        name: t('modules.components.publish-module-button.confirmation-dialog.title'),
-      });
-      await click(
-        within(dialog).getByRole('button', {
-          name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
-        }),
-      );
+      const dialog = await screen.findByRole('dialog', { name: 'Confirmation de publication' });
+      await click(within(dialog).getByRole('button', { name: 'Confirmer la publication' }));
 
       await waitFor(() => {
         if (screen.queryByRole('dialog')) throw new Error('Dialog should not be visible');
       });
 
       // then
-      assert.ok(sendErrorStub.calledWith(t('modules.components.publish-module-button.validation-error')));
+      assert.ok(
+        sendErrorStub.calledWith('Le brouillon ne peut pas être publié car il contient des erreurs de validation.'),
+      );
     });
   });
 
@@ -143,25 +118,19 @@ module('Integration | Component | modules/publish-module-button', function (hook
       // when
       await click(
         screen.getByRole('button', {
-          name: t('modules.components.publish-module-button.aria-label', { title: 'Mon module' }),
+          name: 'Publier le brouillon "Mon module"',
         }),
       );
 
-      const dialog = await screen.findByRole('dialog', {
-        name: t('modules.components.publish-module-button.confirmation-dialog.title'),
-      });
-      await click(
-        within(dialog).getByRole('button', {
-          name: t('modules.components.publish-module-button.confirmation-dialog.confirm'),
-        }),
-      );
+      const dialog = await screen.findByRole('dialog', { name: 'Confirmation de publication' });
+      await click(within(dialog).getByRole('button', { name: 'Confirmer la publication' }));
 
       await waitFor(() => {
         if (screen.queryByRole('dialog')) throw new Error('Dialog should not be visible');
       });
 
       // then
-      assert.ok(sendErrorStub.calledWith(t('modules.components.publish-module-button.error')));
+      assert.ok(sendErrorStub.calledWith('Erreur lors de la publication du module.'));
     });
   });
 });
