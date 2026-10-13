@@ -142,7 +142,7 @@ describe('Acceptance | Script | AddMissingLlmMessagesKeys', () => {
     databaseBuilder.factory.buildDraftModule(draftOfModule);
     await databaseBuilder.commit();
 
-    const spiedLogger = { info: vi.fn() };
+    const spiedLogger = { info: vi.fn(), error: vi.fn() };
 
     // when
     await new AddMissingLlmMessagesKeys().handle({ options: { dryRun: true }, logger: spiedLogger });
@@ -173,6 +173,7 @@ describe('Acceptance | Script | AddMissingLlmMessagesKeys', () => {
       ['1 draft module(s) to update (1 recreated because their module is updated), 1 object(s) to complete'],
       ['Dry run: nothing saved. Re-run with --dryRun=false to apply changes.'],
     ]);
+    expect(spiedLogger.error).not.toHaveBeenCalled();
 
     await expect(knex('modules').select('version', 'sections')).resolves.toStrictEqual([
       {
@@ -188,6 +189,45 @@ describe('Acceptance | Script | AddMissingLlmMessagesKeys', () => {
     ]);
     await expect(knex('module-versions').count().first()).resolves.toStrictEqual({ count: 0 });
     await expect(knex('draft-module-versions').count().first()).resolves.toStrictEqual({ count: 0 });
+  });
+
+  describe('when validation of an updated module fails', () => {
+    it('should log the error and stop the script', async () => {
+      // given
+      const messageWithMissingKeys = { direction: 'outbound', content: 'Bonjour' };
+
+      const notValidModuleWithEmptyObjectives = domainBuilder.buildModule({
+        shortId: 'module01',
+        internalTitle: 'module-to-fix-without-draft',
+        details: { objectives: [] },
+        version: '1.0',
+        sections: buildSectionsWithLlmMessages([messageWithMissingKeys]),
+      });
+
+      const notValidModuleWithDuplicatedId = domainBuilder.buildModule({
+        shortId: 'module02',
+        internalTitle: 'module-to-fix-without-draft-2',
+        version: '1.0',
+        sections: buildSectionsWithLlmMessages([messageWithMissingKeys]),
+      });
+      notValidModuleWithDuplicatedId.sections.at(0).id = notValidModuleWithEmptyObjectives.id;
+
+      databaseBuilder.factory.buildModule(notValidModuleWithEmptyObjectives);
+      databaseBuilder.factory.buildModule(notValidModuleWithDuplicatedId);
+      await databaseBuilder.commit();
+
+      const spiedLogger = { info: vi.fn(), error: vi.fn() };
+
+      // when
+      await expect(new AddMissingLlmMessagesKeys().handle({ options: { dryRun: true }, logger: spiedLogger })).rejects.toThrow('Modules validation failed.');
+
+      // then
+      expect(spiedLogger.error.mock.calls).toStrictEqual([
+        [`2 modules validation failed : ${notValidModuleWithEmptyObjectives.id}, ${notValidModuleWithDuplicatedId.id}`],
+        [`Errors in module ${notValidModuleWithEmptyObjectives.id}: {\"message\":\"\\"details.objectives\\" doit contenir au moins 1 élément(s)\",\"isSchemaError\":true}, {\"message\":\"Le brouillon a des ids dupliqués : ${notValidModuleWithEmptyObjectives.id}\",\"isSchemaError\":false}`],
+        [`Errors in module ${notValidModuleWithDuplicatedId.id}: {\"message\":\"Le brouillon a des ids dupliqués : ${notValidModuleWithDuplicatedId.sections.at(0).id}\",\"isSchemaError\":false}`],
+      ]);
+    });
   });
 });
 
