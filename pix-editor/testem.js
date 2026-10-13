@@ -3,6 +3,7 @@ const config = {
   test_page: 'tests/index.html?hidepassed',
   disable_watching: true,
   reporter: 'dot',
+  src_files: ['*.js', '*.gjs'],
   launch_in_ci: ['Firefox'],
   launch_in_dev: ['Firefox'],
   browser_start_timeout: 120,
