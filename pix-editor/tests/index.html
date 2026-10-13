@@ -62,8 +62,12 @@
     </script>
     <script type="module">
       import { start } from './test-helper';
-      import.meta.glob('./**/*.{js,ts,gjs,gts}', { eager: true });
-      start();
+      const availableModules = {
+        ...import.meta.glob('./acceptance/**/*.{js,ts,gjs,gts}'),
+        ...import.meta.glob('./integration/**/*.{js,ts,gjs,gts}'),
+        ...import.meta.glob('./unit/**/*.{js,ts,gjs,gts}'),
+      };
+      start({ availableModules });
     </script>
 
     {{content-for "body-footer"}}
