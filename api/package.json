@@ -47,7 +47,7 @@
     "@1024pix/oppsy": "1.0.2",
     "@adminjs/hapi": "7.1.0",
     "@adminjs/sequelize": "4.1.1",
-    "@googleapis/sheets": "18.0.1",
+    "@googleapis/sheets": "18.1.0",
     "@hapi/boom": "10.0.1",
     "@hapi/cookie": "12.0.1",
     "@hapi/hapi": "21.4.10",
