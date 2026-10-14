@@ -91,7 +91,7 @@
   "devDependencies": {
     "@stylistic/eslint-plugin": "5.10.0",
     "dayjs": "1.11.23",
-    "eslint": "10.11.0",
+    "eslint": "10.12.0",
     "eslint-plugin-mocha": "12.0.2",
     "flush-write-stream": "2.0.0",
     "form-data": "4.0.6",
