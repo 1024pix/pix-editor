@@ -24,7 +24,30 @@ export class AddMissingLlmMessagesKeys extends Script {
   async handle({ options, logger }) {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
-    const modulesToUpdate = getModulesToUpdate(await moduleRepository.list());
+    const existingModules = await moduleRepository.list();
+    const modulesToUpdate = getModulesToUpdate(existingModules);
+    const modulesToValidate = modulesToUpdate.map(({ module }) => module);
+
+    const refModules = [...existingModules.filter((existingModule) => modulesToValidate.find(({ id }) => id === existingModule.id)), ...modulesToValidate];
+    const notValidModuleIdsWithErrors = new Map();
+
+    for (const module of modulesToValidate) {
+      const { validationStatus, validationErrors } = await module.validate({ modules: refModules });
+
+      if (!validationStatus) {
+        notValidModuleIdsWithErrors.set(module.id, validationErrors);
+      }
+    }
+
+    if (notValidModuleIdsWithErrors.size > 0) {
+      logger.error(`${notValidModuleIdsWithErrors.size} modules validation failed : ${Array.from(notValidModuleIdsWithErrors.keys()).join(', ')}`);
+      for (const [moduleId, errors] of notValidModuleIdsWithErrors.entries()) {
+        logger.error(`Errors in module ${moduleId}: ${errors.map(JSON.stringify).join(', ')}`);
+      }
+
+      return;
+    }
+
     logModulesToUpdate(modulesToUpdate, logger);
 
     const modulesToUpdateIds = modulesToUpdate.map(({ module }) => module.id);

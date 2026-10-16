@@ -189,6 +189,45 @@ describe('Acceptance | Script | AddMissingLlmMessagesKeys', () => {
     await expect(knex('module-versions').count().first()).resolves.toStrictEqual({ count: 0 });
     await expect(knex('draft-module-versions').count().first()).resolves.toStrictEqual({ count: 0 });
   });
+
+  describe('when validation of an updated module fails', () => {
+    it('should log the error and stop the script', async () => {
+      // given
+      const messageWithMissingKeys = { direction: 'outbound', content: 'Bonjour' };
+
+      const notValidModuleWithEmptyObjectives = domainBuilder.buildModule({
+        shortId: 'module01',
+        internalTitle: 'module-to-fix-without-draft',
+        details: { objectives: [] },
+        version: '1.0',
+        sections: buildSectionsWithLlmMessages([messageWithMissingKeys]),
+      });
+
+      const notValidModuleWithDuplicatedId = domainBuilder.buildModule({
+        shortId: 'module02',
+        internalTitle: 'module-to-fix-without-draft-2',
+        version: '1.0',
+        sections: buildSectionsWithLlmMessages([messageWithMissingKeys]),
+      });
+      notValidModuleWithDuplicatedId.sections.id = notValidModuleWithEmptyObjectives.id;
+
+      databaseBuilder.factory.buildModule(notValidModuleWithEmptyObjectives);
+      databaseBuilder.factory.buildModule(notValidModuleWithDuplicatedId);
+      await databaseBuilder.commit();
+
+      const spiedLogger = { info: vi.fn(), error: vi.fn() };
+
+      // when
+      await new AddMissingLlmMessagesKeys().handle({ options: { dryRun: true }, logger: spiedLogger });
+
+      // then
+      expect(spiedLogger.error.mock.calls).toStrictEqual([
+        [`2 modules validation failed : ${notValidModuleWithEmptyObjectives.id}, ${notValidModuleWithDuplicatedId.id}`],
+        [expect.stringContaining(`Errors in module ${notValidModuleWithEmptyObjectives.id}:`)],
+        [expect.stringContaining(`Errors in module ${notValidModuleWithDuplicatedId.id}:`)],
+      ]);
+    });
+  });
 });
 
 function buildSectionsWithLlmMessages(messages) {
