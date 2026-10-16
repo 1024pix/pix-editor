@@ -121,4 +121,21 @@ module('Acceptance | Modules | Workbench', function (hooks) {
       });
     });
   });
+
+  module('when no draft module exists', function () {
+    test('should display a "no result" message and hide table and pagination', async function (assert) {
+      // given
+      this.server.create('config', 'default');
+      this.server.create('user', { trigram: 'ABC' });
+      await authenticateSession();
+
+      // when
+      const screen = await visit('/modules/workbench');
+
+      // then
+      assert.dom(screen.queryByRole('table')).doesNotExist();
+      assert.dom(screen.queryByText('Page 1 / 1')).doesNotExist();
+      assert.dom(screen.getByText('Aucun résultat')).exists();
+    });
+  });
 });

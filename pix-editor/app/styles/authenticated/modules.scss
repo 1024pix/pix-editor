@@ -23,6 +23,22 @@
   }
 }
 
+.modules-list-no-results {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+
+  &__text {
+    @extend %pix-title-xs;
+  }
+
+  &__image {
+    height: 150px;
+  }
+}
+
 th.modules-list__actions {
   display: flex;
   justify-content: center;
