@@ -10,113 +10,132 @@ module('Acceptance | Modules | Workbench', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
-    this.server.create('config', 'default');
-    this.server.create('user', { trigram: 'ABC' });
+  module('when draft modules exists', function (hooks) {
+    hooks.beforeEach(function () {
+      this.server.create('config', 'default');
+      this.server.create('user', { trigram: 'ABC' });
 
-    this.server.createList('draft-module', 36);
-    this.server.createList('module', 36);
+      this.server.createList('draft-module', 36);
+      this.server.createList('module', 36);
 
-    return authenticateSession();
-  });
+      return authenticateSession();
+    });
 
-  test('displays module creation button', async function (assert) {
-    // when
-    const screen = await visit('/');
-    await clickByName('Modules');
-
-    // then
-    assert.dom(screen.getByRole('link', { name: 'Créer un module' })).exists();
-  });
-
-  test('displays modules with pagination', async function (assert) {
-    // when
-    const screen = await visit('/');
-    await clickByName('Modules');
-
-    // then
-    assert.strictEqual(currentURL(), '/modules/workbench');
-    assert.dom(await screen.findByRole('heading', { name: 'Modules' })).exists();
-
-    assert.dom(await screen.findByText('1-10 sur 36 éléments')).exists();
-    assert.dom(await screen.findByText('Page 1 / 4')).exists();
-    assert.dom(await screen.findByText('MOD_0')).exists();
-    assert.dom(await screen.findByText('MOD_5')).exists();
-    assert.dom(await screen.findByText('MOD_9')).exists();
-
-    await screen.getByRole('button', { name: 'Aller à la page suivante' }).click();
-    assert.dom(await screen.findByText('11-20 sur 36 éléments')).exists();
-    assert.dom(await screen.findByText('Page 2 / 4')).exists();
-    assert.dom(await screen.findByText('MOD_10')).exists();
-    assert.dom(await screen.findByText('MOD_15')).exists();
-    assert.dom(await screen.findByText('MOD_19')).exists();
-
-    await screen.getByRole('button', { name: 'Aller à la page suivante' }).click();
-    assert.dom(await screen.findByText('21-30 sur 36 éléments')).exists();
-    assert.dom(await screen.findByText('Page 3 / 4')).exists();
-    assert.dom(await screen.findByText('MOD_20')).exists();
-    assert.dom(await screen.findByText('MOD_25')).exists();
-    assert.dom(await screen.findByText('MOD_29')).exists();
-
-    await screen.getByRole('button', { name: 'Aller à la page suivante' }).click();
-    assert.dom(await screen.findByText('31-36 sur 36 éléments')).exists();
-    assert.dom(await screen.findByText('Page 4 / 4')).exists();
-    assert.dom(await screen.findByText('MOD_30')).exists();
-    assert.dom(await screen.findByText('MOD_35')).exists();
-
-    await screen.getByRole('button', { name: 'Aller à la page précédente' }).click();
-    assert.dom(await screen.findByText('Page 3 / 4')).exists();
-
-    await selectOption(screen, "Nombre d'élément à afficher par page", '50');
-    assert.dom(await screen.findByText('Page 1 / 1')).exists();
-    assert.dom(await screen.findByText('36 éléments')).exists();
-    assert.dom(await screen.findByText('MOD_0')).exists();
-    assert.dom(await screen.findByText('MOD_35')).exists();
-  });
-
-  test('filters draft modules by internal title', async function (assert) {
-    // given
-    const screen = await visit('/modules/workbench');
-
-    // when
-    await fillIn(screen.getByRole('textbox', { name: 'Titre interne' }), 'MOD_12');
-
-    // then
-    assert.dom(await screen.findByText('MOD_12')).exists();
-    assert.dom(screen.getByText('1 élément')).exists();
-    assert.dom(screen.queryByText('MOD_0')).doesNotExist();
-    assert.strictEqual(currentURL(), '/modules/workbench?internalTitle=MOD_12');
-  });
-
-  module('when clearing filters', function () {
-    test('resets the internal title filter', async function (assert) {
-      // given
-      const screen = await visit('/modules/workbench?internalTitle=MOD_3');
-
+    test('displays module creation button', async function (assert) {
       // when
-      await click(screen.getByRole('button', { name: 'Réinitialiser le filtre' }));
+      const screen = await visit('/');
+      await clickByName('Modules');
 
       // then
-      assert.dom(await screen.findByText('MOD_0')).exists();
-      assert.dom(await screen.findByText('MOD_3')).exists();
+      assert.dom(screen.getByRole('link', { name: 'Créer un module' })).exists();
+    });
+
+    test('displays modules with pagination', async function (assert) {
+      // when
+      const screen = await visit('/');
+      await clickByName('Modules');
+
+      // then
       assert.strictEqual(currentURL(), '/modules/workbench');
+      assert.dom(await screen.findByRole('heading', { name: 'Modules' })).exists();
+
+      assert.dom(await screen.findByText('1-10 sur 36 éléments')).exists();
+      assert.dom(await screen.findByText('Page 1 / 4')).exists();
+      assert.dom(await screen.findByText('MOD_0')).exists();
+      assert.dom(await screen.findByText('MOD_5')).exists();
+      assert.dom(await screen.findByText('MOD_9')).exists();
+
+      await screen.getByRole('button', { name: 'Aller à la page suivante' }).click();
+      assert.dom(await screen.findByText('11-20 sur 36 éléments')).exists();
+      assert.dom(await screen.findByText('Page 2 / 4')).exists();
+      assert.dom(await screen.findByText('MOD_10')).exists();
+      assert.dom(await screen.findByText('MOD_15')).exists();
+      assert.dom(await screen.findByText('MOD_19')).exists();
+
+      await screen.getByRole('button', { name: 'Aller à la page suivante' }).click();
+      assert.dom(await screen.findByText('21-30 sur 36 éléments')).exists();
+      assert.dom(await screen.findByText('Page 3 / 4')).exists();
+      assert.dom(await screen.findByText('MOD_20')).exists();
+      assert.dom(await screen.findByText('MOD_25')).exists();
+      assert.dom(await screen.findByText('MOD_29')).exists();
+
+      await screen.getByRole('button', { name: 'Aller à la page suivante' }).click();
+      assert.dom(await screen.findByText('31-36 sur 36 éléments')).exists();
+      assert.dom(await screen.findByText('Page 4 / 4')).exists();
+      assert.dom(await screen.findByText('MOD_30')).exists();
+      assert.dom(await screen.findByText('MOD_35')).exists();
+
+      await screen.getByRole('button', { name: 'Aller à la page précédente' }).click();
+      assert.dom(await screen.findByText('Page 3 / 4')).exists();
+
+      await selectOption(screen, "Nombre d'élément à afficher par page", '50');
+      assert.dom(await screen.findByText('Page 1 / 1')).exists();
+      assert.dom(await screen.findByText('36 éléments')).exists();
+      assert.dom(await screen.findByText('MOD_0')).exists();
+      assert.dom(await screen.findByText('MOD_35')).exists();
+    });
+
+    test('filters draft modules by internal title', async function (assert) {
+      // given
+      const screen = await visit('/modules/workbench');
+
+      // when
+      await fillIn(screen.getByRole('textbox', { name: 'Titre interne' }), 'MOD_12');
+
+      // then
+      assert.dom(await screen.findByText('MOD_12')).exists();
+      assert.dom(screen.getByText('1 élément')).exists();
+      assert.dom(screen.queryByText('MOD_0')).doesNotExist();
+      assert.strictEqual(currentURL(), '/modules/workbench?internalTitle=MOD_12');
+    });
+
+    module('when clearing filters', function () {
+      test('resets the internal title filter', async function (assert) {
+        // given
+        const screen = await visit('/modules/workbench?internalTitle=MOD_3');
+
+        // when
+        await click(screen.getByRole('button', { name: 'Réinitialiser le filtre' }));
+
+        // then
+        assert.dom(await screen.findByText('MOD_0')).exists();
+        assert.dom(await screen.findByText('MOD_3')).exists();
+        assert.strictEqual(currentURL(), '/modules/workbench');
+      });
+    });
+
+    module('when switching to the production tab', function () {
+      test('keeps the internal title filter', async function (assert) {
+        // given
+        const screen = await visit('/modules/workbench');
+        await fillIn(screen.getByRole('textbox', { name: 'Titre interne' }), 'MOD_3');
+        await waitUntil(() => currentURL() === '/modules/workbench?internalTitle=MOD_3');
+
+        // when
+        await click(await screen.getByRole('link', { name: 'En production' }));
+
+        // then
+        assert.dom(await screen.findByText('MOD_3')).exists();
+        assert.dom(screen.queryByText('MOD_0')).doesNotExist();
+        assert.strictEqual(currentURL(), '/modules/production?internalTitle=MOD_3');
+      });
     });
   });
 
-  module('when switching to the production tab', function () {
-    test('keeps the internal title filter', async function (assert) {
+  module('when no draft module exists', function () {
+    test('should display a "no result" message and hide table and pagination', async function (assert) {
       // given
-      const screen = await visit('/modules/workbench');
-      await fillIn(screen.getByRole('textbox', { name: 'Titre interne' }), 'MOD_3');
-      await waitUntil(() => currentURL() === '/modules/workbench?internalTitle=MOD_3');
+      this.server.create('config', 'default');
+      this.server.create('user', { trigram: 'ABC' });
+      await authenticateSession();
 
       // when
-      await click(await screen.getByRole('link', { name: 'En production' }));
+      const screen = await visit('/modules/workbench');
 
       // then
-      assert.dom(await screen.findByText('MOD_3')).exists();
-      assert.dom(screen.queryByText('MOD_0')).doesNotExist();
-      assert.strictEqual(currentURL(), '/modules/production?internalTitle=MOD_3');
+      assert.dom(screen.queryByRole('table')).doesNotExist();
+      assert.dom(screen.queryByText('Page 1 / 1')).doesNotExist();
+      assert.dom(screen.getByText('Aucun résultat')).exists();
     });
   });
 });

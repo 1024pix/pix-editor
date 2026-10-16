@@ -72,6 +72,7 @@ modules:
       caption: Liste des modules
       internal-title: Titre interne
       level: Niveau
+      no-results: Aucun résultat
       production-detail: Voir le détail du module en prod
       status: Statut
     module-notification:
