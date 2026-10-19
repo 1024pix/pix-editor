@@ -23,8 +23,17 @@ import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
         @onClearFilters={{@controller.clearFilters}}
       />
       <ModulesTabs @internalTitle={{@controller.internalTitle}} />
-      <ModuleList @modules={{@model.modules}} @goToDetailPage={{this.goToDetailPage}} />
-      <Pagination @pagination={{@model.modules.meta}} />
+      {{#if @model.modules}}
+        <ModuleList @modules={{@model.modules}} @goToDetailPage={{this.goToDetailPage}} />
+        <Pagination @pagination={{@model.modules.meta}} />
+      {{else}}
+        <div id="modules-list-no-results" class="modules-list-no-results">
+          <img src="/assets/images/modulix/red-panda-no-results.png" alt="" class="modules-list-no-results__image" />
+          <p class="modules-list-no-results__text" aria-live="polite">{{t
+              "modules.components.modules-list.no-results"
+            }}</p>
+        </div>
+      {{/if}}
     </section>
   </main>
 </template>
