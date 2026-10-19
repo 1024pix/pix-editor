@@ -10,6 +10,8 @@ const imageElementSchema = Joi.object({
   alternativeText: htmlSchema.allow(''),
   legend: htmlNotAllowedSchema.allow(''),
   licence: htmlNotAllowedSchema.allow(''),
+  maxWidth: Joi.number().integer().min(0).max(700).required()
+    .description('Largeur maximale de l’image en pixels (0 à 700). Laisser 0 pour occuper toute la largeur du module.'),
 }).required();
 
 export { imageElementSchema };
