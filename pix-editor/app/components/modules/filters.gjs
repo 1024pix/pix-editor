@@ -33,6 +33,7 @@ export default class ModulesFilters extends Component {
       {{#each (array this.resetKey) as |_key|}}
         <PixSearchInput
           @id="modules-filter-internal-title"
+          aria-describedby="modules-list-no-results"
           @value={{@internalTitle}}
           @debounceTimeInMs={{400}}
           @triggerFiltering={{this.triggerInternalTitleFilter}}
