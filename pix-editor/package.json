@@ -50,7 +50,7 @@
     "@rollup/plugin-babel": "7.1.0",
     "@typescript-eslint/parser": "8.71.1",
     "acorn": "8.19.0",
-    "babel-plugin-ember-template-compilation": "4.0.0",
+    "babel-plugin-ember-template-compilation": "4.0.1",
     "canvg": "4.0.3",
     "countries-list": "3.4.1",
     "css-element-queries": "file:external/css-element-queries",
