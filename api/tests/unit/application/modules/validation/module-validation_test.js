@@ -211,6 +211,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
     describe('when image maxWidth is valid', function() {
       [
+        ['missing', undefined],
         ['zero', 0],
         ['a positive integer', 1],
         ['the maximum allowed value', 700],
@@ -222,7 +223,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
             url: 'https://assets.pix.org/modules/placeholder-image.svg',
             alt: '',
             alternativeText: '',
-            maxWidth,
+            ...(maxWidth !== undefined && { maxWidth }),
           };
 
           try {
@@ -235,23 +236,6 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
     });
 
     describe('when image maxWidth is invalid', function() {
-      it('should throw when maxWidth is missing', async function() {
-        const sample = {
-          id: randomUUID(),
-          type: 'image',
-          url: 'https://assets.pix.org/modules/placeholder-image.svg',
-          alt: '',
-          alternativeText: '',
-        };
-
-        try {
-          await imageElementSchema.validateAsync(sample, { abortEarly: false });
-          throw new Error('Joi validation should have thrown');
-        } catch (joiError) {
-          expect(joiError.details.some((detail) => detail.path.includes('maxWidth'))).to.equal(true);
-        }
-      });
-
       [
         ['a non numeric value', 'abc'],
         ['an empty string', ''],
