@@ -1,0 +1,16 @@
+@use '../../global';
+@use 'pix-design-tokens/typography';
+
+.statistics {
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--pix-spacing-4x);
+    padding: var(--pix-spacing-4x);
+  }
+
+  &__column {
+    flex: 1 1 36rem;
+    min-width: 0;
+  }
+}
