@@ -1,3 +1,4 @@
+import { PixIcon } from '@1024pix/nebulix-ember';
 import Component from '@glimmer/component';
 
 const NEUTRAL = 0;
@@ -7,7 +8,7 @@ const UNESCO = 3;
 export default class StatisticsI18nComponent extends Component {
   <template>
     <h2 class="ui header">
-      <i class="globe icon"></i>
+      <PixIcon @name="language" @ariaHidden={{true}} />
       <div class="content">
         Internationalisation
       </div>

@@ -1,9 +1,10 @@
+import { PixIcon } from '@1024pix/nebulix-ember';
 import Component from '@glimmer/component';
 
 export default class StatisticsProductionComponent extends Component {
   <template>
     <h2 class="ui header">
-      <i class="rocket icon"></i>
+      <PixIcon @name="bolt" @ariaHidden={{true}} />
       <div class="content">
         En production
       </div>
