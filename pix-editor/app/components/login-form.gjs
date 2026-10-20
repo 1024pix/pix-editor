@@ -1,4 +1,4 @@
-import { PixButton, PixInput } from '@1024pix/nebulix-ember';
+import { PixButton, PixInput, PixNotificationAlert } from '@1024pix/nebulix-ember';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
@@ -52,9 +52,9 @@ export default class LoginForm extends Component {
           ><:label>Clé API</:label></PixInput>
 
           {{#if this.isErrorMessagePresent}}
-            <div class="ui negative message" id="login-form-error-message">
-              <p>{{this.errorMessage}}</p>
-            </div>
+            <PixNotificationAlert @type="error" id="login-form-error-message">
+              {{this.errorMessage}}
+            </PixNotificationAlert>
           {{/if}}
 
           <PixButton @type="submit">
