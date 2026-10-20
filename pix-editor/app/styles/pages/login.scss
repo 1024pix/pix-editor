@@ -7,10 +7,4 @@
   width: 100%;
   min-height: 100vh;
   background: colors.$pix-secondary-app-gradient;
-
-  &__container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--pix-spacing-4x);
-  }
 }
