@@ -1,15 +1,16 @@
 @use 'pix-design-tokens/breakpoints';
 @use 'pix-design-tokens/fonts';
 @use 'pix-design-tokens/colors';
+@use 'pix-design-tokens/typography';
 
 .login {
   background-color: var(--pix-neutral-0);
-  border-radius: 10px;
-  padding: 20px 30px;
+  border-radius: var(--pix-spacing-2x);
+  padding: var(--pix-spacing-5x) var(--pix-spacing-8x);
   max-width: 500px;
 
   @include breakpoints.device-is('tablet') {
-    padding: 40px 60px;
+    padding: var(--pix-spacing-10x) calc(var(--pix-spacing-8x) * 2);
   }
 
   &__header {
@@ -23,25 +24,20 @@
 
 .login-header {
   &__title {
-    font-family: fonts.$font-open-sans;
-    font-weight: 400;
-    font-size: 2rem;
-    color: colors.$pix-neutral-80;
-    margin-top: 32px;
-    margin-bottom: 8px;
+    @extend %pix-title-m;
+
+    color: var(--pix-neutral-800);
+    margin: var(--pix-spacing-8x) 0 var(--pix-spacing-2x) 0;
   }
 
   &__information {
-    margin-bottom: 32px;
-    font-family: fonts.$font-roboto;
-    max-width: 400px;
-    width: 100%;
+    @extend %pix-body-m;
   }
 }
 
 .login-main {
   &__form {
-    margin-top: 16px;
+    margin-top: var(--pix-spacing-4x);
     display: flex;
     flex-direction: column;
     gap: var(--pix-spacing-4x);
