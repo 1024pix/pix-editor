@@ -35,12 +35,12 @@ export default class LoginForm extends Component {
 
         <h1 class="login-header__title">Connectez-vous</h1>
 
-        <p class="login-header__information paragraph">
+        <p class="login-header__information">
           Pour vous identifier, merci de saisir votre clé personnelle.
         </p>
       </header>
 
-      <main class="login__main">
+      <main>
 
         <form class="login-main__form" {{on "submit" this.logInClicked}}>
 
