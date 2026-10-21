@@ -94,7 +94,7 @@
     "jspdf": "4.2.1",
     "jspdf-autotable": "5.0.8",
     "lodash": "4.18.1",
-    "mime": "4.1.0",
+    "mime": "4.1.1",
     "miragejs": "0.1.48",
     "monaco-editor": "0.57.0",
     "morgan": "1.12.1",
