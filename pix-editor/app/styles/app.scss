@@ -71,3 +71,7 @@
 @use 'components/v2/field/toggle-field';
 @use 'components/v2/localized-framework-tube';
 @use 'components/v2/locale-tag';
+
+// PoC : renderer schema-driven (remplaçant json-editor)
+@use 'components/schema-form';
+@use 'components/poc-modulix-editor';

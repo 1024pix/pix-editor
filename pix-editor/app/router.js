@@ -112,6 +112,7 @@ Router.map(function () {
         this.route('edit');
       });
     });
+    this.route('poc-modulix-editor', { path: '/poc-modulix-editor' });
   });
   this.route('page-not-found', { path: '*' });
 });

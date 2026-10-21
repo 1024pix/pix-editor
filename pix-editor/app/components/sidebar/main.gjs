@@ -72,6 +72,10 @@ export default class SidebarMain extends Component {
           </LinkTo>
         {{/if}}
         <Export @areas={{this.areas}} />
+        <LinkTo class="secondary-links--action" @route="authenticated.poc-modulix-editor" {{on "click" @close}}>
+          <PixIcon @name="builderPencil" @ariaHidden={{true}} />
+          PoC Modulix Editor
+        </LinkTo>
         <LinkTo @route="authenticated.statistics" {{on "click" @close}}>
           <i class="chart bar icon"></i>
           Statistiques

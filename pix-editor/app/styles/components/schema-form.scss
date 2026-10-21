@@ -1,0 +1,215 @@
+// SchemaForm — PoC renderer schema-driven (remplaçant json-editor)
+
+.schema-form {
+  font-family: inherit;
+
+  // ─── Champs génériques ───────────────────────────────────────────────────
+
+  &-field {
+    margin-bottom: 1rem;
+
+    &--boolean {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+
+  &__label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+    color: #1a1a1a;
+
+    &--inline {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: normal;
+    }
+  }
+
+  &__info {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0 0 0.25rem;
+    font-style: italic;
+  }
+
+  &__input,
+  &__select,
+  &__textarea {
+    width: 100%;
+    padding: 0.375rem 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: 2px solid #0057ad;
+      outline-offset: 1px;
+      border-color: #0057ad;
+    }
+
+    &--readonly {
+      background-color: #f5f5f5;
+      color: #666;
+      cursor: not-allowed;
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 6rem;
+    font-family: inherit;
+  }
+
+  &__checkbox {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
+
+  &__badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: normal;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+
+    &--readonly {
+      background: #eee;
+      color: #666;
+    }
+
+    &--rich-text {
+      background: #e8f0fe;
+      color: #1a56db;
+    }
+  }
+
+  // ─── Objets ──────────────────────────────────────────────────────────────
+
+  &-object {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    &__legend {
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0 0.4rem;
+      color: #333;
+      text-transform: capitalize;
+    }
+  }
+
+  // ─── Tableaux ────────────────────────────────────────────────────────────
+
+  &-array {
+    margin-bottom: 1rem;
+
+    &__header {
+      margin-bottom: 0.5rem;
+    }
+
+    &__items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    &__item {
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 0.75rem;
+      position: relative;
+      background: #fafafa;
+    }
+
+    &__add {
+      margin-top: 0.5rem;
+      padding: 0.375rem 0.75rem;
+      border: 1px dashed #0057ad;
+      border-radius: 4px;
+      background: transparent;
+      color: #0057ad;
+      font-size: 0.875rem;
+      cursor: pointer;
+      width: 100%;
+
+      &:hover {
+        background: #e8f0fe;
+      }
+    }
+
+    &__remove {
+      margin-top: 0.5rem;
+      padding: 0.25rem 0.5rem;
+      border: 1px solid #c00;
+      border-radius: 4px;
+      background: transparent;
+      color: #c00;
+      font-size: 0.8rem;
+      cursor: pointer;
+
+      &:hover {
+        background: #fff0f0;
+      }
+    }
+  }
+
+  // ─── OneOf ───────────────────────────────────────────────────────────────
+
+  &-oneof {
+    margin-bottom: 1rem;
+  }
+
+  // ─── Champ inconnu (préservation des données) ─────────────────────────────
+
+  &-unknown {
+    margin-bottom: 1rem;
+    border: 1px solid #f0a500;
+    border-radius: 6px;
+    padding: 0.75rem;
+    background: #fffbea;
+
+    &__warning {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-bottom: 0.75rem;
+      color: #7a5300;
+      font-size: 0.875rem;
+
+      strong {
+        font-size: 0.9rem;
+      }
+
+      p {
+        margin: 0;
+      }
+    }
+
+    &__raw {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 0.5rem;
+      font-size: 0.75rem;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 12rem;
+      overflow-y: auto;
+      margin: 0;
+      color: #333;
+    }
+  }
+}
