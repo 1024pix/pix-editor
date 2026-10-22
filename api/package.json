@@ -44,7 +44,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@1024pix/epreuves-components": "4.35.0",
-    "@1024pix/oppsy": "1.1.0",
+    "@1024pix/oppsy": "1.1.1",
     "@adminjs/hapi": "7.1.0",
     "@adminjs/sequelize": "4.1.1",
     "@googleapis/sheets": "18.1.1",
