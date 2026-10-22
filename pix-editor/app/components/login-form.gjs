@@ -1,4 +1,4 @@
-import { PixButton, PixInput, PixNotificationAlert } from '@1024pix/nebulix-ember';
+import { PixBlock, PixButton, PixInput, PixNotificationAlert } from '@1024pix/nebulix-ember';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
@@ -28,7 +28,7 @@ export default class LoginForm extends Component {
   }
 
   <template>
-    <div class="login">
+    <PixBlock class="login">
 
       <header class="login__header">
         <img src="/assets/images/elephant_login.svg" alt="Pix Editor" />
@@ -62,6 +62,6 @@ export default class LoginForm extends Component {
           </PixButton>
         </form>
       </main>
-    </div>
+    </PixBlock>
   </template>
 }
