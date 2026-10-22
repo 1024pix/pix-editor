@@ -1,0 +1,34 @@
+.statistics-i18n {
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: var(--pix-spacing-4x) -0.5rem;
+  }
+
+  &__column {
+    padding: 0 var(--pix-spacing-3x) var(--pix-spacing-3x) 0;
+  }
+
+  &__grid--four > &__column {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+
+  &__grid--two > &__column {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  &__wide-column {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  &__table--five {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  &__table--two {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

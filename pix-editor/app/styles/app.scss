@@ -21,7 +21,6 @@
 @use 'custom-sortable-group';
 @use 'custom-tabs';
 @use 'lists';
-@use 'statistics';
 @use 'mde';
 @use 'popin';
 @use 'pages/login';
@@ -71,3 +70,6 @@
 @use 'components/v2/field/toggle-field';
 @use 'components/v2/localized-framework-tube';
 @use 'components/v2/locale-tag';
+@use 'components/statistics/i18n' as statistics-i18n;
+@use 'components/statistics/production' as statistics-production;
+@use 'templates/authenticated/statistics' as statistics-view;

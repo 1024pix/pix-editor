@@ -1,4 +1,4 @@
-import { PixButton, PixInput } from '@1024pix/nebulix-ember';
+import { PixBlock, PixButton, PixInput, PixNotificationAlert } from '@1024pix/nebulix-ember';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
@@ -28,19 +28,19 @@ export default class LoginForm extends Component {
   }
 
   <template>
-    <div class="login">
+    <PixBlock class="login">
 
       <header class="login__header">
         <img src="/assets/images/elephant_login.svg" alt="Pix Editor" />
 
         <h1 class="login-header__title">Connectez-vous</h1>
 
-        <p class="login-header__information paragraph">
+        <p class="login-header__information">
           Pour vous identifier, merci de saisir votre clé personnelle.
         </p>
       </header>
 
-      <main class="login__main">
+      <main>
 
         <form class="login-main__form" {{on "submit" this.logInClicked}}>
 
@@ -52,9 +52,9 @@ export default class LoginForm extends Component {
           ><:label>Clé API</:label></PixInput>
 
           {{#if this.isErrorMessagePresent}}
-            <div class="ui negative message" id="login-form-error-message">
-              <p>{{this.errorMessage}}</p>
-            </div>
+            <PixNotificationAlert @type="error" id="login-form-error-message">
+              {{this.errorMessage}}
+            </PixNotificationAlert>
           {{/if}}
 
           <PixButton @type="submit">
@@ -62,6 +62,6 @@ export default class LoginForm extends Component {
           </PixButton>
         </form>
       </main>
-    </div>
+    </PixBlock>
   </template>
 }

@@ -1,0 +1,73 @@
+@use '../../global';
+@use 'pix-design-tokens/typography';
+
+.statistics {
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--pix-spacing-4x);
+    padding: var(--pix-spacing-4x);
+  }
+
+  &__column {
+    flex: 1 1 36rem;
+    min-width: 0;
+  }
+
+  &__section-heading {
+    @extend %pix-title-s;
+
+    display: flex;
+    gap: var(--pix-spacing-2x);
+    align-items: center;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--pix-spacing-3x) 0;
+    text-align: center;
+    background-color: var(--pix-neutral-0);
+    border: 1px solid var(--pix-neutral-100);
+    border-top: 3px solid var(--pix-neutral-100);
+    border-radius: 8px;
+
+    &--secondary {
+      border-top-color: var(--pix-secondary-500);
+    }
+
+    &--tertiary {
+      border-top-color: var(--pix-tertiary-500);
+    }
+  }
+
+  &__card-value {
+    @extend %pix-body-l;
+
+    font-weight: var(--pix-font-bold);
+  }
+
+  &__card-label {
+    @extend %pix-body-s;
+
+    margin-top: var(--pix-spacing-1x);
+    color: var(--pix-neutral-500);
+  }
+
+  &__table {
+    display: grid;
+    align-items: center;
+    padding: var(--pix-spacing-2x);
+  }
+
+  &__cell {
+    @extend %pix-body-m;
+
+    padding: var(--pix-spacing-2x) var(--pix-spacing-3x);
+    text-align: center;
+
+    &--head {
+      font-weight: var(--pix-font-bold);
+    }
+  }
+}
