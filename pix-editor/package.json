@@ -46,7 +46,7 @@
     "@embroider/core": "4.6.9",
     "@embroider/vite": "1.7.15",
     "@glimmer/component": "2.1.1",
-    "@playwright/test": "1.63.0",
+    "@playwright/test": "1.64.1",
     "@rollup/plugin-babel": "7.1.0",
     "@typescript-eslint/parser": "8.71.2",
     "acorn": "8.19.0",
