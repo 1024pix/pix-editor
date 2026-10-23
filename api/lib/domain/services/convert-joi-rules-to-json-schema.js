@@ -78,7 +78,8 @@ function convertString(joiStringDescribedSchema) {
     jsonSchema.maxLength = maxRule.args.limit;
   }
 
-  const allowsEmptyString = joiStringDescribedSchema.allow?.includes('');
+  const allowsEmptyString
+    = joiStringDescribedSchema.allow?.includes('') || joiStringDescribedSchema.flags?.empty?.allow?.includes('');
   if (!allowsEmptyString && jsonSchema.minLength === undefined) {
     jsonSchema.minLength = 1;
   }

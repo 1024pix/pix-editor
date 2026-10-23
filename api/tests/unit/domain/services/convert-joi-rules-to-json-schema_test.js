@@ -83,6 +83,34 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       });
     });
 
+    describe('empty', function() {
+      it("should not set a default minLength when Joi.string is empty('')", function() {
+        const joiSchema = Joi.string().empty('');
+        const jsonSchema = convertJoiToJsonSchema(joiSchema);
+        expect(jsonSchema).to.deep.equal({ type: 'string', format: null, options: null });
+      });
+
+      it("should convert Joi.string.uri.empty('') to JSON Schema with anyOf allowing URI or empty string", function() {
+        const joiSchema = Joi.string().uri().empty('');
+        const jsonSchema = convertJoiToJsonSchema(joiSchema);
+        expect(jsonSchema).to.deep.equal({
+          type: 'string',
+          options: null,
+          anyOf: [{ format: 'uri' }, { maxLength: 0 }],
+        });
+      });
+
+      it("should not set minLength when Joi.string.empty('') is used as an optional object property", function() {
+        const joiSchema = Joi.object({ imageTextDisplay: Joi.string().empty('').optional() });
+        const jsonSchema = convertJoiToJsonSchema(joiSchema);
+        expect(jsonSchema).to.deep.equal({
+          type: 'object',
+          properties: { imageTextDisplay: { type: 'string', format: null, options: null } },
+          additionalProperties: false,
+        });
+      });
+    });
+
     it('should convert Joi.string.guid to JSON Schema with format uuid', function() {
       const joiSchema = Joi.string().guid({ version: 'uuidv4' });
       const jsonSchema = convertJoiToJsonSchema(joiSchema);
