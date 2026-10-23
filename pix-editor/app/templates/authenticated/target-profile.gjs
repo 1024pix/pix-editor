@@ -13,14 +13,16 @@ const multiselectTranslationList = {
 };
 
 <template>
-  <div class="main-left">
-    <div class="main-title">
-      <h1 class="ui header">{{if
+  <div class="page">
+    <header class="page-header">
+      <h1 class="page-title">{{if
           @controller.isThematicResultMode
           "Générateur de résultat thématique"
           "Générateur de profil cible"
         }}
-        <div class="target-profile-filter {{if @controller.isThematicResultMode 'active'}}">
+      </h1>
+      <div class="target-profile-view__filters">
+        <div>
           Résultat thématique
           <div class="ui toggle checkbox">
             <Input
@@ -34,14 +36,14 @@ const multiselectTranslationList = {
           </div>
         </div>
         {{#unless @controller.isThematicResultMode}}
-          <div class="target-profile-filter {{if @controller.showTubeDetails 'active'}}">
+          <div>
             Détails des sujets
             <div class="ui toggle checkbox">
               <Input id="tubeDetails" @type="checkbox" @checked={{@controller.showTubeDetails}} class="toggle" />
               <label class="checkbox-label" for="tubeDetails"></label>
             </div>
           </div>
-          <div class="target-profile-filter {{if @controller.filter 'active'}}">
+          <div>
             Filtrer les sujets sélectionnés
             <div class="ui toggle checkbox">
               <Input id="filter" @type="checkbox" @checked={{@controller.filter}} class="toggle" />
@@ -49,8 +51,8 @@ const multiselectTranslationList = {
             </div>
           </div>
         {{/unless}}
-      </h1>
-    </div>
+      </div>
+    </header>
     <div class="ui top attached borderless labelled icon menu">
       {{#unless @controller.isThematicResultMode}}
         <button class="ui button first left" {{on "click" @controller.load}} type="button">
