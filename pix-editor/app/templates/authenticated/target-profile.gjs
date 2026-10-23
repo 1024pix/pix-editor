@@ -1,4 +1,4 @@
-import { PixMultiSelect, PixToggle } from '@1024pix/nebulix-ember';
+import { PixButton, PixMultiSelect, PixToggle } from '@1024pix/nebulix-ember';
 import { Input } from '@ember/component';
 import { on } from '@ember/modifier';
 import SingleEntry from 'pixeditor/components/pop-in/single-entry';
@@ -36,15 +36,17 @@ const multiselectTranslationList = {
       </div>
     </header>
     <main>
-      <div class="ui top attached borderless labelled icon menu">
-        {{#unless @controller.isThematicResultMode}}
-          <button class="ui button first left" {{on "click" @controller.load}} type="button">
-            <i class="folder open icon"></i>Ouvrir
-          </button>
-          <button class="ui button left" {{on "click" @controller.getSaveTitle}} type="button">
-            <i class="save icon"></i>Enregistrer
-          </button>
-        {{/unless}}
+      <div class="target-profile-view__menu">
+        <div class="target-profile-view__menu-group">
+          {{#unless @controller.isThematicResultMode}}
+            <PixButton @variant="secondary" @iconBefore="upload" @triggerAction={{@controller.load}}>
+              Ouvrir
+            </PixButton>
+            <PixButton @variant="secondary" @iconBefore="inboxIn" @triggerAction={{@controller.getSaveTitle}}>
+              Enregistrer
+            </PixButton>
+          {{/unless}}
+        </div>
         <div class="right menu">
           {{#unless @controller.isThematicResultMode}}
             <button class="ui button" {{on "click" @controller.showThresholdCalculation}} type="button">
