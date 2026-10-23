@@ -1,20 +1,45 @@
 @use '../../global';
 @use 'pix-design-tokens/typography';
+@use 'pix-design-tokens/breakpoints';
 
 .target-profile-view {
+  flex-direction: column;
+  gap: var(--pix-spacing-2x);
+
+  @include breakpoints.device-is('desktop') {
+    flex-direction: row;
+  }
+
   &__filters {
     display: flex;
-    gap: var(--pix-spacing-4x);
+    flex-direction: column;
+    gap: var(--pix-spacing-2x);
+
+    @include breakpoints.device-is('desktop') {
+      flex-direction: row;
+      gap: var(--pix-spacing-4x);
+    }
   }
 
   &__menu {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: var(--pix-spacing-2x);
     padding: var(--pix-spacing-4x) var(--pix-spacing-2x);
+
+    @include breakpoints.device-is('desktop') {
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 
   &__menu-group {
     display: flex;
+    flex-direction: column;
     gap: var(--pix-spacing-2x);
+
+    @include breakpoints.device-is('desktop') {
+      flex-direction: row;
+    }
   }
 }
