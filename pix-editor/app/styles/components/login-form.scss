@@ -6,6 +6,7 @@
 .login {
   background-color: var(--pix-neutral-0);
   padding: var(--pix-spacing-5x) var(--pix-spacing-8x);
+  max-width: 500px;
 
   @include breakpoints.device-is('tablet') {
     padding: var(--pix-spacing-10x) calc(var(--pix-spacing-8x) * 2);
