@@ -47,22 +47,29 @@ const multiselectTranslationList = {
             </PixButton>
           {{/unless}}
         </div>
-        <div class="right menu">
+        <div class="target-profile-view__menu-group">
           {{#unless @controller.isThematicResultMode}}
-            <button class="ui button" {{on "click" @controller.showThresholdCalculation}} type="button">
-              <i class="calculator icon"></i>Paliers indicatifs
-            </button>
+            <PixButton
+              @variant="secondary"
+              @iconBefore="percent"
+              @triggerAction={{@controller.showThresholdCalculation}}
+            >
+              Paliers indicatifs
+            </PixButton>
           {{/unless}}
-          <button class="ui button" {{on "click" @controller.getGenerateTitleOrThematicResultTitle}} type="button">
-            <i class="download icon"></i>Identifiants
-          </button>
+          <PixButton
+            @variant="secondary"
+            @iconBefore="download"
+            @triggerAction={{@controller.getGenerateTitleOrThematicResultTitle}}
+          >
+            Identifiants
+          </PixButton>
           {{#unless @controller.isThematicResultMode}}
-            <button class="ui button" {{on "click" @controller.getProfileId}} type="button">
-              <i class="code icon"></i>CSV
-            </button>
+            <PixButton @variant="secondary" @iconBefore="codeNumber" @triggerAction={{@controller.getProfileId}}>
+              CSV
+            </PixButton>
             <PdfExport @model={{@controller.areas}} />
           {{/unless}}
-
         </div>
       </div>
       <h2 class="ui top attached padded grid target-profile-title">
