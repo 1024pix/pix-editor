@@ -14,7 +14,7 @@ const multiselectTranslationList = {
 
 <template>
   <div class="page">
-    <header class="page-header">
+    <header class="page-header target-profile-view">
       <h1 class="page-title">{{if
           @controller.isThematicResultMode
           "Générateur de résultat thématique"
