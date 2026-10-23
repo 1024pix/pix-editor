@@ -248,6 +248,70 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.deepEqual(fileSaverStub.getCall(0).args[0], expectedResult);
   });
 
+  module('toggleThematicResult', function () {
+    module('when checked', function () {
+      test('it should enable thematic result mode, filter and tube details', function (assert) {
+        // given
+        // when
+        controller.toggleThematicResult({ target: { checked: true } });
+
+        // then
+        assert.true(controller.isThematicResultMode);
+        assert.true(controller.filter);
+        assert.true(controller.showTubeDetails);
+      });
+    });
+
+    module('when unchecked', function () {
+      test('it should disable thematic result mode', function (assert) {
+        // given
+        controller.isThematicResultMode = true;
+        controller.filter = true;
+        controller.showTubeDetails = true;
+
+        // when
+        controller.toggleThematicResult({ target: { checked: false } });
+
+        // then
+        assert.false(controller.isThematicResultMode);
+        assert.true(controller.filter);
+        assert.true(controller.showTubeDetails);
+      });
+    });
+  });
+
+  module('toggleTubeDetails', function () {
+    test('it should set showTubeDetails according to checkbox state', function (assert) {
+      // when
+      controller.toggleTubeDetails({ target: { checked: true } });
+
+      // then
+      assert.true(controller.showTubeDetails);
+
+      // when
+      controller.toggleTubeDetails({ target: { checked: false } });
+
+      // then
+      assert.false(controller.showTubeDetails);
+    });
+  });
+
+  module('toggleFilter', function () {
+    test('it should set filter according to checkbox state', function (assert) {
+      // when
+      controller.toggleFilter({ target: { checked: true } });
+
+      // then
+      assert.true(controller.filter);
+
+      // when
+      controller.toggleFilter({ target: { checked: false } });
+
+      // then
+      assert.false(controller.filter);
+    });
+  });
+
   module('_determineFileType', function () {
     test('should return orga when the file is an array of strings', function (assert) {
       // given

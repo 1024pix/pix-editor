@@ -1,4 +1,4 @@
-import { PixMultiSelect } from '@1024pix/nebulix-ember';
+import { PixMultiSelect, PixToggle } from '@1024pix/nebulix-ember';
 import { Input } from '@ember/component';
 import { on } from '@ember/modifier';
 import SingleEntry from 'pixeditor/components/pop-in/single-entry';
@@ -22,34 +22,16 @@ const multiselectTranslationList = {
         }}
       </h1>
       <div class="target-profile-view__filters">
-        <div>
+        <PixToggle @checked={{@controller.isThematicResultMode}} {{on "change" @controller.toggleThematicResult}}>
           Résultat thématique
-          <div class="ui toggle checkbox">
-            <Input
-              id="thematicResult"
-              @type="checkbox"
-              @checked={{@controller.isThematicResultMode}}
-              {{on "change" @controller.toggleThematicResult}}
-              class="toggle"
-            />
-            <label class="checkbox-label" for="thematicResult"></label>
-          </div>
-        </div>
+        </PixToggle>
         {{#unless @controller.isThematicResultMode}}
-          <div>
+          <PixToggle @checked={{@controller.showTubeDetails}} {{on "change" @controller.toggleTubeDetails}}>
             Détails des sujets
-            <div class="ui toggle checkbox">
-              <Input id="tubeDetails" @type="checkbox" @checked={{@controller.showTubeDetails}} class="toggle" />
-              <label class="checkbox-label" for="tubeDetails"></label>
-            </div>
-          </div>
-          <div>
+          </PixToggle>
+          <PixToggle @checked={{@controller.filter}} {{on "change" @controller.toggleFilter}}>
             Filtrer les sujets sélectionnés
-            <div class="ui toggle checkbox">
-              <Input id="filter" @type="checkbox" @checked={{@controller.filter}} class="toggle" />
-              <label class="checkbox-label" for="filter"></label>
-            </div>
-          </div>
+          </PixToggle>
         {{/unless}}
       </div>
     </header>
