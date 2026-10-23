@@ -1,0 +1,9 @@
+@use '../../global';
+@use 'pix-design-tokens/typography';
+
+.target-profile-view {
+  &__filters {
+    display: flex;
+    gap: var(--pix-spacing-4x);
+  }
+}
