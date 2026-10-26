@@ -103,7 +103,7 @@
     "postcss": "8.5.30",
     "postcss-url": "10.1.4",
     "prettier-plugin-ember-template-tag": "2.1.8",
-    "qunit": "2.26.0",
+    "qunit": "3.0.0",
     "qunit-dom": "3.6.0",
     "sass-embedded": "1.105.1",
     "sinon": "22.1.0",
