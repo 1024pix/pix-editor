@@ -200,12 +200,66 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           url: 'https://assets.pix.org/modules/placeholder-image.svg',
           alt: '',
           alternativeText: '',
+          maxWidth: 400,
         };
 
         await imageElementSchema.validateAsync(sample, { abortEarly: false });
       } catch (joiError) {
         expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
       }
+    });
+
+    describe('when image maxWidth is valid', function() {
+      [
+        ['missing', undefined],
+        ['zero', 0],
+        ['a positive integer', 1],
+        ['the maximum allowed value', 700],
+      ].forEach(([caseName, maxWidth]) => {
+        it(`should validate when maxWidth is ${caseName}`, async function() {
+          const sample = {
+            id: randomUUID(),
+            type: 'image',
+            url: 'https://assets.pix.org/modules/placeholder-image.svg',
+            alt: '',
+            alternativeText: '',
+            ...(maxWidth !== undefined && { maxWidth }),
+          };
+
+          try {
+            await imageElementSchema.validateAsync(sample, { abortEarly: false });
+          } catch (joiError) {
+            expect(joiError, JSON.stringify(joiError?.details)).to.equal(undefined);
+          }
+        });
+      });
+    });
+
+    describe('when image maxWidth is invalid', function() {
+      [
+        ['a non numeric value', 'abc'],
+        ['an empty string', ''],
+        ['a negative value', -1],
+        ['a value above the maximum', 701],
+      ].forEach(([caseName, maxWidth]) => {
+        it(`should throw when maxWidth is ${caseName}`, async function() {
+          const sample = {
+            id: randomUUID(),
+            type: 'image',
+            url: 'https://assets.pix.org/modules/placeholder-image.svg',
+            alt: '',
+            alternativeText: '',
+            maxWidth,
+          };
+
+          try {
+            await imageElementSchema.validateAsync(sample, { abortEarly: false });
+            throw new Error('Joi validation should have thrown');
+          } catch (joiError) {
+            expect(joiError.details.some((detail) => detail.path.includes('maxWidth'))).to.equal(true);
+          }
+        });
+      });
     });
 
     it('should validate sample qab structure', async function() {
@@ -628,6 +682,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           url: 'https://assets.pix.org/modules/placeholder-image.svg',
           alt: '<p>cooucou</p>',
           alternativeText: '',
+          maxWidth: 400,
         };
 
         try {
