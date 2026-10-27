@@ -3,5 +3,13 @@
   "extends": [
     "local>1024pix/renovate-config:default",
     "local>1024pix/renovate-config:js-app"
+  ],
+  "packageRules": [
+    {
+      "description": "Vite 8 (Rolldown) wraps vendor.js as CommonJS and breaks UMD globals such as ResizeSensor used by ember-table (PIX-24872)",
+      "matchFileNames": ["pix-editor/package.json"],
+      "matchPackageNames": ["vite"],
+      "allowedVersions": "<8"
+    }
   ]
 }
