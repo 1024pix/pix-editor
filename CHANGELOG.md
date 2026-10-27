@@ -1,5 +1,82 @@
 
 
+## v4.60.0 (27/10/2026)
+
+
+### :rocket: Amélioration
+- [#1726](https://github.com/1024pix/pix-editor/pull/1726) [FEATURE] Permettre de définir la largeur max des images des modules (PIX-24387).
+- [#1744](https://github.com/1024pix/pix-editor/pull/1744) [FEATURE] Prendre en compte la règle Joi.empty() quand on génère le json-schema (PIX-24759).
+- [#1727](https://github.com/1024pix/pix-editor/pull/1727) [FEATURE] Afficher un "aucun résultat" sur les pages de brouillons et de modules (PIX-24294).
+
+### :building_construction: Tech
+- [#1738](https://github.com/1024pix/pix-editor/pull/1738) [TECH] Nettoyage de Pix Editor (partie 1) (PIX-24814).
+- [#1701](https://github.com/1024pix/pix-editor/pull/1701) [TECH] Utilise `ember-exam` pour paralléliser les tests fronts sur la CI.
+
+### :bug: Correction
+- [#1753](https://github.com/1024pix/pix-editor/pull/1753) [BUGFIX] Remettre la taille max de la page de connexion.
+
+### :arrow_up: Montée de version
+- [#1761](https://github.com/1024pix/pix-editor/pull/1761) [BUMP] Update dependency vitest to v4.1.12 (challenge-parser).
+- [#1763](https://github.com/1024pix/pix-editor/pull/1763) [BUMP] Update JS test packages (api).
+- [#1762](https://github.com/1024pix/pix-editor/pull/1762) [BUMP] Update ember-intl (pix-editor).
+- [#1760](https://github.com/1024pix/pix-editor/pull/1760) [BUMP] Update dependency @1024pix/stylelint-config to v5.2.26 (pix-editor).
+- [#1759](https://github.com/1024pix/pix-editor/pull/1759) [BUMP] Update dependency sass-embedded to v1.105.2 (pix-editor).
+- [#1758](https://github.com/1024pix/pix-editor/pull/1758) [BUMP] Update dependency postcss to v8.5.31 (pix-editor).
+- [#1757](https://github.com/1024pix/pix-editor/pull/1757) [BUMP] Update linters (pix-editor).
+- [#1756](https://github.com/1024pix/pix-editor/pull/1756) [BUMP] Update dependency jspdf-autotable to v5.0.9 (pix-editor).
+- [#1755](https://github.com/1024pix/pix-editor/pull/1755) [BUMP] Update dependency html-validate to v11.16.4 (api).
+- [#1752](https://github.com/1024pix/pix-editor/pull/1752) [BUMP] Update dependency @1024pix/eslint-plugin to v3.0.11 (pix-editor).
+- [#1743](https://github.com/1024pix/pix-editor/pull/1743) [BUMP] Update dependency postcss to v8.5.30 (pix-editor).
+- [#1731](https://github.com/1024pix/pix-editor/pull/1731) [BUMP] Update dependency ember-eslint-parser to v0.14.9 (pix-editor).
+- [#1750](https://github.com/1024pix/pix-editor/pull/1750) [BUMP] Update dependency @playwright/test to v1.64.1 (pix-editor).
+- [#1749](https://github.com/1024pix/pix-editor/pull/1749) [BUMP] Update dependency qs to v6.16.1 (api).
+- [#1748](https://github.com/1024pix/pix-editor/pull/1748) [BUMP] Update dependency ember-source to v6.12.1 (pix-editor).
+- [#1747](https://github.com/1024pix/pix-editor/pull/1747) [BUMP] Update dependency dotenv to v18.0.8 (pix-editor).
+- [#1746](https://github.com/1024pix/pix-editor/pull/1746) [BUMP] Update dependency @1024pix/oppsy to v1.1.1 (api).
+- [#1745](https://github.com/1024pix/pix-editor/pull/1745) [BUMP] Update dependency @1024pix/eslint-plugin to v3.0.10 (pix-editor).
+- [#1737](https://github.com/1024pix/pix-editor/pull/1737) [BUMP] Update dependency @1024pix/epreuves-components to v4.35.0 (api).
+- [#1742](https://github.com/1024pix/pix-editor/pull/1742) [BUMP] Update dependency mime to v4.1.1 (pix-editor).
+- [#1741](https://github.com/1024pix/pix-editor/pull/1741) [BUMP] Update dependency @1024pix/oppsy to v1.1.0 (api).
+- [#1740](https://github.com/1024pix/pix-editor/pull/1740) [BUMP] Update linters (pix-editor).
+- [#1739](https://github.com/1024pix/pix-editor/pull/1739) [BUMP] Update github-actions (workflows).
+- [#1736](https://github.com/1024pix/pix-editor/pull/1736) [BUMP] Update linters (pix-editor).
+- [#1735](https://github.com/1024pix/pix-editor/pull/1735) [BUMP] Update ember-intl (pix-editor).
+- [#1734](https://github.com/1024pix/pix-editor/pull/1734) [BUMP] Update dependency pg-boss to v12.37.1 (api).
+- [#1733](https://github.com/1024pix/pix-editor/pull/1733) [BUMP] Update dependency p-queue to v9.3.5 (pix-editor).
+- [#1732](https://github.com/1024pix/pix-editor/pull/1732) [BUMP] Update dependency ember-sortable to v5.4.1 (pix-editor).
+- [#1730](https://github.com/1024pix/pix-editor/pull/1730) [BUMP] Update dependency dotenv to v18.0.7 (pix-editor).
+- [#1729](https://github.com/1024pix/pix-editor/pull/1729) [BUMP] Update dependency babel-plugin-ember-template-compilation to v4.0.1 (pix-editor).
+- [#1728](https://github.com/1024pix/pix-editor/pull/1728) [BUMP] Update dependency @googleapis/sheets to v18.1.1 (api).
+- [#1725](https://github.com/1024pix/pix-editor/pull/1725) [BUMP] Update dependency vite to v8 (pix-editor).
+- [#1722](https://github.com/1024pix/pix-editor/pull/1722) [BUMP] Update dependency ember-cli-showdown to v10 (pix-editor).
+- [#1719](https://github.com/1024pix/pix-editor/pull/1719) [BUMP] Update dependency pino-pretty to v13.2.0 (api).
+- [#1720](https://github.com/1024pix/pix-editor/pull/1720) [BUMP] Update Node.js to ^24.21.0.
+- [#1718](https://github.com/1024pix/pix-editor/pull/1718) [BUMP] Update dependency pino to v10.4.0 (api).
+- [#1717](https://github.com/1024pix/pix-editor/pull/1717) [BUMP] Update dependency pg-boss to v12.37.0 (api).
+- [#1714](https://github.com/1024pix/pix-editor/pull/1714) [BUMP] Update dependency @googleapis/sheets to v18.1.0 (api).
+- [#1713](https://github.com/1024pix/pix-editor/pull/1713) [BUMP] Update dependency @ember/test-helpers to v5.7.0 (pix-editor).
+- [#1715](https://github.com/1024pix/pix-editor/pull/1715) [BUMP] Update dependency acorn to v8.19.0 (pix-editor).
+- [#1716](https://github.com/1024pix/pix-editor/pull/1716) [BUMP] Update dependency eslint to v10.12.0 (api).
+- [#1711](https://github.com/1024pix/pix-editor/pull/1711) [BUMP] Update dependency vite to v7.3.7 (pix-editor).
+- [#1712](https://github.com/1024pix/pix-editor/pull/1712) [BUMP] Update embroider monorepo (pix-editor).
+- [#1709](https://github.com/1024pix/pix-editor/pull/1709) [BUMP] Update dependency @1024pix/eslint-plugin to v3.0.6 (pix-editor).
+- [#1710](https://github.com/1024pix/pix-editor/pull/1710) [BUMP] Update dependency dotenv to v18.0.6 (pix-editor).
+- [#1702](https://github.com/1024pix/pix-editor/pull/1702) [BUMP] Pin dependency vitest to 4.1.11 (challenge-parser).
+- [#1708](https://github.com/1024pix/pix-editor/pull/1708) [BUMP] Update dependency @1024pix/nebulix-ember to v1.3.0 (pix-editor).
+- [#1703](https://github.com/1024pix/pix-editor/pull/1703) [BUMP] Update dependency fast-csv to v5.0.8 (api).
+- [#1707](https://github.com/1024pix/pix-editor/pull/1707) [BUMP] Update linters (pix-editor).
+- [#1706](https://github.com/1024pix/pix-editor/pull/1706) [BUMP] Update dependency postcss to v8.5.29 (pix-editor).
+- [#1705](https://github.com/1024pix/pix-editor/pull/1705) [BUMP] Update dependency js-yaml to v5.4.3 (pix-editor).
+- [#1704](https://github.com/1024pix/pix-editor/pull/1704) [BUMP] Update dependency html-validate to v11.16.2 (api).
+- [#1700](https://github.com/1024pix/pix-editor/pull/1700) [BUMP] Pin dependency @glimmer/component to 2.1.1 (pix-editor).
+- [#1698](https://github.com/1024pix/pix-editor/pull/1698) [BUMP] Pin dependencies (pix-editor).
+- [#1696](https://github.com/1024pix/pix-editor/pull/1696) [BUMP] Pin dependencies (pix-editor).
+- [#1693](https://github.com/1024pix/pix-editor/pull/1693) [BUMP] Pin dependencies (api).
+- [#1699](https://github.com/1024pix/pix-editor/pull/1699) [BUMP] Pin dependencies (workflows).
+- [#1697](https://github.com/1024pix/pix-editor/pull/1697) [BUMP] Pin dependencies (pix-editor).
+- [#1695](https://github.com/1024pix/pix-editor/pull/1695) [BUMP] Pin dependencies (api).
+- [#1694](https://github.com/1024pix/pix-editor/pull/1694) [BUMP] Pin dependencies (api).
+
 ## v4.59.0 (12/10/2026)
 
 
