@@ -1,5 +1,11 @@
 
 
+## v4.60.1 (27/10/2026)
+
+
+### :bug: Correction
+- [#1765](https://github.com/1024pix/pix-editor/pull/1765) [BUGFIX] Rever vite de v8 à v7 (PIX-24872).
+
 ## v4.60.0 (27/10/2026)
 
 
