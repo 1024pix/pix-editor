@@ -95,9 +95,9 @@ async function validateModules({ existingModules, modulesToUpdate }) {
   const notValidModuleIdsWithErrors = new Map();
 
   for (const module of modulesToValidate) {
-    const { validationStatus, validationErrors } = await module.validate({ modules: refModules });
+    const { isValid, validationErrors } = await module.validate({ modules: refModules });
 
-    if (!validationStatus) {
+    if (!isValid) {
       notValidModuleIdsWithErrors.set(module.id, validationErrors);
     }
   }

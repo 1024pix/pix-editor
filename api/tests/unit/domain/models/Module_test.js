@@ -87,7 +87,7 @@ describe('Unit | Domain | Module', () => {
 
   describe('#validate', () => {
     describe('when module is valid', () => {
-      it('returns an object with an attribute "validationStatus" with value "true" and an empty errors array', async () => {
+      it('returns an object with an attribute "isValid" with value "true" and an empty errors array', async () => {
         // given
         const moduleToValidate = domainBuilder.buildModule();
         const moduleA = domainBuilder.buildModule();
@@ -102,12 +102,12 @@ describe('Unit | Domain | Module', () => {
         const result = await moduleToValidate.validate({ modules });
 
         // then
-        expect(result).toEqual({ validationStatus: true, validationErrors: [] });
+        expect(result).toEqual({ isValid: true, validationErrors: [] });
       });
     });
 
     describe('when module is not valid', () => {
-      it('returns an object with an attribute "validationStatus" with value "false" and errors array not empty', async () => {
+      it('returns an object with an attribute "isValid" with value "false" and errors array not empty', async () => {
         // given
         const moduleA = domainBuilder.buildModule({ shortId: 'abcd1234', slug: 'module-a' });
         const moduleB = domainBuilder.buildModule({ shortId: 'efgh1234', slug: 'module-b' });
@@ -126,7 +126,7 @@ describe('Unit | Domain | Module', () => {
 
         // then
         expect(result).toEqual({
-          validationStatus: false,
+          isValid: false,
           validationErrors: [
             { message: '"slug" est requis', isSchemaError: true },
             {

@@ -102,7 +102,7 @@ export class Module {
   async validate({ modules }) {
     const moduleToValidate = this.toModuleValidation();
     const validationErrors = [];
-    let validationStatus = true;
+    let isValid = true;
 
     try {
       await moduleSchema.validateAsync(moduleToValidate, { abortEarly: false });
@@ -117,10 +117,10 @@ export class Module {
     }
 
     if (validationErrors.length > 0) {
-      validationStatus = false;
+      isValid = false;
     }
 
-    return { validationStatus, validationErrors };
+    return { isValid, validationErrors };
   }
 
   #validateModuleDoesNotHaveDuplicateIds({ moduleToValidate, modules }) {
