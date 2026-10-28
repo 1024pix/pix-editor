@@ -123,6 +123,24 @@ export class Module {
     return { isValid, validationErrors };
   }
 
+  async validateSchema() {
+    const moduleToValidate = this.toModuleValidation();
+    const validationErrors = [];
+    let isValid = true;
+
+    try {
+      await moduleSchema.validateAsync(moduleToValidate, { abortEarly: false });
+    } catch (joiError) {
+      validationErrors.push(...joiErrorParser.toStructuredErrors(joiError));
+    }
+
+    if (validationErrors.length > 0) {
+      isValid = false;
+    }
+
+    return { isValid, validationErrors };
+  }
+
   #validateModuleDoesNotHaveDuplicateIds({ moduleToValidate, modules }) {
     const otherModules = modules.filter((module) => (module.shortId !== moduleToValidate.shortId));
 

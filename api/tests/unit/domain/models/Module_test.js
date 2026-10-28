@@ -138,4 +138,36 @@ describe('Unit | Domain | Module', () => {
       });
     });
   });
+
+  describe('#validateSchema', () => {
+    describe('when module is valid', () => {
+      it('returns an object with an attribute "isValid" with value "true" and an empty errors array', async () => {
+        // given
+        const moduleToValidate = domainBuilder.buildModule();
+
+        // when
+        const result = await moduleToValidate.validateSchema();
+
+        // then
+        expect(result).toEqual({ isValid: true, validationErrors: [] });
+      });
+    });
+
+    describe('when module is not valid', () => {
+      it('returns an object with an attribute "isValid" with value "false" and errors array not empty', async () => {
+        // given
+        const moduleToValidate = domainBuilder.buildModule({ shortId: 'abcd1234' });
+        Reflect.deleteProperty(moduleToValidate, 'slug');
+
+        // when
+        const result = await moduleToValidate.validateSchema();
+
+        // then
+        expect(result).toEqual({
+          isValid: false,
+          validationErrors: [{ message: '"slug" est requis', isSchemaError: true }],
+        });
+      });
+    });
+  });
 });
