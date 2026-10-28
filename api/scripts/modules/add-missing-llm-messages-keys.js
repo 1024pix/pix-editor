@@ -24,7 +24,16 @@ export class AddMissingLlmMessagesKeys extends Script {
   async handle({ options, logger }) {
     logger.info({ dryRun: options.dryRun }, 'Script options');
 
-    const modulesToUpdate = getModulesToUpdate(await moduleRepository.list());
+    const existingModules = await moduleRepository.list();
+    const modulesToUpdate = getModulesToUpdate(existingModules);
+
+    const notValidModuleIdsWithErrors = await validateModules({ modulesToUpdate });
+
+    if (notValidModuleIdsWithErrors.size > 0) {
+      logNotValidModulesWithErrors({ moduleIdsWithErrors: notValidModuleIdsWithErrors, logger });
+      throw new Error('Modules validation failed.');
+    }
+
     logModulesToUpdate(modulesToUpdate, logger);
 
     const modulesToUpdateIds = modulesToUpdate.map(({ module }) => module.id);
@@ -79,6 +88,22 @@ function getDraftModulesToUpdate(draftModules, updatedModuleIds) {
     }) => numberOfEditedObjects > 0 || isDraftOfUpdatedModule);
 }
 
+async function validateModules({ modulesToUpdate }) {
+  const modulesToValidate = modulesToUpdate.map(({ module }) => module);
+
+  const notValidModuleIdsWithErrors = new Map();
+
+  for (const module of modulesToValidate) {
+    const { isValid, validationSchemaErrors } = await module.validateSchema();
+
+    if (!isValid) {
+      notValidModuleIdsWithErrors.set(module.id, validationSchemaErrors);
+    }
+  }
+
+  return notValidModuleIdsWithErrors;
+}
+
 function logModulesToUpdate(modulesToUpdate, logger) {
   for (const { module, numberOfEditedObjects } of modulesToUpdate) {
     logger.info({ ...toLogSummary(module), numberOfEditedObjects }, 'Module to update');
@@ -96,6 +121,13 @@ function logDraftModulesToUpdate(draftModulesToUpdate, logger) {
   }
   const numberOfDraftModulesToRecreate = draftModulesToUpdate.filter(({ isDraftOfUpdatedModule }) => isDraftOfUpdatedModule).length;
   logger.info(`${draftModulesToUpdate.length} draft module(s) to update (${numberOfDraftModulesToRecreate} recreated because their module is updated), ${countEditedObjects(draftModulesToUpdate)} object(s) to complete`);
+}
+
+function logNotValidModulesWithErrors({ moduleIdsWithErrors, logger }) {
+  logger.error(`${moduleIdsWithErrors.size} modules validation failed : ${Array.from(moduleIdsWithErrors.keys()).join(', ')}`);
+  for (const [moduleId, errors] of moduleIdsWithErrors.entries()) {
+    logger.error(`Errors in module ${moduleId}: ${errors.map(JSON.stringify).join(', ')}`);
+  }
 }
 
 function logSavedModules({ savedModules, savedDraftModules }, logger) {
