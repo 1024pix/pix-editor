@@ -100,48 +100,40 @@ export class Module {
   }
 
   async validate({ modules }) {
-    const moduleToValidate = this.toModuleValidation();
-    const validationErrors = [];
-    let isValid = true;
+    const { isValid: isModuleSchemaValid, validationSchemaErrors } = await this.validateSchema();
+    const { isValid: hasNoDuplicateIds, validationIdsErrors } = this.#validateIdsDuplication(modules);
+    const validationErrors = [...validationSchemaErrors, ...validationIdsErrors];
 
-    try {
-      await moduleSchema.validateAsync(moduleToValidate, { abortEarly: false });
-    } catch (joiError) {
-      validationErrors.push(...joiErrorParser.toStructuredErrors(joiError));
-    }
-
-    try {
-      this.#validateModuleDoesNotHaveDuplicateIds({ moduleToValidate, modules });
-    } catch (error) {
-      validationErrors.push({ message: error.message, isSchemaError: false });
-    }
-
-    if (validationErrors.length > 0) {
-      isValid = false;
-    }
-
-    return { isValid, validationErrors };
+    return { isValid: isModuleSchemaValid && hasNoDuplicateIds, validationErrors };
   }
 
   async validateSchema() {
     const moduleToValidate = this.toModuleValidation();
-    const validationErrors = [];
-    let isValid = true;
+    const validationSchemaErrors = [];
 
     try {
       await moduleSchema.validateAsync(moduleToValidate, { abortEarly: false });
     } catch (joiError) {
-      validationErrors.push(...joiErrorParser.toStructuredErrors(joiError));
+      validationSchemaErrors.push(...joiErrorParser.toStructuredErrors(joiError));
     }
 
-    if (validationErrors.length > 0) {
-      isValid = false;
-    }
-
-    return { isValid, validationErrors };
+    return { isValid: validationSchemaErrors.length === 0, validationSchemaErrors };
   }
 
-  #validateModuleDoesNotHaveDuplicateIds({ moduleToValidate, modules }) {
+  #validateIdsDuplication(modules) {
+    const validationIdsErrors = [];
+
+    try {
+      this.#validateModuleDoesNotHaveDuplicateIds(modules);
+    } catch (error) {
+      validationIdsErrors.push({ message: error.message, isSchemaError: false });
+    }
+
+    return { isValid: validationIdsErrors.length === 0, validationIdsErrors };
+  }
+
+  #validateModuleDoesNotHaveDuplicateIds(modules) {
+    const moduleToValidate = this.toModuleValidation();
     const otherModules = modules.filter((module) => (module.shortId !== moduleToValidate.shortId));
 
     const existingIds = new Set();

@@ -149,7 +149,7 @@ describe('Unit | Domain | Module', () => {
         const result = await moduleToValidate.validateSchema();
 
         // then
-        expect(result).toEqual({ isValid: true, validationErrors: [] });
+        expect(result).toEqual({ isValid: true, validationSchemaErrors: [] });
       });
     });
 
@@ -165,7 +165,7 @@ describe('Unit | Domain | Module', () => {
         // then
         expect(result).toEqual({
           isValid: false,
-          validationErrors: [{ message: '"slug" est requis', isSchemaError: true }],
+          validationSchemaErrors: [{ message: '"slug" est requis', isSchemaError: true }],
         });
       });
     });
