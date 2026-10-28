@@ -204,16 +204,7 @@ describe('Acceptance | Script | AddMissingLlmMessagesKeys', () => {
         sections: buildSectionsWithLlmMessages([messageWithMissingKeys]),
       });
 
-      const notValidModuleWithDuplicatedId = domainBuilder.buildModule({
-        shortId: 'module02',
-        internalTitle: 'module-to-fix-without-draft-2',
-        version: '1.0',
-        sections: buildSectionsWithLlmMessages([messageWithMissingKeys]),
-      });
-      notValidModuleWithDuplicatedId.sections.at(0).id = notValidModuleWithEmptyObjectives.id;
-
       databaseBuilder.factory.buildModule(notValidModuleWithEmptyObjectives);
-      databaseBuilder.factory.buildModule(notValidModuleWithDuplicatedId);
       await databaseBuilder.commit();
 
       const spiedLogger = { info: vi.fn(), error: vi.fn() };
@@ -222,11 +213,7 @@ describe('Acceptance | Script | AddMissingLlmMessagesKeys', () => {
       await expect(new AddMissingLlmMessagesKeys().handle({ options: { dryRun: true }, logger: spiedLogger })).rejects.toThrow('Modules validation failed.');
 
       // then
-      expect(spiedLogger.error.mock.calls).toStrictEqual([
-        [`2 modules validation failed : ${notValidModuleWithEmptyObjectives.id}, ${notValidModuleWithDuplicatedId.id}`],
-        [`Errors in module ${notValidModuleWithEmptyObjectives.id}: {\"message\":\"\\"details.objectives\\" doit contenir au moins 1 élément(s)\",\"isSchemaError\":true}, {\"message\":\"Le brouillon a des ids dupliqués : ${notValidModuleWithEmptyObjectives.id}\",\"isSchemaError\":false}`],
-        [`Errors in module ${notValidModuleWithDuplicatedId.id}: {\"message\":\"Le brouillon a des ids dupliqués : ${notValidModuleWithDuplicatedId.sections.at(0).id}\",\"isSchemaError\":false}`],
-      ]);
+      expect(spiedLogger.error.mock.calls).toStrictEqual([[`1 modules validation failed : ${notValidModuleWithEmptyObjectives.id}`], [`Errors in module ${notValidModuleWithEmptyObjectives.id}: {\"message\":\"\\"details.objectives\\" doit contenir au moins 1 élément(s)\",\"isSchemaError\":true}`]]);
     });
   });
 });
