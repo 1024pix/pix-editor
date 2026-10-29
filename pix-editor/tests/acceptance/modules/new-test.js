@@ -142,6 +142,7 @@ module('Acceptance | Modules | New', function (hooks) {
             glossary: [
               {
                 word: 'pouet',
+                words: ['pouet'],
                 definition: 'sound',
               },
             ],

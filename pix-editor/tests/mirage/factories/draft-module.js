@@ -35,6 +35,7 @@ export default Factory.extend({
     return [
       {
         word: 'pouet',
+        words: ['pouet'],
         definition: 'sound',
       },
     ];
