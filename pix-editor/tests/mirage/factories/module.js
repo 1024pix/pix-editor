@@ -34,7 +34,6 @@ export default Factory.extend({
   glossary() {
     return [
       {
-        word: 'pouet',
         words: ['pouet'],
         definition: 'sound',
       },
