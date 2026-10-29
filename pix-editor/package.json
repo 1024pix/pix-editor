@@ -45,7 +45,7 @@
     "@embroider/config-meta-loader": "1.0.0",
     "@embroider/core": "4.6.9",
     "@embroider/vite": "1.7.15",
-    "@glimmer/component": "2.1.1",
+    "@glimmer/component": "2.2.0",
     "@playwright/test": "1.64.1",
     "@rollup/plugin-babel": "7.1.0",
     "@typescript-eslint/parser": "8.72.0",
