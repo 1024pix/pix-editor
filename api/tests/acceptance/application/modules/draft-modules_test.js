@@ -510,7 +510,6 @@ describe('Acceptance | Route | draft-modules', () => {
         glossary: [
           ...module.glossary,
           {
-            word: 'antennes',
             words: ['antennes'],
             definition: 'La paire d’antennes de l’escargot lui sert, en gros, à tâter le terrain et à découvrir, par le toucher, son environnement immédiat.',
           },
@@ -553,7 +552,6 @@ describe('Acceptance | Route | draft-modules', () => {
         <span class="line"><span style="color:#24292E">       "definition": "Une coquille est un agglomérat de calcaire très résistant. Sa structure cristalline spécifique lui confère une résistance protectrice. Elle prodique à l'escargot toute sa force et sa vitalité."</span></span>
         <span class="line"><span style="color:#22863A">+    },</span></span>
         <span class="line"><span style="color:#22863A">+    {</span></span>
-        <span class="line"><span style="color:#22863A">+      "word": "antennes",</span></span>
         <span class="line"><span style="color:#22863A">+      "words": [</span></span>
         <span class="line"><span style="color:#22863A">+        "antennes"</span></span>
         <span class="line"><span style="color:#22863A">+      ],</span></span>
