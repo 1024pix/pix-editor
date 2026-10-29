@@ -1152,6 +1152,7 @@ function _createModuleWithElement(element) {
     glossary: [
       {
         word: 'Pix',
+        words: ['Pix'],
         definition:
           'Pix est un service public en ligne pour évaluer, développer, et certifier ses compétences numériques.',
       },
