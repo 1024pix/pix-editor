@@ -1,5 +1,23 @@
 
 
+## v4.61.0 (29/10/2026)
+
+
+### :building_construction: Tech
+- [#1776](https://github.com/1024pix/pix-editor/pull/1776) [TECH] Ajouter la clé "words" dans le champ "glossary" des modules (PIX-24895).
+- [#1770](https://github.com/1024pix/pix-editor/pull/1770) [TECH] Supprimer les modules non valides.
+- [#1692](https://github.com/1024pix/pix-editor/pull/1692) [TECH] Ajouter la validation des modules dans le script (PIX-24349).
+
+### :arrow_up: Montée de version
+- [#1774](https://github.com/1024pix/pix-editor/pull/1774) [BUMP] Update dependency @glimmer/component to v2.2.0 (pix-editor).
+- [#1773](https://github.com/1024pix/pix-editor/pull/1773) [BUMP] Update hapijs monorepo (api).
+- [#1772](https://github.com/1024pix/pix-editor/pull/1772) [BUMP] Update ember-intl (pix-editor).
+- [#1771](https://github.com/1024pix/pix-editor/pull/1771) [BUMP] Update dependency npm-run-all2 to v9.0.4 (pix-editor).
+- [#1768](https://github.com/1024pix/pix-editor/pull/1768) [BUMP] Update linters (pix-editor).
+- [#1769](https://github.com/1024pix/pix-editor/pull/1769) [BUMP] Update dependency @1024pix/nebulix-ember to v1.4.0 (pix-editor).
+- [#1767](https://github.com/1024pix/pix-editor/pull/1767) [BUMP] Update dependency nock to v15.0.5 (api).
+- [#1766](https://github.com/1024pix/pix-editor/pull/1766) [BUMP] Update dependency @1024pix/oppsy to v1.1.2 (api).
+
 ## v4.60.1 (27/10/2026)
 
 
