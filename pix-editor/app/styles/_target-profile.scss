@@ -1,24 +1,4 @@
 // stylelint-disable color-no-hex, color-named
-.main-title {
-  .target-profile-filter {
-    display: flex;
-    align-items: center;
-    float: right;
-    margin-top: 2px;
-    color: rgba(255, 255, 255, 0.5);
-    font-weight: normal;
-    font-size: 14px;
-
-    &.active {
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .ui.toggle.checkbox {
-      margin-left: 10px;
-    }
-  }
-}
-
 .target-profile-title {
   color: white;
   background: black;

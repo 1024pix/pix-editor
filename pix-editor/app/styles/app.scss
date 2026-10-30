@@ -73,3 +73,4 @@
 @use 'components/statistics/i18n' as statistics-i18n;
 @use 'components/statistics/production' as statistics-production;
 @use 'templates/authenticated/statistics' as statistics-view;
+@use 'templates/authenticated/target-profile' as target-profile-view;
