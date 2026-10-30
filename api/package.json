@@ -100,7 +100,7 @@
     "nodemon": "3.1.14",
     "papaparse": "5.7.0",
     "parse-multipart-data": "1.5.0",
-    "pg-boss": "12.37.1",
+    "pg-boss": "12.38.0",
     "split2": "4.2.0",
     "vitest": "4.1.12",
     "yargs": "18.2.0"
