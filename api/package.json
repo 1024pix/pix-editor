@@ -65,7 +65,7 @@
     "fast-csv": "5.0.8",
     "fetch-cookie": "3.2.0",
     "file-saver": "2.0.5",
-    "html-validate": "11.16.4",
+    "html-validate": "11.17.0",
     "joi": "18.3.0",
     "js-crypto-random": "1.0.5",
     "json-stream-es": "1.2.1",
