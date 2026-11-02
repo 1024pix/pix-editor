@@ -1,5 +1,6 @@
 export * from './AreaForReplication.js';
 export * from './AttachmentForReplication.js';
+export * from './ChallengeForReplication.js';
 export * from './CompetenceForReplication.js';
 export * from './CourseForReplication.js';
 export * from './FrameworkForReplication.js';
