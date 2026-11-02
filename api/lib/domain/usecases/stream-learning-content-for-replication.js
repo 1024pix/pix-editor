@@ -21,6 +21,7 @@ import {
   skillTransformer,
   thematicTransformer,
 } from '../../infrastructure/transformers/index.js';
+import { ChallengeForReplication } from '../models/replication/index.js';
 
 export async function* streamLearningContentForReplication(signal) {
   const frameworks = await frameworkRepository.list();
@@ -49,7 +50,7 @@ export async function* streamLearningContentForReplication(signal) {
     translatedChallenges.forEach((translatedChallenge) => {
       delete translatedChallenge.localizedChallenges;
     });
-    yield* wrapChallenges(translatedChallenges);
+    yield* wrapChallenges(translatedChallenges.map((translatedChallenge) => new ChallengeForReplication(translatedChallenge)));
   }
 
   const attachmentsStream = attachmentRepository.streamForReplication(signal);
@@ -66,13 +67,14 @@ export async function* streamLearningContentForReplication(signal) {
 
   const missions = await missionRepository.list();
   const missionsChallenges = await challengeRepository.listByThematicIds(missions.flatMap((mission) => mission.thematicIds));
-  yield* wrapValuesWithType('missions')(missionTransformer.transform({
+  const missionsTransformed = missionTransformer.transform({
     missions,
     thematics,
     tubes,
     skills,
     challenges: missionsChallenges,
-  }));
+  });
+  yield* wrapValuesWithType('missions')(missionsTransformed.map((mission) => new MissionReplication(mission)));
 
   const modules = await moduleRepository.listForReplication();
   yield* wrapValuesWithType('modules')(modules);

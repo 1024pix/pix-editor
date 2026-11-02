@@ -6,6 +6,7 @@ import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib
 import _ from 'lodash';
 import {
   AreaForReplication,
+  ChallengeForReplication,
   CompetenceForReplication,
   FrameworkForReplication,
   ModuleForReplication,
@@ -243,7 +244,7 @@ async function mockCurrentContent() {
     expectedChallenge,
     expectedChallengeNl,
     expectedAlternativeChallenge,
-  ];
+  ].map((challenge) => new ChallengeForReplication(challenge));
 
   const expectedAttachment = {
     id: 'attid1',
