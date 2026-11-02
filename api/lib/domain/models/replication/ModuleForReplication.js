@@ -23,5 +23,8 @@ export class ModuleForReplication {
     this.duration = duration;
     this.objectives = objectives;
     this.version = version;
+
+    // mappings for replication
+    this.uuid = id;
   }
 }
