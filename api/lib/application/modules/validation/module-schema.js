@@ -145,8 +145,7 @@ const moduleSectionSchema = Joi.object({
 });
 
 const moduleGlossaryEntrySchema = Joi.object({
-  word: Joi.string().optional(),
-  words: Joi.array().items(Joi.string().min(1)).optional(),
+  words: Joi.array().items(Joi.string().min(1)).required(),
   definition: htmlSchema.required(),
 });
 

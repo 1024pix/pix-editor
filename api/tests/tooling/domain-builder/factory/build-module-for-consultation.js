@@ -37,7 +37,6 @@ export function buildModuleForConsultation({
   sections = defaultSections,
   glossary = [
     {
-      word: 'coquille',
       words: ['coquille'],
       description: 'Une coquille est un agglomérat de calcaire très résistant. Sa structure cristalline spécifique lui confère une résistance protectrice. Elle prodique à l\'escargot toute sa force et sa vitalité.',
     },
