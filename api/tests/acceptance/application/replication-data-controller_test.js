@@ -6,10 +6,14 @@ import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib
 import _ from 'lodash';
 import {
   AreaForReplication,
+  CompetenceForReplication,
   FrameworkForReplication,
   ModuleForReplication,
   SkillForReplication,
+  ThematicForReplication,
+  TubeForReplication,
 } from '../../../lib/domain/models/replication/index.js';
+import { database } from '../../../lib/config.js';
 
 describe('Acceptance | Controller | replication-data-controller', () => {
   let user;
@@ -82,10 +86,12 @@ async function mockCurrentContent() {
   const expectedCurrentContent = { translations: [] };
   const expectedFramework = new FrameworkForReplication(domainBuilder.buildFramework({ name: 'Pix' }));
   expectedCurrentContent.frameworks = [{ ...expectedFramework }];
+  databaseBuilder.factory.buildFramework(expectedFramework);
 
   const area = domainBuilder.buildArea({ frameworkId: expectedFramework.id, competenceIds: ['recCompetence1'] });
   const expectedArea = new AreaForReplication({ name: area.name, ...area });
   expectedCurrentContent.areas = [{ ...expectedArea }];
+  databaseBuilder.factory.buildArea(expectedArea);
 
   const expectedCompetence = omit(
     [
@@ -108,7 +114,8 @@ async function mockCurrentContent() {
       origin: 'Pix',
     }),
   );
-  expectedCurrentContent.competences = [expectedCompetence];
+  expectedCurrentContent.competences = [new CompetenceForReplication(expectedCompetence)];
+  databaseBuilder.factory.buildCompetence(expectedCompetence);
 
   const expectedThematic = omit(
     [
@@ -126,7 +133,8 @@ async function mockCurrentContent() {
       tubeIds: ['recTube1'],
     }),
   );
-  expectedCurrentContent.thematics = [expectedThematic];
+  expectedCurrentContent.thematics = [new ThematicForReplication(expectedThematic)];
+  databaseBuilder.factory.buildThematic(expectedThematic);
 
   const expectedTube = omit(
     [
@@ -144,7 +152,12 @@ async function mockCurrentContent() {
       name: '@dvorak',
     }),
   );
-  expectedCurrentContent.tubes = [expectedTube];
+  expectedCurrentContent.tubes = [new TubeForReplication(expectedTube)];
+  databaseBuilder.factory.buildTube(expectedTube);
+
+  const tutorials = [domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto1', tagIds: [] }), domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto2', tagIds: [] })];
+  expectedCurrentContent.tutorials = tutorials;
+  tutorials.forEach(databaseBuilder.factory.buildTutorial);
 
   const baseSkill = domainBuilder.buildSkill({
     id: 'recSkill1',
@@ -159,6 +172,8 @@ async function mockCurrentContent() {
     obsoletedAt: '2024-01-08T18:08:00.000Z',
   });
   expectedCurrentContent.skills = [{ ...new SkillForReplication(baseSkill), pixValue: 4 }];
+  databaseBuilder.factory.buildSkill({ ...baseSkill, pixValue: 4 });
+
   const challenge = domainBuilder.buildChallenge({
     id: 'challenge-id',
     files: [{ fileId: 'attid1', localizedChallengeId: 'challenge-id' }, { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' }],
@@ -271,8 +286,6 @@ async function mockCurrentContent() {
     }),
   ];
 
-  expectedCurrentContent.tutorials = [domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto1', tagIds: [] }), domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto2', tagIds: [] })];
-
   expectedCurrentContent.courses = [
     {
       id: 'recCourse1',
@@ -309,13 +322,6 @@ async function mockCurrentContent() {
   const modules = [domainBuilder.buildModule({ shortId: 'moduleab', slug: 'ab' }), domainBuilder.buildModule({ shortId: 'modulecd', internalTitle: 'modulecd', slug: 'cd' })];
   expectedCurrentContent.modules = modules.map(({ details, ...module }) => new ModuleForReplication({ ...module, ...details }));
 
-  expectedCurrentContent.frameworks.forEach(databaseBuilder.factory.buildFramework);
-  expectedCurrentContent.areas.forEach(databaseBuilder.factory.buildArea);
-  expectedCurrentContent.competences.forEach(databaseBuilder.factory.buildCompetence);
-  expectedCurrentContent.thematics.forEach(databaseBuilder.factory.buildThematic);
-  expectedCurrentContent.tubes.forEach(databaseBuilder.factory.buildTube);
-  expectedCurrentContent.tutorials.forEach(databaseBuilder.factory.buildTutorial);
-  expectedCurrentContent.skills.forEach(databaseBuilder.factory.buildSkill);
   databaseBuilder.factory.buildChallenge(challenge);
   databaseBuilder.factory.buildChallenge(alternativeChallenge);
 
