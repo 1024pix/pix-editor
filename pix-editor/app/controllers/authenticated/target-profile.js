@@ -354,7 +354,7 @@ export default class TargetProfileController extends Controller {
   @action
   toggleThematicResult(event) {
     this.isThematicResultMode = event.target.checked;
-    if (event.target.checked) {
+    if (this.isThematicResultMode) {
       this.filter = true;
       this.showTubeDetails = true;
     }

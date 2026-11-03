@@ -9,8 +9,7 @@ module('Integration | Component | target-profile/pdf-export', function (hooks) {
   setupIntlRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    // given
-    // when
+    // given & when
     const screen = await render(<template><PdfExport /></template>);
 
     // then
