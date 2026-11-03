@@ -9,6 +9,7 @@ import {
   ChallengeForReplication,
   CompetenceForReplication,
   FrameworkForReplication,
+  MissionForReplication,
   ModuleForReplication,
   SkillForReplication,
   ThematicForReplication,
@@ -298,34 +299,10 @@ async function mockCurrentContent() {
     },
   ];
 
-  expectedCurrentContent.missions = [
-    {
-      id: 123456789,
-      name_i18n: { fr: 'validated mission PG name' },
-      competenceId: 'competenceId',
-      thematicIds: 'thematicIds',
-      learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
-      validatedObjectives_i18n: { fr: 'Rien' },
-      status: Mission.status.VALIDATED,
-      createdAt: new Date('2010-01-04').toISOString(),
-      introductionMediaUrl: null,
-      introductionMediaType: null,
-      introductionMediaAlt_i18n: { fr: 'Message alternatif' },
-      documentationUrl: 'http://url-example.net',
-      cardImageUrl: null,
-      content: {
-        dareChallenges: [],
-        steps: [],
-      },
-    },
-  ];
-
   const modules = [domainBuilder.buildModule({ shortId: 'moduleab', slug: 'ab' }), domainBuilder.buildModule({ shortId: 'modulecd', internalTitle: 'modulecd', slug: 'cd' })];
   expectedCurrentContent.modules = modules.map(({ details, ...module }) => new ModuleForReplication({ ...module, ...details }));
-
   databaseBuilder.factory.buildChallenge(challenge);
   databaseBuilder.factory.buildChallenge(alternativeChallenge);
-
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse2',
     name: 'nameCourse2',
@@ -338,22 +315,29 @@ async function mockCurrentContent() {
     description: 'Description du Course',
     challengeIds: 'recChallenge0',
   });
-
-  const mission = databaseBuilder.factory.buildMission(
-    {
-      id: 123456789,
-      name: 'validated mission PG name',
-      competenceId: 'competenceId',
-      learningObjectives: 'Que tu sois le meilleur',
-      thematicIds: 'thematicIds',
-      validatedObjectives: 'Rien',
-      status: Mission.status.VALIDATED,
-      documentationUrl: 'http://url-example.net',
-    },
-    false,
-  );
-
   modules.forEach(databaseBuilder.factory.buildModule);
+
+  const mission = {
+    id: 123456789,
+    name_i18n: { fr: 'validated mission PG name' },
+    competenceId: 'competenceId',
+    thematicIds: 'thematicIds',
+    learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+    validatedObjectives_i18n: { fr: 'Rien' },
+    status: Mission.status.VALIDATED,
+    createdAt: new Date('2010-01-04').toISOString(),
+    introductionMediaUrl: null,
+    introductionMediaType: null,
+    introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+    documentationUrl: 'http://url-example.net',
+    cardImageUrl: null,
+    content: {
+      dareChallenges: [],
+      steps: [],
+    },
+  };
+  databaseBuilder.factory.buildMission(mission, false);
+  expectedCurrentContent.missions = [new MissionForReplication(mission)];
 
   databaseBuilder.factory.buildLocalizedChallenge({
     id: challenge.id,

@@ -21,7 +21,7 @@ import {
   skillTransformer,
   thematicTransformer,
 } from '../../infrastructure/transformers/index.js';
-import { ChallengeForReplication } from '../models/replication/index.js';
+import { ChallengeForReplication, MissionForReplication } from '../models/replication/index.js';
 
 export async function* streamLearningContentForReplication(signal) {
   const frameworks = await frameworkRepository.list();
@@ -74,7 +74,7 @@ export async function* streamLearningContentForReplication(signal) {
     skills,
     challenges: missionsChallenges,
   });
-  yield* wrapValuesWithType('missions')(missionsTransformed.map((mission) => new MissionReplication(mission)));
+  yield* wrapValuesWithType('missions')(missionsTransformed.map((mission) => new MissionForReplication(mission)));
 
   const modules = await moduleRepository.listForReplication();
   yield* wrapValuesWithType('modules')(modules);
