@@ -100,7 +100,7 @@
     "morgan": "1.12.1",
     "npm-run-all2": "9.0.4",
     "p-queue": "10.0.0",
-    "postcss": "8.5.31",
+    "postcss": "8.5.32",
     "postcss-url": "10.1.4",
     "prettier-plugin-ember-template-tag": "2.1.8",
     "qunit": "2.26.0",
