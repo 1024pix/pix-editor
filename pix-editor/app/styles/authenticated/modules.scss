@@ -21,6 +21,10 @@
   &__red-panda {
     width: 40px;
   }
+
+  &__main {
+    height: 89vh;
+  }
 }
 
 .modules-list-no-results {
@@ -98,6 +102,15 @@ td.modules-list__actions {
 
     label {
       padding: var(--pix-spacing-4x);
+    }
+  }
+
+  &__footer {
+    background-color: rgb(var(--pix-neutral-0-inline), 0.5);
+    padding-left: var(--pix-spacing-3x);
+
+    .pix-button {
+      justify-content: start;
     }
   }
 }

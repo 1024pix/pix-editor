@@ -1,3 +1,4 @@
+import { PixButtonLink, PixIcon } from '@1024pix/nebulix-ember';
 import t from 'ember-intl/helpers/t';
 import Pagination from 'pixeditor/components/list/pagination';
 import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
@@ -15,7 +16,7 @@ import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
       <CreateModuleButton />
     </div>
   </header>
-  <main class="page-body">
+  <main class="page-body modules-list__main">
     <section class="page-section modules-list">
       <ModulesFilters
         @internalTitle={{@controller.internalTitle}}
@@ -36,4 +37,16 @@ import ModulesTabs from 'pixeditor/components/modules/modules-tabs';
       {{/if}}
     </section>
   </main>
+  <footer class="module__footer">
+    <PixButtonLink
+      @href="https://www.flaticon.com/fr/auteurs/yukyik"
+      @variant="tertiary"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Crédit icône panda roux : yukyik sur Flaticon (nouvelle fenêtre)"
+    >
+      Crédit icône panda roux : yukyik
+      <PixIcon @name="openNew" />
+    </PixButtonLink>
+  </footer>
 </template>
