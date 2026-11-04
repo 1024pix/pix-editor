@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import and from 'ember-truth-helpers/helpers/and';
 import not from 'ember-truth-helpers/helpers/not';
 import Checkbox from 'pixeditor/components/field/checkbox';
@@ -29,11 +30,31 @@ const multiselectTranslationList = {
     placeholder: 'Choisir une ou plusieurs langues',
     emptyMessage: 'Aucune langue sélectionnée',
   },
-  maintenance: {
+  assessmentMaintenance: {
     placeholder: 'Choisir un ou plusieurs types de maintenance',
-    emptyMessage: 'Aucun type de maintenance sélectionné',
+    searchLabel: "Rechercher un type de maintenance d'évaluation",
+    emptySearchMessage: 'Aucun type de maintenance trouvé',
+  },
+  translationMaintenance: {
+    placeholder: 'Choisir un ou plusieurs types de maintenance',
+    searchLabel: 'Rechercher un type de maintenance de traduction',
+    emptySearchMessage: 'Aucun type de maintenance trouvé',
   },
 };
+
+function normalize(str) {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function filterOptions(options, search) {
+  const trimmedSearch = search.trim();
+  if (!trimmedSearch) return options;
+  const normalizedSearch = normalize(trimmedSearch);
+  return options.filter(({ label }) => normalize(label).includes(normalizedSearch));
+}
 
 const options = {
   types: [
@@ -82,6 +103,8 @@ export default class ChallengeForm extends Component {
   languageOptions = [];
   assessmentMaintenanceTagOptions = [];
   translationMaintenanceTagOptions = [];
+  @tracked assessmentMaintenanceTagSearch = '';
+  @tracked translationMaintenanceTagSearch = '';
   locales = this.languageOptions;
 
   solutionsFieldId = `solutionsFieldId-${guidFor(this)}`;
@@ -112,6 +135,24 @@ export default class ChallengeForm extends Component {
         value,
       };
     });
+  }
+
+  get filteredAssessmentMaintenanceTagOptions() {
+    return filterOptions(this.assessmentMaintenanceTagOptions, this.assessmentMaintenanceTagSearch);
+  }
+
+  get filteredTranslationMaintenanceTagOptions() {
+    return filterOptions(this.translationMaintenanceTagOptions, this.translationMaintenanceTagSearch);
+  }
+
+  @action
+  searchAssessmentMaintenanceTags(value) {
+    this.assessmentMaintenanceTagSearch = value;
+  }
+
+  @action
+  searchTranslationMaintenanceTags(value) {
+    this.translationMaintenanceTagSearch = value;
   }
 
   get geographyOptionList() {
@@ -516,9 +557,10 @@ export default class ChallengeForm extends Component {
                 @isSearchable={{true}}
                 @onChange={{fn (mut @challenge.assessmentMaintenanceTags)}}
                 @values={{@challenge.assessmentMaintenanceTags}}
-                @options={{this.assessmentMaintenanceTagOptions}}
+                @onSearch={{this.searchAssessmentMaintenanceTags}}
+                @options={{this.filteredAssessmentMaintenanceTagOptions}}
                 @isDisabled={{not @edition}}
-                @texts={{multiselectTranslationList.maintenance}}
+                @texts={{multiselectTranslationList.assessmentMaintenance}}
               >
                 <:label>Évaluation</:label>
                 <:default as |option|>{{option.label}}</:default>
@@ -529,9 +571,10 @@ export default class ChallengeForm extends Component {
                 @isSearchable={{true}}
                 @onChange={{fn (mut @challenge.translationMaintenanceTags)}}
                 @values={{@challenge.translationMaintenanceTags}}
-                @options={{this.translationMaintenanceTagOptions}}
+                @onSearch={{this.searchTranslationMaintenanceTags}}
+                @options={{this.filteredTranslationMaintenanceTagOptions}}
                 @isDisabled={{not @edition}}
-                @texts={{multiselectTranslationList.maintenance}}
+                @texts={{multiselectTranslationList.translationMaintenance}}
               >
                 <:label>Traduction</:label>
                 <:default as |option|>{{option.label}}</:default>

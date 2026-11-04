@@ -1,4 +1,4 @@
-import { clickByName, render } from '@1024pix/ember-testing-library';
+import { clickByName, fillByLabel, render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
 import { click, settled } from '@ember/test-helpers';
@@ -227,6 +227,34 @@ module('Integration | Component | challenge-form', function (hooks) {
           Challenge.ASSESSMENT_MAINTENANCE_TAGS.RULE,
           Challenge.ASSESSMENT_MAINTENANCE_TAGS.AMBIGUOUS_ANSWERS,
         ]);
+      });
+
+      test('it should search among assessment maintenance tags', async function (assert) {
+        // Given
+        const store = this.owner.lookup('service:store');
+        this.countries = [{ FR: 'France' }];
+        this.challengeData = store.createRecord('challenge', {
+          id: 'recChallenge_3',
+          name: 'challenge',
+          genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+          assessmentMaintenanceTags: [],
+        });
+        screen = await render(
+          <template>
+            <FormChallenge @challenge={{this.challengeData}} @edition={{true}} @countries={{this.countries}} />
+          </template>,
+        );
+        await clickByName('Évaluation');
+        await screen.findByRole('menu');
+
+        // When
+        await fillByLabel("Rechercher un type de maintenance d'évaluation", 'evolution');
+
+        // Then
+        assert
+          .dom(screen.getByRole('checkbox', { name: Challenge.ASSESSMENT_MAINTENANCE_TAGS.SOFTWARE_EVOLUTION }))
+          .exists();
+        assert.dom(screen.queryByRole('checkbox', { name: Challenge.ASSESSMENT_MAINTENANCE_TAGS.RULE })).doesNotExist();
       });
 
       test('it should set translationMaintenanceTags', async function (assert) {
