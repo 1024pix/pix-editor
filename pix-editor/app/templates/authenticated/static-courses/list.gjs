@@ -18,7 +18,8 @@ import Pagination from 'pixeditor/components/list/pagination';
 // TRADUCTIONS PIXMULTISELECT
 const multiselectTranslationList = {
   placeholder: 'Sélectionnez des tags',
-  emptyMessage: 'Pas de résultats',
+  searchLabel: 'Rechercher un tag',
+  emptySearchMessage: 'Pas de résultats',
 };
 
 <template>
@@ -69,11 +70,12 @@ const multiselectTranslationList = {
         ><:label>Nom</:label></PixInput>
         <PixMultiSelect
           @id="filter-tags-selector"
-          @isSearchable="true"
+          @isSearchable={{true}}
+          @onSearch={{@controller.searchTags}}
           @screenReaderOnly={{true}}
           @onChange={{@controller.selectTags}}
           @values={{@controller.tempTagIds}}
-          @options={{@controller.tagOptions}}
+          @options={{@controller.filteredTagOptions}}
           @texts={{multiselectTranslationList}}
         >
           <:label>Tags</:label>

@@ -3,6 +3,13 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+function normalize(str) {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
 export default class StaticCoursesController extends Controller {
   @service router;
   queryParams = ['pageNumber', 'pageSize', 'isActive', 'name', 'tagIds'];
@@ -16,11 +23,24 @@ export default class StaticCoursesController extends Controller {
   @tracked tempTagIds = [];
   @tracked name = '';
   @tracked tempName = '';
+  @tracked tagSearch = '';
 
   get tagOptions() {
     return this.model.staticCourseTags
       .map(({ id, label }) => ({ value: id, label }))
       .sort((a, b) => a.label.localeCompare(b.label));
+  }
+
+  get filteredTagOptions() {
+    const search = this.tagSearch.trim();
+    if (!search) return this.tagOptions;
+    const normalizedSearch = normalize(search);
+    return this.tagOptions.filter(({ label }) => normalize(label).includes(normalizedSearch));
+  }
+
+  @action
+  searchTags(value) {
+    this.tagSearch = value;
   }
 
   @action
