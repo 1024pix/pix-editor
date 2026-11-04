@@ -1,4 +1,4 @@
-import { PixButton, PixInput, PixMultiSelect, PixTag, PixTextarea } from '@1024pix/nebulix-ember';
+import { PixButton, PixInput, PixTag, PixTextarea } from '@1024pix/nebulix-ember';
 import { A } from '@ember/array';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
@@ -6,6 +6,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import Card from 'pixeditor/components/card';
+import MultiSelect from 'pixeditor/components/field/multi-select';
 
 const STATES = {
   DEFAULT: 'default',
@@ -17,15 +18,7 @@ const STATES = {
 const multiselectTranslationList = {
   placeholder: 'Sélectionnez des tags',
   searchLabel: 'Rechercher un tag',
-  emptySearchMessage: 'Pas de résultats',
 };
-
-function normalize(str) {
-  return str
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-}
 
 export default class StaticCourseForm extends Component {
   @service store;
@@ -36,7 +29,6 @@ export default class StaticCourseForm extends Component {
   @tracked isFormInvalid = true;
   @tracked isSubmitting = false;
   @tracked tagOptions = [];
-  @tracked tagSearch = '';
   @tracked selectedTagIds = [];
   @tracked selectedTags = [];
   @tracked errorMessages = A([]);
@@ -65,18 +57,6 @@ export default class StaticCourseForm extends Component {
     }
     this.tagOptions.sort((a, b) => a.label.localeCompare(b.label));
     this.checkFormValidity();
-  }
-
-  get filteredTagOptions() {
-    const search = this.tagSearch.trim();
-    if (!search) return this.tagOptions;
-    const normalizedSearch = normalize(search);
-    return this.tagOptions.filter(({ label }) => normalize(label).includes(normalizedSearch));
-  }
-
-  @action
-  searchTags(value) {
-    this.tagSearch = value;
   }
 
   @action
@@ -168,18 +148,16 @@ export default class StaticCourseForm extends Component {
           {{on "keyup" this.updateDescription}}
         ><:label>Description à usage interne</:label></PixTextarea>
         <div class="static-course-tag__area">
-          <PixMultiSelect
+          <MultiSelect
             @id="tags-selector"
             @values={{this.selectedTagIds}}
             @onChange={{this.onTagClicked}}
             @isSearchable={{true}}
-            @onSearch={{this.searchTags}}
-            @options={{this.filteredTagOptions}}
+            @options={{this.tagOptions}}
             @texts={{multiselectTranslationList}}
           >
             <:label>Tags</:label>
-            <:default as |option|>{{option.label}}</:default>
-          </PixMultiSelect>
+          </MultiSelect>
           <div class="static-course-chips">
             {{#each this.selectedTags as |tag|}}
               <PixTag class="static-course-tag" @color="yellow">

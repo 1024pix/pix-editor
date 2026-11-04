@@ -1,8 +1,8 @@
-import { PixFilterBanner, PixMultiSelect, PixSearchInput, PixToggle } from '@1024pix/nebulix-ember';
+import { PixFilterBanner, PixSearchInput, PixToggle } from '@1024pix/nebulix-ember';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import MultiSelect from 'pixeditor/components/field/multi-select';
 import Select from 'pixeditor/components/field/select';
 
 // TRADUCTIONS PIXSELECT
@@ -11,69 +11,14 @@ const selectTranslationList = {
 };
 
 // TRADUCTIONS PIXMULTISELECT
-const emptySearchMessage = 'Aucun résultat';
 const multiselectTranslationList = {
-  challenge: { placeholder: 'Filtrer par épreuve', searchLabel: 'Rechercher une épreuve', emptySearchMessage },
-  skill: { placeholder: 'Filtrer par acquis', searchLabel: 'Rechercher un acquis', emptySearchMessage },
-  tutorial: { placeholder: 'Filtrer par tutoriel', searchLabel: 'Rechercher un tutoriel', emptySearchMessage },
-  framework: { placeholder: 'Filtrer par référentiel', searchLabel: 'Rechercher un référentiel', emptySearchMessage },
+  challenge: { placeholder: 'Filtrer par épreuve', searchLabel: 'Rechercher une épreuve' },
+  skill: { placeholder: 'Filtrer par acquis', searchLabel: 'Rechercher un acquis' },
+  tutorial: { placeholder: 'Filtrer par tutoriel', searchLabel: 'Rechercher un tutoriel' },
+  framework: { placeholder: 'Filtrer par référentiel', searchLabel: 'Rechercher un référentiel' },
 };
 
-function normalize(str) {
-  return str
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-}
-
-function filterOptions(options, search) {
-  if (!search?.trim()) return options;
-  const normalizedSearch = normalize(search.trim());
-  return options.filter(({ label }) => normalize(String(label ?? '')).includes(normalizedSearch));
-}
-
 export default class BrokenUrlFilters extends Component {
-  @tracked skillSearch = '';
-  @tracked localizedChallengeSearch = '';
-  @tracked tutorialSearch = '';
-  @tracked frameworkSearch = '';
-
-  get filteredSkillOptionList() {
-    return filterOptions(this.skillOptionList, this.skillSearch);
-  }
-
-  get filteredLocalizedChallengeOptionList() {
-    return filterOptions(this.localizedChallengeOptionList, this.localizedChallengeSearch);
-  }
-
-  get filteredTutorialOptionList() {
-    return filterOptions(this.tutorialOptionList, this.tutorialSearch);
-  }
-
-  get filteredFrameworksOptionList() {
-    return filterOptions(this.frameworksOptionList, this.frameworkSearch);
-  }
-
-  @action
-  searchSkill(value) {
-    this.skillSearch = value;
-  }
-
-  @action
-  searchLocalizedChallenge(value) {
-    this.localizedChallengeSearch = value;
-  }
-
-  @action
-  searchTutorial(value) {
-    this.tutorialSearch = value;
-  }
-
-  @action
-  searchFramework(value) {
-    this.frameworkSearch = value;
-  }
-
   get statusCodeOptionList() {
     const statusCodes = new Set(this.args.brokenUrls.map((brokenUrl) => brokenUrl.statusCode.toString()));
     return Array.from(statusCodes)
@@ -184,10 +129,9 @@ export default class BrokenUrlFilters extends Component {
         <:label>{{selectTranslationList.placeholder}}</:label>
       </Select>
       {{#if @showTutorialsFilters}}
-        <PixMultiSelect
+        <MultiSelect
           @id="tutorials-filter"
-          @options={{this.filteredTutorialOptionList}}
-          @onSearch={{this.searchTutorial}}
+          @options={{this.tutorialOptionList}}
           @values={{@tutorialFilterValues}}
           @onChange={{this.triggerTutorialFilter}}
           @screenReaderOnly={{true}}
@@ -195,12 +139,10 @@ export default class BrokenUrlFilters extends Component {
           @texts={{multiselectTranslationList.tutorial}}
         >
           <:label>Filtrer par tutoriel</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
-        <PixMultiSelect
+        </MultiSelect>
+        <MultiSelect
           @id="skill-filter"
-          @options={{this.filteredSkillOptionList}}
-          @onSearch={{this.searchSkill}}
+          @options={{this.skillOptionList}}
           @values={{@skillFilterValues}}
           @onChange={{this.triggerSkillFilter}}
           @screenReaderOnly={{true}}
@@ -208,14 +150,12 @@ export default class BrokenUrlFilters extends Component {
           @texts={{multiselectTranslationList.skill}}
         >
           <:label>Filtrer par acquis</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
+        </MultiSelect>
       {{/if}}
       {{#if @showChallengesFilters}}
-        <PixMultiSelect
+        <MultiSelect
           @id="localized-challenges-filter"
-          @options={{this.filteredLocalizedChallengeOptionList}}
-          @onSearch={{this.searchLocalizedChallenge}}
+          @options={{this.localizedChallengeOptionList}}
           @values={{@localizedChallengeFilterValues}}
           @onChange={{this.triggerLocalizedChallengeFilter}}
           @screenReaderOnly={{true}}
@@ -223,13 +163,11 @@ export default class BrokenUrlFilters extends Component {
           @texts={{multiselectTranslationList.challenge}}
         >
           <:label>Filtrer par épreuve</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
+        </MultiSelect>
       {{/if}}
-      <PixMultiSelect
+      <MultiSelect
         @id="frameworks-filter"
-        @options={{this.filteredFrameworksOptionList}}
-        @onSearch={{this.searchFramework}}
+        @options={{this.frameworksOptionList}}
         @values={{@frameworkFilterValues}}
         @onChange={{this.triggerFrameworkFilter}}
         @screenReaderOnly={{true}}
@@ -237,8 +175,7 @@ export default class BrokenUrlFilters extends Component {
         @texts={{multiselectTranslationList.framework}}
       >
         <:label>Filtrer par référentiel</:label>
-        <:default as |option|>{{option.label}}</:default>
-      </PixMultiSelect>
+      </MultiSelect>
       <PixToggle @checked={{@ignoredFilterValue}} {{on "change" this.triggerIgnoredFilter}}>
         Afficher les URL ignorées
       </PixToggle>
