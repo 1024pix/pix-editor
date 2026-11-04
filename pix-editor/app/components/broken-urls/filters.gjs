@@ -2,6 +2,7 @@ import { PixFilterBanner, PixMultiSelect, PixSearchInput, PixToggle } from '@102
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import Select from 'pixeditor/components/field/select';
 
 // TRADUCTIONS PIXSELECT
@@ -10,14 +11,69 @@ const selectTranslationList = {
 };
 
 // TRADUCTIONS PIXMULTISELECT
+const emptySearchMessage = 'Aucun résultat';
 const multiselectTranslationList = {
-  challenge: { placeholder: 'Filtrer par épreuve' },
-  skill: { placeholder: 'Filtrer par acquis' },
-  tutorial: { placeholder: 'Filtrer par tutoriel' },
-  framework: { placeholder: 'Filtrer par référentiel' },
+  challenge: { placeholder: 'Filtrer par épreuve', searchLabel: 'Rechercher une épreuve', emptySearchMessage },
+  skill: { placeholder: 'Filtrer par acquis', searchLabel: 'Rechercher un acquis', emptySearchMessage },
+  tutorial: { placeholder: 'Filtrer par tutoriel', searchLabel: 'Rechercher un tutoriel', emptySearchMessage },
+  framework: { placeholder: 'Filtrer par référentiel', searchLabel: 'Rechercher un référentiel', emptySearchMessage },
 };
 
+function normalize(str) {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function filterOptions(options, search) {
+  if (!search?.trim()) return options;
+  const normalizedSearch = normalize(search.trim());
+  return options.filter(({ label }) => normalize(String(label ?? '')).includes(normalizedSearch));
+}
+
 export default class BrokenUrlFilters extends Component {
+  @tracked skillSearch = '';
+  @tracked localizedChallengeSearch = '';
+  @tracked tutorialSearch = '';
+  @tracked frameworkSearch = '';
+
+  get filteredSkillOptionList() {
+    return filterOptions(this.skillOptionList, this.skillSearch);
+  }
+
+  get filteredLocalizedChallengeOptionList() {
+    return filterOptions(this.localizedChallengeOptionList, this.localizedChallengeSearch);
+  }
+
+  get filteredTutorialOptionList() {
+    return filterOptions(this.tutorialOptionList, this.tutorialSearch);
+  }
+
+  get filteredFrameworksOptionList() {
+    return filterOptions(this.frameworksOptionList, this.frameworkSearch);
+  }
+
+  @action
+  searchSkill(value) {
+    this.skillSearch = value;
+  }
+
+  @action
+  searchLocalizedChallenge(value) {
+    this.localizedChallengeSearch = value;
+  }
+
+  @action
+  searchTutorial(value) {
+    this.tutorialSearch = value;
+  }
+
+  @action
+  searchFramework(value) {
+    this.frameworkSearch = value;
+  }
+
   get statusCodeOptionList() {
     const statusCodes = new Set(this.args.brokenUrls.map((brokenUrl) => brokenUrl.statusCode.toString()));
     return Array.from(statusCodes)
@@ -130,7 +186,8 @@ export default class BrokenUrlFilters extends Component {
       {{#if @showTutorialsFilters}}
         <PixMultiSelect
           @id="tutorials-filter"
-          @options={{this.tutorialOptionList}}
+          @options={{this.filteredTutorialOptionList}}
+          @onSearch={{this.searchTutorial}}
           @values={{@tutorialFilterValues}}
           @onChange={{this.triggerTutorialFilter}}
           @screenReaderOnly={{true}}
@@ -142,7 +199,8 @@ export default class BrokenUrlFilters extends Component {
         </PixMultiSelect>
         <PixMultiSelect
           @id="skill-filter"
-          @options={{this.skillOptionList}}
+          @options={{this.filteredSkillOptionList}}
+          @onSearch={{this.searchSkill}}
           @values={{@skillFilterValues}}
           @onChange={{this.triggerSkillFilter}}
           @screenReaderOnly={{true}}
@@ -156,12 +214,13 @@ export default class BrokenUrlFilters extends Component {
       {{#if @showChallengesFilters}}
         <PixMultiSelect
           @id="localized-challenges-filter"
-          @options={{this.localizedChallengeOptionList}}
+          @options={{this.filteredLocalizedChallengeOptionList}}
+          @onSearch={{this.searchLocalizedChallenge}}
           @values={{@localizedChallengeFilterValues}}
           @onChange={{this.triggerLocalizedChallengeFilter}}
           @screenReaderOnly={{true}}
           @isSearchable={{true}}
-          @texts={{multiselectTranslationList.skill}}
+          @texts={{multiselectTranslationList.challenge}}
         >
           <:label>Filtrer par épreuve</:label>
           <:default as |option|>{{option.label}}</:default>
@@ -169,7 +228,8 @@ export default class BrokenUrlFilters extends Component {
       {{/if}}
       <PixMultiSelect
         @id="frameworks-filter"
-        @options={{this.frameworksOptionList}}
+        @options={{this.filteredFrameworksOptionList}}
+        @onSearch={{this.searchFramework}}
         @values={{@frameworkFilterValues}}
         @onChange={{this.triggerFrameworkFilter}}
         @screenReaderOnly={{true}}
