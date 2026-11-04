@@ -99,9 +99,12 @@ module('Acceptance | Static Courses | Creation', function (hooks) {
       // when
       await fillByLabel('Nom du test statique *', 'Mon nouveau test statique');
       await fillByLabel('Description à usage interne', 'Une super description pour mon nouveau test');
-      await fillByLabel('Tags', 'cou');
+      await clickByName('Tags');
+      await fillByLabel('Rechercher un tag', 'cou');
+      assert.dom(screen.queryByLabelText('Foin')).doesNotExist();
       await clickByText('COUrage');
       await clickByText('COUleur');
+      await clickByName('Tags');
       await fillByLabel('IDs des épreuves', 'chalA\nchalC');
       await triggerEvent(find('#static-course-name'), 'keyup', '');
       await triggerEvent(find('#static-course-description'), 'keyup', '');

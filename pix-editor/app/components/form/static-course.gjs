@@ -16,8 +16,16 @@ const STATES = {
 // TRADUCTIONS PIXMULTISELECT
 const multiselectTranslationList = {
   placeholder: 'Sélectionnez des tags',
-  emptyMessage: 'Pas de résultats',
+  searchLabel: 'Rechercher un tag',
+  emptySearchMessage: 'Pas de résultats',
 };
+
+function normalize(str) {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
 
 export default class StaticCourseForm extends Component {
   @service store;
@@ -28,6 +36,7 @@ export default class StaticCourseForm extends Component {
   @tracked isFormInvalid = true;
   @tracked isSubmitting = false;
   @tracked tagOptions = [];
+  @tracked tagSearch = '';
   @tracked selectedTagIds = [];
   @tracked selectedTags = [];
   @tracked errorMessages = A([]);
@@ -56,6 +65,18 @@ export default class StaticCourseForm extends Component {
     }
     this.tagOptions.sort((a, b) => a.label.localeCompare(b.label));
     this.checkFormValidity();
+  }
+
+  get filteredTagOptions() {
+    const search = this.tagSearch.trim();
+    if (!search) return this.tagOptions;
+    const normalizedSearch = normalize(search);
+    return this.tagOptions.filter(({ label }) => normalize(label).includes(normalizedSearch));
+  }
+
+  @action
+  searchTags(value) {
+    this.tagSearch = value;
   }
 
   @action
@@ -151,8 +172,9 @@ export default class StaticCourseForm extends Component {
             @id="tags-selector"
             @values={{this.selectedTagIds}}
             @onChange={{this.onTagClicked}}
-            @isSearchable="true"
-            @options={{this.tagOptions}}
+            @isSearchable={{true}}
+            @onSearch={{this.searchTags}}
+            @options={{this.filteredTagOptions}}
             @texts={{multiselectTranslationList}}
           >
             <:label>Tags</:label>

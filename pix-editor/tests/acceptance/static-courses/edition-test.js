@@ -143,9 +143,11 @@ module('Acceptance | Static Courses | Edition', function (hooks) {
 
       // when
       await fillByLabel('Description à usage interne', 'Ma nouvelle description toute jolie');
-      await fillByLabel('Tags', 'ta');
+      await clickByName('Tags');
+      await fillByLabel('Rechercher un tag', 'ta');
       await screen.getByLabelText('tagC').click();
       await screen.getByLabelText('tagB').click();
+      await clickByName('Tags');
       await fillByLabel('IDs des épreuves', 'chalA\nchalC');
       await triggerEvent(find('#static-course-description'), 'keyup', '');
       await triggerEvent(find('#static-course-challenges'), 'keyup', '');
