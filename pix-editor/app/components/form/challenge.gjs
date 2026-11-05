@@ -1,4 +1,3 @@
-import { PixMultiSelect } from '@1024pix/nebulix-ember';
 import { fn } from '@ember/helper';
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
@@ -11,6 +10,7 @@ import Files from 'pixeditor/components/field/files';
 import Illustration from 'pixeditor/components/field/illustration';
 import Input from 'pixeditor/components/field/input';
 import Mde from 'pixeditor/components/field/mde';
+import MultiSelect from 'pixeditor/components/field/multi-select';
 import Quality from 'pixeditor/components/field/quality';
 import Select from 'pixeditor/components/field/select';
 import Textarea from 'pixeditor/components/field/textarea';
@@ -27,11 +27,14 @@ const selectTranslationList = {
 const multiselectTranslationList = {
   language: {
     placeholder: 'Choisir une ou plusieurs langues',
-    emptyMessage: 'Aucune langue sélectionnée',
   },
-  maintenance: {
+  assessmentMaintenance: {
     placeholder: 'Choisir un ou plusieurs types de maintenance',
-    emptyMessage: 'Aucun type de maintenance sélectionné',
+    searchLabel: "Rechercher un type de maintenance d'évaluation",
+  },
+  translationMaintenance: {
+    placeholder: 'Choisir un ou plusieurs types de maintenance',
+    searchLabel: 'Rechercher un type de maintenance de traduction',
   },
 };
 
@@ -512,30 +515,28 @@ export default class ChallengeForm extends Component {
           <label>Maintenance</label>
           <div class="two fields">
             <div class="field">
-              <PixMultiSelect
+              <MultiSelect
                 @isSearchable={{true}}
                 @onChange={{fn (mut @challenge.assessmentMaintenanceTags)}}
                 @values={{@challenge.assessmentMaintenanceTags}}
                 @options={{this.assessmentMaintenanceTagOptions}}
                 @isDisabled={{not @edition}}
-                @texts={{multiselectTranslationList.maintenance}}
+                @texts={{multiselectTranslationList.assessmentMaintenance}}
               >
                 <:label>Évaluation</:label>
-                <:default as |option|>{{option.label}}</:default>
-              </PixMultiSelect>
+              </MultiSelect>
             </div>
             <div class="field" data-testid="translationSelect">
-              <PixMultiSelect
+              <MultiSelect
                 @isSearchable={{true}}
                 @onChange={{fn (mut @challenge.translationMaintenanceTags)}}
                 @values={{@challenge.translationMaintenanceTags}}
                 @options={{this.translationMaintenanceTagOptions}}
                 @isDisabled={{not @edition}}
-                @texts={{multiselectTranslationList.maintenance}}
+                @texts={{multiselectTranslationList.translationMaintenance}}
               >
                 <:label>Traduction</:label>
-                <:default as |option|>{{option.label}}</:default>
-              </PixMultiSelect>
+              </MultiSelect>
             </div>
           </div>
         </div>
@@ -544,7 +545,7 @@ export default class ChallengeForm extends Component {
         <label>Internationalisation</label>
         <div class="two fields">
           <div class="field">
-            <PixMultiSelect
+            <MultiSelect
               @onChange={{this.setLocales}}
               @values={{this.languages}}
               @options={{this.languageOptions}}
@@ -552,8 +553,7 @@ export default class ChallengeForm extends Component {
               @texts={{multiselectTranslationList.language}}
             >
               <:label>Langue(s)</:label>
-              <:default as |option|>{{option.label}}</:default>
-            </PixMultiSelect>
+            </MultiSelect>
           </div>
           <div class="field">
             <Select

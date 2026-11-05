@@ -1,4 +1,4 @@
-import { PixButton, PixInput, PixMultiSelect, PixTag, PixTextarea } from '@1024pix/nebulix-ember';
+import { PixButton, PixInput, PixTag, PixTextarea } from '@1024pix/nebulix-ember';
 import { A } from '@ember/array';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
@@ -6,6 +6,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import Card from 'pixeditor/components/card';
+import MultiSelect from 'pixeditor/components/field/multi-select';
 
 const STATES = {
   DEFAULT: 'default',
@@ -16,7 +17,7 @@ const STATES = {
 // TRADUCTIONS PIXMULTISELECT
 const multiselectTranslationList = {
   placeholder: 'Sélectionnez des tags',
-  emptyMessage: 'Pas de résultats',
+  searchLabel: 'Rechercher un tag',
 };
 
 export default class StaticCourseForm extends Component {
@@ -147,17 +148,16 @@ export default class StaticCourseForm extends Component {
           {{on "keyup" this.updateDescription}}
         ><:label>Description à usage interne</:label></PixTextarea>
         <div class="static-course-tag__area">
-          <PixMultiSelect
+          <MultiSelect
             @id="tags-selector"
             @values={{this.selectedTagIds}}
             @onChange={{this.onTagClicked}}
-            @isSearchable="true"
+            @isSearchable={{true}}
             @options={{this.tagOptions}}
             @texts={{multiselectTranslationList}}
           >
             <:label>Tags</:label>
-            <:default as |option|>{{option.label}}</:default>
-          </PixMultiSelect>
+          </MultiSelect>
           <div class="static-course-chips">
             {{#each this.selectedTags as |tag|}}
               <PixTag class="static-course-tag" @color="yellow">

@@ -76,7 +76,10 @@ module('Acceptance | Static Courses | List', function (hooks) {
     const screen = await visit('/');
     await clickByName('Tests statiques');
     await clickByText('Tous');
-    await fillByLabel('Tags', 'ta');
+    await click(screen.getByLabelText('Tags'));
+    await fillByLabel('Rechercher un tag', 'tagc');
+    assert.dom(screen.queryByLabelText('tagA')).doesNotExist();
+    assert.dom(screen.queryByLabelText('tagB')).doesNotExist();
     await click(await screen.findByLabelText('tagC'));
     // 2 clicks to go outside the dropdown and then to effectively click on the button
     await click(await screen.getByText('Filtres'));

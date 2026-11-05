@@ -1,7 +1,8 @@
-import { PixFilterBanner, PixMultiSelect, PixSearchInput, PixToggle } from '@1024pix/nebulix-ember';
+import { PixFilterBanner, PixSearchInput, PixToggle } from '@1024pix/nebulix-ember';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import MultiSelect from 'pixeditor/components/field/multi-select';
 import Select from 'pixeditor/components/field/select';
 
 // TRADUCTIONS PIXSELECT
@@ -11,10 +12,10 @@ const selectTranslationList = {
 
 // TRADUCTIONS PIXMULTISELECT
 const multiselectTranslationList = {
-  challenge: { placeholder: 'Filtrer par épreuve' },
-  skill: { placeholder: 'Filtrer par acquis' },
-  tutorial: { placeholder: 'Filtrer par tutoriel' },
-  framework: { placeholder: 'Filtrer par référentiel' },
+  challenge: { placeholder: 'Filtrer par épreuve', searchLabel: 'Rechercher une épreuve' },
+  skill: { placeholder: 'Filtrer par acquis', searchLabel: 'Rechercher un acquis' },
+  tutorial: { placeholder: 'Filtrer par tutoriel', searchLabel: 'Rechercher un tutoriel' },
+  framework: { placeholder: 'Filtrer par référentiel', searchLabel: 'Rechercher un référentiel' },
 };
 
 export default class BrokenUrlFilters extends Component {
@@ -128,7 +129,7 @@ export default class BrokenUrlFilters extends Component {
         <:label>{{selectTranslationList.placeholder}}</:label>
       </Select>
       {{#if @showTutorialsFilters}}
-        <PixMultiSelect
+        <MultiSelect
           @id="tutorials-filter"
           @options={{this.tutorialOptionList}}
           @values={{@tutorialFilterValues}}
@@ -138,9 +139,8 @@ export default class BrokenUrlFilters extends Component {
           @texts={{multiselectTranslationList.tutorial}}
         >
           <:label>Filtrer par tutoriel</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
-        <PixMultiSelect
+        </MultiSelect>
+        <MultiSelect
           @id="skill-filter"
           @options={{this.skillOptionList}}
           @values={{@skillFilterValues}}
@@ -150,24 +150,22 @@ export default class BrokenUrlFilters extends Component {
           @texts={{multiselectTranslationList.skill}}
         >
           <:label>Filtrer par acquis</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
+        </MultiSelect>
       {{/if}}
       {{#if @showChallengesFilters}}
-        <PixMultiSelect
+        <MultiSelect
           @id="localized-challenges-filter"
           @options={{this.localizedChallengeOptionList}}
           @values={{@localizedChallengeFilterValues}}
           @onChange={{this.triggerLocalizedChallengeFilter}}
           @screenReaderOnly={{true}}
           @isSearchable={{true}}
-          @texts={{multiselectTranslationList.skill}}
+          @texts={{multiselectTranslationList.challenge}}
         >
           <:label>Filtrer par épreuve</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
+        </MultiSelect>
       {{/if}}
-      <PixMultiSelect
+      <MultiSelect
         @id="frameworks-filter"
         @options={{this.frameworksOptionList}}
         @values={{@frameworkFilterValues}}
@@ -177,8 +175,7 @@ export default class BrokenUrlFilters extends Component {
         @texts={{multiselectTranslationList.framework}}
       >
         <:label>Filtrer par référentiel</:label>
-        <:default as |option|>{{option.label}}</:default>
-      </PixMultiSelect>
+      </MultiSelect>
       <PixToggle @checked={{@ignoredFilterValue}} {{on "change" this.triggerIgnoredFilter}}>
         Afficher les URL ignorées
       </PixToggle>

@@ -4,7 +4,6 @@ import {
   PixIcon,
   PixIconButton,
   PixInput,
-  PixMultiSelect,
   PixSegmentedControl,
   PixTag,
   PixTooltip,
@@ -13,12 +12,13 @@ import { fn } from '@ember/helper';
 import { on } from '@ember/modifier';
 import formatDate from 'ember-intl/helpers/format-date';
 import not from 'ember-truth-helpers/helpers/not';
+import MultiSelect from 'pixeditor/components/field/multi-select';
 import Pagination from 'pixeditor/components/list/pagination';
 
 // TRADUCTIONS PIXMULTISELECT
 const multiselectTranslationList = {
   placeholder: 'Sélectionnez des tags',
-  emptyMessage: 'Pas de résultats',
+  searchLabel: 'Rechercher un tag',
 };
 
 <template>
@@ -67,9 +67,9 @@ const multiselectTranslationList = {
           @value={{@controller.name}}
           {{on "keyup" @controller.updateName}}
         ><:label>Nom</:label></PixInput>
-        <PixMultiSelect
+        <MultiSelect
           @id="filter-tags-selector"
-          @isSearchable="true"
+          @isSearchable={{true}}
           @screenReaderOnly={{true}}
           @onChange={{@controller.selectTags}}
           @values={{@controller.tempTagIds}}
@@ -77,8 +77,7 @@ const multiselectTranslationList = {
           @texts={{multiselectTranslationList}}
         >
           <:label>Tags</:label>
-          <:default as |option|>{{option.label}}</:default>
-        </PixMultiSelect>
+        </MultiSelect>
         <PixSegmentedControl
           @toggled={{@controller.showActiveOnly}}
           @onChange={{@controller.toggleShowActiveOnly}}

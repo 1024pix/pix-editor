@@ -192,6 +192,24 @@ module('Integration | Component | broken-urls/filters', function (hooks) {
     assert.ok(onApplyFiltersClicked.calledOnceWith('tutorials', ['tutorialId1']));
   });
 
+  test('it should search among framework options', async function (assert) {
+    // given
+    const screen = await render(
+      <template>
+        <BrokenUrlFilters @brokenUrls={{brokenUrls}} @onApplyFiltersClicked={{onApplyFiltersClicked}} />
+      </template>,
+    );
+    await click(screen.getByLabelText('Filtrer par référentiel'));
+
+    // when
+    await fillByLabel('Rechercher un référentiel', 'autre');
+
+    // then
+    assert.dom(await screen.findByRole('checkbox', { name: 'AutreRef' })).exists();
+    assert.dom(screen.queryByRole('checkbox', { name: 'Pix' })).doesNotExist();
+    assert.dom(screen.queryByRole('checkbox', { name: 'PasPix' })).doesNotExist();
+  });
+
   test('it should enable display of ignored broken urls', async function (assert) {
     // given
     const screen = await render(
