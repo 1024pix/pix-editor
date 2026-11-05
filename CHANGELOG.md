@@ -1,5 +1,15 @@
 
 
+## v4.62.1 (05/11/2026)
+
+
+### :bug: Correction
+- [#1807](https://github.com/1024pix/pix-editor/pull/1807) [BUGFIX] Filtrage sur la page des URLs cassées et PixMultiSelect(PIX-24926).
+
+### :arrow_up: Montée de version
+- [#1809](https://github.com/1024pix/pix-editor/pull/1809) [BUMP] Update dependency phrase-js to v3.31.0 (api).
+- [#1808](https://github.com/1024pix/pix-editor/pull/1808) [BUMP] Update dependency @hapi/hapi to v21.4.12 (api).
+
 ## v4.62.0 (04/11/2026)
 
 
