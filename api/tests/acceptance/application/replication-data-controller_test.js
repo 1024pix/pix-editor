@@ -6,9 +6,15 @@ import { Attachment, Challenge, LocalizedChallenge, Mission } from '../../../lib
 import _ from 'lodash';
 import {
   AreaForReplication,
+  ChallengeForReplication,
+  CompetenceForReplication,
   FrameworkForReplication,
+  MissionForReplication,
   ModuleForReplication,
   SkillForReplication,
+  ThematicForReplication,
+  TranslationForReplication,
+  TubeForReplication,
 } from '../../../lib/domain/models/replication/index.js';
 
 describe('Acceptance | Controller | replication-data-controller', () => {
@@ -82,10 +88,12 @@ async function mockCurrentContent() {
   const expectedCurrentContent = { translations: [] };
   const expectedFramework = new FrameworkForReplication(domainBuilder.buildFramework({ name: 'Pix' }));
   expectedCurrentContent.frameworks = [{ ...expectedFramework }];
+  databaseBuilder.factory.buildFramework(expectedFramework);
 
   const area = domainBuilder.buildArea({ frameworkId: expectedFramework.id, competenceIds: ['recCompetence1'] });
   const expectedArea = new AreaForReplication({ name: area.name, ...area });
   expectedCurrentContent.areas = [{ ...expectedArea }];
+  databaseBuilder.factory.buildArea(expectedArea);
 
   const expectedCompetence = omit(
     [
@@ -108,7 +116,8 @@ async function mockCurrentContent() {
       origin: 'Pix',
     }),
   );
-  expectedCurrentContent.competences = [expectedCompetence];
+  expectedCurrentContent.competences = [new CompetenceForReplication(expectedCompetence)];
+  databaseBuilder.factory.buildCompetence(expectedCompetence);
 
   const expectedThematic = omit(
     [
@@ -126,7 +135,8 @@ async function mockCurrentContent() {
       tubeIds: ['recTube1'],
     }),
   );
-  expectedCurrentContent.thematics = [expectedThematic];
+  expectedCurrentContent.thematics = [new ThematicForReplication(expectedThematic)];
+  databaseBuilder.factory.buildThematic(expectedThematic);
 
   const expectedTube = omit(
     [
@@ -144,7 +154,12 @@ async function mockCurrentContent() {
       name: '@dvorak',
     }),
   );
-  expectedCurrentContent.tubes = [expectedTube];
+  expectedCurrentContent.tubes = [new TubeForReplication(expectedTube)];
+  databaseBuilder.factory.buildTube(expectedTube);
+
+  const tutorials = [domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto1', tagIds: [] }), domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto2', tagIds: [] })];
+  expectedCurrentContent.tutorials = tutorials;
+  tutorials.forEach(databaseBuilder.factory.buildTutorial);
 
   const baseSkill = domainBuilder.buildSkill({
     id: 'recSkill1',
@@ -159,6 +174,8 @@ async function mockCurrentContent() {
     obsoletedAt: '2024-01-08T18:08:00.000Z',
   });
   expectedCurrentContent.skills = [{ ...new SkillForReplication(baseSkill), pixValue: 4 }];
+  databaseBuilder.factory.buildSkill({ ...baseSkill, pixValue: 4 });
+
   const challenge = domainBuilder.buildChallenge({
     id: 'challenge-id',
     files: [{ fileId: 'attid1', localizedChallengeId: 'challenge-id' }, { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' }],
@@ -228,7 +245,7 @@ async function mockCurrentContent() {
     expectedChallenge,
     expectedChallengeNl,
     expectedAlternativeChallenge,
-  ];
+  ].map((challenge) => new ChallengeForReplication(challenge));
 
   const expectedAttachment = {
     id: 'attid1',
@@ -271,8 +288,6 @@ async function mockCurrentContent() {
     }),
   ];
 
-  expectedCurrentContent.tutorials = [domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto1', tagIds: [] }), domainBuilder.buildTutorialDatasourceObject({ id: 'recTuto2', tagIds: [] })];
-
   expectedCurrentContent.courses = [
     {
       id: 'recCourse1',
@@ -284,41 +299,10 @@ async function mockCurrentContent() {
     },
   ];
 
-  expectedCurrentContent.missions = [
-    {
-      id: 123456789,
-      name_i18n: { fr: 'validated mission PG name' },
-      competenceId: 'competenceId',
-      thematicIds: 'thematicIds',
-      learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
-      validatedObjectives_i18n: { fr: 'Rien' },
-      status: Mission.status.VALIDATED,
-      createdAt: new Date('2010-01-04').toISOString(),
-      introductionMediaUrl: null,
-      introductionMediaType: null,
-      introductionMediaAlt_i18n: { fr: 'Message alternatif' },
-      documentationUrl: 'http://url-example.net',
-      cardImageUrl: null,
-      content: {
-        dareChallenges: [],
-        steps: [],
-      },
-    },
-  ];
-
   const modules = [domainBuilder.buildModule({ shortId: 'moduleab', slug: 'ab' }), domainBuilder.buildModule({ shortId: 'modulecd', internalTitle: 'modulecd', slug: 'cd' })];
   expectedCurrentContent.modules = modules.map(({ details, ...module }) => new ModuleForReplication({ ...module, ...details }));
-
-  expectedCurrentContent.frameworks.forEach(databaseBuilder.factory.buildFramework);
-  expectedCurrentContent.areas.forEach(databaseBuilder.factory.buildArea);
-  expectedCurrentContent.competences.forEach(databaseBuilder.factory.buildCompetence);
-  expectedCurrentContent.thematics.forEach(databaseBuilder.factory.buildThematic);
-  expectedCurrentContent.tubes.forEach(databaseBuilder.factory.buildTube);
-  expectedCurrentContent.tutorials.forEach(databaseBuilder.factory.buildTutorial);
-  expectedCurrentContent.skills.forEach(databaseBuilder.factory.buildSkill);
   databaseBuilder.factory.buildChallenge(challenge);
   databaseBuilder.factory.buildChallenge(alternativeChallenge);
-
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse2',
     name: 'nameCourse2',
@@ -331,51 +315,29 @@ async function mockCurrentContent() {
     description: 'Description du Course',
     challengeIds: 'recChallenge0',
   });
-
-  const mission = databaseBuilder.factory.buildMission(
-    {
-      id: 123456789,
-      name: 'validated mission PG name',
-      competenceId: 'competenceId',
-      learningObjectives: 'Que tu sois le meilleur',
-      thematicIds: 'thematicIds',
-      validatedObjectives: 'Rien',
-      status: Mission.status.VALIDATED,
-      documentationUrl: 'http://url-example.net',
-    },
-    false,
-  );
-
   modules.forEach(databaseBuilder.factory.buildModule);
 
-  expectedCurrentContent.translations.push(
-    databaseBuilder.factory.buildTranslation({
-      key: `mission.${mission.id}.name`,
-      locale: 'fr',
-      value: 'validated mission PG name',
-    }),
-  );
-  expectedCurrentContent.translations.push(
-    databaseBuilder.factory.buildTranslation({
-      key: `mission.${mission.id}.learningObjectives`,
-      locale: 'fr',
-      value: 'Que tu sois le meilleur',
-    }),
-  );
-  expectedCurrentContent.translations.push(
-    databaseBuilder.factory.buildTranslation({
-      key: `mission.${mission.id}.validatedObjectives`,
-      locale: 'fr',
-      value: 'Rien',
-    }),
-  );
-  expectedCurrentContent.translations.push(
-    databaseBuilder.factory.buildTranslation({
-      key: `mission.${mission.id}.introductionMediaAlt`,
-      locale: 'fr',
-      value: 'Message alternatif',
-    }),
-  );
+  const mission = {
+    id: 123456789,
+    name_i18n: { fr: 'validated mission PG name' },
+    competenceId: 'competenceId',
+    thematicIds: 'thematicIds',
+    learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+    validatedObjectives_i18n: { fr: 'Rien' },
+    status: Mission.status.VALIDATED,
+    createdAt: new Date('2010-01-04').toISOString(),
+    introductionMediaUrl: null,
+    introductionMediaType: null,
+    introductionMediaAlt_i18n: { fr: 'Message alternatif' },
+    documentationUrl: 'http://url-example.net',
+    cardImageUrl: null,
+    content: {
+      dareChallenges: [],
+      steps: [],
+    },
+  };
+  databaseBuilder.factory.buildMission(mission, false);
+  expectedCurrentContent.missions = [new MissionForReplication(mission)];
 
   databaseBuilder.factory.buildLocalizedChallenge({
     id: challenge.id,
@@ -417,159 +379,137 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildAttachment(expectedAttachment);
   databaseBuilder.factory.buildAttachment(expectedAttachmentNl);
 
-  expectedCurrentContent.translations.push(
+  const translations = [
     databaseBuilder.factory.buildTranslation({
       key: `area.${expectedCurrentContent.areas[0].id}.title`,
       locale: 'fr',
       value: expectedCurrentContent.areas[0].title_i18n.fr,
     }),
-  );
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `area.${expectedCurrentContent.areas[0].id}.title`,
       locale: 'en',
       value: expectedCurrentContent.areas[0].title_i18n.en,
     }),
-  );
-
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `competence.${expectedCurrentContent.competences[0].id}.name`,
       locale: 'fr',
       value: expectedCurrentContent.competences[0].name_i18n.fr,
     }),
-  );
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `competence.${expectedCurrentContent.competences[0].id}.name`,
       locale: 'en',
       value: expectedCurrentContent.competences[0].name_i18n.en,
     }),
-  );
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `competence.${expectedCurrentContent.competences[0].id}.description`,
       locale: 'fr',
       value: expectedCurrentContent.competences[0].description_i18n.fr,
     }),
-  );
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `competence.${expectedCurrentContent.competences[0].id}.description`,
       locale: 'en',
       value: expectedCurrentContent.competences[0].description_i18n.en,
     }),
-  );
-
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
       locale: 'fr',
       value: expectedCurrentContent.thematics[0].name_i18n.fr,
     }),
-  );
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
       locale: 'en',
       value: expectedCurrentContent.thematics[0].name_i18n.en,
     }),
-  );
-
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `tube.${expectedCurrentContent.tubes[0].id}.practicalTitle`,
       locale: 'fr',
       value: expectedCurrentContent.tubes[0].practicalTitle_i18n.fr,
     }),
-  );
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `tube.${expectedCurrentContent.tubes[0].id}.practicalTitle`,
       locale: 'en',
       value: expectedCurrentContent.tubes[0].practicalTitle_i18n.en,
     }),
-  );
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `tube.${expectedCurrentContent.tubes[0].id}.practicalDescription`,
       locale: 'fr',
       value: expectedCurrentContent.tubes[0].practicalDescription_i18n.fr,
     }),
-  );
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `tube.${expectedCurrentContent.tubes[0].id}.practicalDescription`,
       locale: 'en',
       value: expectedCurrentContent.tubes[0].practicalDescription_i18n.en,
     }),
-  );
-
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
       locale: 'fr',
       value: expectedCurrentContent.skills[0].hint_i18n.fr,
     }),
-  );
-  expectedCurrentContent.translations.push(
     databaseBuilder.factory.buildTranslation({
       key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
       locale: 'en',
       value: expectedCurrentContent.skills[0].hint_i18n.en,
     }),
-  );
+    databaseBuilder.factory.buildTranslation({
+      key: `mission.${mission.id}.name`,
+      locale: 'fr',
+      value: 'validated mission PG name',
+    }),
+    databaseBuilder.factory.buildTranslation({
+      key: `mission.${mission.id}.learningObjectives`,
+      locale: 'fr',
+      value: 'Que tu sois le meilleur',
+    }),
+    databaseBuilder.factory.buildTranslation({
+      key: `mission.${mission.id}.validatedObjectives`,
+      locale: 'fr',
+      value: 'Rien',
+    }),
+    databaseBuilder.factory.buildTranslation({
+      key: `mission.${mission.id}.introductionMediaAlt`,
+      locale: 'fr',
+      value: 'Message alternatif',
+    }),
+  ];
 
   for (const challengeForTranslation of [expectedChallenge, expectedAlternativeChallenge]) {
-    expectedCurrentContent.translations.push(
-      databaseBuilder.factory.buildTranslation({
-        key: `challenge.${challengeForTranslation.id}.instruction`,
-        locale: 'fr',
-        value: challengeForTranslation.instruction,
-      }),
-    );
-    expectedCurrentContent.translations.push(
-      databaseBuilder.factory.buildTranslation({
-        key: `challenge.${challengeForTranslation.id}.alternativeInstruction`,
-        locale: 'fr',
-        value: challengeForTranslation.alternativeInstruction,
-      }),
-    );
-    expectedCurrentContent.translations.push(
-      databaseBuilder.factory.buildTranslation({
-        key: `challenge.${challengeForTranslation.id}.proposals`,
-        locale: 'fr',
-        value: challengeForTranslation.proposals,
-      }),
-    );
-    expectedCurrentContent.translations.push(
-      databaseBuilder.factory.buildTranslation({
-        key: `challenge.${challengeForTranslation.id}.solution`,
-        locale: 'fr',
-        value: challengeForTranslation.solution,
-      }),
-    );
-    expectedCurrentContent.translations.push(
-      databaseBuilder.factory.buildTranslation({
-        key: `challenge.${challengeForTranslation.id}.solutionToDisplay`,
-        locale: 'fr',
-        value: challengeForTranslation.solutionToDisplay,
-      }),
-    );
-    expectedCurrentContent.translations.push(
-      databaseBuilder.factory.buildTranslation({
-        key: `challenge.${challengeForTranslation.id}.embedTitle`,
-        locale: 'fr',
-        value: challengeForTranslation.embedTitle,
-      }),
-    );
+    translations.push(databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.instruction`,
+      locale: 'fr',
+      value: challengeForTranslation.instruction,
+    }));
+    translations.push(databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.alternativeInstruction`,
+      locale: 'fr',
+      value: challengeForTranslation.alternativeInstruction,
+    }));
+    translations.push(databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.proposals`,
+      locale: 'fr',
+      value: challengeForTranslation.proposals,
+    }));
+    translations.push(databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.solution`,
+      locale: 'fr',
+      value: challengeForTranslation.solution,
+    }));
+    translations.push(databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.solutionToDisplay`,
+      locale: 'fr',
+      value: challengeForTranslation.solutionToDisplay,
+    }));
+    translations.push(databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.embedTitle`,
+      locale: 'fr',
+      value: challengeForTranslation.embedTitle,
+    }));
   }
 
-  expectedCurrentContent.translations.forEach((translation) => {
+  translations.forEach((translation) => {
     translation.sourceEntityId = null;
   });
 
-  expectedCurrentContent.translations.push({
+  translations.push({
     ...databaseBuilder.factory.buildTranslation({
       key: `challenge.${challenge.id}.instruction`,
       locale: 'nl',
@@ -580,7 +520,7 @@ async function mockCurrentContent() {
     sourceEntityId: challenge.id,
   });
 
-  expectedCurrentContent.translations.push({
+  translations.push({
     ...databaseBuilder.factory.buildTranslation({
       key: `challenge.${expectedChallenge.id}.illustrationAlt`,
       locale: 'nl',
@@ -591,7 +531,7 @@ async function mockCurrentContent() {
     sourceEntityId: expectedChallenge.id,
   });
 
-  expectedCurrentContent.translations = expectedCurrentContent.translations.sort((trA, trB) => {
+  expectedCurrentContent.translations = translations.map((translation) => new TranslationForReplication(translation)).toSorted((trA, trB) => {
     const compareKey = trA.key.localeCompare(trB.key);
     if (compareKey === 0) {
       return trA.locale.localeCompare(trB.locale);
