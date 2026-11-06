@@ -27,7 +27,7 @@ export default defineConfig({
         test: {
           name: 'unit',
           include: ['tests/unit/**/*_test.js'],
-          sequence: { groupOrder: 2, concurrent: true },
+          sequence: { groupOrder: 2 },
         },
       },
     ],
