@@ -35,5 +35,8 @@ export class SkillForReplication {
     this.activatedAt = activatedAt;
     this.archivedAt = archivedAt;
     this.obsoletedAt = obsoletedAt;
+
+    // mappings for replication
+    this.hint = hint_i18n?.fr;
   }
 }

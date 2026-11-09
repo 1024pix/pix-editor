@@ -8,5 +8,10 @@ export class CompetenceForReplication {
     this.origin = origin;
     this.name_i18n = name_i18n;
     this.description_i18n = description_i18n;
+
+    // mappings for replication
+    this.name = name_i18n?.fr;
+    this.title = name_i18n?.fr;
+    this.code = index;
   }
 }
