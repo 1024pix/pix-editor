@@ -988,11 +988,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
   });
 
   describe('GET /challenges/:id/translations/:locale', () => {
-    it('should redirect to the phrase project', async () => {
-      // given
-      const challengeId = 'challenge123';
-      const locale = 'nl';
+    const challengeId = 'challenge123';
 
+    async function buildChallengeWithLocalizedChallenge(locale) {
       databaseBuilder.factory.buildFramework({ id: 'recFmk1', name: 'Pix' });
       databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
@@ -1010,7 +1008,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challenge123_nl',
+        id: `${challengeId}_${locale}`,
         challengeId,
         locale,
       });
@@ -1029,7 +1027,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
 
       await databaseBuilder.commit();
+    }
 
+    function mockPhraseApi(phraseLocales) {
       const phraseAccountsApiScope = nock('https://api.phrase.com')
         .get('/v2/accounts')
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
@@ -1044,26 +1044,21 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const phraseLocalesApiScope = nock('https://api.phrase.com')
         .get('/v2/projects/PHRASE_PROJECT_ID_AREA_1/locales')
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-        .reply(200, [
-          {
-            id: 'frLocaleId',
-            name: 'fr',
-            code: 'fr',
-            default: true,
-          },
-          {
-            id: 'enLocaleId',
-            name: 'en',
-            code: 'en',
-            default: false,
-          },
-          {
-            id: 'nlLocaleId',
-            name: 'nl',
-            code: 'nl',
-            default: false,
-          },
-        ]);
+        .reply(200, phraseLocales);
+
+      return { phraseAccountsApiScope, phraseLocalesApiScope };
+    }
+
+    it('should redirect to the phrase project', async () => {
+      // given
+      const locale = 'nl';
+      await buildChallengeWithLocalizedChallenge(locale);
+
+      const { phraseAccountsApiScope, phraseLocalesApiScope } = mockPhraseApi([
+        { id: 'frLocaleId', name: 'fr', code: 'fr', default: true },
+        { id: 'enLocaleId', name: 'en', code: 'en', default: false },
+        { id: 'nlLocaleId', name: 'nl', code: 'nl', default: false },
+      ]);
 
       const server = await createServer();
 
@@ -1077,6 +1072,56 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(response.statusCode).toBe(302);
       expect(response.headers.location).toBe(
         `https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/PHRASE_PROJECT_ID_AREA_1?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27nlLocaleId%27`,
+      );
+
+      expect(phraseAccountsApiScope.isDone()).toBe(true);
+      expect(phraseLocalesApiScope.isDone()).toBe(true);
+    });
+
+    it('should map Pix locale de-AT to Phrase locale de', async () => {
+      // given
+      const locale = 'de-AT';
+      await buildChallengeWithLocalizedChallenge(locale);
+
+      const { phraseAccountsApiScope, phraseLocalesApiScope } = mockPhraseApi([{ id: 'frLocaleId', name: 'fr', code: 'fr', default: true }, { id: 'deLocaleId', name: 'de', code: 'de', default: false }]);
+
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: `/api/challenges/${challengeId}/translations/${locale}`,
+      });
+
+      // then
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toBe(
+        `https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/PHRASE_PROJECT_ID_AREA_1?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27deLocaleId%27`,
+      );
+
+      expect(phraseAccountsApiScope.isDone()).toBe(true);
+      expect(phraseLocalesApiScope.isDone()).toBe(true);
+    });
+
+    it('should not filter on locales when the locale is not found in Phrase', async () => {
+      // given
+      const locale = 'it';
+      await buildChallengeWithLocalizedChallenge(locale);
+
+      const { phraseAccountsApiScope, phraseLocalesApiScope } = mockPhraseApi([{ id: 'frLocaleId', name: 'fr', code: 'fr', default: true }, { id: 'nlLocaleId', name: 'nl', code: 'nl', default: false }]);
+
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: `/api/challenges/${challengeId}/translations/${locale}`,
+      });
+
+      // then
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toBe(
+        `https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/PHRASE_PROJECT_ID_AREA_1?search=keyNameQuery%3Achallenge.${challengeId}`,
       );
 
       expect(phraseAccountsApiScope.isDone()).toBe(true);
