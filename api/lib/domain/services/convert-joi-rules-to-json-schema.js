@@ -175,11 +175,6 @@ function convertArray(joiArrayDescribedSchema, key = '') {
     jsonSchema.minItems = minRule.args.limit;
   }
 
-  const uniqueRule = findRule(rules, 'unique');
-  if (uniqueRule !== undefined) {
-    jsonSchema.uniqueItems = true;
-  }
-
   if (joiArrayDescribedSchema.items) {
     jsonSchema.items = {};
 

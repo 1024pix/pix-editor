@@ -264,12 +264,6 @@ describe('Unit | Domain | Service | convert-joi-rules-to-json-schema', function(
       expect(jsonSchema).to.deep.equal({ type: 'array', minItems: 3, options: null });
     });
 
-    it('should convert Joi.array.unique to JSON Schema with uniqueItems', function() {
-      const joiSchema = Joi.array().unique();
-      const jsonSchema = convertJoiToJsonSchema(joiSchema);
-      expect(jsonSchema).to.deep.equal({ type: 'array', uniqueItems: true, options: null });
-    });
-
     describe('items', function() {
       it('should convert Joi.array.items(string) to JSON Schema with items string', function() {
         const joiSchema = Joi.array().items(Joi.string());
