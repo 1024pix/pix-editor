@@ -837,6 +837,26 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
     });
 
     describe('when element references an untrusted URL', function() {
+      it('should reject an image url that is not hosted on assets.pix.org', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'image',
+          url: 'https://example.com/modules/placeholder-image.svg',
+          alt: '',
+          alternativeText: '',
+        };
+
+        // when
+        try {
+          await imageElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"url" doit être hébergé sur "assets.pix.org"');
+        }
+      });
+
       it('should reject an audio url that is not hosted on assets.pix.org', async function() {
         // given
         const sample = {
