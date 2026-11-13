@@ -1,7 +1,14 @@
 import { AccountsApi, Configuration, LocalesApi } from 'phrase-js';
 import * as config from '../../config.js';
+import { LOCALE } from '../constants.js';
 import { logger } from '../../infrastructure/logger.js';
 import { areaRepository, translationsConfigRepository } from '../../infrastructure/repositories/index.js';
+
+const PIX_TO_PHRASE_LOCALE_CODE = Object.freeze({ [LOCALE.GERMAN_AUSTRIA]: LOCALE.GERMAN_SPOKEN });
+
+export function toPhraseLocaleCode(locale) {
+  return PIX_TO_PHRASE_LOCALE_CODE[locale] ?? locale;
+}
 
 export async function getPhraseTranslationsURL(
   { challengeId, locale },
@@ -24,11 +31,16 @@ export async function getPhraseTranslationsURL(
     const locales = await new phrase.LocalesApi(configuration).localesList({ projectId: phraseProjectId });
 
     const defaultLocaleId = locales.find(({ _default }) => _default)?.id;
-    const targetLocaleId = locales.find(({ code }) => code === locale)?.id;
+    const phraseLocaleCode = toPhraseLocaleCode(locale);
+    const targetLocaleId = locales.find(({ code }) => code === phraseLocaleCode)?.id;
 
     const url = new URL(phraseProjectId, `https://app.phrase.com/editor/v4/accounts/${accountId}/projects/`);
     url.searchParams.set('search', `keyNameQuery:challenge.${challengeId}`);
-    url.searchParams.set('locales', `'${defaultLocaleId}','${targetLocaleId}'`);
+    if (targetLocaleId) {
+      url.searchParams.set('locales', `'${defaultLocaleId}','${targetLocaleId}'`);
+    } else {
+      logger.warn({ locale, phraseLocaleCode, phraseProjectId }, 'Phrase locale not found, link will not be filtered on locale');
+    }
 
     return url.href;
   } catch (e) {
