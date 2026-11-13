@@ -721,8 +721,8 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
           type: 'video',
           title: '<h1>Une vidéo</h1>',
-          url: 'https://videos.pix.fr/modulix/placeholder-video.mp4',
-          subtitles: 'https://videos.pix.fr/modulix/placeholder-video.vtt',
+          url: 'https://assets.pix.org/modulix/placeholder-video.mp4',
+          subtitles: 'https://assets.pix.org/modulix/placeholder-video.vtt',
           transcription: '<p>Vidéo manquante</p>',
         };
 
@@ -854,6 +854,29 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         } catch (joiError) {
           // then
           expect(joiError.message).to.equal('"url" doit être hébergé sur "assets.pix.org"');
+        }
+      });
+
+      it('should reject a video url or subtitles that are not hosted on assets.pix.org', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'video',
+          title: 'Une vidéo',
+          url: 'https://example.com/modules/placeholder-video.mp4',
+          subtitles: 'https://example.com/modules/placeholder-video.vtt',
+          transcription: '<p>Vidéo manquante</p>',
+        };
+
+        // when
+        try {
+          await videoElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal(
+            '"url" doit être hébergé sur "assets.pix.org". "subtitles" doit être hébergé sur "assets.pix.org"',
+          );
         }
       });
 
