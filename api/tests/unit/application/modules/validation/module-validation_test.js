@@ -701,7 +701,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
           type: 'audio',
           title: '<h1>Un audio</h1>',
-          url: 'https://assets.pix.fr/modulix/placeholder-audio.mp3',
+          url: 'https://assets.pix.org/modulix/placeholder-audio.mp3',
           transcription: '<p>Audio manquante</p>',
         };
 
@@ -832,6 +832,28 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         } catch (joiError) {
           const message = joiError.details[0].context.value.results[0].messages[0].message;
           expect(message).to.deep.equal('Use external stylesheet with <link> instead of <style> tag');
+        }
+      });
+    });
+
+    describe('when element references an untrusted URL', function() {
+      it('should reject an audio url that is not hosted on assets.pix.org', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'audio',
+          title: 'Un audio',
+          url: 'https://example.com/modules/placeholder-audio.mp3',
+          transcription: '<p>Audio manquant</p>',
+        };
+
+        // when
+        try {
+          await audioElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"url" doit être hébergé sur "assets.pix.org"');
         }
       });
     });
