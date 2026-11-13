@@ -742,7 +742,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
           type: 'short-video',
           title: '<h1>Une vidéo</h1>',
-          url: 'https://videos.pix.fr/modulix/placeholder-video.mp4',
+          url: 'https://assets.pix.org/modulix/placeholder-video.mp4',
           transcription: 'Je clique sur le bouton droit de la souris.',
         };
 
@@ -850,6 +850,26 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         // when
         try {
           await imageElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"url" doit être hébergé sur "assets.pix.org"');
+        }
+      });
+
+      it('should reject a short video url that is not hosted on assets.pix.org', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'short-video',
+          title: 'Une vidéo courte',
+          url: 'https://example.com/modules/placeholder-video.mp4',
+          transcription: 'Je clique sur le bouton droit de la souris.',
+        };
+
+        // when
+        try {
+          await shortVideoElementSchema.validateAsync(sample, { abortEarly: false });
           throw new Error('Joi validation should have thrown');
         } catch (joiError) {
           // then
