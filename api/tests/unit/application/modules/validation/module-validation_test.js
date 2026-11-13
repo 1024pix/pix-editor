@@ -1008,6 +1008,33 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
       });
     });
 
+    describe('when a QCU discovery solution does not match any proposal', function() {
+      it('should reject the element', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcu-discovery',
+          instruction: '<p>Une question découverte ?</p>',
+          proposals: [
+            { id: '1', content: 'Proposition 1', feedback: { diagnosis: '<p>1</p>' } },
+            { id: '2', content: 'Proposition 2', feedback: { diagnosis: '<p>2</p>' } },
+            { id: '3', content: 'Proposition 3', feedback: { diagnosis: '<p>3</p>' } },
+          ],
+          solution: '4',
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcuDiscoveryElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"value" : La solution doit correspondre à une proposition existante');
+        }
+      });
+    });
+
     describe('When module contains not allowed HTML', function() {
       it('should throw htmlNotAllowedSchema custom error for title field', async function() {
         // given
