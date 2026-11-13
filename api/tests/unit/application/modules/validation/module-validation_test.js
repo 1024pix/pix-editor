@@ -102,7 +102,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           id: randomUUID(),
           type: 'custom-draft',
           title: 'Echange de mails',
-          url: 'https://1024pix.github.io/pixmail-alert_avast_b.html',
+          url: 'https://1024pix.github.io/atelier-contenus/pixmail-alert_avast_b.html',
           instruction: '<p>Vous participez à un échange de mail.</p>',
           height: 400,
         };
@@ -837,6 +837,29 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
     });
 
     describe('when element references an untrusted URL', function() {
+      it('should reject a custom-draft url that does not start with an allowed prefix', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'custom-draft',
+          title: 'Echange de mails',
+          url: 'https://1024pix.github.io/pixmail-alert_avast_b.html',
+          instruction: '<p>Vous participez à un échange de mail.</p>',
+          height: 400,
+        };
+
+        // when
+        try {
+          await customDraftElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal(
+            '"url" doit commencer par l\'une des valeurs suivantes : https://1024pix.github.io/atelier-contenus, https://1024pix.github.io/pix-epreuves-externes',
+          );
+        }
+      });
+
       it('should reject an image url that is not hosted on assets.pix.org', async function() {
         // given
         const sample = {
