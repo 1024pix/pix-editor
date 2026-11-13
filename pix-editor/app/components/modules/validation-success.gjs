@@ -12,13 +12,16 @@ export default class ModuleValidationSuccess extends Component {
   }
 
   <template>
-    <PixNotificationAlert @type="success" @withIcon={{true}} class="module-validation-success">
-      <span class="module-validation-success__information">
-        <span class="module-validation-success-information--bold">{{t
-            "modules.components.validation-success.title"
-          }}</span>
-        {{t "modules.components.validation-success.subtitle"}}
-      </span>
+    <PixNotificationAlert @type="success" class="module-validation-success">
+      <div class="modules-list__title">
+        <img src="/assets/images/modulix/red-panda-ok.png" alt="" class="modules-list__red-panda" />
+        <span class="module-validation-success__information">
+          <span class="module-validation-success-information--bold">{{t
+              "modules.components.validation-success.title"
+            }}</span>
+          {{t "modules.components.validation-success.subtitle"}}
+        </span>
+      </div>
       {{#if this.mayDisplayPublishButton}}
         <PublishModuleButton @draftModule={{@draftModule}} />
       {{/if}}

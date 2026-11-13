@@ -42,7 +42,7 @@ export default class ModuleValidationErrors extends Component {
     <details class="module-validation-errors" {{on "toggle" this.handleToggle}}>
       <summary class="module-validation-errors__summary" aria-expanded={{if this.isOpen "true" "false"}}>
         <span class="module-validation-errors-summary__title-container">
-          <PixIcon @ariaHidden={{true}} @name="error" @plainIcon={{true}} />
+          <img src="/assets/images/modulix/red-panda-oups.png" alt="" class="modules-list__red-panda" />
           <span class="module-validation-errors-summary__title">
             <span>{{t "modules.components.validation-errors.title" count=this.totalErrorsCount}}</span>
             {{#if @isEditPage}}
