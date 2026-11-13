@@ -23,6 +23,7 @@ function _getQcuSchemaWithProposalContentSchema(proposalContentSchema) {
         content: proposalContentSchema.required(),
         feedback: feedbackSchema.required(),
       })
+      .min(1)
       .required(),
     solution: proposalIdSchema.required(),
   }).custom((value, helpers) => {

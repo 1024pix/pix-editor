@@ -11,6 +11,7 @@ import { imageElementSchema } from '../../../../../lib/application/modules/valid
 import { qabElementSchema } from '../../../../../lib/application/modules/validation/element/qab-schema.js';
 import { qcmDeclarativeElementSchema } from '../../../../../lib/application/modules/validation/element/qcm-declarative-schema.js';
 import { qcmElementSchema } from '../../../../../lib/application/modules/validation/element/qcm-schema.js';
+import { qcuDeclarativeElementSchema } from '../../../../../lib/application/modules/validation/element/qcu-declarative-schema.js';
 import { qcuDiscoveryElementSchema } from '../../../../../lib/application/modules/validation/element/qcu-discovery-schema.js';
 import { qcuElementSchema } from '../../../../../lib/application/modules/validation/element/qcu-schema.js';
 import {
@@ -1031,6 +1032,128 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         } catch (joiError) {
           // then
           expect(joiError.message).to.equal('"value" : La solution doit correspondre à une proposition existante');
+        }
+      });
+    });
+
+    describe('when an element proposals or files list is empty', function() {
+      it('should reject a download element with an empty files list', async function() {
+        // given
+        const sample = { id: randomUUID(), type: 'download', files: [] };
+
+        // when
+        try {
+          await downloadElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"files" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QCU element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcu',
+          instruction: '<p>Une question à choix unique ?</p>',
+          proposals: [],
+          solution: '1',
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcuElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QCU declarative element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcu-declarative',
+          instruction: '<p>Une question à choix unique ?</p>',
+          proposals: [],
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcuDeclarativeElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QCU discovery element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcu-discovery',
+          instruction: '<p>Une question découverte ?</p>',
+          proposals: [],
+          solution: '1',
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcuDiscoveryElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QCM declarative element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcm-declarative',
+          instruction: '<p>Une question à choix multiples ?</p>',
+          proposals: [],
+          feedback: { diagnosis: '<p>Un exemple de diagnostic...</p>' },
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcmDeclarativeElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QROCM element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qrocm',
+          instruction: '<p>Un QROCM ?</p>',
+          proposals: [],
+          feedbacks: {
+            valid: { state: 'Correct !', diagnosis: '<p>Un exemple de diagnostic...</p>' },
+            invalid: { state: 'Incorrect !', diagnosis: '<p>Un exemple de diagnostic...</p>' },
+          },
+        };
+
+        // when
+        try {
+          await qrocmElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
         }
       });
     });

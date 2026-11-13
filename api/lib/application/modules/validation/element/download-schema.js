@@ -10,6 +10,7 @@ const downloadElementSchema = Joi.object({
       url: Joi.string().uri({ scheme: 'https' }).required(),
       format: Joi.string().required(),
     })
+    .min(1)
     .required(),
 }).required();
 

@@ -21,6 +21,7 @@ function _getQcuDiscoverySchemaWithProposalContentSchema(proposalContentSchema) 
         content: proposalContentSchema.required(),
         feedback: feedbackNeutralSchema.required(),
       })
+      .min(1)
       .required(),
     solution: proposalIdSchema.required(),
   }).custom((value, helpers) => {
