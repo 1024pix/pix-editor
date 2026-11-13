@@ -48,4 +48,24 @@ function withAssetsHostname(schema) {
   });
 }
 
-export { htmlNotAllowedSchema, htmlSchema, proposalIdSchema, uuidSchema, withAssetsHostname };
+const CUSTOM_DRAFT_URL_PREFIXES = ['https://1024pix.github.io/atelier-contenus', 'https://1024pix.github.io/pix-epreuves-externes'];
+
+function withCustomDraftUrlPrefix(schema) {
+  return schema.custom((value, helpers) => {
+    if (!CUSTOM_DRAFT_URL_PREFIXES.some((prefix) => value.startsWith(prefix))) {
+      return helpers.message(
+        `{{#label}} doit commencer par l'une des valeurs suivantes : ${CUSTOM_DRAFT_URL_PREFIXES.join(', ')}`,
+      );
+    }
+    return value;
+  });
+}
+
+export {
+  htmlNotAllowedSchema,
+  htmlSchema,
+  proposalIdSchema,
+  uuidSchema,
+  withAssetsHostname,
+  withCustomDraftUrlPrefix,
+};

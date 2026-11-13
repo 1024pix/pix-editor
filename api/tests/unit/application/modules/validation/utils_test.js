@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { describe, expect, it } from 'vitest';
 
-import { withAssetsHostname } from '../../../../../lib/application/modules/validation/utils.js';
+import { withAssetsHostname, withCustomDraftUrlPrefix } from '../../../../../lib/application/modules/validation/utils.js';
 
 describe('Unit | Application | Modules | Validation | utils', function() {
   describe('#withAssetsHostname', function() {
@@ -39,6 +39,35 @@ describe('Unit | Application | Modules | Validation | utils', function() {
 
       // then
       expect(value).to.equal('');
+    });
+  });
+
+  describe('#withCustomDraftUrlPrefix', function() {
+    it('accepts a URL starting with an allowed prefix', async function() {
+      // given
+      const schema = withCustomDraftUrlPrefix(Joi.string().uri());
+
+      // when
+      const value = await schema.validateAsync('https://1024pix.github.io/atelier-contenus/placeholder.html');
+
+      // then
+      expect(value).to.equal('https://1024pix.github.io/atelier-contenus/placeholder.html');
+    });
+
+    it('rejects a URL that does not start with any allowed prefix', async function() {
+      // given
+      const schema = withCustomDraftUrlPrefix(Joi.string().uri());
+
+      // when
+      try {
+        await schema.validateAsync('https://1024pix.github.io/placeholder.html');
+        throw new Error('Joi validation should have thrown');
+      } catch (joiError) {
+        // then
+        expect(joiError.message).to.equal(
+          '"value" doit commencer par l\'une des valeurs suivantes : https://1024pix.github.io/atelier-contenus, https://1024pix.github.io/pix-epreuves-externes',
+        );
+      }
     });
   });
 });
