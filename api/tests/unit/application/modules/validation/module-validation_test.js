@@ -944,6 +944,43 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
       });
     });
 
+    describe('when a QCM solution does not match any proposal', function() {
+      it('should reject the element', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcm',
+          instruction: '<p>Une question à choix multiples ?</p>',
+          proposals: [
+            { id: '1', content: 'Proposition 1' },
+            { id: '2', content: 'Proposition 2' },
+            { id: '3', content: 'Proposition 3' },
+          ],
+          feedbacks: {
+            valid: {
+              state: 'Correct !',
+              diagnosis: '<p>Un exemple de diagnostic...</p>',
+            },
+            invalid: {
+              state: 'Incorrect !',
+              diagnosis: '<p>Un exemple de diagnostic...</p>',
+            },
+          },
+          solutions: ['1', '4'],
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcmElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"value" : Chaque solution doit correspondre à une proposition existante');
+        }
+      });
+    });
+
     describe('When module contains not allowed HTML', function() {
       it('should throw htmlNotAllowedSchema custom error for title field', async function() {
         // given

@@ -29,5 +29,14 @@ function _getQcmElementSchemaWithProposalContentSchema(proposalContentSchema) {
       invalid: feedbackSchema,
     }).required(),
     solutions: Joi.array().items(proposalIdSchema).min(2).required(),
-  }).required();
+  })
+    .required()
+    .custom((value, helpers) => {
+      const proposalIds = value.proposals.map((proposal) => proposal.id);
+      const everySolutionMatchesAProposal = value.solutions.every((solution) => proposalIds.includes(solution));
+      if (!everySolutionMatchesAProposal) {
+        return helpers.message('{{#label}} : Chaque solution doit correspondre à une proposition existante');
+      }
+      return value;
+    });
 }
