@@ -1,5 +1,38 @@
 
 
+## v4.63.0 (13/11/2026)
+
+
+### :building_construction: Tech
+- [#1797](https://github.com/1024pix/pix-editor/pull/1797) [TECH] Déplace les adaptations de la replication dans LCMS.
+
+### :bug: Correction
+- [#1834](https://github.com/1024pix/pix-editor/pull/1834) [BUGFIX] Mapper la locale de-AT vers de pour les traductions via Phrase (PIX-25088).
+- [#1835](https://github.com/1024pix/pix-editor/pull/1835) [BUGFIX] Corriger QROCM valide qui disparaît dans Modulix Editor (PIX-25109).
+
+### :arrow_up: Montée de version
+- [#1833](https://github.com/1024pix/pix-editor/pull/1833) [BUMP] Update dependency @1024pix/stylelint-config to v5.2.29 (pix-editor).
+- [#1831](https://github.com/1024pix/pix-editor/pull/1831) [BUMP] Update dependency vitest to v5.1.0 (challenge-parser).
+- [#1829](https://github.com/1024pix/pix-editor/pull/1829) [BUMP] Update dependency shiki to v4.6.0 (api).
+- [#1830](https://github.com/1024pix/pix-editor/pull/1830) [BUMP] Update dependency vitest to v5.1.0 (api).
+- [#1828](https://github.com/1024pix/pix-editor/pull/1828) [BUMP] Update dependency @ember/test-helpers to v5.8.0 (pix-editor).
+- [#1827](https://github.com/1024pix/pix-editor/pull/1827) [BUMP] Update dependency html-validate to v11.18.0 (api).
+- [#1825](https://github.com/1024pix/pix-editor/pull/1825) [BUMP] Update dependency @1024pix/eslint-plugin to v3.0.22 (pix-editor).
+- [#1826](https://github.com/1024pix/pix-editor/pull/1826) [BUMP] Update dependency globals to v17.14.0 (pix-editor).
+- [#1822](https://github.com/1024pix/pix-editor/pull/1822) [BUMP] Update dependency eslint to v10.14.0 (pix-editor).
+- [#1823](https://github.com/1024pix/pix-editor/pull/1823) [BUMP] Update dependency globals to v17.14.0 (api).
+- [#1819](https://github.com/1024pix/pix-editor/pull/1819) [BUMP] Update dependency @googleapis/sheets to v18.1.2 (api).
+- [#1820](https://github.com/1024pix/pix-editor/pull/1820) [BUMP] Update dependency sass-embedded to v1.107.1 (pix-editor).
+- [#1821](https://github.com/1024pix/pix-editor/pull/1821) [BUMP] Update dependency eslint to v10.14.0 (api).
+- [#1796](https://github.com/1024pix/pix-editor/pull/1796) [BUMP] Update dependency vitest to v5 (api).
+- [#1816](https://github.com/1024pix/pix-editor/pull/1816) [BUMP] Update dependency sass-embedded to v1.107.0 (pix-editor).
+- [#1815](https://github.com/1024pix/pix-editor/pull/1815) [BUMP] Update dependency qs to v6.17.1 (api).
+- [#1814](https://github.com/1024pix/pix-editor/pull/1814) [BUMP] Update ember-intl (pix-editor).
+- [#1813](https://github.com/1024pix/pix-editor/pull/1813) [BUMP] Update dependency eslint-plugin-ember to v13.9.1 (pix-editor).
+- [#1812](https://github.com/1024pix/pix-editor/pull/1812) [BUMP] Update dependency @1024pix/stylelint-config to v5.2.28 (pix-editor).
+- [#1810](https://github.com/1024pix/pix-editor/pull/1810) [BUMP] Update github-actions (workflows).
+- [#1811](https://github.com/1024pix/pix-editor/pull/1811) [BUMP] Update dependency @1024pix/oppsy to v1.1.6 (api).
+
 ## v4.62.1 (05/11/2026)
 
 
