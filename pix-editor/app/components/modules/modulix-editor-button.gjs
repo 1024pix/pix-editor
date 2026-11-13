@@ -17,7 +17,7 @@ export default class ModulixEditorButton extends Component {
   addModuleContentListener() {
     window.addEventListener('message', (event) => {
       if (event.data?.from === 'modulix-editor' && event.data?.message === 'ready') {
-        const moduleContent = this.args.moduleContent;
+        const moduleContent = this.args.moduleContent ? this.args.moduleContent : {};
         if (moduleContent) {
           this.previewWindow?.postMessage({ from: 'pix-editor', moduleContent }, '*');
         }
