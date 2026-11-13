@@ -22,6 +22,7 @@ function _getQcmDeclarativeSchemaWithProposalContentSchema(proposalContentSchema
         id: proposalIdSchema.required(),
         content: proposalContentSchema.required(),
       })
+      .min(1)
       .required(),
     feedback: feedbackNeutralSchema.required(),
   });

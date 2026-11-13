@@ -21,8 +21,15 @@ function _getQcuDiscoverySchemaWithProposalContentSchema(proposalContentSchema) 
         content: proposalContentSchema.required(),
         feedback: feedbackNeutralSchema.required(),
       })
+      .min(1)
       .required(),
     solution: proposalIdSchema.required(),
+  }).custom((value, helpers) => {
+    const proposalIds = value.proposals.map((proposal) => proposal.id);
+    if (!proposalIds.includes(value.solution)) {
+      return helpers.message('{{#label}} : La solution doit correspondre à une proposition existante');
+    }
+    return value;
   });
 }
 export { qcuDiscoveryElementSchema };

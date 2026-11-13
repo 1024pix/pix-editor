@@ -11,6 +11,7 @@ import { imageElementSchema } from '../../../../../lib/application/modules/valid
 import { qabElementSchema } from '../../../../../lib/application/modules/validation/element/qab-schema.js';
 import { qcmDeclarativeElementSchema } from '../../../../../lib/application/modules/validation/element/qcm-declarative-schema.js';
 import { qcmElementSchema } from '../../../../../lib/application/modules/validation/element/qcm-schema.js';
+import { qcuDeclarativeElementSchema } from '../../../../../lib/application/modules/validation/element/qcu-declarative-schema.js';
 import { qcuDiscoveryElementSchema } from '../../../../../lib/application/modules/validation/element/qcu-discovery-schema.js';
 import { qcuElementSchema } from '../../../../../lib/application/modules/validation/element/qcu-schema.js';
 import {
@@ -102,7 +103,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           id: randomUUID(),
           type: 'custom-draft',
           title: 'Echange de mails',
-          url: 'https://1024pix.github.io/pixmail-alert_avast_b.html',
+          url: 'https://1024pix.github.io/atelier-contenus/pixmail-alert_avast_b.html',
           instruction: '<p>Vous participez à un échange de mail.</p>',
           height: 400,
         };
@@ -701,7 +702,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
           type: 'audio',
           title: '<h1>Un audio</h1>',
-          url: 'https://assets.pix.fr/modulix/placeholder-audio.mp3',
+          url: 'https://assets.pix.org/modulix/placeholder-audio.mp3',
           transcription: '<p>Audio manquante</p>',
         };
 
@@ -721,8 +722,8 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
           type: 'video',
           title: '<h1>Une vidéo</h1>',
-          url: 'https://videos.pix.fr/modulix/placeholder-video.mp4',
-          subtitles: 'https://videos.pix.fr/modulix/placeholder-video.vtt',
+          url: 'https://assets.pix.org/modulix/placeholder-video.mp4',
+          subtitles: 'https://assets.pix.org/modulix/placeholder-video.vtt',
           transcription: '<p>Vidéo manquante</p>',
         };
 
@@ -742,7 +743,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           id: '73ac3644-7637-4cee-86d4-1a75f53f0b9c',
           type: 'short-video',
           title: '<h1>Une vidéo</h1>',
-          url: 'https://videos.pix.fr/modulix/placeholder-video.mp4',
+          url: 'https://assets.pix.org/modulix/placeholder-video.mp4',
           transcription: 'Je clique sur le bouton droit de la souris.',
         };
 
@@ -832,6 +833,327 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
         } catch (joiError) {
           const message = joiError.details[0].context.value.results[0].messages[0].message;
           expect(message).to.deep.equal('Use external stylesheet with <link> instead of <style> tag');
+        }
+      });
+    });
+
+    describe('when element references an untrusted URL', function() {
+      it('should reject a custom-draft url that does not start with an allowed prefix', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'custom-draft',
+          title: 'Echange de mails',
+          url: 'https://1024pix.github.io/pixmail-alert_avast_b.html',
+          instruction: '<p>Vous participez à un échange de mail.</p>',
+          height: 400,
+        };
+
+        // when
+        try {
+          await customDraftElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal(
+            '"url" doit commencer par l\'une des valeurs suivantes : https://1024pix.github.io/atelier-contenus, https://1024pix.github.io/pix-epreuves-externes',
+          );
+        }
+      });
+
+      it('should reject an image url that is not hosted on assets.pix.org', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'image',
+          url: 'https://example.com/modules/placeholder-image.svg',
+          alt: '',
+          alternativeText: '',
+        };
+
+        // when
+        try {
+          await imageElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"url" doit être hébergé sur "assets.pix.org"');
+        }
+      });
+
+      it('should reject a video url or subtitles that are not hosted on assets.pix.org', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'video',
+          title: 'Une vidéo',
+          url: 'https://example.com/modules/placeholder-video.mp4',
+          subtitles: 'https://example.com/modules/placeholder-video.vtt',
+          transcription: '<p>Vidéo manquante</p>',
+        };
+
+        // when
+        try {
+          await videoElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal(
+            '"url" doit être hébergé sur "assets.pix.org". "subtitles" doit être hébergé sur "assets.pix.org"',
+          );
+        }
+      });
+
+      it('should reject a short video url that is not hosted on assets.pix.org', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'short-video',
+          title: 'Une vidéo courte',
+          url: 'https://example.com/modules/placeholder-video.mp4',
+          transcription: 'Je clique sur le bouton droit de la souris.',
+        };
+
+        // when
+        try {
+          await shortVideoElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"url" doit être hébergé sur "assets.pix.org"');
+        }
+      });
+
+      it('should reject an audio url that is not hosted on assets.pix.org', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'audio',
+          title: 'Un audio',
+          url: 'https://example.com/modules/placeholder-audio.mp3',
+          transcription: '<p>Audio manquant</p>',
+        };
+
+        // when
+        try {
+          await audioElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"url" doit être hébergé sur "assets.pix.org"');
+        }
+      });
+    });
+
+    describe('when a QCM solution does not match any proposal', function() {
+      it('should reject the element', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcm',
+          instruction: '<p>Une question à choix multiples ?</p>',
+          proposals: [
+            { id: '1', content: 'Proposition 1' },
+            { id: '2', content: 'Proposition 2' },
+            { id: '3', content: 'Proposition 3' },
+          ],
+          feedbacks: {
+            valid: {
+              state: 'Correct !',
+              diagnosis: '<p>Un exemple de diagnostic...</p>',
+            },
+            invalid: {
+              state: 'Incorrect !',
+              diagnosis: '<p>Un exemple de diagnostic...</p>',
+            },
+          },
+          solutions: ['1', '4'],
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcmElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"value" : Chaque solution doit correspondre à une proposition existante');
+        }
+      });
+    });
+
+    describe('when a QCU solution does not match any proposal', function() {
+      it('should reject the element', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcu',
+          instruction: '<p>Une question à choix unique ?</p>',
+          proposals: [
+            { id: '1', content: 'Proposition 1', feedback: { state: 'Correct !', diagnosis: '<p>1</p>' } },
+            { id: '2', content: 'Proposition 2', feedback: { state: 'Incorrect !', diagnosis: '<p>2</p>' } },
+            { id: '3', content: 'Proposition 3', feedback: { state: 'Incorrect !', diagnosis: '<p>3</p>' } },
+          ],
+          solution: '4',
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcuElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"value" : La solution doit correspondre à une proposition existante');
+        }
+      });
+    });
+
+    describe('when a QCU discovery solution does not match any proposal', function() {
+      it('should reject the element', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcu-discovery',
+          instruction: '<p>Une question découverte ?</p>',
+          proposals: [
+            { id: '1', content: 'Proposition 1', feedback: { diagnosis: '<p>1</p>' } },
+            { id: '2', content: 'Proposition 2', feedback: { diagnosis: '<p>2</p>' } },
+            { id: '3', content: 'Proposition 3', feedback: { diagnosis: '<p>3</p>' } },
+          ],
+          solution: '4',
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcuDiscoveryElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"value" : La solution doit correspondre à une proposition existante');
+        }
+      });
+    });
+
+    describe('when an element proposals or files list is empty', function() {
+      it('should reject a download element with an empty files list', async function() {
+        // given
+        const sample = { id: randomUUID(), type: 'download', files: [] };
+
+        // when
+        try {
+          await downloadElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"files" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QCU element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcu',
+          instruction: '<p>Une question à choix unique ?</p>',
+          proposals: [],
+          solution: '1',
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcuElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QCU declarative element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcu-declarative',
+          instruction: '<p>Une question à choix unique ?</p>',
+          proposals: [],
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcuDeclarativeElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QCU discovery element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcu-discovery',
+          instruction: '<p>Une question découverte ?</p>',
+          proposals: [],
+          solution: '1',
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcuDiscoveryElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QCM declarative element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qcm-declarative',
+          instruction: '<p>Une question à choix multiples ?</p>',
+          proposals: [],
+          feedback: { diagnosis: '<p>Un exemple de diagnostic...</p>' },
+          hasShortProposals: false,
+        };
+
+        // when
+        try {
+          await qcmDeclarativeElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
+        }
+      });
+
+      it('should reject a QROCM element with an empty proposals list', async function() {
+        // given
+        const sample = {
+          id: randomUUID(),
+          type: 'qrocm',
+          instruction: '<p>Un QROCM ?</p>',
+          proposals: [],
+          feedbacks: {
+            valid: { state: 'Correct !', diagnosis: '<p>Un exemple de diagnostic...</p>' },
+            invalid: { state: 'Incorrect !', diagnosis: '<p>Un exemple de diagnostic...</p>' },
+          },
+        };
+
+        // when
+        try {
+          await qrocmElementSchema.validateAsync(sample, { abortEarly: false });
+          throw new Error('Joi validation should have thrown');
+        } catch (joiError) {
+          // then
+          expect(joiError.message).to.equal('"proposals" must contain at least 1 items');
         }
       });
     });

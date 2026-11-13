@@ -1,11 +1,11 @@
 import Joi from 'joi';
 
-import { htmlNotAllowedSchema, htmlSchema, uuidSchema } from '../utils.js';
+import { htmlNotAllowedSchema, htmlSchema, uuidSchema, withAssetsHostname } from '../utils.js';
 
 const imageElementSchema = Joi.object({
   id: uuidSchema,
   type: Joi.string().valid('image').required(),
-  url: Joi.string().uri().required(),
+  url: withAssetsHostname(Joi.string().uri().required()),
   alt: htmlNotAllowedSchema.allow('').required(),
   alternativeText: htmlSchema.allow(''),
   legend: htmlNotAllowedSchema.allow(''),

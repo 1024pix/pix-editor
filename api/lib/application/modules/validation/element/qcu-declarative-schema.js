@@ -23,6 +23,7 @@ function _getQcuDeclarativeSchemaWithProposalContentSchema(proposalContentSchema
         content: proposalContentSchema.required(),
         feedback: feedbackNeutralSchema.required(),
       })
+      .min(1)
       .required(),
   });
 }
