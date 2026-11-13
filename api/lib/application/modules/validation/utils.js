@@ -36,4 +36,16 @@ const htmlNotAllowedSchema = Joi.string()
   .regex(/<.*?>/, { invert: true })
   .message('{{:#label}} failed custom validation because HTML is not allowed in this field');
 
-export { htmlNotAllowedSchema, htmlSchema, proposalIdSchema, uuidSchema };
+const ASSETS_HOSTNAME = 'assets.pix.org';
+
+function withAssetsHostname(schema) {
+  return schema.custom((value, helpers) => {
+    if (!value) return value;
+    if (new URL(value).hostname !== ASSETS_HOSTNAME) {
+      return helpers.message(`{{#label}} doit être hébergé sur "${ASSETS_HOSTNAME}"`);
+    }
+    return value;
+  });
+}
+
+export { htmlNotAllowedSchema, htmlSchema, proposalIdSchema, uuidSchema, withAssetsHostname };
