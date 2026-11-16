@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { htmlSafe } from '@ember/template';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import t from 'ember-intl/helpers/t';
 import ModuleForm from 'pixeditor/components/modules/module-form';
 import ModulixEditorButton from 'pixeditor/components/modules/modulix-editor-button';
@@ -13,6 +14,13 @@ export default class NewModule extends Component {
   @service notifications;
   @service router;
   @service store;
+
+  @tracked currentModuleContent = null;
+
+  @action
+  onModuleDataChange(moduleData) {
+    this.currentModuleContent = moduleData;
+  }
 
   @action
   async saveModule({ internalTitle, title, isBeta, slug, visibility, details, sections, glossary }) {
@@ -96,11 +104,15 @@ export default class NewModule extends Component {
           {{/if}}
         </h1>
       </div>
-      <ModulixEditorButton />
+      <ModulixEditorButton @moduleContent={{this.currentModuleContent}} />
     </header>
     <main class="page-body">
       <section class="page-section module-form">
-        <ModuleForm @module={{@model.module}} @saveModule={{this.saveModule}} />
+        <ModuleForm
+          @module={{@model.module}}
+          @saveModule={{this.saveModule}}
+          @onModuleDataChange={{this.onModuleDataChange}}
+        />
       </section>
     </main>
   </template>

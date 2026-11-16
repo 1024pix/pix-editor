@@ -1,6 +1,6 @@
 import { visit, within } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { click, currentURL, fillIn } from '@ember/test-helpers';
+import { click, currentURL, fillIn, settled } from '@ember/test-helpers';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { setupApplicationTest } from 'pixeditor/tests/setup-application-rendering';
@@ -157,6 +157,41 @@ module('Acceptance | Modules | New', function (hooks) {
         assert.strictEqual(currentURL(), '/modules/workbench');
         assert.dom(screen.getByText('NEW_MODULE')).exists();
         assert.dom(await screen.findByText('Le module "NEW_MODULE" a été enregistré.')).exists();
+      });
+
+      test('sends current form content to modulix editor on button click', async function (assert) {
+        // given
+        const postMessageStub = sinon.stub();
+        const originalWindowOpen = window.open;
+        window.open = sinon.stub().returns({ postMessage: postMessageStub });
+
+        const moduleData = {
+          title: 'Mon module',
+          isBeta: false,
+          slug: 'mon-module',
+          visibility: 'public',
+          details: { level: 'novice' },
+          sections: [],
+          glossary: [],
+        };
+
+        const screen = await visit('/');
+        await click(await screen.findByRole('link', { name: 'Modules' }));
+        await click(await screen.findByRole('link', { name: 'Créer un module' }));
+
+        await fillIn(await screen.findByLabelText('Contenu (JSON)'), JSON.stringify(moduleData));
+
+        // WORKAROUND: let some time for Monaco
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // when
+        await click(screen.getByRole('button', { name: 'Ouvrir dans Modulix Editor' }));
+        window.dispatchEvent(new MessageEvent('message', { data: { from: 'modulix-editor', message: 'ready' } }));
+        await settled();
+
+        // then
+        assert.true(postMessageStub.calledWithExactly({ from: 'pix-editor', moduleContent: moduleData }, '*'));
+        window.open = originalWindowOpen;
       });
     });
 
