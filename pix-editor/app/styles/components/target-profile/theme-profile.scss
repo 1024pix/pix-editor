@@ -1,0 +1,22 @@
+.theme-profile {
+  padding: 0;
+  display: flex;
+  background: var(--pix-neutral-0);
+
+  &:not(:nth-last-child(2)) {
+    border-bottom: var(--pix-neutral-900) solid 1px;
+  }
+
+  &__name {
+    width: 23%;
+    display: flex;
+    align-items: center;
+    font-weight: var(--pix-font-bold);
+    margin-left: var(--pix-spacing-4x);
+  }
+
+  &__tubes {
+    flex: 1;
+    padding: 0;
+  }
+}

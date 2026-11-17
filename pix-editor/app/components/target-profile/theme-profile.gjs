@@ -4,15 +4,15 @@ import TubeProfile from 'pixeditor/components/target-profile/tube-profile';
 
 export default class ThemeProfile extends Component {
   <template>
-    <div data-test-theme-profile class="row theme-profile">
-      <div class="three wide column theme-name">
-        <p>{{@theme.name}}</p>
+    <div data-test-theme-profile class="theme-profile">
+      <div class="theme-profile__name">
+        <h3>{{@theme.name}}</h3>
       </div>
-      <div class="thirteen wide column">
+      <div class="theme-profile__tubes">
         {{#each this.filteredTubes as |tube|}}
           {{#if @isThematicResultMode}}
             <TubeProfile
-              class="tube-profile thematicResult"
+              class="thematicResult"
               @tube={{tube}}
               @clickAction={{this.clickOnThematicResultTube}}
               @selectedSkillLevel={{tube.selectedThematicResultLevel}}
@@ -20,7 +20,6 @@ export default class ThemeProfile extends Component {
             />
           {{else}}
             <TubeProfile
-              class="tube-profile"
               @tube={{tube}}
               @clickAction={{this.clickOnTube}}
               @selectedSkillLevel={{tube.selectedLevel}}
