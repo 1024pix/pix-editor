@@ -25,7 +25,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--pix-spacing-2x);
-    padding: var(--pix-spacing-4x) var(--pix-spacing-2x);
+    padding: var(--pix-spacing-4x);
 
     @include breakpoints.device-is('desktop') {
       flex-direction: row;
@@ -40,6 +40,33 @@
 
     @include breakpoints.device-is('desktop') {
       flex-direction: row;
+    }
+  }
+
+  &__summary {
+    @extend %pix-body-m;
+
+    margin: var(--pix-spacing-2x) var(--pix-spacing-4x);
+    color: var(--pix-neutral-900);
+  }
+
+  &__summary-count, &__summary-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__summary-row {
+    justify-content: space-between;
+  }
+
+  &__body {
+    overflow: hidden scroll;
+    margin: var(--pix-spacing-2x) var(--pix-spacing-4x);
+
+    #target-profile__open-file {
+      display: none;
     }
   }
 }
