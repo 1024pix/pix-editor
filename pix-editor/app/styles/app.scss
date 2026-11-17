@@ -11,7 +11,6 @@
 @use 'competence';
 @use 'competence-management';
 @use 'area-management';
-@use 'target-profile';
 @use 'challenges';
 @use 'skill';
 @use 'tube';
@@ -59,6 +58,7 @@
 @use 'components/select-location';
 @use 'components/sidebar/navigation';
 @use 'components/sidebar/search';
+@use 'components/target-profile/competence-profile';
 @use 'globals/global' as globals-global;
 @use 'globals/page';
 @use 'globals/table';
