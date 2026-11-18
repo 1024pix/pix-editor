@@ -61,7 +61,7 @@ module('Integration | Components | modules/modulix-editor-button', function (hoo
     });
 
     module('when no draft module exists', function () {
-      test('it only redirects', async function (assert) {
+      test('it redirects and sends an empty object as module content in postMessage', async function (assert) {
         // given
         const postMessageStub = sinon.stub();
         const openStub = sinon.stub(window, 'open');
@@ -79,8 +79,8 @@ module('Integration | Components | modules/modulix-editor-button', function (hoo
         await settled();
 
         // then
-        assert.false(postMessageStub.calledOnce);
-        assert.true(openStub.calledWithExactly('https://app.modulix-editor.io', 'modulix-editor-edit'));
+        assert.true(postMessageStub.calledWithExactly({ from: 'pix-editor', moduleContent: {} }, '*'));
+        sinon.assert.calledOnceWithExactly(openStub, 'https://app.modulix-editor.io', 'modulix-editor-edit');
       });
     });
   });

@@ -91,6 +91,59 @@ module('Integration | Component | modules/module-form', function (hooks) {
     });
   });
 
+  module('when @onModuleDataChange is provided', function () {
+    module('when module JSON is valid', function () {
+      test.if('it calls onModuleDataChange with parsed data', !isChrome, async function (assert) {
+        // given
+        const onModuleDataChange = sinon.stub();
+        const validModuleData = { slug: 'mon-module', title: 'Mon module' };
+
+        // when
+        const screen = await render(<template><ModuleForm @onModuleDataChange={{onModuleDataChange}} /></template>);
+        await fillIn(await screen.findByLabelText('Contenu (JSON)'), JSON.stringify(validModuleData));
+
+        // then
+        sinon.assert.calledWith(onModuleDataChange, validModuleData);
+        assert.ok(true);
+      });
+    });
+
+    module('when module JSON has invalid syntax', function () {
+      test.if('it calls onModuleDataChange with undefined', !isChrome, async function (assert) {
+        // given
+        const onModuleDataChange = sinon.stub();
+        const invalidModuleData = "{ 'slug'= 'mon-module-invalide' }";
+
+        // when
+        const screen = await render(<template><ModuleForm @onModuleDataChange={{onModuleDataChange}} /></template>);
+        await fillIn(await screen.findByLabelText('Contenu (JSON)'), invalidModuleData);
+
+        // then
+        sinon.assert.calledWith(onModuleDataChange, undefined);
+        assert.ok(true);
+      });
+    });
+
+    module('when module JSON is partially valid', function () {
+      test.if('it calls onModuleDataChange with data', !isChrome, async function (assert) {
+        // given
+        const onModuleDataChange = sinon.stub();
+        const partiallyValidModuleData = {
+          sloug: 'slug-key-wrong',
+          title: 'mon module',
+        };
+
+        // when
+        const screen = await render(<template><ModuleForm @onModuleDataChange={{onModuleDataChange}} /></template>);
+        await fillIn(await screen.findByLabelText('Contenu (JSON)'), JSON.stringify(partiallyValidModuleData));
+
+        // then
+        sinon.assert.calledWith(onModuleDataChange, partiallyValidModuleData);
+        assert.ok(true);
+      });
+    });
+  });
+
   module('when module-form is readonly', function () {
     test('it should not display actions buttons', async function (assert) {
       const moduleWoInternalTitle = {

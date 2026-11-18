@@ -58,6 +58,7 @@ export default class ModuleForm extends Component {
     } catch {
       this.moduleData = undefined;
     }
+    this.args.onModuleDataChange?.(this.moduleData);
   }
 
   get isSaveDisabled() {
