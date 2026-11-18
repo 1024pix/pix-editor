@@ -1,5 +1,21 @@
 
 
+## v4.64.0 (18/11/2026)
+
+
+### :building_construction: Tech
+- [#1824](https://github.com/1024pix/pix-editor/pull/1824) [TECH] Ajouter la validation manquante des URLs médias et de l'intégrité des QCM dans les modules (PIX-25064).
+
+### :bug: Correction
+- [#1844](https://github.com/1024pix/pix-editor/pull/1844) [BUGFIX] Ajouter une méthode à la désérialisation des translations pour supprimer un caractère inutile ajouté par Phrase (PIX-25159).
+- [#1836](https://github.com/1024pix/pix-editor/pull/1836) [BUGFIX] L'affichage du JSON d'un nouveau brouillon vers modulix-editor, depuis Pix Editor, ne marche pas (PIX-24541).
+
+### :arrow_up: Montée de version
+- [#1842](https://github.com/1024pix/pix-editor/pull/1842) [BUMP] Update dependency @1024pix/nebulix-ember to v1.5.0 (pix-editor).
+- [#1838](https://github.com/1024pix/pix-editor/pull/1838) [BUMP] Update dependency @1024pix/oppsy to v1.1.7 (api).
+- [#1841](https://github.com/1024pix/pix-editor/pull/1841) [BUMP] Update dependency dotenv to v18.0.10 (pix-editor).
+- [#1840](https://github.com/1024pix/pix-editor/pull/1840) [BUMP] Update dependency browser-tools to v2.4.3 (.circleci).
+
 ## v4.63.0 (13/11/2026)
 
 
