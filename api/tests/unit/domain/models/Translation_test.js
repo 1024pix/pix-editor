@@ -1,5 +1,6 @@
 import { describe, describe as context, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
+import { Translation } from '../../../../lib/domain/models/Translation.js';
 
 describe('Unit | Domain | Translation', function() {
   context('get entityId', function() {
@@ -25,6 +26,48 @@ describe('Unit | Domain | Translation', function() {
 
       // then
       expect(model).to.equal('challenge');
+    });
+  });
+
+  context('exorciseDevilApostrophe', function() {
+    it('returns a model without the escaping apostrophe on proposals field', function() {
+      // given
+      const translation = {
+        key: 'challenge.challengeId.proposals',
+        locale: 'fr',
+        value: '\'-pouet 1\n -patate douce',
+      };
+
+      // when
+      const result = new Translation(translation);
+
+      // then
+      expect(result).toBeInstanceOf(Translation);
+      expect(result).to.deep.equal({
+        key: 'challenge.challengeId.proposals',
+        locale: 'fr',
+        value: '-pouet 1\n -patate douce',
+      });
+    });
+
+    it('returns a model without the escaping apostrophe on another field', function() {
+      // given
+      const translation = {
+        key: 'challenge.challengeId.instruction',
+        locale: 'fr',
+        value: '\'-pouet 1\n -patate douce',
+      };
+
+      // when
+      const result = new Translation(translation);
+
+      // then
+      expect(result).toBeInstanceOf(Translation);
+      expect(result).to.deep.equal({
+        key: 'challenge.challengeId.instruction',
+        locale: 'fr',
+        value: '\'-pouet 1\n -patate douce',
+      });
     });
   });
 });

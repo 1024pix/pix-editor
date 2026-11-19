@@ -1,3 +1,5 @@
+import { logger } from '../../infrastructure/logger.js';
+
 export class Translation {
   /**
    * @param {object} params
@@ -9,6 +11,14 @@ export class Translation {
     this.key = key;
     this.locale = locale;
     this.value = value ?? '';
+    this.#exorciseDevilApostrophe();
+  }
+
+  #exorciseDevilApostrophe() {
+    if (this.key.endsWith('proposals')) {
+      logger.info(`The key and value of translation about to be exorcised: ${this.key}, ${this.value}`);
+      this.value = this.value.replace(/^\'/, '');
+    }
   }
 
   get entityId() {
