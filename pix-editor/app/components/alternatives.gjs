@@ -2,7 +2,6 @@ import { PixButton, PixCheckbox, PixIcon } from '@1024pix/nebulix-ember';
 import { on } from '@ember/modifier';
 import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import AlternativesList from 'pixeditor/components/list/alternatives';
@@ -10,7 +9,7 @@ import Challenge from 'pixeditor/models/challenge';
 
 export default class Alternatives extends Component {
   <template>
-    <div class="alternatives__header {{if this.config.lite 'lite' ''}}">
+    <div class="alternatives__header">
       <h1 class="alternatives-header__title">
         Déclinaisons de
         {{@challenge.skillName}}
@@ -44,8 +43,6 @@ export default class Alternatives extends Component {
 
   @tracked competence = null;
   @tracked shouldDisplayPerimeAlternatives = false;
-
-  @service config;
 
   get alternatives() {
     return this.shouldDisplayPerimeAlternatives
