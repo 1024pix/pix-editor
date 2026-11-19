@@ -1,5 +1,5 @@
+import { render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
-import { render } from '@ember/test-helpers';
 import ThemeProfile from 'pixeditor/components/target-profile/theme-profile';
 import { module, test } from 'qunit';
 
@@ -21,10 +21,10 @@ module('Integration | Component | target-profile/theme-profile', function (hooks
     this.filter = true;
 
     // when
-    await render(<template><ThemeProfile @theme={{self.theme}} @filter={{self.filter}} /></template>);
+    const screen = await render(<template><ThemeProfile @theme={{self.theme}} @filter={{self.filter}} /></template>);
 
     // then
-    assert.dom('.theme-name').hasText('theme_name');
-    assert.dom('[data-test-tube-profile]').exists({ count: 2 });
+    assert.dom(screen.getByRole('heading', { level: 3, name: 'theme_name' })).exists();
+    assert.strictEqual(screen.getAllByRole('checkbox').length, 2);
   });
 });

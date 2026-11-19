@@ -13,28 +13,24 @@ export default class CompetenceProfile extends Component {
   }
 
   <template>
-    <div class="ui grid">
+    <div class="competence-profile-cell">
       <h2
         data-test-competence-profile
         id="competence-profile-anchor-{{@competence.id}}"
-        class="row competence-profile area-profile-{{@areaCode}}"
+        class="competence-profile area-profile-{{@areaCode}}"
       >
-        <div class="column competence-code right aligned">
+        <div class="competence-profile__competence-title">
           {{@competence.code}}
+          <div>{{@competence.title}}</div>
         </div>
-        <div class="fourteen wide column">
-          <div class="competence-title">{{@competence.title}}</div>
-        </div>
-        <div class="column center competence-info">
-          <PixTooltip @id="info-tooltip" @position="left" @isWide={{true}} @isLight={{true}}>
-            <:triggerElement>
-              <PixIcon aria-describedby="info-tooltip" @name="info" />
-            </:triggerElement>
-            <:tooltip>
-              {{@competence.description}}
-            </:tooltip>
-          </PixTooltip>
-        </div>
+        <PixTooltip @id="info-tooltip" @position="left" @isWide={{true}} @isLight={{true}}>
+          <:triggerElement>
+            <PixIcon aria-describedby="info-tooltip" @name="info" />
+          </:triggerElement>
+          <:tooltip>
+            {{@competence.description}}
+          </:tooltip>
+        </PixTooltip>
       </h2>
       {{#each this.filteredTheme as |theme|}}
         <ThemeProfile
@@ -48,16 +44,14 @@ export default class CompetenceProfile extends Component {
           @theme={{theme}}
         />
       {{/each}}
-      <div class="row">
-        <div class="fifteen wide column"></div>
+      <div class="competence-profile__footer">
         {{#if @isThematicResultMode}}
-          <div class="column selected-tube-count">{{@competence.selectedThematicResultTubeCount}}
-            /{{@competence.selectedProductionTubeCount}}</div>
+          {{@competence.selectedThematicResultTubeCount}}
+          /{{@competence.selectedProductionTubeCount}}
         {{else}}
-          <div class="column selected-tube-count">{{@competence.selectedProductionTubeCount}}
-            /{{@competence.productionTubeCount}}</div>
+          {{@competence.selectedProductionTubeCount}}
+          /{{@competence.productionTubeCount}}
         {{/if}}
-
       </div>
     </div>
   </template>

@@ -1,0 +1,54 @@
+@use 'pix-design-tokens/typography';
+
+.competence-profile {
+  @extend %pix-title-xs;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: var(--pix-font-bold);
+  color: var(--pix-neutral-0);
+  border-radius: 8px 8px 0 0;
+  background-color: var(--pix-neutral-900);
+  padding: var(--pix-spacing-4x);
+
+  &__competence-title {
+    display: flex;
+    gap: var(--pix-spacing-4x);
+  }
+
+  &.area-profile-1 {
+    background: var(--pix-warning-500);
+  }
+
+  &.area-profile-2 {
+    background: var(--pix-success-500);
+  }
+
+  &.area-profile-3 {
+    background: var(--pix-info-500);
+  }
+
+  &.area-profile-4 {
+    background: var(--pix-security-light);
+  }
+
+  &.area-profile-5 {
+    background: var(--pix-primary-500);
+  }
+
+  &__footer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--pix-spacing-4x);
+    background: var(--pix-orga-50);
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+.competence-profile-cell {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--pix-spacing-4x);
+}

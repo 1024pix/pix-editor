@@ -1,4 +1,4 @@
-import { PixButton, PixMultiSelect, PixToggle } from '@1024pix/nebulix-ember';
+import { PixBlock, PixButton, PixMultiSelect, PixToggle } from '@1024pix/nebulix-ember';
 import { Input } from '@ember/component';
 import { on } from '@ember/modifier';
 import SingleEntry from 'pixeditor/components/pop-in/single-entry';
@@ -72,34 +72,30 @@ const multiselectTranslationList = {
           {{/unless}}
         </div>
       </div>
-      <h2 class="ui top attached padded grid target-profile-title">
-        <div class="row">
-          {{#if @controller.isThematicResultMode}}
-            <div class="eleven wide center aligned column"></div>
-            <div class="four wide right aligned column">{{@controller.selectedThematicResultTubeCount}}
+      <PixBlock class="target-profile-view__summary">
+        {{#if @controller.isThematicResultMode}}
+          <div class="target-profile-view__summary-count">
+            <div>{{@controller.selectedThematicResultTubeCount}}
               /{{@controller.selectedTubeCount}}</div>
-          {{else}}
-            <div class="three wide column">
-              <PixMultiSelect
-                @options={{@controller.frameworkOptionList}}
-                @values={{@controller.selectedFrameworkIds}}
-                @onChange={{@controller.selectFrameworks}}
-                @texts={{multiselectTranslationList}}
-              >
-                <:label>
-                  <span class="text-white">Référentiel</span>
-                </:label>
-                <:default as |frameworkOption|>{{frameworkOption.label}}</:default>
-              </PixMultiSelect>
-            </div>
-            <div class="six wide center aligned column"></div>
-            <div
-              class="four wide right aligned column"
-            >{{@controller.selectedTubeCount}}/{{@controller.tubeCount}}</div>
-          {{/if}}
-        </div>
-      </h2>
-      <div class="ui attached target-profile">
+          </div>
+        {{else}}
+          <div class="target-profile-view__summary-row">
+            <PixMultiSelect
+              @options={{@controller.frameworkOptionList}}
+              @values={{@controller.selectedFrameworkIds}}
+              @onChange={{@controller.selectFrameworks}}
+              @texts={{multiselectTranslationList}}
+            >
+              <:label>
+                <span>Référentiel</span>
+              </:label>
+              <:default as |frameworkOption|>{{frameworkOption.label}}</:default>
+            </PixMultiSelect>
+            <div>{{@controller.selectedTubeCount}}/{{@controller.tubeCount}}</div>
+          </div>
+        {{/if}}
+      </PixBlock>
+      <PixBlock class="target-profile-view__body target-profile">
         {{#each @controller.areas as |area|}}
           <AreaProfile
             @area={{area}}
@@ -115,7 +111,7 @@ const multiselectTranslationList = {
           />
         {{/each}}
         <Input @type="file" id="target-profile__open-file" {{on "change" @controller.openFile}} />
-      </div>
+      </PixBlock>
       <TubeLevel
         @setTubeLevel={{@controller.setTubeAction}}
         @clearTube={{@controller.clearTubeAction}}

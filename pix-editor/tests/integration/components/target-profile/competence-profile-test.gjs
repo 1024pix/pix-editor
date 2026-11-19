@@ -1,5 +1,5 @@
+import { render } from '@1024pix/ember-testing-library';
 import EmberObject from '@ember/object';
-import { render } from '@ember/test-helpers';
 import CompetenceProfile from 'pixeditor/components/target-profile/competence-profile';
 import { module, test } from 'qunit';
 
@@ -35,11 +35,15 @@ module('Integration | Component | target-profile/competence-profile', function (
     const filter = true;
 
     // when
-    await render(<template><CompetenceProfile @competence={{competence}} @filter={{filter}} /></template>);
+    const screen = await render(
+      <template><CompetenceProfile @competence={{competence}} @filter={{filter}} /></template>,
+    );
 
     // then
-    assert.dom('.competence-title').hasText('competence_title');
-    assert.dom('[data-test-theme-profile]').exists({ count: 2 });
+    assert.dom(screen.getByRole('heading', { level: 2, name: /competence_title/ })).exists();
+    assert.dom(screen.getByRole('heading', { level: 3, name: 'theme_1' })).exists();
+    assert.dom(screen.getByRole('heading', { level: 3, name: 'theme_3' })).exists();
+    assert.dom(screen.queryByRole('heading', { level: 3, name: 'theme_2' })).doesNotExist();
   });
 
   test('it should not display empty theme', async function (assert) {
@@ -64,9 +68,10 @@ module('Integration | Component | target-profile/competence-profile', function (
     });
 
     // when
-    await render(<template><CompetenceProfile @competence={{competence}} /></template>);
+    const screen = await render(<template><CompetenceProfile @competence={{competence}} /></template>);
 
     // then
-    assert.dom('[data-test-theme-profile]').exists({ count: 1 });
+    assert.dom(screen.getByRole('heading', { level: 3, name: 'theme_1' })).exists();
+    assert.dom(screen.queryByRole('heading', { level: 3, name: 'theme_2' })).doesNotExist();
   });
 });

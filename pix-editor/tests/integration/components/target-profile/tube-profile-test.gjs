@@ -1,10 +1,12 @@
-import { render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
+import { click } from '@ember/test-helpers';
 import TubeProfile from 'pixeditor/components/target-profile/tube-profile';
 import { module, test } from 'qunit';
+import sinon from 'sinon';
 
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
-module('Integration | Component | target-profile/competence-thematic-result', function (hooks) {
+module('Integration | Component | target-profile/tube-profile', function (hooks) {
   setupIntlRenderingTest(hooks);
   let tube;
   hooks.beforeEach(async function () {
@@ -28,7 +30,7 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     this.showTubeDetails = false;
 
     // when
-    await render(
+    const screen = await render(
       <template>
         <TubeProfile
           @tube={{self.tube}}
@@ -40,9 +42,20 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     );
 
     // then
-    assert.dom(this.element.querySelector('[data-test-tube-profile]')).hasClass('active');
-    assert.dom(this.element.querySelector('.square.icon')).hasClass('active');
-    assert.dom(this.element.querySelector('.square.icon')).hasClass('check');
+    assert.dom(screen.getByRole('checkbox', { name: '@tube1 : practicalTitleFr' })).isChecked();
+    assert.dom(screen.queryByText('6')).doesNotExist();
+  });
+
+  test('it should not be selected if tube has no `selectedSkillLevel`', async function (assert) {
+    const self = this;
+
+    // when
+    const screen = await render(
+      <template><TubeProfile @tube={{self.tube}} @clickAction={{self.clickOnTube}} /></template>,
+    );
+
+    // then
+    assert.dom(screen.getByRole('checkbox', { name: '@tube1 : practicalTitleFr' })).isNotChecked();
   });
 
   test('it should display a `selectedSkillLevel` if `showTubeDetails` is `true`', async function (assert) {
@@ -53,7 +66,7 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     this.selectedLevel = 6;
 
     // when
-    await render(
+    const screen = await render(
       <template>
         <TubeProfile
           @tube={{self.tube}}
@@ -65,6 +78,20 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
     );
 
     // then
-    assert.dom('.max-skill-level').hasText('6');
+    assert.dom(screen.getByText('6')).exists();
+  });
+
+  test('it should call `clickAction` with the tube on click', async function (assert) {
+    const self = this;
+
+    // given
+    const clickAction = sinon.stub();
+
+    // when
+    const screen = await render(<template><TubeProfile @tube={{self.tube}} @clickAction={{clickAction}} /></template>);
+    await click(screen.getByText('practicalDescriptionFr'));
+
+    // then
+    assert.ok(clickAction.calledOnceWith(tube));
   });
 });
