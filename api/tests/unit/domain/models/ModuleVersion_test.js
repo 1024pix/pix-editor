@@ -7,8 +7,10 @@ describe('Unit | Domain | ModuleVersion', () => {
     it('creates a ModuleVersion from a Module', () => {
       // given
       const module = domainBuilder.buildModule();
+      const publishedBy = 123;
       const expectedModuleVersion = new ModuleVersion({
         moduleId: module.id,
+        publishedBy,
         shortId: module.shortId,
         internalTitle: module.internalTitle,
         slug: module.slug,
@@ -22,10 +24,21 @@ describe('Unit | Domain | ModuleVersion', () => {
       });
 
       // when
-      const moduleVersion = ModuleVersion.fromModule(module);
+      const moduleVersion = ModuleVersion.fromModule(module, { publishedBy });
 
       // then
       expect(moduleVersion).toStrictEqual(expectedModuleVersion);
+    });
+
+    it('sets publishedBy to null when not provided', () => {
+      // given
+      const module = domainBuilder.buildModule();
+
+      // when
+      const moduleVersion = ModuleVersion.fromModule(module);
+
+      // then
+      expect(moduleVersion.publishedBy).toBeNull();
     });
   });
 });
