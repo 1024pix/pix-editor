@@ -797,6 +797,7 @@ describe('Acceptance | Route | draft-modules', () => {
           glossary: draftModule.glossary,
           version: '48.0',
           ...draftModule.details,
+          userId: editorUser.id,
           createdAt: expect.any(Date),
         },
       ]);
