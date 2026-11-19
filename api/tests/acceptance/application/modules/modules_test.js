@@ -183,8 +183,10 @@ describe('Acceptance | Route | modules', () => {
     let module, draftModule;
 
     beforeEach(async () => {
-      module = domainBuilder.buildModule();
+      module = domainBuilder.buildModule({ version: '2.0' });
       databaseBuilder.factory.buildModule(module);
+      databaseBuilder.factory.buildModuleVersion({ ...module, id: undefined, moduleId: module.id, version: '1.0' });
+      databaseBuilder.factory.buildModuleVersion({ ...module, id: undefined, moduleId: module.id, userId: editorUser.id });
       draftModule = domainBuilder.buildDraftModule({ id: module.id, moduleId: module.id });
       databaseBuilder.factory.buildDraftModule(draftModule);
       await databaseBuilder.commit();
@@ -220,6 +222,7 @@ describe('Acceptance | Route | modules', () => {
             glossary: module.glossary,
             url: `${config.pixApp.production.baseUrlFr}/modules/${module.shortId}/${module.slug}`,
             'preview-url': `${config.pixApp.production.baseUrlFr}/modules/preview/${module.shortId}/${module.slug}`,
+            'published-by': editorUser.trigram,
           },
           relationships: {
             'draft-module': {
