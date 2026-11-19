@@ -1,3 +1,5 @@
+import { getElements } from '../helpers/get-elements.js';
+
 export function addMissingKeysToLlmMessages({ sections }) {
   const transformedSections = structuredClone(sections);
   const messagesWithMissingKeys = getElements(transformedSections)
@@ -8,15 +10,6 @@ export function addMissingKeysToLlmMessages({ sections }) {
   messagesWithMissingKeys.forEach(addMissingKeys);
 
   return { sections: transformedSections, numberOfEditedObjects: messagesWithMissingKeys.length };
-}
-
-function getElements(sections) {
-  return sections
-    .flatMap((section) => section.grains)
-    .flatMap((grain) => grain.components)
-    .flatMap((component) => component.type === 'stepper'
-      ? component.steps.flatMap((step) => step.elements)
-      : [component.element]);
 }
 
 function isLlmMessagesElement(element) {
