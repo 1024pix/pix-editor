@@ -27,7 +27,8 @@ describe('Unit | Domain | Use Cases | publish-draft-module', () => {
   it('validates the draft module, then saves it as a module and removes the draft module', async () => {
     // when
     const dependencies = { draftModuleRepository, moduleRepository, moduleVersionRepository, validateDraftModule };
-    const result = await publishDraftModule({ draftModuleId: draftModule.id }, dependencies);
+    const userId = 123;
+    const result = await publishDraftModule({ draftModuleId: draftModule.id, userId }, dependencies);
 
     // then
     expect(result).toBe(savedModule);
@@ -37,7 +38,7 @@ describe('Unit | Domain | Use Cases | publish-draft-module', () => {
     expect(publish).toHaveBeenCalledExactlyOnceWith();
     expect(moduleRepository.save).toHaveBeenCalledExactlyOnceWith(publishedModule);
     expect(draftModuleRepository.remove).toHaveBeenCalledExactlyOnceWith({ id: draftModule.id });
-    expect(fromModule).toHaveBeenCalledExactlyOnceWith(savedModule);
+    expect(fromModule).toHaveBeenCalledExactlyOnceWith(savedModule, { publishedBy: userId });
     expect(moduleVersionRepository.create).toHaveBeenCalledExactlyOnceWith(moduleVersion);
   });
 
