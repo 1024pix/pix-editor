@@ -1,5 +1,14 @@
 
 
+## v4.64.1 (19/11/2026)
+
+
+### :building_construction: Tech
+- [#1837](https://github.com/1024pix/pix-editor/pull/1837) [TECH] Nettoyage (Partie 3) (PIX-25142).
+
+### :bug: Correction
+- [#1845](https://github.com/1024pix/pix-editor/pull/1845) [BUGFIX] Il y a toujours des apostrophes qui polluent les proposals des épreuves (PIX-25176).
+
 ## v4.64.0 (18/11/2026)
 
 
