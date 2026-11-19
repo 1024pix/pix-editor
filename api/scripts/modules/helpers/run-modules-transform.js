@@ -1,80 +1,70 @@
-import { draftModuleRepository, moduleRepository } from '../../lib/infrastructure/repositories/index.js';
-import { bulkUpdateDraftModules, bulkUpdateModules } from '../../lib/domain/usecases/index.js';
-import { addMissingKeysToLlmMessages } from './transforms/add-missing-keys-to-llm-messages.js';
-import { DomainTransaction } from '../../lib/domain/DomainTransaction.js';
-import { DraftModule, Module } from '../../lib/domain/models/index.js';
-import { Script } from '../../lib/application/scripts/script.js';
-import { ScriptRunner } from '../../lib/application/scripts/script-runner.js';
+import { draftModuleRepository, moduleRepository } from '../../../lib/infrastructure/repositories/index.js';
+import { bulkUpdateDraftModules, bulkUpdateModules } from '../../../lib/domain/usecases/index.js';
+import { DomainTransaction } from '../../../lib/domain/DomainTransaction.js';
+import { DraftModule, Module } from '../../../lib/domain/models/index.js';
 
-export class AddMissingLlmMessagesKeys extends Script {
-  constructor() {
-    super({
-      description: 'Script pour ajouter les clés "illustrations" (à []) et "attachmentName" (à \'\') manquantes aux messages des éléments custom llm-messages',
-      permanent: false,
-      options: {
-        dryRun: {
-          type: 'boolean',
-          describe: 'If true, it does not perform any update.',
-          default: true,
-        },
-      },
-    });
+/**
+ * Applies a transform to the sections of every module and draft module, then saves the updated ones.
+ *
+ * @param {Object} params
+ * @param {(module: { sections: Array }) => { sections: Array, numberOfEditedObjects: number }} params.transform
+ *   Pure function returning an updated copy of the sections and the number of edited objects.
+ * @param {{ dryRun: boolean }} params.options
+ * @param {Object} params.logger
+ */
+export async function runModulesTransform({ transform, options, logger }) {
+  logger.info({ dryRun: options.dryRun }, 'Script options');
+
+  const existingModules = await moduleRepository.list();
+  const modulesToUpdate = getModulesToUpdate(existingModules, transform);
+
+  const notValidModuleIdsWithErrors = await validateModules({ modulesToUpdate });
+
+  if (notValidModuleIdsWithErrors.size > 0) {
+    logNotValidModulesWithErrors({ moduleIdsWithErrors: notValidModuleIdsWithErrors, logger });
+    throw new Error('Modules validation failed.');
   }
 
-  async handle({ options, logger }) {
-    logger.info({ dryRun: options.dryRun }, 'Script options');
+  logModulesToUpdate(modulesToUpdate, logger);
 
-    const existingModules = await moduleRepository.list();
-    const modulesToUpdate = getModulesToUpdate(existingModules);
+  const modulesToUpdateIds = modulesToUpdate.map(({ module }) => module.id);
+  const draftModulesToUpdate = getDraftModulesToUpdate(await draftModuleRepository.list(), modulesToUpdateIds, transform);
+  logDraftModulesToUpdate(draftModulesToUpdate, logger);
 
-    const notValidModuleIdsWithErrors = await validateModules({ modulesToUpdate });
-
-    if (notValidModuleIdsWithErrors.size > 0) {
-      logNotValidModulesWithErrors({ moduleIdsWithErrors: notValidModuleIdsWithErrors, logger });
-      throw new Error('Modules validation failed.');
-    }
-
-    logModulesToUpdate(modulesToUpdate, logger);
-
-    const modulesToUpdateIds = modulesToUpdate.map(({ module }) => module.id);
-    const draftModulesToUpdate = getDraftModulesToUpdate(await draftModuleRepository.list(), modulesToUpdateIds);
-    logDraftModulesToUpdate(draftModulesToUpdate, logger);
-
-    if (modulesToUpdate.length === 0 && draftModulesToUpdate.length === 0) {
-      logger.info('Nothing to update');
-      return;
-    }
-
-    if (options.dryRun) {
-      logger.info('Dry run: nothing saved. Re-run with --dryRun=false to apply changes.');
-      return;
-    }
-
-    const { savedModules, savedDraftModules } = await DomainTransaction.execute(async () => {
-      const savedModules = await bulkUpdateModules(modulesToUpdate.map(({ module }) => module));
-      const savedDraftModules = await bulkUpdateDraftModules({
-        draftModules: draftModulesToUpdate.map(({ draftModule }) => draftModule),
-        updatedModuleIds: modulesToUpdateIds,
-      });
-      return { savedModules, savedDraftModules };
-    });
-    logSavedModules({ savedModules, savedDraftModules }, logger);
+  if (modulesToUpdate.length === 0 && draftModulesToUpdate.length === 0) {
+    logger.info('Nothing to update');
+    return;
   }
+
+  if (options.dryRun) {
+    logger.info('Dry run: nothing saved. Re-run with --dryRun=false to apply changes.');
+    return;
+  }
+
+  const { savedModules, savedDraftModules } = await DomainTransaction.execute(async () => {
+    const savedModules = await bulkUpdateModules(modulesToUpdate.map(({ module }) => module));
+    const savedDraftModules = await bulkUpdateDraftModules({
+      draftModules: draftModulesToUpdate.map(({ draftModule }) => draftModule),
+      updatedModuleIds: modulesToUpdateIds,
+    });
+    return { savedModules, savedDraftModules };
+  });
+  logSavedModules({ savedModules, savedDraftModules }, logger);
 }
 
-function getModulesToUpdate(modules) {
+function getModulesToUpdate(modules, transform) {
   return modules
     .map((module) => {
-      const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(module);
+      const { sections, numberOfEditedObjects } = transform(module);
       return { module: new Module({ ...module, sections }), numberOfEditedObjects };
     })
     .filter(({ numberOfEditedObjects }) => numberOfEditedObjects > 0);
 }
 
-function getDraftModulesToUpdate(draftModules, updatedModuleIds) {
+function getDraftModulesToUpdate(draftModules, updatedModuleIds, transform) {
   return draftModules
     .map((draftModule) => {
-      const { sections, numberOfEditedObjects } = addMissingKeysToLlmMessages(draftModule);
+      const { sections, numberOfEditedObjects } = transform(draftModule);
       const isDraftOfUpdatedModule = updatedModuleIds.includes(draftModule.moduleId);
       return {
         draftModule: new DraftModule({ ...draftModule, sections }),
@@ -147,5 +137,3 @@ function countEditedObjects(modulesToUpdate) {
 function toLogSummary({ id, internalTitle, version }) {
   return { id, internalTitle, version };
 }
-
-await ScriptRunner.execute(import.meta.url, AddMissingLlmMessagesKeys);
