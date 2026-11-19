@@ -1,62 +1,64 @@
-import { Input } from '@ember/component';
+import { PixButton, PixCheckbox, PixIcon } from '@1024pix/nebulix-ember';
 import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import Alternatives0 from 'pixeditor/components/list/alternatives';
+import AlternativesList from 'pixeditor/components/list/alternatives';
 import Challenge from 'pixeditor/models/challenge';
 
 export default class Alternatives extends Component {
   <template>
-    <div class="main-title {{if this.config.lite 'lite' ''}}">
-      <h1 class="ui header">
-        <div class="ui right floated menu">
-          <LinkTo
-            @route="authenticated.competence.prototypes.single"
-            @model={{@challenge}}
-            class="ui button icon item"
-          ><i class="icon window close"></i></LinkTo>
-        </div>
+    <div class="alternatives__header {{if this.config.lite 'lite' ''}}">
+      <h1 class="alternatives-header__title">
         Déclinaisons de
         {{@challenge.skillName}}
       </h1>
+      <LinkTo @route="authenticated.competence.prototypes.single" @model={{@challenge}} aria-label="Fermer"><PixIcon
+          @name="close"
+          @ariaHidden={{true}}
+        /></LinkTo>
     </div>
     {{#unless @rightMaximized}}
-      <div class="ui attached segment competence {{@size}}">
-        <Alternatives0 @list={{this.alternatives}} />
-      </div>
-      <div class="ui borderless bottom attached labelled icon menu">
-        <div class="item competence-info">
-          <div>
-            <Input id="hide-perime" @type="checkbox" @checked={{this.arePerimeDeclisDisplayed}} />
-            <label for="hide-perime">Afficher les déclinaisons périmées</label>
-          </div>
-          <div>En production : <span class="production">{{@challenge.productionAlternatives.length}}</span></div>
-          <div>Brouillons : <span class="workbench">{{@challenge.draftAlternatives.length}}</span></div>
+      <div class="alternatives__body alternatives__body--{{@size}}">
+        <div class="alternatives__information">
+          <PixCheckbox
+            @checked={{this.shouldDisplayPerimeAlternatives}}
+            {{on "change" this.togglePerimeAlternativesDisplay}}
+          >
+            <:label>Afficher les déclinaisons périmées</:label>
+          </PixCheckbox>
+          <p>En production : {{@challenge.productionAlternatives.length}}</p>
+          <p>Brouillons : {{@challenge.draftAlternatives.length}}</p>
+          {{#if this.canCreateAlternative}}
+            <PixButton @iconBefore="add" @triggerAction={{@newAlternative}} data-test-new-alternative-action>
+              Nouvelle déclinaison
+            </PixButton>
+          {{/if}}
         </div>
-        {{#if this.canCreateAlternative}}
-          <button class="ui button right item" {{on "click" @newAlternative}} type="button">
-            <i class="plus square outline icon" data-test-new-alternative-action></i>
-            Nouvelle déclinaison
-          </button>
-        {{/if}}
+        <AlternativesList @list={{this.alternatives}} />
       </div>
     {{/unless}}
   </template>
 
   @tracked competence = null;
-  @tracked arePerimeDeclisDisplayed = false;
+  @tracked shouldDisplayPerimeAlternatives = false;
 
   @service config;
 
   get alternatives() {
-    return this.arePerimeDeclisDisplayed
+    return this.shouldDisplayPerimeAlternatives
       ? this.args.challenge.alternatives
       : this.args.challenge.alternatives.filter((alternative) => alternative.status !== Challenge.STATUSES.PERIME);
   }
 
   get canCreateAlternative() {
     return this.args.mayCreateAlternative && this.args.challenge.isLive;
+  }
+
+  @action
+  togglePerimeAlternativesDisplay(event) {
+    this.shouldDisplayPerimeAlternatives = event.target.checked;
   }
 }
