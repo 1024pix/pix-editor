@@ -33,6 +33,12 @@ export default class ProductionModule extends Component {
             &#9679;
             {{t "modules.production-module.information-tag"}}
           </div>
+          {{#if @model.module.publishedBy}}
+            <p class="module-header__published-by">
+              <span class="module-header__published-by--bullet">&#65372;</span>
+              {{t "modules.production-module.published-by" publishedBy=@model.module.publishedBy}}
+            </p>
+          {{/if}}
         </div>
       </div>
       <div class="page-actions">
