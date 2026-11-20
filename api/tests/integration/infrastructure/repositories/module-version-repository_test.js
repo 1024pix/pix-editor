@@ -14,6 +14,7 @@ describe('Module Version Repository', () => {
       const moduleVersion = ModuleVersion.fromModule(module);
       const expectedCreatedModuleVersion = new ModuleVersion({
         ...moduleVersion,
+        userId: null,
         id: expect.any(Number),
         createdAt: expect.any(Date),
       });

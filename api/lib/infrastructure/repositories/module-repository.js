@@ -67,8 +67,12 @@ export async function listForReplication() {
 export async function getById({ id }) {
   const knexConn = DomainTransaction.getConnection();
 
-  const module = await knexConn('modules').select('modules.*', 'draft-modules.id as draftModuleId')
+  const module = await knexConn('modules').select('modules.*', 'draft-modules.id as draftModuleId', 'users.trigram as publishedBy')
     .leftOuterJoin('draft-modules', 'draft-modules.moduleId', 'modules.id')
+    .leftOuterJoin('module-versions', function() {
+      this.on('module-versions.moduleId', 'modules.id').andOn('module-versions.version', 'modules.version');
+    })
+    .leftOuterJoin('users', 'users.id', 'module-versions.userId')
     .where('modules.id', id)
     .first();
 

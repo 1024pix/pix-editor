@@ -15,6 +15,7 @@ const defaultAttributes = [
   'draftModule',
   'url',
   'previewUrl',
+  'publishedBy',
 ];
 
 export function serialize(module, { attributes = defaultAttributes, meta } = {}) {

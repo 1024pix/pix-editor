@@ -149,7 +149,8 @@ export function register(server) {
         validate: { params: Joi.object({ id: Types.moduleId().required() }).required() },
         handler: async (request, h) => {
           const { id } = request.params;
-          const publishedModule = await publishDraftModule({ draftModuleId: id });
+          const userId = request.auth.credentials.user.id;
+          const publishedModule = await publishDraftModule({ draftModuleId: id, userId });
           return h.response(moduleSerializer.serialize(publishedModule)).code(200);
         },
       },
