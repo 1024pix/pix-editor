@@ -133,6 +133,7 @@ modules:
     title: Modules
   production-module:
     information-tag: en production
+    published-by: Publié par {publishedBy}
   workbench:
     title: Modules
 prototype:
