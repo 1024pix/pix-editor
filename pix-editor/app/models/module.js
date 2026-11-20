@@ -1,9 +1,10 @@
-import { belongsTo } from '@ember-data/model';
+import { attr, belongsTo } from '@ember-data/model';
 
 import BaseModule from './base-module';
 
 export default class Module extends BaseModule {
   @belongsTo('draft-module', { inverse: 'module', async: true }) draftModule;
+  @attr publishedBy;
 
   get draftModuleId() {
     return this.belongsTo('draftModule').id();

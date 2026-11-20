@@ -15,7 +15,7 @@ module('Acceptance | Modules | Production Module', function (hooks) {
     this.server.create('user', { trigram: 'ABC' });
 
     id = crypto.randomUUID();
-    const module = this.server.create('module', { id, internalTitle: 'MON_BEAU_MODULE' });
+    const module = this.server.create('module', { id, internalTitle: 'MON_BEAU_MODULE', publishedBy: 'XYZ' });
     this.server.create('draft-module', { id, module, internalTitle: 'MON_BEAU_MODULE' });
 
     return authenticateSession();
@@ -46,6 +46,7 @@ module('Acceptance | Modules | Production Module', function (hooks) {
       assert.strictEqual(currentURL(), `/modules/production/${id}`);
       assert.dom(screen.getByRole('heading', { name: 'MON_BEAU_MODULE' })).exists();
       assert.dom(screen.getByText('● en production')).exists();
+      assert.dom(screen.getByText('Publié par XYZ')).exists();
 
       // WORKAROUND: let some time for monaco-editor to settle
       await new Promise((resolve) => setTimeout(resolve, 100));
