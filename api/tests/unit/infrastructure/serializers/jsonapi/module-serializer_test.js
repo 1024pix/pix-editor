@@ -9,7 +9,7 @@ describe('Unit | Serializer | JSONAPI | module-serializer', () => {
   describe('#serialize', () => {
     it('serializes a Module model to a module payload', () => {
       // given
-      const module = domainBuilder.buildModuleForConsultation({ draftModuleId: 'pouet' });
+      const module = domainBuilder.buildModuleForConsultation({ draftModuleId: 'pouet', publishedBy: 'Coco' });
       const expectedPayload = {
         data: {
           type: 'modules',
@@ -26,6 +26,7 @@ describe('Unit | Serializer | JSONAPI | module-serializer', () => {
             glossary: module.glossary,
             url: `${config.pixApp.production.baseUrlFr}/modules/${module.shortId}/${module.slug}`,
             'preview-url': `${config.pixApp.production.baseUrlFr}/modules/preview/${module.shortId}/${module.slug}`,
+            'published-by': 'Coco',
           },
           relationships: {
             'draft-module': {

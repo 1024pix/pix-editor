@@ -12,9 +12,10 @@ export async function create(moduleVersion) {
 /**
  * @param {import('../../domain/models/index.js').ModuleVersion} moduleVersion
  */
-function toDto({ details, sections, glossary, updatedAt: _, ...moduleVersion }) {
+function toDto({ details, sections, glossary, publishedBy, updatedAt: _, ...moduleVersion }) {
   return {
     ...moduleVersion,
+    publishedBy,
     ...details,
     sections: JSON.stringify(sections),
     glossary: JSON.stringify(glossary),

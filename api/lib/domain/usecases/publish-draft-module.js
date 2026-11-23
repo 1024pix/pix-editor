@@ -4,7 +4,7 @@ import { DraftModuleValidationError } from '../errors.js';
 import { ModuleVersion } from '../models/index.js';
 import { validateDraftModule } from './validate-draft-module.js';
 
-export async function publishDraftModule({ draftModuleId }, dependencies = { draftModuleRepository, moduleRepository, moduleVersionRepository, validateDraftModule }) {
+export async function publishDraftModule({ draftModuleId, userId }, dependencies = { draftModuleRepository, moduleRepository, moduleVersionRepository, validateDraftModule }) {
   const draftModule = await dependencies.draftModuleRepository.getById({ id: draftModuleId, forUpdate: true });
 
   const validatedDraftModule = await dependencies.validateDraftModule(draftModule, dependencies);
@@ -17,7 +17,7 @@ export async function publishDraftModule({ draftModuleId }, dependencies = { dra
 
     await dependencies.draftModuleRepository.remove({ id: draftModuleId });
 
-    await dependencies.moduleVersionRepository.create(ModuleVersion.fromModule(module));
+    await dependencies.moduleVersionRepository.create(ModuleVersion.fromModule(module, { publishedBy: userId }));
 
     return module;
   });

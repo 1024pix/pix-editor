@@ -12,6 +12,7 @@ export * from './build-localized-challenge.js';
 export * from './build-localized-framework-tubes.js';
 export * from './build-mission.js';
 export * from './build-module.js';
+export * from './build-module-version.js';
 export * from './build-note.js';
 export * from './build-release.js';
 export * from './build-skill.js';

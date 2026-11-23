@@ -179,10 +179,28 @@ describe('Integration | Module Repository', () => {
       // given
       const id = crypto.randomUUID();
       const expectedModule = domainBuilder.buildModule({ id });
-      const expectedModuleForConsultation = domainBuilder.buildModuleForConsultation({ ...expectedModule, draftModuleId: id });
+      const expectedModuleForConsultation = domainBuilder.buildModuleForConsultation({ ...expectedModule, draftModuleId: id, publishedBy: null });
       databaseBuilder.factory.buildModule(expectedModuleForConsultation);
       databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({ id, moduleId: id }));
       databaseBuilder.factory.buildModule(domainBuilder.buildModule({ shortId: 'secondar', internalTitle: 'secondar' }));
+      await databaseBuilder.commit();
+
+      // when
+      const module = await getById({ id });
+
+      // then
+      expect(module).toStrictEqual(expectedModuleForConsultation);
+    });
+
+    it('returns the trigram of the user who published the module version matching the module version', async () => {
+      // given
+      const id = crypto.randomUUID();
+      const user = databaseBuilder.factory.buildEditorUser();
+      const otherUser = databaseBuilder.factory.buildAdminUser();
+      const expectedModuleForConsultation = domainBuilder.buildModuleForConsultation({ id, version: '2.0', publishedBy: user.trigram });
+      databaseBuilder.factory.buildModule(expectedModuleForConsultation);
+      databaseBuilder.factory.buildModuleVersion({ ...expectedModuleForConsultation, id: undefined, moduleId: id, version: '1.0', publishedBy: otherUser.id });
+      databaseBuilder.factory.buildModuleVersion({ ...expectedModuleForConsultation, id: undefined, moduleId: id, publishedBy: user.id });
       await databaseBuilder.commit();
 
       // when

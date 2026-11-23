@@ -1,19 +1,22 @@
 import { Module } from './Module.js';
 
 export class ModuleVersion extends Module {
-  constructor({ moduleId, ...moduleAttrs }) {
+  constructor({ moduleId, publishedBy = null, ...moduleAttrs }) {
     super(moduleAttrs);
     this.moduleId = moduleId;
+    this.publishedBy = publishedBy;
     delete this.updatedAt;
   }
 
   /**
    * @param {Module} module
+   * @param {{ publishedBy?: number }}
    */
-  static fromModule({ id: moduleId, createdAt: _, ...moduleAttrs }) {
+  static fromModule({ id: moduleId, createdAt: _, ...moduleAttrs }, { publishedBy } = {}) {
     return new ModuleVersion({
       ...moduleAttrs,
       moduleId,
+      publishedBy,
     });
   }
 
