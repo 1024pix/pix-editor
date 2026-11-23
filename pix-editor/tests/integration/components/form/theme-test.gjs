@@ -21,10 +21,7 @@ module('Integration | Component | form/theme', function (hooks) {
     await render(<template><Theme @theme={{self.theme}} /></template>);
     // then
 
-    assert.dom('[data-test-theme-name-field]').hasText('Nom fr-fr :');
+    assert.dom('[data-test-theme-name-field]').hasText('Nom :');
     assert.dom('[data-test-theme-name-field] input').hasValue('themeName');
-
-    assert.dom('[data-test-theme-name-en-us-field]').hasText('Nom en-us :');
-    assert.dom('[data-test-theme-name-en-us-field] input').hasValue('themeNameEnUs');
   });
 });
