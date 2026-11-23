@@ -7,6 +7,7 @@ const serializer = new Serializer('area', {
   attributes: [
     'pixId',
     'code',
+    'color',
     'name',
     'titleFrFr',
     'titleEnUs',
