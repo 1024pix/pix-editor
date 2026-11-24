@@ -21,7 +21,8 @@ describe('Integration | Repository | attachment-repository', () => {
           id: challengeId1,
           skillId: 'skill1',
           version: 1,
-        }),
+        },
+      ),
     );
     databaseBuilder.factory.buildChallenge(
       domainBuilder.buildChallengeDatasourceObject({

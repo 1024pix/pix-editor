@@ -129,8 +129,7 @@ export class Skill {
     const name = `${tubeDestination.name}${level}`;
     const id = generateNewIdFnc(Skill.ID_PREFIX);
     const liveChallenges = skillChallenges.filter((ch) =>
-      [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE].includes(ch.status),
-    );
+      [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE].includes(ch.status));
     const prototypesWithActiveFirst = liveChallenges
       .filter((ch) => ch.genealogy === Challenge.GENEALOGIES.PROTOTYPE)
       .sort((chA, chB) => {

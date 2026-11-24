@@ -72,8 +72,7 @@ describe('Integration | Repository | skill-repository', () => {
         skill.challengeIds.forEach((id) =>
           databaseBuilder.factory.buildChallenge(
             domainBuilder.buildChallengeDatasourceObject({ id, skillId: skill.id }),
-          ),
-        );
+          ));
       });
 
       databaseBuilder.factory.buildTranslation({
@@ -184,8 +183,7 @@ describe('Integration | Repository | skill-repository', () => {
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
 
       [...skill1.tutorialIds, ...skill1.learningMoreTutorialIds].forEach((id) =>
-        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id, tagIds: [] })),
-      );
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id, tagIds: [] })));
 
       databaseBuilder.factory.buildSkill(skill1);
       skill1.challengeIds.forEach((id, index) =>
@@ -195,8 +193,7 @@ describe('Integration | Repository | skill-repository', () => {
             skillId: skill1.id,
             genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
           }),
-        ),
-      );
+        ));
 
       databaseBuilder.factory.buildTranslation({
         key: 'skill.skill1.hint',
@@ -272,18 +269,17 @@ describe('Integration | Repository | skill-repository', () => {
       databaseBuilder.factory.buildTube({ id: 'tube1', name: '@foo', thematicId: 'thematic1' });
 
       [...skill1.tutorialIds, ...skill1.learningMoreTutorialIds].forEach((id) =>
-        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id, tagIds: [] })),
-      );
+        databaseBuilder.factory.buildTutorial(domainBuilder.buildTutorialDatasourceObject({ id, tagIds: [] })));
 
       databaseBuilder.factory.buildSkill(skill1);
       skill1.challengeIds.forEach((id, index) =>
         databaseBuilder.factory.buildChallenge(
           domainBuilder.buildChallengeDatasourceObject({
-            id, skillId: skill1.id,
+            id,
+            skillId: skill1.id,
             genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
           }),
-        ),
-      );
+        ));
 
       databaseBuilder.factory.buildTranslation({
         key: 'skill.skill1.hint',
@@ -451,8 +447,7 @@ describe('Integration | Repository | skill-repository', () => {
                 genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
               }),
             );
-          }),
-        );
+          }));
 
         await databaseBuilder.commit();
         const ids = skills.map((skill) => skill.id);
@@ -553,10 +548,10 @@ describe('Integration | Repository | skill-repository', () => {
 
           skill.challengeIds.forEach((id, index) =>
             databaseBuilder.factory.buildChallenge(domainBuilder.buildChallenge({
-              id, skillId: skill.id,
+              id,
+              skillId: skill.id,
               genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
-            })),
-          );
+            })));
 
           databaseBuilder.factory.buildTranslation({
             key: `skill.${skill.id}.hint`,
@@ -855,8 +850,7 @@ describe('Integration | Repository | skill-repository', () => {
           format: `format ${id}`,
           link: `link ${id}`,
           locale: 'fr',
-        }),
-      );
+        }));
       await databaseBuilder.commit();
 
       // when

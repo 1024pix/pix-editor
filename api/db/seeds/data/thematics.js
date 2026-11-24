@@ -1,8 +1,7 @@
 export async function buildThematicsFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   const thematicItems = [];
   const allCompetences = learningContentData.flatMap((framework) =>
-    framework.areas.flatMap((area) => area.competences),
-  );
+    framework.areas.flatMap((area) => area.competences));
   for (const competenceItem of allCompetences) {
     for (let i = 0; i < learningContentConfig.cntThematicsPerCompetence; ++i) {
       const thematicItem = buildThematic({

@@ -32,7 +32,8 @@ export function register(server) {
               'hasBeenValidated',
               'module',
               'previewUrl',
-            ], meta,
+            ],
+            meta,
           });
         },
       },

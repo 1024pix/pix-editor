@@ -38,18 +38,15 @@ describe('Integration | Repository | competence-repository', () => {
       competences.forEach((competence) => {
         databaseBuilder.factory.buildCompetence(competence);
         competence.thematicIds.forEach((id) =>
-          databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }),
-        );
+          databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
         competence.tubeIds.forEach((id, index) =>
           databaseBuilder.factory.buildTube({
             id,
             name: `@${id}`,
             thematicId: competence.thematicIds[index % competence.thematicIds.length],
-          }),
-        );
+          }));
         competence.skillIds.forEach((id, index) =>
-          databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }),
-        );
+          databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
       });
 
       databaseBuilder.factory.buildTranslation({
@@ -168,18 +165,15 @@ describe('Integration | Repository | competence-repository', () => {
       competences.forEach((competence) => {
         databaseBuilder.factory.buildCompetence(competence);
         competence.thematicIds.forEach((id) =>
-          databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }),
-        );
+          databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
         competence.tubeIds.forEach((id, index) =>
           databaseBuilder.factory.buildTube({
             id,
             name: `@${id}`,
             thematicId: competence.thematicIds[index % competence.thematicIds.length],
-          }),
-        );
+          }));
         competence.skillIds.forEach((id, index) =>
-          databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }),
-        );
+          databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
       });
 
       databaseBuilder.factory.buildTranslation({
@@ -301,18 +295,15 @@ describe('Integration | Repository | competence-repository', () => {
       databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'recFmk1' });
       databaseBuilder.factory.buildCompetence(competence);
       competence.thematicIds.forEach((id) =>
-        databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }),
-      );
+        databaseBuilder.factory.buildThematic({ id, competenceId: competence.id }));
       competence.tubeIds.forEach((id, index) =>
         databaseBuilder.factory.buildTube({
           id,
           name: `@${id}`,
           thematicId: competence.thematicIds[index % competence.thematicIds.length],
-        }),
-      );
+        }));
       competence.skillIds.forEach((id, index) =>
-        databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }),
-      );
+        databaseBuilder.factory.buildSkill({ id, tubeId: competence.tubeIds[index % competence.tubeIds.length] }));
 
       databaseBuilder.factory.buildTranslation({
         key: 'competence.competence1.name',

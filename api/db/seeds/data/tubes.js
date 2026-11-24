@@ -64,8 +64,7 @@ const pickTubeName = getTubeName();
 export function buildTubesFromConfig({ databaseBuilder, learningContentConfig, learningContentData }) {
   const tubeItems = [];
   const allThematics = learningContentData.flatMap((framework) =>
-    framework.areas.flatMap((area) => area.competences).flatMap((competence) => competence.thematics),
-  );
+    framework.areas.flatMap((area) => area.competences).flatMap((competence) => competence.thematics));
   for (const thematicItem of allThematics) {
     if (thematicItem.name.includes('workbench')) {
       const tubeItemWorkbench = buildTube({

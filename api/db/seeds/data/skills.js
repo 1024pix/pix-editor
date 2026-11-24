@@ -22,8 +22,7 @@ export function buildSkillsFromConfig({ databaseBuilder, learningContentConfig, 
   const allTubes = learningContentData.flatMap((framework) =>
     framework.areas
       .flatMap((area) => area.competences)
-      .flatMap((competence) => competence.thematics.flatMap((thematic) => thematic.tubes)),
-  );
+      .flatMap((competence) => competence.thematics.flatMap((thematic) => thematic.tubes)));
   const tutorialsIter = cycleTutorials(tutorialItems);
   for (const tubeItem of allTubes) {
     if (tubeItem.name.includes('workbench')) {

@@ -10,15 +10,21 @@ export default [
   {
     plugins: { '@stylistic': stylistic },
     rules: {
-      '@stylistic/array-bracket-newline': ['error', { multiline: true }],
-      '@stylistic/array-element-newline': ['error', { multiline: true, minItems: 3 }],
       '@stylistic/arrow-parens': ['error', 'always'],
       '@stylistic/brace-style': ['error', '1tbs'],
       '@stylistic/curly-newline': ['error', { consistent: true, ClassBody: { minElements: 1 } }],
       '@stylistic/function-call-spacing': ['error', 'never'],
+      '@stylistic/list-style': [
+        'error',
+        {
+          singleLine: { spacing: 'never' },
+          overrides: {
+            ArrayExpression: { singleLine: { spacing: 'never', maxItems: 2 } },
+            '{}': { singleLine: { spacing: 'always' } },
+          },
+        },
+      ],
       '@stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1 }],
-      '@stylistic/object-curly-newline': ['error', { multiline: true }],
-      '@stylistic/object-curly-spacing': ['error', 'always'],
       '@stylistic/quotes': [
         'error',
         'single',

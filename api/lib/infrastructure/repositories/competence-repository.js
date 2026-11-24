@@ -107,8 +107,7 @@ export function _selectCompetences() {
 function toDomainList(dtos, translations) {
   const translationsByCompetenceId = Object.groupBy(translations, (translation) => translation.entityId);
   return dtos.map((datasourceCompetence) =>
-    toDomain(datasourceCompetence, translationsByCompetenceId[datasourceCompetence.id]),
-  );
+    toDomain(datasourceCompetence, translationsByCompetenceId[datasourceCompetence.id]));
 }
 
 function toDomain({ id, areaId, thematicIds = [], tubeIds = [], skillIds = [], ...dto }, translations = []) {

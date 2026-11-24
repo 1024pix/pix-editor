@@ -52,8 +52,7 @@ export class ScriptRunner {
     try {
       const yargsCommand = yargs(getProcessArgs()).usage(description).options(options).help().version(false);
       Object.entries(commands).forEach(([name, { description, options }]) =>
-        yargsCommand.command(name, description, options),
-      );
+        yargsCommand.command(name, description, options));
 
       const result = await yargsCommand.parseAsync();
 

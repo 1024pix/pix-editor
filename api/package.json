@@ -89,7 +89,7 @@
     "url-regex-safe": "4.0.0"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "5.10.0",
+    "@stylistic/eslint-plugin": "6.0.1",
     "dayjs": "1.11.23",
     "eslint": "10.15.0",
     "eslint-plugin-mocha": "12.0.2",

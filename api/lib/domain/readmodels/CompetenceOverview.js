@@ -28,8 +28,7 @@ export class CompetenceOverview {
             challenges,
             locale,
             localizedFrameworkTubes,
-          }),
-        )
+          }))
         .filter((thematicOverview) => !thematicOverview.isEmpty),
       primaryLocales,
     });
@@ -50,8 +49,7 @@ export class CompetenceOverview {
             tubes,
             skills: skillsWithoutWorkbench,
             challenges,
-          }),
-        )
+          }))
         .filter((thematicOverview) => !thematicOverview.isEmpty),
       primaryLocales,
     });
@@ -94,8 +92,7 @@ class ThematicOverview {
             challenges,
             locale,
             localizedFrameworkTube: localizedFrameworkTubesById?.[tube.id],
-          }),
-        )
+          }))
         .filter((tubeOverview) => !tubeOverview.isEmpty),
     });
   }
@@ -114,8 +111,7 @@ class ThematicOverview {
             tube,
             skills,
             challenges,
-          }),
-        )
+          }))
         .filter((tubeOverview) => !tubeOverview.isEmpty),
     });
   }
@@ -152,8 +148,7 @@ class TubeOverview {
           skill: skills?.[0],
           challenges,
           locale,
-        }),
-      ),
+        })),
     });
   }
 
@@ -165,8 +160,7 @@ class TubeOverview {
       airtableId: tube.airtableId,
       name: tube.name,
       skillOverviews: skillsByLevel?.map((skills) =>
-        SkillOverview.buildForChallengesWorkbench({ skills, challenges }),
-      ),
+        SkillOverview.buildForChallengesWorkbench({ skills, challenges })),
     });
   }
 }

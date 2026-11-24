@@ -33,7 +33,8 @@ export function register(server) {
               'isBeta',
               'visibility',
               'url',
-            ], meta,
+            ],
+            meta,
           });
         },
       },

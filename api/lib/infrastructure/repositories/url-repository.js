@@ -70,8 +70,7 @@ async function clearOlderSheets(spreadsheetId) {
       return sheetDate.getTime() < limitDate.getTime();
     };
     const sheetsToDelete = spreadsheet.data.sheets.filter((sheet) =>
-      isSheetOlderThanLimitDate(sheet.properties.title, limitDate),
-    );
+      isSheetOlderThanLimitDate(sheet.properties.title, limitDate));
     await sheets.spreadsheets.batchUpdate({
       spreadsheetId,
       auth,

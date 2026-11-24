@@ -53,8 +53,7 @@ export function buildChallengesFromConfig({ databaseBuilder, learningContentConf
   const allTubes = learningContentData.flatMap((framework) =>
     framework.areas
       .flatMap((area) => area.competences)
-      .flatMap((competence) => competence.thematics.flatMap((thematic) => thematic.tubes)),
-  );
+      .flatMap((competence) => competence.thematics.flatMap((thematic) => thematic.tubes)));
   const allSkills = allTubes.flatMap((tube) => tube.skills);
   for (const skillItem of allSkills) {
     const tubeIndex = allTubes.findIndex(({ airtableId }) => skillItem.tubeAirtableId === airtableId);
