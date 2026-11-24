@@ -125,6 +125,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
       'version',
       'hasBeenValidated',
       'validationErrors',
+      'modifiedBy',
       'createdAt',
       'updatedAt',
     ];

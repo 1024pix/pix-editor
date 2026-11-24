@@ -2,12 +2,14 @@ import { describe, expect, it, vi } from 'vitest';
 import { bulkUpdateDraftModules } from '../../../../lib/domain/usecases/index.js';
 
 describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
-  it('removes drafts whose module has been updated, creates them again and returns them validated', async () => {
+  it('removes drafts whose module has been updated, creates them again keeping modifiedBy and returns them validated', async () => {
     // given
+    const modifiedBy = Symbol('modifiedBy');
     const draftModule = {
       id: 1,
       moduleId: 1,
       version: '1.3',
+      modifiedBy,
     };
     const createdDraftModule = Symbol('createdDraftModule');
     const draftModuleRepository = { remove: vi.fn() };
@@ -27,7 +29,7 @@ describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
     // then
     expect(result).toStrictEqual([validatedDraftModule]);
     expect(draftModuleRepository.remove).toHaveBeenCalledExactlyOnceWith({ id: 1 });
-    expect(createDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith({ draftModule });
+    expect(createDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith({ draftModule, userId: modifiedBy });
     expect(validateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(createdDraftModule);
     expect(updateDraftModuleUsecase).not.toHaveBeenCalled();
   });

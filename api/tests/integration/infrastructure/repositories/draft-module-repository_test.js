@@ -10,14 +10,14 @@ describe('Integration | Repository | draft-module-repository', () => {
       const draftModule = domainBuilder.buildDraftModule();
       const user = databaseBuilder.factory.buildUser({ name: 'User', access: 'editor' });
       await databaseBuilder.commit();
-      const expectedDraftModule = { ...draftModule, createdAt: expect.any(Date), updatedAt: expect.any(Date) };
+      const expectedDraftModule = { ...draftModule, modifiedBy: user.id, createdAt: expect.any(Date), updatedAt: expect.any(Date) };
 
       // when
       const savedDraftModule = await draftModuleRepository.save({ draftModule, modifiedBy: user.id });
 
       // then
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
-      await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails, modifiedBy: user.id }]);
+      await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails }]);
       expect({ ...savedDraftModule }).toStrictEqual(expectedDraftModule);
     });
 
@@ -64,6 +64,45 @@ describe('Integration | Repository | draft-module-repository', () => {
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
       await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails, modifiedBy: null }]);
       expect(savedDraftModule).toStrictEqual(expectedDraftModule);
+    });
+
+    describe('when modifiedBy is not provided (script case)', () => {
+      it('keeps existing modifiedBy', async () => {
+        // given
+        const user = databaseBuilder.factory.buildUser({ name: 'User', access: 'editor' });
+
+        const internalTitle = 'DRAFT_WITHOUT_MODIFIED_BY';
+        const draftModule = domainBuilder.buildDraftModule({ internalTitle });
+        databaseBuilder.factory.buildDraftModule({ ...draftModule, modifiedBy: user.id });
+        await databaseBuilder.commit();
+
+        // when
+        await draftModuleRepository.save({ draftModule: { ...draftModule } });
+
+        // then
+        const result = await knex('draft-modules').select('internalTitle', 'modifiedBy').where('internalTitle', internalTitle);
+        expect(result).toStrictEqual([{ internalTitle, modifiedBy: user.id }]);
+      });
+    });
+
+    describe('when modifiedBy is provided', () => {
+      it('overrides existing modifiedBy', async () => {
+        // given
+        const user = databaseBuilder.factory.buildUser({ name: 'User', access: 'editor' });
+        const otherUser = databaseBuilder.factory.buildUser({ name: 'Other user', access: 'editor', trigram: 'OTH' });
+
+        const internalTitle = 'DRAFT_WITH_MODIFIED_BY';
+        const draftModule = domainBuilder.buildDraftModule({ internalTitle });
+        databaseBuilder.factory.buildDraftModule({ ...draftModule, modifiedBy: user.id });
+        await databaseBuilder.commit();
+
+        // when
+        await draftModuleRepository.save({ draftModule, modifiedBy: otherUser.id });
+
+        // then
+        const result = await knex('draft-modules').select('internalTitle', 'modifiedBy').where('internalTitle', internalTitle);
+        expect(result).toStrictEqual([{ internalTitle, modifiedBy: otherUser.id }]);
+      });
     });
 
     it('does not persist validationErrors', async () => {

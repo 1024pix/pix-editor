@@ -6,6 +6,7 @@ export function buildDraftModule({
   hasBeenValidated = false,
   validationErrors = null,
   version = '0.1',
+  modifiedBy = null,
   ...moduleAttributes
 } = {}) {
   const module = buildModule({ ...moduleAttributes, version });
@@ -14,5 +15,6 @@ export function buildDraftModule({
     moduleId,
     hasBeenValidated,
     validationErrors,
+    modifiedBy,
   });
 }

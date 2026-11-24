@@ -23,7 +23,8 @@ export async function bulkUpdateDraftModules({ draftModules, updatedModuleIds },
 
 // Recreating the draft makes its version start from the new major version of its module (e.g. 2.1 instead of 1.4).
 // Removing the draft also removes its history of draft module versions.
+// The last user who modified the draft is kept.
 async function recreateDraftModule(draftModule, dependencies) {
   await dependencies.draftModuleRepository.remove({ id: draftModule.id });
-  return dependencies.createDraftModule({ draftModule });
+  return dependencies.createDraftModule({ draftModule, userId: draftModule.modifiedBy });
 }

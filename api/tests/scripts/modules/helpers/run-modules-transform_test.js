@@ -10,6 +10,8 @@ const FIXED_CONTENT = '<p>Corrigé</p>';
 describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () => {
   it('saves the modules and draft modules updated by the transform', async () => {
     // given
+    const user = databaseBuilder.factory.buildUser({ name: 'User', access: 'editor' });
+
     const moduleToFixWithoutDraft = domainBuilder.buildModule({
       shortId: 'module01',
       internalTitle: 'module-to-fix-without-draft',
@@ -28,6 +30,7 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       moduleId: moduleToFixWithDraftToFix.id,
       version: '1.1',
       sections: buildSectionsWithText(CONTENT_TO_FIX),
+      modifiedBy: user.id,
     });
 
     const moduleToFixWithOutOfScopeDraft = domainBuilder.buildModule({
@@ -41,6 +44,7 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       moduleId: moduleToFixWithOutOfScopeDraft.id,
       version: '1.1',
       sections: buildSectionsWithText('<p>Brouillon à jour</p>'),
+      modifiedBy: user.id,
     });
 
     const outOfScopeModuleWithDraftToFix = domainBuilder.buildModule({
@@ -54,6 +58,7 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       moduleId: outOfScopeModuleWithDraftToFix.id,
       version: '1.1',
       sections: buildSectionsWithText(CONTENT_TO_FIX),
+      modifiedBy: user.id,
     });
 
     const outOfScopeModuleWithOutOfScopeDraft = domainBuilder.buildModule({
@@ -67,6 +72,7 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       moduleId: outOfScopeModuleWithOutOfScopeDraft.id,
       version: '1.1',
       sections: buildSectionsWithText('<p>Brouillon à jour</p>'),
+      modifiedBy: user.id,
     });
 
     const creationDraftToFix = domainBuilder.buildDraftModule({
@@ -74,12 +80,14 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       internalTitle: 'creation-draft-to-fix',
       version: '0.1',
       sections: buildSectionsWithText(CONTENT_TO_FIX),
+      modifiedBy: user.id,
     });
     const outOfScopeCreationDraft = domainBuilder.buildDraftModule({
       shortId: 'draft002',
       internalTitle: 'out-of-scope-creation-draft',
       version: '0.1',
       sections: buildSectionsWithText('<p>Brouillon à jour</p>'),
+      modifiedBy: user.id,
     });
 
     databaseBuilder.factory.buildModule(moduleToFixWithoutDraft);
@@ -120,14 +128,15 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
     expect(updatedModuleVersions).toStrictEqual(expectedModuleVersions);
 
     // A recreated draft starts again from its own sections, so an out-of-scope draft keeps its content.
-    const updatedDraftModules = await knex('draft-modules').select('internalTitle', 'version', textContent).orderBy('shortId');
+    // The last user who modified a draft is kept, whether the draft is recreated or updated.
+    const updatedDraftModules = await knex('draft-modules').select('internalTitle', 'version', textContent, 'modifiedBy').orderBy('shortId');
     const expectedDraftModules = [
-      { internalTitle: 'creation-draft-to-fix', version: '0.2', content: FIXED_CONTENT },
-      { internalTitle: 'out-of-scope-creation-draft', version: '0.1', content: '<p>Brouillon à jour</p>' },
-      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.1', content: FIXED_CONTENT },
-      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.1', content: '<p>Brouillon à jour</p>' },
-      { internalTitle: 'out-of-scope-module-with-draft-to-fix', version: '1.2', content: FIXED_CONTENT },
-      { internalTitle: 'out-of-scope-module-with-out-of-scope-draft', version: '1.1', content: '<p>Brouillon à jour</p>' },
+      { internalTitle: 'creation-draft-to-fix', version: '0.2', content: FIXED_CONTENT, modifiedBy: user.id },
+      { internalTitle: 'out-of-scope-creation-draft', version: '0.1', content: '<p>Brouillon à jour</p>', modifiedBy: user.id },
+      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.1', content: FIXED_CONTENT, modifiedBy: user.id },
+      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.1', content: '<p>Brouillon à jour</p>', modifiedBy: user.id },
+      { internalTitle: 'out-of-scope-module-with-draft-to-fix', version: '1.2', content: FIXED_CONTENT, modifiedBy: user.id },
+      { internalTitle: 'out-of-scope-module-with-out-of-scope-draft', version: '1.1', content: '<p>Brouillon à jour</p>', modifiedBy: user.id },
     ];
     expect(updatedDraftModules).toStrictEqual(expectedDraftModules);
 

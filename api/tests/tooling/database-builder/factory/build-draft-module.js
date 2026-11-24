@@ -23,6 +23,7 @@ import { databaseBuffer } from '../database-buffer.js';
  *   version?: string
  *   hasBeenValidated?: boolean
  *   validationErrors?: { message: string, isSchemaError: boolean }[]
+ *   modifiedBy?: number
  *   createdAt?: string | number | Date
  *   updatedAt?: string | number | Date
  * }} draftModuleToBuild
@@ -42,6 +43,7 @@ export function buildDraftModule({
   version,
   hasBeenValidated,
   validationErrors,
+  modifiedBy,
   createdAt,
   updatedAt,
 } = {}) {
@@ -60,6 +62,7 @@ export function buildDraftModule({
     version,
     hasBeenValidated,
     validationErrors,
+    modifiedBy,
     createdAt,
     updatedAt,
   };
