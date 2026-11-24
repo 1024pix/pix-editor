@@ -2,11 +2,26 @@ name: "Security Checks"
 
 on:
   push:
-    branches:
-      - dev
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+    types: [opened, reopened, ready_for_review, labeled]
+    paths: # only loads on changes of dependencies
+      - '**/package-lock.json'
+      - '.github/workflows/security.yml'
+
+permissions: {}
 
 jobs:
-  upload_sboms:
+  gate: # runs only on selected labels
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.action != 'labeled'
+      || github.event.label.name == '🛡️ security update'
+      || github.event.label.name == 'deptrack-reload'
+    steps:
+      - run: echo "Security scan triggered by ${{ github.event_name }}/${{ github.event.action }}"
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -14,84 +29,126 @@ jobs:
         with:
           node-version-file: "package.json"
 
-      - name: Install Cyclone DX
-        run: npm install -g @cyclonedx/cyclonedx-npm@4.2.0
 
-      - name: Pix Editor Monorepo - Install dependencies
-        run: npm ci
+  check_risk_score_monorepo:
+    runs-on: ubuntu-latest
+    needs: gate
+    permissions:
+      contents: read
+    outputs:
+      upload: ${{ steps.riskscoreMonorepo.outputs.upload_json }}
+    steps:
 
-      - name: Pix Editor Monorepo - Create SBOM
-        id: create_monorepo_sbom
-        continue-on-error: true
-        run: npx @cyclonedx/cyclonedx-npm --output-file pix-editor-repo-sbom.json package.json
-
-      - name: Pix Editor Monorepo - Upload BOM to Dependency-Track
-        uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
-        if: ${{ steps.create_monorepo_sbom.outcome == 'success' }}
-        continue-on-error: true
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
-          apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-          # change these variables for each project
-          projectName: Pix Editor Monorepo
-          projectVersion: dev
-          bomFilename: "pix-editor-repo-sbom.json"
-          autoCreate: true
+          persist-credentials: false
 
-      - name: Pix Editor front - Create SBOM
-        id: create_front_sbom
-        continue-on-error: true
-        run: npx @cyclonedx/cyclonedx-npm --output-file pix-editor-front-sbom.json pix-editor/package.json
-
-      - name: Pix Editor front - Upload BOM to Dependency-Track
-        uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
-        if: ${{ steps.create_front_sbom.outcome == 'success' }}
-        continue-on-error: true
+      - name: Generates Monorepo SBoM and upload to OWASP DTrack
+        id: riskscoreMonorepo
+        uses: 1024pix/check-dependency-track-action/node@3f4ca48509e2e15b2f201e456d7f7e9fc2fe39f1 # v1.1.2
         with:
-          serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
-          apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-          # change these variables for each project
-          projectName: Pix Editor front
-          projectVersion: dev
-          bomFilename: "pix-editor-front-sbom.json"
-          autoCreate: true
+          url: '${{ secrets.DEPENDENCYTRACK_URL }}'
+          key: '${{ secrets.DEPENDENCYTRACK_APIKEY }}'
+          directory: '.'
+          wait_for_status: 'false'
+          basic_user: '${{ vars.DEPENDENCYTRACK_BASIC_USER }}'
+          basic_password: '${{ secrets.DEPENDENCYTRACK_BASIC_PASSWORD }}'
 
-      - name: Pix Editor API - Create SBOM
-        id: create_api_sbom
-        continue-on-error: true
-        run: npx @cyclonedx/cyclonedx-npm --output-file pix-editor-api-sbom.json api/package.json
-
-      - name: Pix Editor API - Upload BOM to Dependency-Track
-        uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
-        if: ${{ steps.create_api_sbom.outcome == 'success' }}
-        continue-on-error: true
+  check_risk_score_front:
+    runs-on: ubuntu-latest
+    needs: gate
+    permissions:
+      contents: read
+    outputs:
+      upload: ${{ steps.riskscoreFront.outputs.upload_json }}
+    steps:
+      
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
-          apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-          # change these variables for each project
-          projectName: Pix Editor API
-          projectVersion: dev
-          bomFilename: "pix-editor-api-sbom.json"
-          autoCreate: true
+          persist-credentials: false
 
-      - name: Pix Editor Challenge-Parser - Install dependencies
-        working-directory: challenge-parser
-        run: npm ci
-
-      - name: Pix Editor Challenge-Parser - Create SBOM
-        id: create_challenge_parser_sbom
-        continue-on-error: true
-        run: npx @cyclonedx/cyclonedx-npm --output-file pix-editor-challengeparser-sbom.json challenge-parser/package.json
-
-      - name: Pix Editor Challenge-Parser - Upload BOM to Dependency-Track
-        uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5
-        if: ${{ steps.create_challenge_parser_sbom.outcome == 'success' }}
-        continue-on-error: true
+      - name: Generates Front app SBoM and upload to OWASP DTrack
+        id: riskscoreFront
+        uses: 1024pix/check-dependency-track-action/node@3f4ca48509e2e15b2f201e456d7f7e9fc2fe39f1 # v1.1.2
         with:
-          serverHostname: ${{ secrets.DEPENDENCYTRACK_HOSTNAME }}
-          apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-          # change these variables for each project
-          projectName: Pix Editor Challenge-Parser
-          projectVersion: dev
-          bomFilename: "pix-editor-challengeparser-sbom.json"
-          autoCreate: true
+          url: '${{ secrets.DEPENDENCYTRACK_URL }}'
+          key: '${{ secrets.DEPENDENCYTRACK_APIKEY }}'
+          directory: 'pix-editor/'
+          wait_for_status: 'false'
+          basic_user: '${{ vars.DEPENDENCYTRACK_BASIC_USER }}'
+          basic_password: '${{ secrets.DEPENDENCYTRACK_BASIC_PASSWORD }}'
+
+  check_risk_score_api:
+    runs-on: ubuntu-latest
+    needs: gate
+    permissions:
+      contents: read
+    outputs:
+      upload: ${{ steps.riskscoreAPI.outputs.upload_json }}
+    steps:
+      
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Generates API SBoM and upload to OWASP DTrack
+        id: riskscoreAPI
+        uses: 1024pix/check-dependency-track-action/node@3f4ca48509e2e15b2f201e456d7f7e9fc2fe39f1 # v1.1.2
+        with:
+          url: '${{ secrets.DEPENDENCYTRACK_URL }}'
+          key: '${{ secrets.DEPENDENCYTRACK_APIKEY }}'
+          directory: 'api/'
+          wait_for_status: 'false'
+          basic_user: '${{ vars.DEPENDENCYTRACK_BASIC_USER }}'
+          basic_password: '${{ secrets.DEPENDENCYTRACK_BASIC_PASSWORD }}'
+
+  check_risk_score_challenge_parser:
+    runs-on: ubuntu-latest
+    needs: gate
+    permissions:
+      contents: read
+    outputs:
+      upload: ${{ steps.riskscoreChallengeParser.outputs.upload_json }}
+    steps:
+      
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Generates Challenge-Parser SBoM and upload to OWASP DTrack
+        id: riskscoreChallengeParser
+        uses: 1024pix/check-dependency-track-action/node@3f4ca48509e2e15b2f201e456d7f7e9fc2fe39f1 # v1.1.2
+        with:
+          url: '${{ secrets.DEPENDENCYTRACK_URL }}'
+          key: '${{ secrets.DEPENDENCYTRACK_APIKEY }}'
+          directory: 'challenge-parser/'
+          wait_for_status: 'false'
+          basic_user: '${{ vars.DEPENDENCYTRACK_BASIC_USER }}'
+          basic_password: '${{ secrets.DEPENDENCYTRACK_BASIC_PASSWORD }}'
+
+
+  fetch_results:
+    runs-on: ubuntu-latest
+    needs:
+      - gate
+      - check_risk_score_monorepo
+      - check_risk_score_front
+      - check_risk_score_api
+      - check_risk_score_challenge_parser
+    if: ${{ !cancelled() && github.event_name == 'pull_request' && needs.gate.result == 'success' }}
+    outputs:
+      status: ${{ steps.fetch_all_scores.outputs.status }}
+      markdown: ${{ steps.fetch_all_scores.outputs.markdown }}
+    steps:
+      - id: fetch_all_scores
+        uses: 1024pix/check-dependency-track-action/fetch@3f4ca48509e2e15b2f201e456d7f7e9fc2fe39f1 # v1.1.2
+        with:
+          url: '${{ secrets.DEPENDENCYTRACK_URL }}'
+          key: '${{ secrets.DEPENDENCYTRACK_APIKEY }}'
+          basic_user: '${{ vars.DEPENDENCYTRACK_BASIC_USER }}'
+          basic_password: '${{ secrets.DEPENDENCYTRACK_BASIC_PASSWORD }}'
+          projects: |
+            ${{ needs.check_risk_score_monorepo.outputs.upload }}
+            ${{ needs.check_risk_score_front.outputs.upload }}
+            ${{ needs.check_risk_score_api.outputs.upload }}
+            ${{ needs.check_risk_score_challenge_parser.outputs.upload }}
