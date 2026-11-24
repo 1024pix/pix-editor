@@ -58,8 +58,12 @@ export async function count({ filter } = {}) {
 export async function getById({ id, forUpdate = false }) {
   const knexConn = DomainTransaction.getConnection();
 
-  let query = knexConn.select('*').from('draft-modules').where({ id }).first();
-  if (forUpdate) query = query.forUpdate();
+  let query = knexConn.select('draft-modules.*', 'users.trigram as modifiedBy')
+    .from('draft-modules')
+    .leftOuterJoin('users', 'users.id', 'draft-modules.modifiedBy')
+    .where('draft-modules.id', id)
+    .first();
+  if (forUpdate) query = query.forUpdate('draft-modules');
 
   const draftModule = await query;
 

@@ -2,6 +2,7 @@ import { describe, describe as context, expect, it } from 'vitest';
 import { catchErr, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as draftModuleRepository from '../../../../lib/infrastructure/repositories/draft-module-repository.js';
 import { NotFoundError } from '../../../../lib/infrastructure/errors.js';
+import { DomainTransaction } from '../../../../lib/domain/DomainTransaction.js';
 
 describe('Integration | Repository | draft-module-repository', () => {
   describe('save', () => {
@@ -227,6 +228,34 @@ describe('Integration | Repository | draft-module-repository', () => {
 
       // then
       expect(draftModule).toStrictEqual(expectedDraftModule);
+    });
+
+    it('returns the trigram of the user who last modified the draft module', async () => {
+      // given
+      const user = databaseBuilder.factory.buildUser({ name: 'User', access: 'editor', trigram: 'USR' });
+      const draftModule = domainBuilder.buildDraftModule();
+      databaseBuilder.factory.buildDraftModule({ ...draftModule, modifiedBy: user.id });
+      await databaseBuilder.commit();
+
+      // when
+      const result = await draftModuleRepository.getById({ id: draftModule.id });
+
+      // then
+      expect(result).toStrictEqual(domainBuilder.buildDraftModule({ ...draftModule, modifiedBy: 'USR' }));
+    });
+
+    it('returns the trigram when locking the draft module for update', async () => {
+      // given
+      const user = databaseBuilder.factory.buildUser({ name: 'User', access: 'editor', trigram: 'USR' });
+      const draftModule = domainBuilder.buildDraftModule();
+      databaseBuilder.factory.buildDraftModule({ ...draftModule, modifiedBy: user.id });
+      await databaseBuilder.commit();
+
+      // when
+      const result = await DomainTransaction.execute(() => draftModuleRepository.getById({ id: draftModule.id, forUpdate: true }));
+
+      // then
+      expect(result.modifiedBy).toEqual('USR');
     });
 
     it('throw a not Found error if draft module is not found', async () => {
