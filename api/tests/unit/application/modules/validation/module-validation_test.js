@@ -212,7 +212,6 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
     describe('when image maxWidth is valid', function() {
       [
-        ['missing', undefined],
         ['zero', 0],
         ['a positive integer', 1],
         ['the maximum allowed value', 700],
@@ -224,7 +223,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
             url: 'https://assets.pix.org/modules/placeholder-image.svg',
             alt: '',
             alternativeText: '',
-            ...(maxWidth !== undefined && { maxWidth }),
+            maxWidth,
           };
 
           try {
@@ -238,6 +237,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
 
     describe('when image maxWidth is invalid', function() {
       [
+        ['missing', undefined],
         ['a non numeric value', 'abc'],
         ['an empty string', ''],
         ['a negative value', -1],
@@ -869,6 +869,7 @@ describe('Unit | Application | Modules | Validation | Module validation', functi
           url: 'https://example.com/modules/placeholder-image.svg',
           alt: '',
           alternativeText: '',
+          maxWidth: 0,
         };
 
         // when

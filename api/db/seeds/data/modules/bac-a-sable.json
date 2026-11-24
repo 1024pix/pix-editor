@@ -323,7 +323,8 @@
                       "alt": "Une photo comportant des chiens et des bagels",
                       "alternativeText": "",
                       "legend": "",
-                      "licence": ""
+                      "licence": "",
+                      "maxWidth": 0
                     }
                   ]
                 },
@@ -1207,7 +1208,8 @@
                 "alt": "Image de flamant rose",
                 "alternativeText": "Image de flamant rose.",
                 "legend": "Faite avant le séminaire de juin 2023",
-                "licence": "©Pix Corporation & Fun, 2025, Challenge Accepted Inc. "
+                "licence": "©Pix Corporation & Fun, 2025, Challenge Accepted Inc. ",
+                "maxWidth": 0
               }
             }
           ]
