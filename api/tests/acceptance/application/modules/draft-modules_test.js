@@ -657,6 +657,7 @@ describe('Acceptance | Route | draft-modules', () => {
           ...draftModule.details,
           createdAt: draftModule.createdAt,
           updatedAt: expect.any(Date),
+          modifiedBy: editorUser.id,
         },
       ]);
 
