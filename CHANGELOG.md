@@ -1,5 +1,31 @@
 
 
+## v4.65.0 (24/11/2026)
+
+
+### :rocket: Amélioration
+- [#1848](https://github.com/1024pix/pix-editor/pull/1848) [FEATURE] Afficher le trigramme de l'utilisateur ayant publié le module (PIX-25043).
+- [#1847](https://github.com/1024pix/pix-editor/pull/1847) [FEATURE] Enregistrer le userId dans la table `module-versions`sous la colonne `publishedBy`et exposer le trigramme sur la route de détails (PIX-24542).
+
+### :arrow_up: Montée de version
+- [#1869](https://github.com/1024pix/pix-editor/pull/1869) [BUMP] Update linters (pix-editor).
+- [#1868](https://github.com/1024pix/pix-editor/pull/1868) [BUMP] Update JS test packages (pix-editor,api).
+- [#1867](https://github.com/1024pix/pix-editor/pull/1867) [BUMP] Update dependency tough-cookie to v6.1.0 (api).
+- [#1866](https://github.com/1024pix/pix-editor/pull/1866) [BUMP] Update dependency sass-embedded to v1.108.2 (pix-editor).
+- [#1862](https://github.com/1024pix/pix-editor/pull/1862) [BUMP] Update dependency ember-cli to v7.4.0 (pix-editor).
+- [#1865](https://github.com/1024pix/pix-editor/pull/1865) [BUMP] Update dependency phrase-js to v3.33.0 (api).
+- [#1864](https://github.com/1024pix/pix-editor/pull/1864) [BUMP] Update dependency html-validate to v11.21.1 (api).
+- [#1863](https://github.com/1024pix/pix-editor/pull/1863) [BUMP] Update dependency ember-sortable to v5.5.1 (pix-editor).
+- [#1861](https://github.com/1024pix/pix-editor/pull/1861) [BUMP] Update dependency @playwright/test to v1.65.1 (pix-editor).
+- [#1860](https://github.com/1024pix/pix-editor/pull/1860) [BUMP] Update hapijs monorepo (api).
+- [#1859](https://github.com/1024pix/pix-editor/pull/1859) [BUMP] Update dependency postcss to v8.5.33 (pix-editor).
+- [#1858](https://github.com/1024pix/pix-editor/pull/1858) [BUMP] Update dependency pg-boss to v12.38.2 (api).
+- [#1857](https://github.com/1024pix/pix-editor/pull/1857) [BUMP] Update dependency papaparse to v5.7.1 (api).
+- [#1856](https://github.com/1024pix/pix-editor/pull/1856) [BUMP] Update dependency @googleapis/sheets to v18.1.3 (api).
+- [#1851](https://github.com/1024pix/pix-editor/pull/1851) [BUMP] Update Node.js to v26.
+- [#1854](https://github.com/1024pix/pix-editor/pull/1854) [BUMP] Update linters (pix-editor,api).
+- [#1852](https://github.com/1024pix/pix-editor/pull/1852) [BUMP] Update dependency @1024pix/oppsy to v1.1.9 (api).
+
 ## v4.64.1 (19/11/2026)
 
 
