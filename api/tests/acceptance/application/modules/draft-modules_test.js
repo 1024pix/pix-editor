@@ -85,6 +85,7 @@ describe('Acceptance | Route | draft-modules', () => {
           ...draftModule.details,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
+          modifiedBy: editorUser.id,
         },
       ]);
     });
@@ -198,6 +199,7 @@ describe('Acceptance | Route | draft-modules', () => {
             ...draftModule.details,
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date),
+            modifiedBy: editorUser.id,
           },
         ]);
 
