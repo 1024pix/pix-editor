@@ -2,14 +2,17 @@ import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { DraftModule } from '../../domain/models/index.js';
 import { NotFoundError } from '../errors.js';
 
-// eslint-disable-next-line no-unused-vars
-export async function save({ details, sections, glossary, validationErrors, ...module }) {
+export async function save({ draftModule, modifiedBy = null }) {
   const knexConn = DomainTransaction.getConnection();
+  // eslint-disable-next-line no-unused-vars
+  const { details, sections, glossary, validationErrors, ...module } = draftModule;
+
   const draftModuleDTO = {
     ...module,
     ...details,
     sections: JSON.stringify(sections),
     glossary: JSON.stringify(glossary),
+    modifiedBy,
   };
 
   const [savedDraftModule] = await knexConn.insert(draftModuleDTO).into('draft-modules').onConflict('id').merge({ ...draftModuleDTO, updatedAt: knexConn.fn.now() }).returning('*');
@@ -72,6 +75,7 @@ export async function remove({ id }) {
   await knexConn.delete().from('draft-modules').where('id', id);
 }
 
-function toDomain({ image, description, duration, level, objectives, tabletSupport, ...draftModule }) {
+// eslint-disable-next-line no-unused-vars
+function toDomain({ image, description, duration, level, objectives, tabletSupport, modifiedBy, ...draftModule }) {
   return new DraftModule({ ...draftModule, details: { image, description, duration, level, objectives, tabletSupport } });
 }

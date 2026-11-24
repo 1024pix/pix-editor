@@ -44,6 +44,7 @@ export function buildDraftModule({
   validationErrors,
   createdAt,
   updatedAt,
+  modifiedBy,
 } = {}) {
   const values = {
     id,
@@ -62,6 +63,7 @@ export function buildDraftModule({
     validationErrors,
     createdAt,
     updatedAt,
+    modifiedBy,
   };
 
   const valuesForDb = {
