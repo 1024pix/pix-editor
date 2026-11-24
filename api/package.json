@@ -85,7 +85,7 @@
     "shiki": "4.6.0",
     "showdown": "2.1.0",
     "standardwebhooks": "1.1.1",
-    "tough-cookie": "6.0.2",
+    "tough-cookie": "6.1.0",
     "url-regex-safe": "4.0.0"
   },
   "devDependencies": {
@@ -106,7 +106,7 @@
     "yargs": "18.2.0"
   },
   "overrides": {
-    "tough-cookie": "6.0.2",
+    "tough-cookie": "6.1.0",
     "@rollup/plugin-commonjs": "29.0.3"
   }
 }
