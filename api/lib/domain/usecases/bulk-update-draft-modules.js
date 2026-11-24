@@ -12,7 +12,7 @@ export async function bulkUpdateDraftModules({ draftModules, updatedModuleIds },
       const isDraftOfUpdatedModule = updatedModuleIds.includes(draftModule.moduleId);
       const savedDraftModule = isDraftOfUpdatedModule
         ? await recreateDraftModule(draftModule, dependencies)
-        : await dependencies.updateDraftModule(draftModule);
+        : await dependencies.updateDraftModule({ draftModule });
 
       validatedDraftModules.push(await dependencies.validateDraftModule(savedDraftModule));
     }
