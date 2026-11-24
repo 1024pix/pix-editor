@@ -8,14 +8,16 @@ describe('Integration | Repository | draft-module-repository', () => {
     it('saves a draft module having a NULL moduleId ', async () => {
       // given
       const draftModule = domainBuilder.buildDraftModule();
+      const user = databaseBuilder.factory.buildUser({ name: 'User', access: 'editor' });
+      await databaseBuilder.commit();
       const expectedDraftModule = { ...draftModule, createdAt: expect.any(Date), updatedAt: expect.any(Date) };
 
       // when
-      const savedDraftModule = await draftModuleRepository.save({ ...draftModule });
+      const savedDraftModule = await draftModuleRepository.save({ draftModule, modifiedBy: user.id });
 
       // then
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
-      await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails }]);
+      await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails, modifiedBy: user.id }]);
       expect({ ...savedDraftModule }).toStrictEqual(expectedDraftModule);
     });
 
@@ -29,11 +31,11 @@ describe('Integration | Repository | draft-module-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const savedDraftModule = await draftModuleRepository.save({ ...module, moduleId: module.id });
+      const savedDraftModule = await draftModuleRepository.save({ draftModule: { ...module, moduleId: module.id } });
 
       // then
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
-      await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails }]);
+      await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails, modifiedBy: null }]);
       expect(savedDraftModule).toStrictEqual(expectedDraftModule);
     });
 
@@ -56,11 +58,11 @@ describe('Integration | Repository | draft-module-repository', () => {
       await databaseBuilder.commit();
 
       // when
-      const savedDraftModule = await draftModuleRepository.save({ ...updatedModule, moduleId: module.id });
+      const savedDraftModule = await draftModuleRepository.save({ draftModule: { ...updatedModule, moduleId: module.id } });
 
       // then
       const { details: expectedDetails, ...expectedDraftModuleData } = expectedDraftModule;
-      await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails }]);
+      await expect(knex.select().from('draft-modules')).resolves.toStrictEqual([{ ...expectedDraftModuleData, ...expectedDetails, modifiedBy: null }]);
       expect(savedDraftModule).toStrictEqual(expectedDraftModule);
     });
 
@@ -82,8 +84,10 @@ describe('Integration | Repository | draft-module-repository', () => {
 
       // when
       await draftModuleRepository.save({
-        ...draftModule,
-        validationErrors: [{ message: 'error passed to save, should be ignored', isSchemaError: false }],
+        draftModule: {
+          ...draftModule,
+          validationErrors: [{ message: 'error passed to save, should be ignored', isSchemaError: false }],
+        },
       });
 
       // then
