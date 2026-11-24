@@ -40,7 +40,7 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
     await expect(result).resolves.toBe(savedDraftModule);
 
     expect(prepareForCreation).toHaveBeenCalledExactlyOnceWith(undefined);
-    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith(draftModule);
+    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith({ draftModule });
     expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
     expect(structuredPatch).toHaveBeenCalledExactlyOnceWith('', '', '', draftModuleJSON);
     expect(draftModuleVersionRepository.create).toHaveBeenCalledExactlyOnceWith(new DraftModuleVersion({
@@ -70,7 +70,7 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
 
       expect(moduleRepository.getById).toHaveBeenCalledExactlyOnceWith({ id: moduleId });
       expect(prepareForCreation).toHaveBeenCalledExactlyOnceWith(module);
-      expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith(draftModule);
+      expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith({ draftModule });
       expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
       expect(structuredPatch).toHaveBeenCalledExactlyOnceWith('', '', moduleJSON, draftModuleJSON);
       expect(draftModuleVersionRepository.create).toHaveBeenCalledExactlyOnceWith(new DraftModuleVersion({
