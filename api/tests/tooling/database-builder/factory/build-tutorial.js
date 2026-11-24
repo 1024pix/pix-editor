@@ -42,7 +42,6 @@ export function buildTutorial({
       tableName: 'tutorials-tutorial_tags',
       autoId: false,
       values: { tutorialId: id, tutorialTagId, createdAt, updatedAt },
-    }),
-  );
+    }));
   return { ...tutorial, tagIds };
 }

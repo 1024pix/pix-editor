@@ -6,8 +6,7 @@ function buildLocalizedFields(locales, fields) {
       locale: locale.locale,
       field: field.field,
       airtableField: `${field.airtableField} ${locale.airtableLocale}`,
-    })),
-  );
+    })));
 }
 
 function toDomain({ fields, locales }) {

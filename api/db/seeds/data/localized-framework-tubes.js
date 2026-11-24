@@ -3,8 +3,7 @@ export function buildLocalizedFrameworkTubesFromConfig({ databaseBuilder, learni
     framework.areas
       .flatMap((area) => area.competences)
       .flatMap((competence) => competence.thematics)
-      .flatMap((thematics) => thematics.tubes),
-  );
+      .flatMap((thematics) => thematics.tubes));
   const liveTubes = allTubes.filter(({ name }) => name !== '@workbench');
   for (const tube of liveTubes) {
     for (const locale of learningContentConfig.locales) {

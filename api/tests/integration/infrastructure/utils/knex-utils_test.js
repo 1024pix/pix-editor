@@ -13,8 +13,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         databaseBuilder.factory.buildStaticCourse({
           id: `staticCourse${index}`,
           name: `${String.fromCharCode(letterA + index)}`,
-        }),
-      );
+        }));
       await databaseBuilder.commit();
 
       // when
@@ -57,8 +56,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 1;
         const total = 3;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -76,8 +74,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 1;
         const total = 3;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -95,8 +92,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 1;
         const total = 3;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -116,8 +112,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 2;
         const total = 3;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -135,8 +130,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const total = 3;
         const pageSize = 6;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -154,8 +148,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 5;
         const total = 1;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -175,8 +168,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 3;
         const total = 5;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -194,8 +186,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 2;
         const total = 3;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -215,8 +206,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 2;
         const total = 10;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -234,8 +224,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 2;
         const total = 3;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when
@@ -253,8 +242,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
         const pageSize = 2;
         const total = 3;
         _.times(total, (index) =>
-          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }),
-        );
+          databaseBuilder.factory.buildStaticCourse({ id: `staticCourse${index}`, name: `c-${index}` }));
         await databaseBuilder.commit();
 
         // when

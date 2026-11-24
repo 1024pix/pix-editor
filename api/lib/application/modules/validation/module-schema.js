@@ -125,8 +125,7 @@ const grainSchema = Joi.object({
           'qcu',
           'qcm',
           'qrocm',
-        ].includes(element.type),
-      );
+        ].includes(element.type));
       if (steppersInArray.length === 1 && containsAnswerableElement) {
         return helpers.message(
           "Un grain ne peut pas être composé d'un composant 'stepper' et d'un composant 'element' répondable (QCU, QCM ou QROCM)",

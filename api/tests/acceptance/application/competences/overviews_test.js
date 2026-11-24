@@ -928,8 +928,7 @@ describe('Acceptance | Route | competence-overviews', () => {
               challengeId: challenge.id,
               localizedChallengeId: challenge.id,
             }),
-          ),
-        );
+          ));
       });
 
       await databaseBuilder.commit();

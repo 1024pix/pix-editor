@@ -603,8 +603,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             challengeId: challenge.id,
             localizedChallengeId: file.localizedChallengeId,
           }),
-        ),
-      );
+        ));
 
       await databaseBuilder.commit();
 

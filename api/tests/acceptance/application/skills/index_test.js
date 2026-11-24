@@ -747,8 +747,7 @@ describe('Application | Route | Skills', () => {
                 skillId: skill.id,
                 genealogy: index === 0 ? Challenge.GENEALOGIES.PROTOTYPE : Challenge.GENEALOGIES.DECLINAISON,
               }),
-            ),
-          );
+            ));
         });
 
         databaseBuilder.factory.buildTranslation({ key: 'skill.skill1.hint', locale: 'fr', value: 'Un indice' });
@@ -1597,8 +1596,7 @@ describe('Application | Route | Skills', () => {
           format: `format ${id}`,
           link: `link ${id}`,
           locale: 'fr',
-        }),
-      );
+        }));
 
       dataToPost = {
         level: 2,

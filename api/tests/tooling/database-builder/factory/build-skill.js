@@ -62,14 +62,12 @@ export function buildSkill({
       tableName: 'skills-tutorials',
       autoId: false,
       values: { skillId: id, tutorialId, type: 'understanding', createdAt, updatedAt },
-    }),
-  );
+    }));
   learningMoreTutorialIds?.forEach((tutorialId) =>
     databaseBuffer.pushInsertable({
       tableName: 'skills-tutorials',
       autoId: false,
       values: { skillId: id, tutorialId, type: 'learningMore', createdAt, updatedAt },
-    }),
-  );
+    }));
   return { ...skill, tutorialIds, learningMoreTutorialIds };
 }
