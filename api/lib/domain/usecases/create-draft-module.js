@@ -7,16 +7,16 @@ import { DomainTransaction } from '../DomainTransaction.js';
 
 /**
  *
- * @param {import('../models/index.js').DraftModule} draftModule
+ * @param {{ draftModule: import('../models/index.js').DraftModule, userId?: number }} params
  */
-export async function createDraftModule(draftModule, dependencies = { draftModuleRepository, draftModuleVersionRepository, moduleRepository, updatePixApiReleaseCache, structuredPatch }) {
+export async function createDraftModule({ draftModule, userId }, dependencies = { draftModuleRepository, draftModuleVersionRepository, moduleRepository, updatePixApiReleaseCache, structuredPatch }) {
   return DomainTransaction.execute(async () => {
     const module = draftModule.moduleId
       ? await dependencies.moduleRepository.getById({ id: draftModule.moduleId })
       : undefined;
 
     draftModule.prepareForCreation(module);
-    const savedDraftModule = await dependencies.draftModuleRepository.save({ draftModule });
+    const savedDraftModule = await dependencies.draftModuleRepository.save({ draftModule, modifiedBy: userId });
 
     const structuredDiff = dependencies.structuredPatch('', '', module?.serializeToJSON() ?? '', savedDraftModule.serializeToJSON());
     await dependencies.draftModuleVersionRepository.create(new DraftModuleVersion({
