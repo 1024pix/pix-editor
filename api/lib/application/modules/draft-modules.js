@@ -107,7 +107,8 @@ export function register(server) {
       config: {
         handler: async (request, h) => {
           const draftModule = await draftModuleSerializer.deserialize(request.payload);
-          const updatedModule = await updateDraftModule(draftModule);
+          const userId = request.auth.credentials.user.id;
+          const updatedModule = await updateDraftModule({ draftModule, userId });
           const validatedModule = await validateDraftModule(updatedModule);
           return h.response(draftModuleSerializer.serialize(validatedModule)).code(200);
         },

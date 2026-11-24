@@ -634,6 +634,7 @@ describe('Acceptance | Route | draft-modules', () => {
             'has-been-validated': true,
             'validation-errors': [],
             'updated-at': expect.any(Date),
+            'modified-by': editorUser.trigram,
           },
           relationships: { module: { data: null } },
         },
@@ -657,6 +658,7 @@ describe('Acceptance | Route | draft-modules', () => {
           ...draftModule.details,
           createdAt: draftModule.createdAt,
           updatedAt: expect.any(Date),
+          modifiedBy: editorUser.id,
         },
       ]);
 
