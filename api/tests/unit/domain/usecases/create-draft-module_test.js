@@ -34,7 +34,7 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
     vi.spyOn(savedDraftModule, 'serializeToJSON').mockReturnValueOnce(draftModuleJSON);
 
     // when
-    const result = createDraftModule(draftModule, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
+    const result = createDraftModule({ draftModule }, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
 
     // then
     await expect(result).resolves.toBe(savedDraftModule);
@@ -50,6 +50,17 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
     }));
   });
 
+  it('saves draft module with userId as modifiedBy', async () => {
+    // given
+    const userId = Symbol('userId');
+
+    // when
+    await createDraftModule({ draftModule, userId }, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
+
+    // then
+    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith({ draftModule, modifiedBy: userId });
+  });
+
   describe('when draft module has a moduleId', () => {
     it('prepares for creation using module', async () => {
       // given
@@ -63,7 +74,7 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
       draftModule.moduleId = moduleId;
 
       // when
-      const result = await createDraftModule(draftModule, { draftModuleRepository, draftModuleVersionRepository, moduleRepository, updatePixApiReleaseCache, structuredPatch });
+      const result = await createDraftModule({ draftModule }, { draftModuleRepository, draftModuleVersionRepository, moduleRepository, updatePixApiReleaseCache, structuredPatch });
 
       // then
       await expect(result).toBe(savedDraftModule);
