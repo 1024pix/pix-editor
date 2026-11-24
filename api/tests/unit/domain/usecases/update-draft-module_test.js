@@ -9,6 +9,7 @@ describe('Unit | Domain | Use Cases | update-draft-module', () => {
   const structuredDiff = Symbol('structuredDiff');
   const existingDraftModuleJSON = Symbol('existingDraftModuleJSON');
   const savedDraftModuleJSON = Symbol('savedDraftModuleJSON');
+  const userId = Symbol('userId');
 
   let draftModuleRepository, existingDraftModule, update, savedDraftModule, updatePixApiReleaseCache, draftModule, structuredPatch, draftModuleVersionRepository;
 
@@ -40,13 +41,13 @@ describe('Unit | Domain | Use Cases | update-draft-module', () => {
 
   it('prepares updates existing module and saves it', async () => {
     // when
-    const result = await updateDraftModule(draftModule, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
+    const result = await updateDraftModule({ draftModule, userId }, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
 
     // then
     await expect(result).toBe(savedDraftModule);
 
     expect(update).toHaveBeenCalledExactlyOnceWith(draftModule);
-    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith(updatedDraftModule);
+    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith({ draftModule: updatedDraftModule, modifiedBy: userId });
     expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
     expect(structuredPatch).toHaveBeenCalledExactlyOnceWith('', '', existingDraftModuleJSON, savedDraftModuleJSON);
     expect(draftModuleVersionRepository.create).toHaveBeenCalledExactlyOnceWith(new DraftModuleVersion({
