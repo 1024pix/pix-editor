@@ -25,5 +25,5 @@ export async function bulkUpdateDraftModules({ draftModules, updatedModuleIds },
 // Removing the draft also removes its history of draft module versions.
 async function recreateDraftModule(draftModule, dependencies) {
   await dependencies.draftModuleRepository.remove({ id: draftModule.id });
-  return dependencies.createDraftModule(draftModule);
+  return dependencies.createDraftModule({ draftModule });
 }

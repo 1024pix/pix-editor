@@ -27,7 +27,7 @@ describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
     // then
     expect(result).toStrictEqual([validatedDraftModule]);
     expect(draftModuleRepository.remove).toHaveBeenCalledExactlyOnceWith({ id: 1 });
-    expect(createDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(draftModule);
+    expect(createDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith({ draftModule });
     expect(validateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(createdDraftModule);
     expect(updateDraftModuleUsecase).not.toHaveBeenCalled();
   });
