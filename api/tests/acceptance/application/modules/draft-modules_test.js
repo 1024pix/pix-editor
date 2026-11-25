@@ -469,6 +469,7 @@ describe('Acceptance | Route | draft-modules', () => {
             'has-been-validated': draftModule.hasBeenValidated,
             'validation-errors': draftModule.validationErrors,
             'updated-at': draftModule.updatedAt,
+            'modified-by': draftModule.modifiedBy,
           },
           relationships: {
             module: {

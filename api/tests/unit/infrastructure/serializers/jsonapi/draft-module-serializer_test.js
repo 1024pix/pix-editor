@@ -30,6 +30,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
             'has-been-validated': draftModule.hasBeenValidated,
             'validation-errors': draftModule.validationErrors,
             'updated-at': draftModule.updatedAt,
+            'modified-by': draftModule.modifiedBy,
           },
           relationships: {
             module: {

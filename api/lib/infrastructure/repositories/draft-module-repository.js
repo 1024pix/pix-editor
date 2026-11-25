@@ -57,8 +57,12 @@ export async function count({ filter } = {}) {
 export async function getById({ id, forUpdate = false }) {
   const knexConn = DomainTransaction.getConnection();
 
-  let query = knexConn.select('*').from('draft-modules').where({ id }).first();
-  if (forUpdate) query = query.forUpdate();
+  let query = knexConn.select('draft-modules.*', 'users.trigram as modifiedBy')
+    .from('draft-modules')
+    .leftOuterJoin('users', 'users.id', 'draft-modules.modifiedBy')
+    .where('draft-modules.id', id)
+    .first();
+  if (forUpdate) query = query.forUpdate('draft-modules');
 
   const draftModule = await query;
 
@@ -75,7 +79,6 @@ export async function remove({ id }) {
   await knexConn.delete().from('draft-modules').where('id', id);
 }
 
-// eslint-disable-next-line no-unused-vars
-function toDomain({ image, description, duration, level, objectives, tabletSupport, modifiedBy, ...draftModule }) {
+function toDomain({ image, description, duration, level, objectives, tabletSupport, ...draftModule }) {
   return new DraftModule({ ...draftModule, details: { image, description, duration, level, objectives, tabletSupport } });
 }

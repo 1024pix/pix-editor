@@ -191,6 +191,20 @@ describe('Integration | Repository | draft-module-repository', () => {
       expect(draftModule).toStrictEqual(expectedDraftModule);
     });
 
+    it('returns the trigram of the user who modified the draft module', async () => {
+      // given
+      const user = databaseBuilder.factory.buildUser({ name: 'User', access: 'editor', trigram: 'USR' });
+      const draftModule = domainBuilder.buildDraftModule();
+      databaseBuilder.factory.buildDraftModule({ ...draftModule, modifiedBy: user.id });
+      await databaseBuilder.commit();
+
+      // when
+      const result = await draftModuleRepository.getById({ id: draftModule.id });
+
+      // then
+      expect(result).toStrictEqual(domainBuilder.buildDraftModule({ ...draftModule, modifiedBy: 'USR' }));
+    });
+
     it('throw a not Found error if draft module is not found', async () => {
       // given
       const inexistingDraftModuleId = crypto.randomUUID();
