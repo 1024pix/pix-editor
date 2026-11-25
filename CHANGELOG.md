@@ -1,5 +1,20 @@
 
 
+## v4.66.0 (25/11/2026)
+
+
+### :building_construction: Tech
+- [#1884](https://github.com/1024pix/pix-editor/pull/1884) [TECH] Supprime @ember-intl/compat.
+- [#1846](https://github.com/1024pix/pix-editor/pull/1846) [TECH] Ajouter un script pour renseigner maxWidth sur les éléments image des modules (PIX-25046).
+
+### :arrow_up: Montée de version
+- [#1882](https://github.com/1024pix/pix-editor/pull/1882) [BUMP] Update dependency standardwebhooks to v1.3.0 (api).
+- [#1881](https://github.com/1024pix/pix-editor/pull/1881) [BUMP] Update ember-intl (pix-editor).
+- [#1880](https://github.com/1024pix/pix-editor/pull/1880) [BUMP] Update dependency ember-sortable to v5.5.2 (pix-editor).
+- [#1879](https://github.com/1024pix/pix-editor/pull/1879) [BUMP] Update dependency ember-qunit to v9.2.1 (pix-editor).
+- [#1878](https://github.com/1024pix/pix-editor/pull/1878) [BUMP] Update dependency @embroider/vite to v1.8.1 (pix-editor).
+- [#1871](https://github.com/1024pix/pix-editor/pull/1871) [BUMP] Update dependency @stylistic/eslint-plugin to v6 (api).
+
 ## v4.65.0 (24/11/2026)
 
 
