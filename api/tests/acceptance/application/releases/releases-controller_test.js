@@ -1016,8 +1016,8 @@ describe('Acceptance | Controller | release-controller', () => {
         // `createdAt` defaults to now() in database, so it has milliseconds,
         // while an HTTP date (RFC 9110) only has seconds
         const server = await createServer();
-        const latestReleaseDate = new Date('2023-01-01T00:00:00Z');
-        latestReleaseDate.setUTCMilliseconds(123);
+        // eslint-disable-next-line no-restricted-syntax
+        const latestReleaseDate = new Date('2023-01-01T00:00:00.123Z');
         databaseBuilder.factory.buildRelease({ createdAt: latestReleaseDate, content: '{"value":"coucouLatest"}' });
         await databaseBuilder.commit();
 
