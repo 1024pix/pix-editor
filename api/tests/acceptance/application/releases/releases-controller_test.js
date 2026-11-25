@@ -1011,6 +1011,30 @@ describe('Acceptance | Controller | release-controller', () => {
         expect(response.result).toBeNull();
       });
 
+      it('should return a 304 when if-modified-since is the latest release date, whose milliseconds are lost in the HTTP date', async function() {
+        // given
+        // `createdAt` defaults to now() in database, so it has milliseconds,
+        // while an HTTP date (RFC 9110) only has seconds
+        const server = await createServer();
+        const latestReleaseDate = new Date('2023-01-01T00:00:00Z');
+        latestReleaseDate.setUTCMilliseconds(123);
+        databaseBuilder.factory.buildRelease({ createdAt: latestReleaseDate, content: '{"value":"coucouLatest"}' });
+        await databaseBuilder.commit();
+
+        // when
+        const headers = generateAuthorizationHeader(user);
+        headers['If-Modified-Since'] = latestReleaseDate.toUTCString();
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/releases/latest',
+          headers,
+        });
+
+        // then
+        expect(response.statusCode).to.equal(304);
+        expect(response.result).toBeNull();
+      });
+
       it('should return the latest release if the release is newer than given if-modified-since date', async function() {
         // Given
         const expectedLatestRelease = databaseBuilder.factory.buildRelease({
