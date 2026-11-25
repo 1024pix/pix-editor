@@ -55,8 +55,8 @@ export async function runModulesTransform({ transform, options, logger }) {
 function getModulesToUpdate(modules, transform) {
   return modules
     .map((module) => {
-      const { sections, numberOfEditedObjects } = transform(module);
-      return { module: new Module({ ...module, sections }), numberOfEditedObjects };
+      const { numberOfEditedObjects, ...updatedFields } = transform(module);
+      return { module: new Module({ ...module, ...updatedFields }), numberOfEditedObjects };
     })
     .filter(({ numberOfEditedObjects }) => numberOfEditedObjects > 0);
 }
@@ -64,10 +64,10 @@ function getModulesToUpdate(modules, transform) {
 function getDraftModulesToUpdate(draftModules, updatedModuleIds, transform) {
   return draftModules
     .map((draftModule) => {
-      const { sections, numberOfEditedObjects } = transform(draftModule);
+      const { numberOfEditedObjects, ...updatedFields } = transform(draftModule);
       const isDraftOfUpdatedModule = updatedModuleIds.includes(draftModule.moduleId);
       return {
-        draftModule: new DraftModule({ ...draftModule, sections }),
+        draftModule: new DraftModule({ ...draftModule, ...updatedFields }),
         numberOfEditedObjects,
         isDraftOfUpdatedModule,
       };
