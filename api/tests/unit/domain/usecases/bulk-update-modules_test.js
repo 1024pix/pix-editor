@@ -4,7 +4,7 @@ import { ModuleVersion } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 
 describe('Unit | Domain | Use Cases | bulk-update-modules', () => {
-  it('increments major version of modules, saves them, creates their module versions and returns them', async () => {
+  it('increments major version of modules, saves them, creates their module versions keeping publishedBy and returns them', async () => {
     // given
     const module1 = domainBuilder.buildModule({
       id: 'module-1',
@@ -21,7 +21,12 @@ describe('Unit | Domain | Use Cases | bulk-update-modules', () => {
       updatedAt: new Date('2026-01-01'),
     });
     const moduleRepository = { save: vi.fn(async (module) => module) };
-    const moduleVersionRepository = { create: vi.fn() };
+    const publishedBy1 = Symbol('publishedBy1');
+    const publishedBy2 = Symbol('publishedBy2');
+    const moduleVersionRepository = {
+      create: vi.fn(),
+      getPublishedBy: vi.fn(async ({ moduleId }) => ({ 'module-1': publishedBy1, 'module-2': publishedBy2 })[moduleId]),
+    };
 
     // when
     const result = await bulkUpdateModules([module1, module2], { moduleRepository, moduleVersionRepository });
@@ -48,9 +53,12 @@ describe('Unit | Domain | Use Cases | bulk-update-modules', () => {
     );
     expect(moduleRepository.save).toHaveBeenNthCalledWith(1, expectedModule1);
     expect(moduleRepository.save).toHaveBeenNthCalledWith(2, expectedModule2);
+    expect(moduleVersionRepository.getPublishedBy).toHaveBeenCalledTimes(2);
+    expect(moduleVersionRepository.getPublishedBy).toHaveBeenNthCalledWith(1, { moduleId: 'module-1', version: '1.0' });
+    expect(moduleVersionRepository.getPublishedBy).toHaveBeenNthCalledWith(2, { moduleId: 'module-2', version: '2.0' });
     expect(moduleVersionRepository.create).toHaveBeenCalledTimes(2);
-    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(1, ModuleVersion.fromModule(expectedModule1));
-    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(2, ModuleVersion.fromModule(expectedModule2));
+    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(1, ModuleVersion.fromModule(expectedModule1, { publishedBy: publishedBy1 }));
+    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(2, ModuleVersion.fromModule(expectedModule2, { publishedBy: publishedBy2 }));
     expect(result).toStrictEqual([expectedModule1, expectedModule2]);
   });
 });

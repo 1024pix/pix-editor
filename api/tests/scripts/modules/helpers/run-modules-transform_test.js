@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { runModulesTransform } from '../../../../scripts/modules/helpers/run-modules-transform.js';
 import { logger } from '../../../../lib/infrastructure/logger.js';
+import { ModuleVersion } from '../../../../lib/domain/models/index.js';
 
 const CONTENT_TO_FIX = '<p>À corriger</p>';
 const FIXED_CONTENT = '<p>Corrigé</p>';
@@ -92,6 +93,8 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
 
     databaseBuilder.factory.buildModule(moduleToFixWithoutDraft);
     databaseBuilder.factory.buildModule(moduleToFixWithDraftToFix);
+    databaseBuilder.factory.buildModuleVersion({ ...ModuleVersion.fromModule(moduleToFixWithoutDraft), publishedBy: user.id });
+    databaseBuilder.factory.buildModuleVersion({ ...ModuleVersion.fromModule(moduleToFixWithDraftToFix), publishedBy: user.id });
     databaseBuilder.factory.buildModule(moduleToFixWithOutOfScopeDraft);
     databaseBuilder.factory.buildModule(outOfScopeModuleWithDraftToFix);
     databaseBuilder.factory.buildModule(outOfScopeModuleWithOutOfScopeDraft);
@@ -119,11 +122,14 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
     ];
     expect(updatedModules).toStrictEqual(expectedModules);
 
-    const updatedModuleVersions = await knex('module-versions').select('internalTitle', 'version').orderBy('shortId');
+    // The user who published the previous version of a module is kept on its new version.
+    const updatedModuleVersions = await knex('module-versions').select('internalTitle', 'version', 'publishedBy').orderBy(['shortId', 'version']);
     const expectedModuleVersions = [
-      { internalTitle: 'module-to-fix-without-draft', version: '2.0' },
-      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.0' },
-      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.0' },
+      { internalTitle: 'module-to-fix-without-draft', version: '1.0', publishedBy: user.id },
+      { internalTitle: 'module-to-fix-without-draft', version: '2.0', publishedBy: user.id },
+      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '1.0', publishedBy: user.id },
+      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.0', publishedBy: user.id },
+      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.0', publishedBy: null },
     ];
     expect(updatedModuleVersions).toStrictEqual(expectedModuleVersions);
 
