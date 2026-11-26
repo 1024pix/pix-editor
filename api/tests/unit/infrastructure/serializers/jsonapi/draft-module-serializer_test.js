@@ -128,6 +128,7 @@ describe('Unit | Serializer | JSONAPI | draft-module-serializer', () => {
       'validationErrors',
       'createdAt',
       'updatedAt',
+      'modifiedBy',
     ];
 
     it('deserializes payload to DraftModule model', async () => {

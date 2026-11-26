@@ -16,7 +16,8 @@ export async function createDraftModule({ draftModule, userId }, dependencies = 
       : undefined;
 
     draftModule.prepareForCreation(module);
-    const savedDraftModule = await dependencies.draftModuleRepository.save({ draftModule, modifiedBy: userId });
+    draftModule.modifiedBy = userId;
+    const savedDraftModule = await dependencies.draftModuleRepository.save({ draftModule });
 
     const structuredDiff = dependencies.structuredPatch('', '', module?.serializeToJSON() ?? '', savedDraftModule.serializeToJSON());
     await dependencies.draftModuleVersionRepository.create(new DraftModuleVersion({

@@ -52,13 +52,14 @@ describe('Unit | Domain | Use Cases | create-draft-module', () => {
 
   it('saves draft module with userId as modifiedBy', async () => {
     // given
-    const userId = Symbol('userId');
+    const userId = 10;
 
     // when
     await createDraftModule({ draftModule, userId }, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
 
     // then
-    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith({ draftModule, modifiedBy: userId });
+    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith({ draftModule });
+    expect(draftModuleRepository.save.mock.calls[0][0].draftModule.modifiedBy).toBe(userId);
   });
 
   describe('when draft module has a moduleId', () => {

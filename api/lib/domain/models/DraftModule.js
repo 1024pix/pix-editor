@@ -4,7 +4,7 @@ import { ModuleVersion } from './ModuleVersion.js';
 import { DraftModuleVersion } from './DraftModuleVersion.js';
 
 export class DraftModule extends Module {
-  constructor({ moduleId, hasBeenValidated, validationErrors, modifiedBy = null, ...attrs } = {}) {
+  constructor({ moduleId, hasBeenValidated, validationErrors, modifiedBy, ...attrs } = {}) {
     super(attrs);
     this.moduleId = moduleId;
     this.hasBeenValidated = hasBeenValidated;
