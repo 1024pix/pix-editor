@@ -62,6 +62,7 @@ describe('Acceptance | Route | draft-modules', () => {
             'has-been-validated': true,
             'validation-errors': [],
             'updated-at': expect.any(Date),
+            'modified-by': editorUser.trigram,
           },
           relationships: { module: { data: null } },
         },
@@ -85,6 +86,7 @@ describe('Acceptance | Route | draft-modules', () => {
           ...draftModule.details,
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
+          modifiedBy: editorUser.id,
         },
       ]);
     });
@@ -167,6 +169,7 @@ describe('Acceptance | Route | draft-modules', () => {
               'has-been-validated': true,
               'validation-errors': [],
               'updated-at': expect.any(Date),
+              'modified-by': editorUser.trigram,
             },
             relationships: {
               module: {
@@ -198,6 +201,7 @@ describe('Acceptance | Route | draft-modules', () => {
             ...draftModule.details,
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date),
+            modifiedBy: editorUser.id,
           },
         ]);
 
@@ -465,6 +469,7 @@ describe('Acceptance | Route | draft-modules', () => {
             'has-been-validated': draftModule.hasBeenValidated,
             'validation-errors': draftModule.validationErrors,
             'updated-at': draftModule.updatedAt,
+            'modified-by': draftModule.modifiedBy,
           },
           relationships: {
             module: {
@@ -634,6 +639,7 @@ describe('Acceptance | Route | draft-modules', () => {
             'has-been-validated': true,
             'validation-errors': [],
             'updated-at': expect.any(Date),
+            'modified-by': editorUser.trigram,
           },
           relationships: { module: { data: null } },
         },
@@ -657,6 +663,7 @@ describe('Acceptance | Route | draft-modules', () => {
           ...draftModule.details,
           createdAt: draftModule.createdAt,
           updatedAt: expect.any(Date),
+          modifiedBy: editorUser.id,
         },
       ]);
 

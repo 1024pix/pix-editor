@@ -2,14 +2,17 @@ import { DomainTransaction } from '../../domain/DomainTransaction.js';
 import { DraftModule } from '../../domain/models/index.js';
 import { NotFoundError } from '../errors.js';
 
-// eslint-disable-next-line no-unused-vars
-export async function save({ details, sections, glossary, validationErrors, ...module }) {
+export async function save({ draftModule }) {
   const knexConn = DomainTransaction.getConnection();
+  // eslint-disable-next-line no-unused-vars
+  const { details, sections, glossary, validationErrors, modifiedBy, ...module } = draftModule;
+
   const draftModuleDTO = {
     ...module,
     ...details,
     sections: JSON.stringify(sections),
     glossary: JSON.stringify(glossary),
+    modifiedBy,
   };
 
   const [savedDraftModule] = await knexConn.insert(draftModuleDTO).into('draft-modules').onConflict('id').merge({ ...draftModuleDTO, updatedAt: knexConn.fn.now() }).returning('*');
@@ -54,8 +57,12 @@ export async function count({ filter } = {}) {
 export async function getById({ id, forUpdate = false }) {
   const knexConn = DomainTransaction.getConnection();
 
-  let query = knexConn.select('*').from('draft-modules').where({ id }).first();
-  if (forUpdate) query = query.forUpdate();
+  let query = knexConn.select('draft-modules.*', 'users.trigram as modifiedBy')
+    .from('draft-modules')
+    .leftOuterJoin('users', 'users.id', 'draft-modules.modifiedBy')
+    .where('draft-modules.id', id)
+    .first();
+  if (forUpdate) query = query.forUpdate('draft-modules');
 
   const draftModule = await query;
 

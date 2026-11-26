@@ -5,12 +5,12 @@ import { DraftModuleVersion } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Use Cases | update-draft-module', () => {
   const draftModuleId = Symbol('draftModuleId');
-  const updatedDraftModule = Symbol('updatedDraftModule');
   const structuredDiff = Symbol('structuredDiff');
   const existingDraftModuleJSON = Symbol('existingDraftModuleJSON');
   const savedDraftModuleJSON = Symbol('savedDraftModuleJSON');
+  const userId = 10;
 
-  let draftModuleRepository, existingDraftModule, update, savedDraftModule, updatePixApiReleaseCache, draftModule, structuredPatch, draftModuleVersionRepository;
+  let draftModuleRepository, existingDraftModule, updatedDraftModule, update, savedDraftModule, updatePixApiReleaseCache, draftModule, structuredPatch, draftModuleVersionRepository;
 
   beforeEach(() => {
     existingDraftModule = domainBuilder.buildDraftModule();
@@ -27,6 +27,7 @@ describe('Unit | Domain | Use Cases | update-draft-module', () => {
       save: vi.fn().mockResolvedValueOnce(savedDraftModule),
     };
 
+    updatedDraftModule = domainBuilder.buildDraftModule({ id: existingDraftModule.id });
     update = vi.spyOn(existingDraftModule, 'update').mockReturnValueOnce(updatedDraftModule);
 
     updatePixApiReleaseCache = { onDraftModuleCreatedOrUpdated: vi.fn().mockResolvedValueOnce() };
@@ -39,14 +40,15 @@ describe('Unit | Domain | Use Cases | update-draft-module', () => {
   });
 
   it('prepares updates existing module and saves it', async () => {
+    // given
     // when
-    const result = await updateDraftModule(draftModule, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
+    const result = await updateDraftModule({ draftModule, userId }, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
 
     // then
     await expect(result).toBe(savedDraftModule);
 
     expect(update).toHaveBeenCalledExactlyOnceWith(draftModule);
-    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith(updatedDraftModule);
+    expect(draftModuleRepository.save).toHaveBeenCalledExactlyOnceWith({ draftModule: updatedDraftModule });
     expect(updatePixApiReleaseCache.onDraftModuleCreatedOrUpdated).toHaveBeenCalledExactlyOnceWith(savedDraftModule);
     expect(structuredPatch).toHaveBeenCalledExactlyOnceWith('', '', existingDraftModuleJSON, savedDraftModuleJSON);
     expect(draftModuleVersionRepository.create).toHaveBeenCalledExactlyOnceWith(new DraftModuleVersion({
@@ -54,5 +56,14 @@ describe('Unit | Domain | Use Cases | update-draft-module', () => {
       version: savedDraftModule.version,
       structuredDiff,
     }));
+  });
+
+  it('saves draft module with userId as modifiedBy', async () => {
+    // given
+    // when
+    await updateDraftModule({ draftModule, userId }, { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch });
+
+    // then
+    expect(draftModuleRepository.save.mock.calls[0][0].draftModule.modifiedBy).toBe(userId);
   });
 });

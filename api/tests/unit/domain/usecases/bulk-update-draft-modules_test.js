@@ -27,7 +27,7 @@ describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
     // then
     expect(result).toStrictEqual([validatedDraftModule]);
     expect(draftModuleRepository.remove).toHaveBeenCalledExactlyOnceWith({ id: 1 });
-    expect(createDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(draftModule);
+    expect(createDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith({ draftModule });
     expect(validateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(createdDraftModule);
     expect(updateDraftModuleUsecase).not.toHaveBeenCalled();
   });
@@ -56,7 +56,7 @@ describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
 
     // then
     expect(result).toStrictEqual([validatedDraftModule]);
-    expect(updateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(draftModule);
+    expect(updateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith({ draftModule });
     expect(validateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(updatedDraftModule);
     expect(draftModuleRepository.remove).not.toHaveBeenCalled();
     expect(createDraftModuleUsecase).not.toHaveBeenCalled();
@@ -86,7 +86,7 @@ describe('Unit | Domain | Use Cases | bulk-update-draft-modules', () => {
 
     // then
     expect(result).toStrictEqual([validatedDraftModule]);
-    expect(updateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(creationDraftModule);
+    expect(updateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith({ draftModule: creationDraftModule });
     expect(validateDraftModuleUsecase).toHaveBeenCalledExactlyOnceWith(updatedDraftModule);
     expect(draftModuleRepository.remove).not.toHaveBeenCalled();
     expect(createDraftModuleUsecase).not.toHaveBeenCalled();

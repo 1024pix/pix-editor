@@ -37,6 +37,7 @@ const defaultAttributes = [
   'hasBeenValidated',
   'validationErrors',
   'updatedAt',
+  'modifiedBy',
 ];
 
 export function serialize(draftModules, { meta, attributes = defaultAttributes } = {}) {

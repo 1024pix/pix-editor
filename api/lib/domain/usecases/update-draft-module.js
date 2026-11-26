@@ -6,14 +6,15 @@ import { DraftModuleVersion } from '../models/index.js';
 import * as updatePixApiReleaseCache from '../services/update-pix-api-release-cache.js';
 
 /**
- * @param {import('../models/index.js').DraftModule} draftModule
+ * @param {{ draftModule: import('../models/index.js').DraftModule, userId?: number }} params
  */
-export async function updateDraftModule(draftModule, dependencies = { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch }) {
+export async function updateDraftModule({ draftModule, userId }, dependencies = { draftModuleRepository, draftModuleVersionRepository, updatePixApiReleaseCache, structuredPatch }) {
   return DomainTransaction.execute(async () => {
     const existingDraftModule = await dependencies.draftModuleRepository.getById({ id: draftModule.id });
     const updatedDraftModule = existingDraftModule.update(draftModule);
+    updatedDraftModule.modifiedBy = userId;
 
-    const savedDraftModule = await dependencies.draftModuleRepository.save(updatedDraftModule);
+    const savedDraftModule = await dependencies.draftModuleRepository.save({ draftModule: updatedDraftModule });
 
     const structuredDiff = dependencies.structuredPatch('', '', existingDraftModule.serializeToJSON(), savedDraftModule.serializeToJSON());
     await dependencies.draftModuleVersionRepository.create(new DraftModuleVersion({
