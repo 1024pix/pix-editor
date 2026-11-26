@@ -1,11 +1,33 @@
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import { draftModuleRepository, moduleRepository } from '../../infrastructure/repositories/index.js';
+import { DraftModuleInternalTitleAlreadyUsedError } from '../errors.js';
+import { DraftModule } from '../models/index.js';
+import { createDraftModule } from './create-draft-module.js';
 
-export function duplicateModule({ moduleData }) {
-  const duplicated = _recursivelyRegenerateUuids(moduleData);
-  duplicated.shortId = crypto.randomUUID().replace(/-/g, '').slice(0, 8);
-  duplicated.slug = `${moduleData.slug}-copie`;
-  duplicated.title = `${moduleData.title} (copie)`;
-  return duplicated;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const COPY_TITLE_PREFIX = '[Copie] ';
+const COPY_SLUG_SUFFIX = '-copie';
+
+export async function duplicateModule({ moduleId }, dependencies = { moduleRepository, draftModuleRepository, createDraftModule }) {
+  const module = await dependencies.moduleRepository.getById({ id: moduleId });
+
+  const internalTitle = `${COPY_TITLE_PREFIX}${module.internalTitle}`;
+  const isInternalTitleUsed = await dependencies.draftModuleRepository.isInternalTitleUsed({ internalTitle });
+  if (isInternalTitleUsed) {
+    throw new DraftModuleInternalTitleAlreadyUsedError(internalTitle);
+  }
+
+  const draftModule = new DraftModule({
+    internalTitle,
+    title: `${COPY_TITLE_PREFIX}${module.title}`,
+    slug: `${module.slug}${COPY_SLUG_SUFFIX}`,
+    isBeta: module.isBeta,
+    visibility: module.visibility,
+    details: module.details,
+    sections: _recursivelyRegenerateUuids(module.sections),
+    glossary: module.glossary,
+  });
+
+  return dependencies.createDraftModule(draftModule);
 }
 
 function _recursivelyRegenerateUuids(node) {
