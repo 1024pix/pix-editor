@@ -236,6 +236,19 @@ describe('Unit | Infrastructure | ErrorManager', function() {
               },
             ],
           });
+        } else if (domainErrorName === 'DraftModuleInternalTitleAlreadyUsedError') {
+          const errorInstance = new domainErrorClass('[Copie] IAGenAmi_CLA');
+          const responseForError = send(hFake, errorInstance);
+          expect(responseForError.statusCode, expectErrorMessage).toStrictEqual(409);
+          expect(responseForError.source).toStrictEqual({
+            errors: [
+              {
+                status: '409',
+                title: 'Conflict',
+                detail: 'Un brouillon avec le titre interne "[Copie] IAGenAmi_CLA" existe déjà.',
+              },
+            ],
+          });
         } else {
           expect(true, `Conversion for ${domainErrorName} not tested`).toBe(false);
         }

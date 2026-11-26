@@ -116,3 +116,9 @@ export class DraftModuleValidationError extends DomainError {
     super(message);
   }
 }
+
+export class DraftModuleInternalTitleAlreadyUsedError extends DomainError {
+  constructor(internalTitle) {
+    super(`Un brouillon avec le titre interne "${internalTitle}" existe déjà.`);
+  }
+}
