@@ -38,15 +38,14 @@ const areaTitleHeight = 69;
 const fontColor = [65, 70, 87];
 const lightGrey = [250, 250, 250];
 const grey = [240, 240, 240];
-const colors = [
-  [241, 161, 65],
-  [87, 200, 132],
-  [18, 163, 255],
-  [255, 63, 148],
-  [87, 77, 166],
-  [56, 138, 255],
-];
-const areaGradient = [area1bg, area2bg, area3bg, area4bg, area5bg, area6bg];
+const areaStylesByColor = {
+  jaffa: { color: [241, 161, 65], gradient: area1bg },
+  emerald: { color: [87, 200, 132], gradient: area2bg },
+  cerulean: { color: [18, 163, 255], gradient: area3bg },
+  'wild-strawberry': { color: [255, 63, 148], gradient: area4bg },
+  'butterfly-bush': { color: [87, 77, 166], gradient: area5bg },
+};
+const defaultAreaStyle = { color: [56, 138, 255], gradient: area6bg };
 
 const defaultLanguage = 'fr';
 
@@ -105,8 +104,7 @@ export default class TargetProfilesPdfExportService extends Service {
     pdf.text(legalMention, 44, 580, { maxWidth: 360, align: 'justify' });
     pdf.addPage();
 
-    for (let i = 0; i < areas.length; i++) {
-      const area = areas[i];
+    for (const area of areas) {
       const competences = hasSelectedTubes
         ? area.sortedCompetences.filter((competence) => competence.selectedProductionTubeCount > 0)
         : area.sortedCompetences;
@@ -114,14 +112,15 @@ export default class TargetProfilesPdfExportService extends Service {
 
       if (competences.length !== 0) {
         const areaName = this._getTranslatedAreaName(language, area);
-        await this._buildRoundedGradientBackground(pdf, areaGradient[i], -15, -30, pdfWidth + 30, 49);
+        const areaStyle = this._getAreaStyle(area);
+        await this._buildRoundedGradientBackground(pdf, areaStyle.gradient, -15, -30, pdfWidth + 30, 49);
         pdf.setFont('AmpleSoft', 'bold');
         pdf.setFontSize(areaTitleSize);
         pdf.setTextColor('#fff');
         pdf.text(this._getCenteredX(pdf, areaName), areaTitleHeight / 2 - 10, areaName);
 
         competences.forEach((competence) => {
-          const competenceColor = colors[i];
+          const competenceColor = areaStyle.color;
           const competenceName = this._getTranslatedCompetenceName(language, competence);
           const tableHead = [
             [
@@ -317,6 +316,10 @@ export default class TargetProfilesPdfExportService extends Service {
       },
       [firstCell],
     );
+  }
+
+  _getAreaStyle(area) {
+    return areaStylesByColor[area.color] ?? defaultAreaStyle;
   }
 
   _getVersionText(language) {

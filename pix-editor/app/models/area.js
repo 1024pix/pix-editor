@@ -6,6 +6,7 @@ export default class AreaModel extends Model {
   @attr titleFrFr;
   @attr titleEnUs;
   @attr code;
+  @attr color;
 
   @hasMany('competence', { async: true, inverse: 'area' }) competences;
   @belongsTo('framework', { async: true, inverse: 'areas' }) framework;

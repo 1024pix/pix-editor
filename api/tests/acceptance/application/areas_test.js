@@ -22,18 +22,18 @@ describe('Acceptance | Route | areas', () => {
   describe('GET /areas', async () => {
     beforeEach(async () => {
       databaseBuilder.factory.buildFramework({ id: 'framework1', name: 'Fmk 1' });
-      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', frameworkId: 'framework1' });
+      databaseBuilder.factory.buildArea({ id: 'area1', code: '1', color: 'jaffa', frameworkId: 'framework1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence1', index: '1.1', areaId: 'area1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence2', index: '1.2', areaId: 'area1' });
-      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', frameworkId: 'framework1' });
+      databaseBuilder.factory.buildArea({ id: 'area2', code: '2', color: 'emerald', frameworkId: 'framework1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence3', index: '2.1', areaId: 'area2' });
       databaseBuilder.factory.buildCompetence({ id: 'competence4', index: '2.2', areaId: 'area2' });
-      databaseBuilder.factory.buildArea({ id: 'area3', code: '3', frameworkId: 'framework1' });
+      databaseBuilder.factory.buildArea({ id: 'area3', code: '3', color: 'cerulean', frameworkId: 'framework1' });
       databaseBuilder.factory.buildCompetence({ id: 'competence5', index: '3.1', areaId: 'area3' });
       databaseBuilder.factory.buildCompetence({ id: 'competence6', index: '3.2', areaId: 'area3' });
       databaseBuilder.factory.buildCompetence({ id: 'competence7', index: '3.3', areaId: 'area3' });
       databaseBuilder.factory.buildFramework({ id: 'framework2', name: 'Fmk 2' });
-      databaseBuilder.factory.buildArea({ id: 'area4', code: '1', frameworkId: 'framework2' });
+      databaseBuilder.factory.buildArea({ id: 'area4', code: '1', color: 'jaffa', frameworkId: 'framework2' });
       databaseBuilder.factory.buildCompetence({ id: 'competence8', index: '1.1', areaId: 'area4' });
       databaseBuilder.factory.buildCompetence({ id: 'competence9', index: '1.2', areaId: 'area4' });
 
@@ -71,6 +71,7 @@ describe('Acceptance | Route | areas', () => {
             attributes: {
               'pix-id': 'area1',
               code: '1',
+              color: 'jaffa',
               'title-fr-fr': 'Premier domaine',
               'title-en-us': 'First domain',
               name: '1. Premier domaine',
@@ -91,6 +92,7 @@ describe('Acceptance | Route | areas', () => {
             attributes: {
               'pix-id': 'area4',
               code: '1',
+              color: 'jaffa',
               'title-fr-fr': 'Quatrième domaine',
               'title-en-us': 'Fourth domain',
               name: '1. Quatrième domaine',
@@ -111,6 +113,7 @@ describe('Acceptance | Route | areas', () => {
             attributes: {
               'pix-id': 'area2',
               code: '2',
+              color: 'emerald',
               'title-fr-fr': 'Deuxième domaine',
               'title-en-us': 'Second domain',
               name: '2. Deuxième domaine',
@@ -131,6 +134,7 @@ describe('Acceptance | Route | areas', () => {
             attributes: {
               'pix-id': 'area3',
               code: '3',
+              color: 'cerulean',
               'title-fr-fr': 'Troisième domaine',
               'title-en-us': 'Third domain',
               name: '3. Troisième domaine',
@@ -283,6 +287,7 @@ describe('Acceptance | Route | areas', () => {
           attributes: {
             'pix-id': 'area5',
             code: '2',
+            color: null,
             'title-fr-fr': 'Cinquième domaine',
             'title-en-us': 'Fifth domain',
             name: '2. Cinquième domaine',
