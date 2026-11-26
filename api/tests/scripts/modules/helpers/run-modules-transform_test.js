@@ -121,11 +121,11 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
     ];
     expect(updatedModules).toStrictEqual(expectedModules);
 
-    const updatedModuleVersions = await knex('module-versions').select('internalTitle', 'version').orderBy('shortId');
+    const updatedModuleVersions = await knex('module-versions').select('internalTitle', 'version', 'publishedBy').orderBy('shortId');
     const expectedModuleVersions = [
-      { internalTitle: 'module-to-fix-without-draft', version: '2.0' },
-      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.0' },
-      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.0' },
+      { internalTitle: 'module-to-fix-without-draft', version: '2.0', publishedBy: user.id },
+      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.0', publishedBy: user.id },
+      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.0', publishedBy: user.id },
     ];
     expect(updatedModuleVersions).toStrictEqual(expectedModuleVersions);
 

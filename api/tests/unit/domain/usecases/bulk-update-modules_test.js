@@ -24,7 +24,7 @@ describe('Unit | Domain | Use Cases | bulk-update-modules', () => {
     const moduleVersionRepository = { create: vi.fn() };
 
     // when
-    const result = await bulkUpdateModules([module1, module2], { moduleRepository, moduleVersionRepository });
+    const result = await bulkUpdateModules({ modules: [module1, module2], userId: 123 }, { moduleRepository, moduleVersionRepository });
 
     // then
     expect(moduleRepository.save).toHaveBeenCalledTimes(2);
@@ -49,8 +49,8 @@ describe('Unit | Domain | Use Cases | bulk-update-modules', () => {
     expect(moduleRepository.save).toHaveBeenNthCalledWith(1, expectedModule1);
     expect(moduleRepository.save).toHaveBeenNthCalledWith(2, expectedModule2);
     expect(moduleVersionRepository.create).toHaveBeenCalledTimes(2);
-    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(1, ModuleVersion.fromModule(expectedModule1));
-    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(2, ModuleVersion.fromModule(expectedModule2));
+    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(1, ModuleVersion.fromModule(expectedModule1, { publishedBy: 123 }));
+    expect(moduleVersionRepository.create).toHaveBeenNthCalledWith(2, ModuleVersion.fromModule(expectedModule2, { publishedBy: 123 }));
     expect(result).toStrictEqual([expectedModule1, expectedModule2]);
   });
 });

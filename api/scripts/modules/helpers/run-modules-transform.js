@@ -47,7 +47,7 @@ export async function runModulesTransform({ transform, options, logger }) {
   }
 
   const { savedModules, savedDraftModules } = await DomainTransaction.execute(async () => {
-    const savedModules = await bulkUpdateModules(modulesToUpdate.map(({ module }) => module));
+    const savedModules = await bulkUpdateModules({ modules: modulesToUpdate.map(({ module }) => module), userId: options.userId });
     const savedDraftModules = await bulkUpdateDraftModules({
       draftModules: draftModulesToUpdate.map(({ draftModule }) => draftModule),
       updatedModuleIds: modulesToUpdateIds,
