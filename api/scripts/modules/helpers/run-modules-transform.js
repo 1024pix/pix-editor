@@ -51,6 +51,7 @@ export async function runModulesTransform({ transform, options, logger }) {
     const savedDraftModules = await bulkUpdateDraftModules({
       draftModules: draftModulesToUpdate.map(({ draftModule }) => draftModule),
       updatedModuleIds: modulesToUpdateIds,
+      userId: options.userId,
     });
     return { savedModules, savedDraftModules };
   });
