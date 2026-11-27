@@ -15,7 +15,10 @@ export class Translation {
   }
 
   #exorciseDevilApostrophe() {
-    if (this.key.endsWith('proposals')) {
+    const ESCAPED_CELL_REGEX = /^'(?=[-@=+])/;
+    const IMPACTED_TRANSLATIONS_REGEX = /(proposals|solution)$/;
+
+    if (IMPACTED_TRANSLATIONS_REGEX.test(this.key) && ESCAPED_CELL_REGEX.test(this.value)) {
       logger.info(`The key and value of translation about to be exorcised: ${this.key}, ${this.value}`);
       this.value = this.value.replace(/^\'/, '');
     }

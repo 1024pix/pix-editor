@@ -30,10 +30,10 @@ describe('Unit | Domain | Translation', function() {
   });
 
   context('exorciseDevilApostrophe', function() {
-    it('returns a model without the escaping apostrophe on proposals field', function() {
+    it.each(['proposals', 'solution'])('returns a model without the escaping apostrophe on %s field', function(field) {
       // given
       const translation = {
-        key: 'challenge.challengeId.proposals',
+        key: `challenge.challengeId.${field}`,
         locale: 'fr',
         value: '\'-pouet 1\n -patate douce',
       };
@@ -44,7 +44,7 @@ describe('Unit | Domain | Translation', function() {
       // then
       expect(result).toBeInstanceOf(Translation);
       expect(result).to.deep.equal({
-        key: 'challenge.challengeId.proposals',
+        key: `challenge.challengeId.${field}`,
         locale: 'fr',
         value: '-pouet 1\n -patate douce',
       });
