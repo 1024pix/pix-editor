@@ -1,5 +1,19 @@
 
 
+## v4.67.0 (27/11/2026)
+
+
+### :rocket: Amélioration
+- [#1876](https://github.com/1024pix/pix-editor/pull/1876) [FEATURE] Enregistrer le `userId` dans la table `draft-modules` sous la colonne `modifiedBy`et exposer le trigramme sur la page de détails (PIX-24753).
+
+### :bug: Correction
+- [#1890](https://github.com/1024pix/pix-editor/pull/1890) [BUGFIX] Supprimer l'apostrophe en trop des clés de traduction `challenge.*.solution` (PIX-25295).
+- [#1855](https://github.com/1024pix/pix-editor/pull/1855) [BUGFIX] Corriger l'export de PDF en cas de compétences trop nombreuses (PIX-25148).
+
+### :arrow_up: Montée de version
+- [#1888](https://github.com/1024pix/pix-editor/pull/1888) [BUMP] Update dependency vitest to v5.1.1 (challenge-parser,api).
+- [#1887](https://github.com/1024pix/pix-editor/pull/1887) [BUMP] Update dependency eslint-plugin-ember to v13.11.2 (pix-editor).
+
 ## v4.66.0 (25/11/2026)
 
 
