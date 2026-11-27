@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { runModulesTransform } from '../../../../scripts/modules/helpers/run-modules-transform.js';
 import { logger } from '../../../../lib/infrastructure/logger.js';
+import { User } from '../../../../lib/domain/models/index.js';
 
 const CONTENT_TO_FIX = '<p>À corriger</p>';
 const FIXED_CONTENT = '<p>Corrigé</p>';
@@ -10,6 +11,8 @@ const FIXED_CONTENT = '<p>Corrigé</p>';
 describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () => {
   it('saves the modules and draft modules updated by the transform', async () => {
     // given
+    const previousUser = databaseBuilder.factory.buildAdminUser();
+
     const moduleToFixWithoutDraft = domainBuilder.buildModule({
       shortId: 'module01',
       internalTitle: 'module-to-fix-without-draft',
@@ -40,6 +43,7 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       ...moduleToFixWithOutOfScopeDraft,
       moduleId: moduleToFixWithOutOfScopeDraft.id,
       version: '1.1',
+      modifiedBy: previousUser.id,
       sections: buildSectionsWithText('<p>Brouillon à jour</p>'),
     });
 
@@ -66,6 +70,7 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       ...outOfScopeModuleWithOutOfScopeDraft,
       moduleId: outOfScopeModuleWithOutOfScopeDraft.id,
       version: '1.1',
+      modifiedBy: previousUser.id,
       sections: buildSectionsWithText('<p>Brouillon à jour</p>'),
     });
 
@@ -79,9 +84,14 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       shortId: 'draft002',
       internalTitle: 'out-of-scope-creation-draft',
       version: '0.1',
+      modifiedBy: previousUser.id,
       sections: buildSectionsWithText('<p>Brouillon à jour</p>'),
     });
 
+    const uuid = crypto.randomUUID();
+    const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN, trigram: 'BOT', apiKey: uuid });
+
+    databaseBuilder.factory.buildUser(user);
     databaseBuilder.factory.buildModule(moduleToFixWithoutDraft);
     databaseBuilder.factory.buildModule(moduleToFixWithDraftToFix);
     databaseBuilder.factory.buildModule(moduleToFixWithOutOfScopeDraft);
@@ -96,7 +106,7 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
     await databaseBuilder.commit();
 
     // when
-    await runModulesTransform({ transform: fixTextContent, options: { dryRun: false }, logger });
+    await runModulesTransform({ transform: fixTextContent, options: { dryRun: false, userId: user.id }, logger });
 
     // then
     const textContent = knex.raw("sections #>> '{0,grains,0,components,0,element,content}' as content");
@@ -111,23 +121,23 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
     ];
     expect(updatedModules).toStrictEqual(expectedModules);
 
-    const updatedModuleVersions = await knex('module-versions').select('internalTitle', 'version').orderBy('shortId');
+    const updatedModuleVersions = await knex('module-versions').select('internalTitle', 'version', 'publishedBy').orderBy('shortId');
     const expectedModuleVersions = [
-      { internalTitle: 'module-to-fix-without-draft', version: '2.0' },
-      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.0' },
-      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.0' },
+      { internalTitle: 'module-to-fix-without-draft', version: '2.0', publishedBy: user.id },
+      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.0', publishedBy: user.id },
+      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.0', publishedBy: user.id },
     ];
     expect(updatedModuleVersions).toStrictEqual(expectedModuleVersions);
 
     // A recreated draft starts again from its own sections, so an out-of-scope draft keeps its content.
-    const updatedDraftModules = await knex('draft-modules').select('internalTitle', 'version', textContent).orderBy('shortId');
+    const updatedDraftModules = await knex('draft-modules').select('internalTitle', 'version', textContent, 'modifiedBy').orderBy('shortId');
     const expectedDraftModules = [
-      { internalTitle: 'creation-draft-to-fix', version: '0.2', content: FIXED_CONTENT },
-      { internalTitle: 'out-of-scope-creation-draft', version: '0.1', content: '<p>Brouillon à jour</p>' },
-      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.1', content: FIXED_CONTENT },
-      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.1', content: '<p>Brouillon à jour</p>' },
-      { internalTitle: 'out-of-scope-module-with-draft-to-fix', version: '1.2', content: FIXED_CONTENT },
-      { internalTitle: 'out-of-scope-module-with-out-of-scope-draft', version: '1.1', content: '<p>Brouillon à jour</p>' },
+      { internalTitle: 'creation-draft-to-fix', version: '0.2', content: FIXED_CONTENT, modifiedBy: user.id },
+      { internalTitle: 'out-of-scope-creation-draft', version: '0.1', content: '<p>Brouillon à jour</p>', modifiedBy: previousUser.id },
+      { internalTitle: 'module-to-fix-with-draft-to-fix', version: '2.1', content: FIXED_CONTENT, modifiedBy: user.id },
+      { internalTitle: 'module-to-fix-with-out-of-scope-draft', version: '2.1', content: '<p>Brouillon à jour</p>', modifiedBy: user.id },
+      { internalTitle: 'out-of-scope-module-with-draft-to-fix', version: '1.2', content: FIXED_CONTENT, modifiedBy: user.id },
+      { internalTitle: 'out-of-scope-module-with-out-of-scope-draft', version: '1.1', content: '<p>Brouillon à jour</p>', modifiedBy: previousUser.id },
     ];
     expect(updatedDraftModules).toStrictEqual(expectedDraftModules);
 
@@ -153,7 +163,10 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
         sections: buildSectionsWithText(CONTENT_TO_FIX),
       });
       const draftOfModule = domainBuilder.buildDraftModule({ ...module, version: '1.1', moduleId: module.id });
+      const uuid = crypto.randomUUID();
+      const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN, trigram: 'BOT', apiKey: uuid });
 
+      databaseBuilder.factory.buildUser(user);
       databaseBuilder.factory.buildModule(module);
       databaseBuilder.factory.buildDraftModule(draftOfModule);
       await databaseBuilder.commit();
@@ -161,7 +174,7 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       const spiedLogger = { info: vi.fn(), error: vi.fn() };
 
       // when
-      await runModulesTransform({ transform: fixTextContent, options: { dryRun: true }, logger: spiedLogger });
+      await runModulesTransform({ transform: fixTextContent, options: { dryRun: true, userId: user.id }, logger: spiedLogger });
 
       // then
       const expectedInfoLogs = [
@@ -195,13 +208,17 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
     it('logs that there is nothing to update and does nothing', async () => {
       // given
       const module = domainBuilder.buildModule({ version: '1.0', sections: buildSectionsWithText('<p>Module à jour</p>') });
+      const uuid = crypto.randomUUID();
+      const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN, trigram: 'BOT', apiKey: uuid });
+
+      databaseBuilder.factory.buildUser(user);
       databaseBuilder.factory.buildModule(module);
       await databaseBuilder.commit();
 
       const spiedLogger = { info: vi.fn(), error: vi.fn() };
 
       // when
-      await runModulesTransform({ transform: fixTextContent, options: { dryRun: false }, logger: spiedLogger });
+      await runModulesTransform({ transform: fixTextContent, options: { dryRun: false, userId: user.id }, logger: spiedLogger });
 
       // then
       expect(spiedLogger.info).toHaveBeenLastCalledWith('Nothing to update');
@@ -220,14 +237,17 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
         version: '1.0',
         sections: buildSectionsWithText(CONTENT_TO_FIX),
       });
+      const uuid = crypto.randomUUID();
+      const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN, trigram: 'BOT', apiKey: uuid });
 
+      databaseBuilder.factory.buildUser(user);
       databaseBuilder.factory.buildModule(notValidModule);
       await databaseBuilder.commit();
 
       const spiedLogger = { info: vi.fn(), error: vi.fn() };
 
       // when
-      const execution = runModulesTransform({ transform: fixTextContent, options: { dryRun: false }, logger: spiedLogger });
+      const execution = runModulesTransform({ transform: fixTextContent, options: { dryRun: false, userId: user.id }, logger: spiedLogger });
 
       // then
       await expect(execution).rejects.toThrow('Modules validation failed.');
@@ -239,6 +259,33 @@ describe('Acceptance | Scripts | Modules | Helpers | run-modules-transform', () 
       const unchangedModules = await knex('modules').select('version', 'sections');
       const expectedModules = [{ version: '1.0', sections: notValidModule.sections }];
       expect(unchangedModules).toStrictEqual(expectedModules);
+    });
+  });
+
+  describe('if userId on options is missing', () => {
+    it('logs an error and do nothing', async () => {
+      // given
+      const module = domainBuilder.buildModule({
+        shortId: 'module01',
+        internalTitle: 'module-to-fix-without-draft',
+        version: '1.0',
+        sections: buildSectionsWithText(CONTENT_TO_FIX),
+      });
+
+      databaseBuilder.factory.buildModule(module);
+      await databaseBuilder.commit();
+
+      const spiedLogger = { info: vi.fn(), error: vi.fn() };
+
+      // when
+      await runModulesTransform({ transform: fixTextContent, options: { dryRun: false }, logger: spiedLogger });
+
+      // then
+      expect(spiedLogger.error.mock.calls).to.deep.equal([['Le userId "BOT Devcomp" est nécessaire au lancement du script.']]);
+
+      const unchangedModule = await knex('modules').select('version', 'sections');
+      const expectedModule = [{ version: '1.0', sections: module.sections }];
+      expect(unchangedModule).toStrictEqual(expectedModule);
     });
   });
 });

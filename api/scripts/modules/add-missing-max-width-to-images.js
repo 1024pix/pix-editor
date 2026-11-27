@@ -14,6 +14,11 @@ export class AddMissingMaxWidthToImagesScript extends Script {
           describe: 'If true, it does not perform any update.',
           default: true,
         },
+        userId: {
+          type: 'number',
+          describe: 'Id de l\'utilisateur "BOT Devcomp" enregistré comme auteur des modifications.',
+          demandOption: true,
+        },
       },
     });
   }

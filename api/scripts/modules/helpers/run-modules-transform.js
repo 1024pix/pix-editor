@@ -9,10 +9,15 @@ import { DraftModule, Module } from '../../../lib/domain/models/index.js';
  * @param {Object} params
  * @param {(module: { sections: Array }) => { sections: Array, numberOfEditedObjects: number }} params.transform
  *   Pure function returning an updated copy of the sections and the number of edited objects.
- * @param {{ dryRun: boolean }} params.options
+ * @param {{ dryRun: boolean, userId: number }} params.options
  * @param {Object} params.logger
  */
 export async function runModulesTransform({ transform, options, logger }) {
+  if (!options.userId || options.userId === undefined) {
+    logger.error('Le userId "BOT Devcomp" est nécessaire au lancement du script.');
+    return;
+  }
+
   logger.info({ dryRun: options.dryRun }, 'Script options');
 
   const existingModules = await moduleRepository.list();
@@ -42,10 +47,11 @@ export async function runModulesTransform({ transform, options, logger }) {
   }
 
   const { savedModules, savedDraftModules } = await DomainTransaction.execute(async () => {
-    const savedModules = await bulkUpdateModules(modulesToUpdate.map(({ module }) => module));
+    const savedModules = await bulkUpdateModules({ modules: modulesToUpdate.map(({ module }) => module), userId: options.userId });
     const savedDraftModules = await bulkUpdateDraftModules({
       draftModules: draftModulesToUpdate.map(({ draftModule }) => draftModule),
       updatedModuleIds: modulesToUpdateIds,
+      userId: options.userId,
     });
     return { savedModules, savedDraftModules };
   });

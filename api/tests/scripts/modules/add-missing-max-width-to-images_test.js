@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../test-helper.js';
 import { AddMissingMaxWidthToImagesScript } from '../../../scripts/modules/add-missing-max-width-to-images.js';
 import { logger } from '../../../lib/infrastructure/logger.js';
+import { User } from '../../../lib/domain/models/index.js';
 
 describe('Acceptance | Script | AddMissingMaxWidthToImagesScript', () => {
   it('adds a maxWidth set to 0 to images of modules and draft modules', async () => {
@@ -28,12 +29,15 @@ describe('Acceptance | Script | AddMissingMaxWidthToImagesScript', () => {
       version: '1.1',
     });
 
+    const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN, trigram: 'BOT', apiKey: crypto.randomUUID() });
+
+    databaseBuilder.factory.buildUser(user);
     databaseBuilder.factory.buildModule(module);
     databaseBuilder.factory.buildDraftModule(draftModule);
     await databaseBuilder.commit();
 
     // when
-    await new AddMissingMaxWidthToImagesScript().handle({ options: { dryRun: false }, logger });
+    await new AddMissingMaxWidthToImagesScript().handle({ options: { dryRun: false, userId: user.id }, logger });
 
     // then
     const imageMaxWidth = knex.raw("sections #> '{0,grains,0,components,0,element,maxWidth}' as \"maxWidth\"");

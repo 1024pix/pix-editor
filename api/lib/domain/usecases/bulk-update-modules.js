@@ -2,7 +2,7 @@ import { moduleRepository, moduleVersionRepository } from '../../infrastructure/
 import { DomainTransaction } from '../DomainTransaction.js';
 import { ModuleVersion } from '../models/index.js';
 
-export async function bulkUpdateModules(modules, dependencies = { moduleRepository, moduleVersionRepository }) {
+export async function bulkUpdateModules({ modules, userId }, dependencies = { moduleRepository, moduleVersionRepository }) {
   return DomainTransaction.execute(async () => {
     const savedModules = [];
 
@@ -10,7 +10,7 @@ export async function bulkUpdateModules(modules, dependencies = { moduleReposito
       module.version = ModuleVersion.incrementMajorVersion(module.version);
       const savedModule = await dependencies.moduleRepository.save(module);
 
-      await dependencies.moduleVersionRepository.create(ModuleVersion.fromModule(savedModule));
+      await dependencies.moduleVersionRepository.create(ModuleVersion.fromModule(savedModule, { publishedBy: userId }));
       savedModules.push(savedModule);
     }
 

@@ -15,7 +15,7 @@ describe('Integration | Usecases | Bulk update modules', () => {
     modules[0].title = 'Nouveau titre';
 
     // when
-    await bulkUpdateModules(modules);
+    await bulkUpdateModules({ modules });
 
     // then
     const returnedModules = knex('modules').select('id', 'title', 'version').orderBy('shortId');
@@ -37,7 +37,7 @@ describe('Integration | Usecases | Bulk update modules', () => {
     await moduleVersionRepository.create(ModuleVersion.fromModule({ ...modules[1], version: '2.0' }));
 
     // when
-    const promise = bulkUpdateModules(modules);
+    const promise = bulkUpdateModules({ modules });
 
     // then
     await expect(promise).rejects.toThrow('module_versions_moduleid_version_unique');
