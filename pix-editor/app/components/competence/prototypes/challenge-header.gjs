@@ -1,27 +1,21 @@
+import { PixIconButton } from '@1024pix/nebulix-ember';
 import { concat } from '@ember/helper';
-import { on } from '@ember/modifier';
 <template>
   <div class={{concat "challenge-header " @class}} data-testid="challenge-header">
-    <div class="ui menu">
-      <div class="ui left menu">
+    <div class="challenge-header__menu">
+      <div class="challenge-header__left">
         {{yield to="actions"}}
       </div>
-      <div class="item header">
+      <h2 class="challenge-header__title">
         {{yield}}
-      </div>
-      <div class="ui right menu">
+      </h2>
+      <div class="challenge-header__right">
         {{#if @maximized}}
-          <button {{on "click" @minimize}} class="ui icon button item" type="button" title="Minimiser la fenêtre">
-            <i class="window minimize icon"></i>
-          </button>
+          <PixIconButton @ariaLabel="Minimiser la fenêtre" @iconName="minus" @triggerAction={{@minimize}} />
         {{else}}
-          <button {{on "click" @maximize}} class="ui icon button item" type="button" title="Maximiser la fenêtre">
-            <i class="window maximize outline icon"></i>
-          </button>
+          <PixIconButton @ariaLabel="Maximiser la fenêtre" @iconName="openInFull" @triggerAction={{@maximize}} />
         {{/if}}
-        <button {{on "click" @close}} class="ui icon button item" type="button" title="Fermer la fenêtre">
-          <i class="icon window close"></i>
-        </button>
+        <PixIconButton @ariaLabel="Fermer la fenêtre" @iconName="close" @triggerAction={{@close}} />
       </div>
     </div>
   </div>

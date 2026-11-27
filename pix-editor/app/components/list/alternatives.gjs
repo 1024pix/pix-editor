@@ -1,7 +1,8 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import EmberTable from 'ember-table/components/ember-table/component';
-import convertLanguageAsFlag from 'pixeditor/helpers/convert-language-as-flag';
+import { eq } from 'ember-truth-helpers';
+import flagForLanguage from 'pixeditor/helpers/flag-for-language';
 
 import SortedList from './sorted';
 
@@ -29,7 +30,10 @@ export default class AlternativesList extends SortedList {
             {{#if r.columnValue.locales}}
               <div class="challenge_languages">
                 {{#each r.rowValue.locales as |language|}}
-                  <i class="{{convertLanguageAsFlag language}} flag" title="{{language}}"></i>
+                  <span
+                    class="flag {{if (eq language 'fr-fr') 'flag--fr-fr' ''}}"
+                    title="{{language}}"
+                  >{{flagForLanguage language}}</span>
                 {{/each}}
               </div>
             {{else}}
