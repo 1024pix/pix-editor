@@ -10,31 +10,15 @@ import Textarea from 'pixeditor/components/field/textarea';
         data-test-practical-title-fr-field
         @value={{@tube.practicalTitleFr}}
         @edition={{@edition}}
-        @label="Titre pratique (fr)"
+        @label="Titre pratique"
         @id="tube-title-fr"
       />
       <Textarea
         data-test-practical-description-fr-field
-        @title="Description pratique (fr) :"
+        @title="Description pratique"
         @value={{@tube.practicalDescriptionFr}}
         @edition={{@edition}}
         @id="tube-description-fr"
-      />
-    </div>
-    <div class="ui raised segment">
-      <Input
-        data-test-practical-title-en-field
-        @value={{@tube.practicalTitleEn}}
-        @edition={{@edition}}
-        @label="Titre pratique (en)"
-        @id="tube-title-en"
-      />
-      <Textarea
-        data-test-practical-description-en-field
-        @title="Description pratique (en) :"
-        @value={{@tube.practicalDescriptionEn}}
-        @edition={{@edition}}
-        @id="tube-description-en"
       />
     </div>
     {{#unless @edition}}

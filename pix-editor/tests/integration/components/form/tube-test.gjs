@@ -21,8 +21,6 @@ module('Integration | Component | tube-form', function (hooks) {
     // then
     assert.dom('[data-test-practical-title-fr-field]').exists();
     assert.dom('[data-test-practical-description-fr-field]').exists();
-    assert.dom('[data-test-practical-title-en-field]').exists();
-    assert.dom('[data-test-practical-description-en-field]').exists();
   });
 
   module('#not edition', function (hooks) {

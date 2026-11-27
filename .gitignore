@@ -42,8 +42,9 @@ pix-editor/app/config-private-test.js
 # zed
 **/.zed
 
-# zed
+# vscode
 **/.vscode
+**/*.code-workspace
 
 # MACOS
 .DS_Store

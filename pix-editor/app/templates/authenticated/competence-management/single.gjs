@@ -25,21 +25,6 @@ import Textarea from 'pixeditor/components/field/textarea';
             @edition={{@controller.edition}}
             @id="competence-description-fr"
           />
-          <div class="ui raised segment">
-            <i class="flag gb uk"></i>
-            <Input
-              @value={{@controller.competence.titleEn}}
-              @edition={{@controller.edition}}
-              @label="Titre (en)"
-              @id="competence-title-en"
-            />
-            <Textarea
-              @title="Description (en) :"
-              @value={{@controller.competence.descriptionEn}}
-              @edition={{@controller.edition}}
-              @id="competence-description-en"
-            />
-          </div>
           {{#unless @controller.edition}}
             <Input @value={{@controller.competence.pixId}} @title="Id" @edition={{false}} />
           {{/unless}}

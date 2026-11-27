@@ -84,8 +84,7 @@ export default class SkillForm extends Component {
       >
         <:label>Statut de la description</:label>
       </Select>
-      <Textarea @title="Indice (fr)" @value={{@skill.clue}} @edition={{@edition}} @id="skill-clue-fr" />
-      <Textarea @title="Indice (en)" @value={{@skill.clueEn}} @edition={{@edition}} @id="skill-clue-en" />
+      <Textarea @title="Indice" @value={{@skill.clue}} @edition={{@edition}} @id="skill-clue-fr" />
       <Select
         @id="select-clue-status"
         @value={{@skill.clueStatus}}
