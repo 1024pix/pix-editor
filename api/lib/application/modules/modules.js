@@ -1,9 +1,10 @@
 import Joi from 'joi';
 
-import { moduleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import { draftModuleSerializer, moduleSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { getModuleById, listPaginatedModules, getModuleJsonSchema } from '../../domain/usecases/index.js';
+import { duplicateModule, getModuleById, listPaginatedModules, getModuleJsonSchema } from '../../domain/usecases/index.js';
 import * as Types from '../types.js';
+import * as securityPreHandlers from '../security-pre-handlers.js';
 
 export function register(server) {
   server.route([
@@ -48,6 +49,19 @@ export function register(server) {
           const { id } = request.params;
           const module = await getModuleById(id);
           return moduleSerializer.serialize(module);
+        },
+      },
+    },
+    {
+      method: 'POST',
+      path: '/api/modules/{id}/duplicate',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        validate: { params: Joi.object({ id: Types.moduleId().required() }).required() },
+        handler: async (request, h) => {
+          const { id } = request.params;
+          const duplicatedDraftModule = await duplicateModule({ moduleId: id });
+          return h.response(draftModuleSerializer.serialize(duplicatedDraftModule, { attributes: [] })).code(201);
         },
       },
     },

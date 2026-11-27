@@ -121,6 +121,14 @@ function _mapToInfrastructureError(error) {
     };
   }
 
+  if (error instanceof DomainErrors.DraftModuleInternalTitleAlreadyUsedError) {
+    const infraError = new InfraErrors.ConflictError(error.message);
+    return {
+      infraErrors: [infraError],
+      statusCode: infraError.status,
+    };
+  }
+
   if (error instanceof DomainErrors.DraftModuleValidationError) {
     const infraError = new InfraErrors.UnprocessableEntityError({ code: 'DRAFT_MODULE_VALIDATION_ERROR' });
     return {

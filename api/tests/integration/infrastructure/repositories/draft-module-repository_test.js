@@ -176,6 +176,32 @@ describe('Integration | Repository | draft-module-repository', () => {
     });
   });
 
+  describe('isInternalTitleUsed', () => {
+    it('returns true when a draft module has the given internal title', async () => {
+      // given
+      databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({ internalTitle: '[Copie] IAGenAmi_CLA' }));
+      await databaseBuilder.commit();
+
+      // when
+      const isUsed = await draftModuleRepository.isInternalTitleUsed({ internalTitle: '[Copie] IAGenAmi_CLA' });
+
+      // then
+      expect(isUsed).toBe(true);
+    });
+
+    it('returns false when no draft module has the given internal title', async () => {
+      // given
+      databaseBuilder.factory.buildDraftModule(domainBuilder.buildDraftModule({ internalTitle: 'IAGenAmi_CLA' }));
+      await databaseBuilder.commit();
+
+      // when
+      const isUsed = await draftModuleRepository.isInternalTitleUsed({ internalTitle: '[Copie] IAGenAmi_CLA' });
+
+      // then
+      expect(isUsed).toBe(false);
+    });
+  });
+
   describe('getById', () => {
     it('returns a draft module by its id', async () => {
       // given

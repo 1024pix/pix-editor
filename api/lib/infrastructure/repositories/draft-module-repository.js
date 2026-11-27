@@ -54,6 +54,12 @@ export async function count({ filter } = {}) {
   return count;
 }
 
+export async function isInternalTitleUsed({ internalTitle }) {
+  const knexConn = DomainTransaction.getConnection();
+  const draftModule = await knexConn.select('id').from('draft-modules').where({ internalTitle }).first();
+  return Boolean(draftModule);
+}
+
 export async function getById({ id, forUpdate = false }) {
   const knexConn = DomainTransaction.getConnection();
 
