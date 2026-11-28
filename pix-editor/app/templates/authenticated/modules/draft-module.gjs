@@ -1,5 +1,5 @@
 import { PixBreadcrumb, PixButtonLink } from '@1024pix/nebulix-ember';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import formatDate from 'ember-intl/helpers/format-date';
 import t from 'ember-intl/helpers/t';

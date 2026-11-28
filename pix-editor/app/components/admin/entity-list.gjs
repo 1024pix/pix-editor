@@ -1,6 +1,6 @@
 import { PixButtonLink, PixIconButton, PixTable, PixTableColumn } from '@1024pix/nebulix-ember';
 import { fn } from '@ember/helper';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 
 import AdminEntityCell from './entity-cell';

@@ -132,6 +132,9 @@
     "version": 2
   },
   "overrides": {
-    "eslint": "$eslint"
+    "eslint": "$eslint",
+    "ember-table": {
+      "ember-cli-htmlbars": "$ember-cli-htmlbars"
+    }
   }
 }

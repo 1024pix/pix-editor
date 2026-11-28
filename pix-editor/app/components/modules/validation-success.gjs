@@ -1,5 +1,5 @@
 import { PixNotificationAlert } from '@1024pix/nebulix-ember';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
 import PublishModuleButton from 'pixeditor/components/modules/publish-module-button';
