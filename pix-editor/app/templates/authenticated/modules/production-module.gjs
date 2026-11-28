@@ -1,5 +1,5 @@
 import { PixBreadcrumb } from '@1024pix/nebulix-ember';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import t from 'ember-intl/helpers/t';
 import CreateModuleButton from 'pixeditor/components/modules/create-module-button';
